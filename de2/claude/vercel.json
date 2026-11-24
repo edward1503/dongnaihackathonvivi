@@ -1,5 +1,7 @@
 {
   "redirects": [
-    { "source": "/", "destination": "/slides/", "permanent": false }
+    { "source": "/", "destination": "/slides/", "permanent": false },
+    { "source": "/ux", "destination": "/ux/ho-so-ux.html", "permanent": false },
+    { "source": "/ux/", "destination": "/ux/ho-so-ux.html", "permanent": false }
   ]
 }
