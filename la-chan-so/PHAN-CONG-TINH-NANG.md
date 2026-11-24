@@ -4,7 +4,7 @@
 
 - Prototype bấm được: https://la-chan-so-doi18.vercel.app (web đội tình nguyện: `/web`, máy Minh trong Zalo: `/zalo`)
 - Thiết kế trên Figma: https://www.figma.com/design/KqUeRMoL69j6OfeDTwWp2v
-- Mã nguồn prototype, 53 màn và bản thuyết minh: nhánh [`thiet-ke-an-tam`](https://github.com/edward1503/dongnaihackathonvivi/tree/thiet-ke-an-tam/la-chan-so), thư mục `la-chan-so/`
+- Mã nguồn prototype, 53 màn và bản thuyết minh: ngay trong thư mục này, xem [`README.md`](README.md)
 
 Danh sách chia thành 6 mảng độc lập, mỗi mảng một người cầm được. Mã màn (A03a, Z01b…) là tên khung trong prototype và Figma. Tên API Android trong bảng là gợi ý, chưa được đội chốt.
 
