@@ -1,6 +1,6 @@
 # Chạy lại video demo Lá chắn số (LCS1)
 
-Quy trình gốc: `/run/media/rin/Rin/Competition/Nestle-Document-Processing/out/video/QUY-TRINH-QUAY-VIDEO.md`.
+Quy trình gốc: tài liệu QUY-TRINH-QUAY-VIDEO của đội (không nằm trong kho này).
 Đặt `W` = thư mục `la-chan-so`. Máy chủ: socket `~/.ssh/scoai-eval.sock` phải còn sống.
 
 ## 1. Máy chủ web tĩnh (giữ chạy khi quay)
@@ -19,7 +19,7 @@ CAN=0 ./xuat.sh > ban/xuat.log 2>&1                          # dung.py + render 
 ## 3. Đổi lời đọc → thu lại giọng (1 lượt Gemini cho cả video) rồi render
 ```bash
 cd $W/video
-set -a; . /run/media/rin/Rin/AI-Thuc-Chien/vlearn-lesson-lab/.env >/dev/null 2>&1; set +a
+set -a; . <đường dẫn tệp .env có GEMINI_API_KEYS> >/dev/null 2>&1; set +a
 uv run --no-project --with numpy python thao-tac/giong.py doc v1 --thu     # in số lượt sẽ gọi
 TTS_VOICE=Kore uv run --no-project --with numpy python thao-tac/giong.py doc v1
 cd thao-tac && ./xuat.sh > ban/xuat.log 2>&1                                 # có căn câu Whisper (GPU máy chủ)

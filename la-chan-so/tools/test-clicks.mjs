@@ -1,7 +1,7 @@
 // Kiểm tra prototype bấm được: chạy luồng người cao tuổi, học sinh, tình nguyện viên bằng cách bấm đúng chữ trên nút.
 // Chạy: node tools/test-clicks.mjs   (cần chromium; tự mở máy chủ http tạm)
 import { spawn } from 'node:child_process';
-import { writeFile, rm } from 'node:fs/promises';
+import { writeFile, rm, mkdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
@@ -31,7 +31,7 @@ async function tapAny() { await ev(`cur.view.contentDocument.querySelector('.fra
 async function step(label, fn, expect) { await fn(); if (await waitFor(expect)) { passes++; console.log('  ✓', label, '→', expect); } }
 async function voice(clip) { await sleep(300); const r = await ev("({src: player.src.split('/').pop(), playing: !player.paused})");
   const ok = r.src === clip + '.m4a' && r.playing; console.log(ok ? '  ✓ đang phát ' + clip : '  ✗ giọng: mong ' + clip + ', thấy ' + JSON.stringify(r)); ok ? passes++ : fails++; }
-async function shot(file) { const s = await c.send('Page.captureScreenshot', { format: 'png' }); await writeFile(path.join(ROOT, 'export/preview', file), Buffer.from(s.data, 'base64')); }
+async function shot(file) { await mkdir(path.join(ROOT, 'export/preview'), { recursive: true }); const s = await c.send('Page.captureScreenshot', { format: 'png' }); await writeFile(path.join(ROOT, 'export/preview', file), Buffer.from(s.data, 'base64')); }
 async function fill(v) { return ev(`(()=>{ const d=cur.view.contentDocument; const i=d.querySelector('.lcs-in,.lcs-ta'); if(!i) return false; i.value=${JSON.stringify(v)}; return true; })()`); }
 const topClick = sel => ev(`(()=>{ const b=[...document.querySelectorAll(${JSON.stringify(sel.q)})].find(x=>x.textContent.trim().startsWith(${JSON.stringify(sel.t)})); if(!b) return false; b.click(); return true; })()`);
 try {
