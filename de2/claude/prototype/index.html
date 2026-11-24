@@ -145,7 +145,7 @@ function seed(){return{
     {id:'PA-0458',type:'flood',addr:'Cách Mạng Tháng Tám, gần chợ',x:84,y:262,status:'new',reporters:3,desc:'Nước ngập ngang mắt cá sau mưa, miệng cống bị rác chặn.',flag:'Người dân chọn khác AI (AI: Rác thải)',created:'23/11 · 17:40'},
     {id:'PA-0466',type:'light',addr:'Hẻm 30 Phan Chu Trinh',x:330,y:250,status:'new',reporters:1,desc:'Bác Tư nhờ báo: đèn đầu hẻm tắt ba tối liền.',flag:'Không có ảnh · người cao tuổi gửi',created:'24/11 · 05:55'},
     {id:'PA-0452',type:'light',addr:'Phan Chu Trinh',x:252,y:228,status:'assigned',dept:'Điện lực',hours:6,assignedAt:'22/11 · 09:00',reporters:2,created:'22/11 · 08:20',dueTxt:'Còn 6 giờ',dueBad:true},
-    {id:'PA-0447',type:'trash',addr:'Hẻm 8 Nguyễn Ái Quốc',x:300,y:40,status:'assigned',dept:'Công ty Môi trường đô thị',hours:48,assignedAt:'21/11 · 10:00',reporters:1,created:'21/11 · 09:30',dueTxt:'Quá hạn 1 ngày',dueBad:true},
+    {id:'PA-0447',type:'trash',addr:'Hẻm 8 Nguyễn Ái Quốc',x:305,y:66,status:'assigned',dept:'Công ty Môi trường đô thị',hours:48,assignedAt:'21/11 · 10:00',reporters:1,created:'21/11 · 09:30',dueTxt:'Quá hạn 1 ngày',dueBad:true},
     {id:'PA-0437',type:'trash',addr:'Hẻm 12 Phan Chu Trinh',x:60,y:110,status:'done',dept:'Công ty Môi trường đô thị',hours:48,assignedAt:'22/11 · 14:00',doneAt:'24/11 · 07:30',reporters:2,mine:true,created:'22/11 · 11:05',result:'Đã thu gom 2 xe rác, đặt biển cấm đổ rác.'},
     {id:'PA-0430',type:'flood',addr:'Đường 30 Tháng 4',x:310,y:330,status:'done',dept:'Tổ quản lý đô thị',reporters:4,created:'20/11 · 16:00',doneAt:'22/11 · 15:00'},
     {id:'PA-0425',type:'light',addr:'Nguyễn Văn Trị',x:40,y:330,status:'done',dept:'Điện lực',reporters:1,created:'19/11 · 19:10',doneAt:'21/11 · 18:00'}
@@ -214,7 +214,7 @@ function mapView(h,list,me){
   <span class="lmk" style="left:178px;top:116px">TH Tiểu học Trấn Biên</span><span class="lmk" style="left:18px;top:${h*0.5+22}px">Chợ Biên Hòa</span>
   ${me?`<div style="position:absolute;left:${ME.x-60}px;top:${ME.y-60}px;width:120px;height:120px;border-radius:60px;border:2px dashed var(--blue);background:rgba(23,71,214,.08)"></div><div style="position:absolute;left:${ME.x-8}px;top:${ME.y-8}px;width:16px;height:16px;border-radius:8px;background:var(--blue);border:3px solid #fff;box-shadow:0 0 0 6px rgba(23,71,214,.25)"></div>`:''}
   ${list.map(r=>`<button class="pinb ${S.pin===r.id?'sel':''}" style="left:${r.x}px;top:${r.y}px;background:${pinColor(r)}" data-a="pin" data-v="${r.id}" aria-label="${r.id} ${T[r.type].label} – ${stTxt(r)}">${ic(pinIcon(r),'#fff',16,3)}</button>`).join('')}
-  <div style="position:absolute;left:10px;bottom:10px;background:#fff;border-radius:12px;padding:7px 10px;display:flex;flex-direction:column;gap:3px;font-size:12px;font-weight:500;box-shadow:0 1px 4px rgba(0,0,0,.12)">
+  <div style="position:absolute;left:10px;top:10px;background:rgba(255,255,255,.94);border-radius:12px;padding:5px 10px;display:flex;gap:10px;font-size:12px;font-weight:500;box-shadow:0 1px 4px rgba(0,0,0,.12)">
   <span>● <b style="color:#B42318">!</b> Mới tiếp nhận</span><span>● <b style="color:#9A5B00">◷</b> Đang xử lý</span><span>● <b style="color:#1C7445">✓</b> Đã khắc phục</span></div></div>`;
 }
 function home(){
@@ -264,10 +264,10 @@ function nearDup(){const d=S.draft;if(!d.ai)return null;return S.reports.filter(
 function loc(){
   const d=S.draft,dup=d.locOk?nearDup():null,show=dup&&!d.dupSkip;
   return `<div class="scr" style="position:relative">${stepHdr(2,'Xác nhận vị trí','capture')}
-  <div style="position:relative">${mapView(330,S.reports.filter(r=>open(r)&&r.status!=='merged'),true)}
-  <div style="position:absolute;left:16px;top:16px;right:16px;background:#fff;border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;box-shadow:0 1px 6px rgba(0,0,0,.15)">
+  <div style="position:relative">${mapView(330,S.reports.filter(r=>open(r)&&r.status!=='merged'),true)}</div>
+  <div style="position:relative;z-index:2;margin:-22px 16px 0;background:#fff;border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;box-shadow:0 -2px 14px rgba(10,26,68,.14)">
   <span class="muted">${d.place?'Bạn đã chọn':'Bạn đang ở'}</span><b style="font-size:16px">${d.place||'Gần số 45 Hưng Đạo Vương'}</b>
-  ${d.locOk?`<span class="st ok">✓ Đã xác nhận vị trí</span>`:`<div style="display:flex;gap:8px"><button class="cta" style="height:44px;font-size:15px" data-a="locok">Đúng</button><button class="sec" style="height:44px" data-a="go" data-v="pick">Không phải</button></div>`}</div></div>
+  ${d.locOk?`<span class="st ok">✓ Đã xác nhận vị trí</span>`:`<div style="display:flex;gap:8px"><button class="cta" style="height:44px;font-size:15px" data-a="locok">Đúng</button><button class="sec" style="height:44px" data-a="go" data-v="pick">Không phải</button></div>`}</div>
   <div style="padding:16px 20px;display:flex;flex-direction:column;gap:10px;flex:1">
   ${d.locOk&&!dup?`<div class="card"><b>Chưa có ai báo sự cố này gần đây</b><span class="muted">Bạn là người đầu tiên – cảm ơn bạn!</span></div><button class="cta" data-a="go" data-v="type">Tiếp tục</button>`:''}
   ${d.locOk&&dup&&d.dupSkip?`<button class="cta" data-a="go" data-v="type">Tiếp tục</button>`:''}
