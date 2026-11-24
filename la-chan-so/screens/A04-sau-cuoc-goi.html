@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>A04 – Phân tích sau cuộc gọi</title>
+<link rel="stylesheet" href="../ds.css">
+<script src="../icons.js"></script>
+</head>
+<body>
+
+<!-- ============ A04a: Bé Nai hỏi thăm bằng giọng nói, bà trả lời bằng lời hoặc bấm Có/Không (chữ lớn) ============ -->
+<section class="shot">
+  <div class="shot-name">A04a – Sau cuộc gọi · Bé Nai hỏi thăm bằng giọng nói (chữ lớn)</div>
+  <div class="frame phone lg" data-name="A04a-hoi-nhanh">
+    <div class="statusbar"><span>10:43</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <i class="ic" data-i="x"></i>
+      <div class="title" style="font-size:20px;line-height:26px">Bé Nai hỏi thăm</div>
+      <i class="ic c-brand" data-i="volume"></i>
+    </div>
+
+    <div class="content" style="padding-top:8px;gap:16px;align-items:center">
+      <div class="call-avatar" style="width:208px;height:208px;border-radius:104px;background:#FFF7ED;border:6px solid #DBEAFE;display:flex;align-items:center;justify-content:center;margin-top:12px">
+        <img src="../assets/spot-mascot.png" width="190" height="190" style="border-radius:95px" alt="">
+      </div>
+      <div class="row gap-8 c-brand"><i class="ic s20" data-i="wave"></i><div class="t-label bold">Bé Nai đang hỏi bà…</div></div>
+
+      <div class="center" style="font-size:22px;line-height:30px;font-weight:600;color:var(--ink);padding:0 8px">Người vừa gọi có bảo bà chuyển tiền không ạ?</div>
+
+      <div class="col gap-12 mt-auto w-full">
+        <div class="row gap-8 jcenter muted"><i class="ic s18" data-i="mic"></i><div class="t-label">Bà nói “có” hoặc “không”, hoặc bấm</div></div>
+        <div class="row gap-12">
+          <div class="btn primary" style="flex:1;min-width:0;height:76px;font-size:26px;line-height:32px;font-weight:700;border-radius:22px">Có</div>
+          <div class="btn outline" style="flex:1;min-width:0;height:76px;font-size:26px;line-height:32px;font-weight:700;border-radius:22px">Không</div>
+        </div>
+        <div class="t-label bold c-brand center">Tôi biết số này</div>
+      </div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ A04b: phân tích từ file ghi âm của máy (chữ lớn, bà Hoa) ============ -->
+<section class="shot">
+  <div class="shot-name">A04b – Sau cuộc gọi · Phân tích bản ghi âm (chữ lớn)</div>
+  <div class="frame phone lg" data-name="A04b-phan-tich-ghi-am" style="height:1068px">
+    <div class="statusbar"><span>10:43</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <i class="ic" data-i="arrow-left"></i>
+      <div class="title" style="font-size:20px;line-height:26px">Phân tích cuộc gọi</div>
+      <i class="ic c-brand" data-i="volume"></i>
+    </div>
+
+    <div class="content" style="padding-top:4px;gap:12px">
+      <div class="row gap-12">
+        <div class="icon-box ai"><i class="ic s20" data-i="file-audio"></i></div>
+        <div class="col grow gap-4">
+          <div class="t-label semi">Bản ghi âm của máy · 4:12</div>
+          <span class="chip ai" style="align-self:flex-start"><i class="ic s14" data-i="sparkles"></i>AI đã chép lời</span>
+        </div>
+      </div>
+
+      <div class="card danger r24 col gap-12">
+        <div class="row gap-12">
+          <div class="icon-box lgx solid-danger"><i class="ic s32" data-i="alert-oct"></i></div>
+          <div class="col grow">
+            <div class="t-cap semi c-danger-ink">Kết quả</div>
+            <div class="t-display c-danger-ink">Nguy hiểm</div>
+          </div>
+        </div>
+        <div class="t-body c-danger-ink">Người gọi đòi chuyển tiền và dặn giữ bí mật.</div>
+        <div class="col gap-6">
+          <div class="t-cap bold c-danger-ink">Bằng chứng kết hợp</div>
+          <div class="t-cap c-danger-ink">14 người đã báo số này · Số chưa từng liên lạc với bà · Bản ghi có câu đòi chuyển tiền</div>
+        </div>
+      </div>
+
+      <div class="card safe row gap-12">
+        <div class="icon-box solid-safe round"><i class="ic s20" data-i="check"></i></div>
+        <div class="col grow">
+          <div class="t-label bold c-safe-ink">Đã báo cho Minh · 10:43</div>
+          <div class="t-cap c-ink">Minh sẽ gọi cho bà. Bà không cần bấm gì.</div>
+        </div>
+      </div>
+      <div class="btn primary xl block"><i class="ic" data-i="phone"></i>Gọi Minh ngay</div>
+
+      <div class="card ai col gap-8">
+        <div class="ai-tag" style="font-size:14px;line-height:20px"><i class="ic s16" data-i="sparkles"></i>AI nhận ra 3 dấu hiệu</div>
+        <div class="row gap-8"><i class="ic s20 c-ai" data-i="check"></i><div class="t-label c-ai-ink">Giả danh cơ quan chức năng</div></div>
+        <div class="row gap-8"><i class="ic s20 c-ai" data-i="check"></i><div class="t-label c-ai-ink">Đòi chuyển tiền</div></div>
+        <div class="row gap-8"><i class="ic s20 c-ai" data-i="check"></i><div class="t-label c-ai-ink">Giục gấp, bắt giữ bí mật</div></div>
+      </div>
+
+      <div class="card col gap-10">
+        <div class="t-over muted">Bản chép lời</div>
+        <div class="col gap-2">
+          <div class="t-cap bold c-danger">Người gọi</div>
+          <div style="font-size:17px;line-height:24px">Tôi là <span class="hl">cán bộ điều tra</span>. Bà có liên quan đến một vụ án rửa tiền.</div>
+        </div>
+        <div class="col gap-2">
+          <div class="t-cap bold c-danger">Người gọi</div>
+          <div style="font-size:17px;line-height:24px">Bà phải <span class="hl">chuyển tiền vào tài khoản tạm giữ</span> <span class="hl">trong 30 phút</span>.</div>
+        </div>
+        <div class="col gap-2">
+          <div class="t-cap bold c-danger">Người gọi</div>
+          <div style="font-size:17px;line-height:24px">Việc này <span class="hl">không được nói với ai</span>, kể cả con cái.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ A04c: máy không có ghi âm cuộc gọi (chữ lớn) ============ -->
+<section class="shot">
+  <div class="shot-name">A04c – Sau cuộc gọi · Máy không có ghi âm (chữ lớn)</div>
+  <div class="frame phone lg" data-name="A04c-khong-co-ghi-am">
+    <div class="statusbar"><span>10:43</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <i class="ic" data-i="x"></i>
+      <div class="title" style="font-size:20px;line-height:26px">Cuộc gọi vừa rồi</div>
+      <i class="ic c-brand" data-i="volume"></i>
+    </div>
+
+    <div class="content" style="padding-top:4px;gap:16px">
+      <div class="card row gap-12" style="padding:14px 16px">
+        <div class="icon-box brand" style="width:48px;height:48px;border-radius:14px"><i class="ic" data-i="phone-in"></i></div>
+        <div class="col grow">
+          <div class="t-h2">0912 345 678</div>
+          <div class="t-cap muted">Số lạ · 4 phút 12 giây · 10:38</div>
+        </div>
+      </div>
+
+      <div class="card soft col gap-12" style="border-color:var(--outline-2)">
+        <div class="icon-box" style="width:48px;height:48px;border-radius:14px;background:#fff;color:var(--brand)"><i class="ic s28" data-i="info"></i></div>
+        <div class="col gap-6">
+          <div class="t-h2">Máy này không có sẵn tính năng ghi âm cuộc gọi.</div>
+          <div class="t-label muted">Lá chắn vẫn kiểm tra được<br>theo 2 cách:</div>
+        </div>
+      </div>
+
+      <div class="card row gap-12" style="padding:24px 16px">
+        <div class="icon-box lgx brand"><i class="ic s28" data-i="list"></i></div>
+        <div class="col grow gap-2">
+          <div class="t-h2">Trả lời một câu hỏi</div>
+          <div class="t-cap muted">Mất khoảng 5 giây</div>
+        </div>
+        <i class="ic faint" data-i="chev-right"></i>
+      </div>
+
+      <div class="card row gap-12" style="padding:24px 16px">
+        <div class="icon-box lgx ai"><i class="ic s28" data-i="mic"></i></div>
+        <div class="col grow gap-2">
+          <div class="t-h2">Kể lại bằng<br>giọng nói</div>
+          <div class="t-cap muted">Bà kể, AI nghe và phân tích</div>
+        </div>
+        <i class="ic faint" data-i="chev-right"></i>
+      </div>
+
+      <div class="row gap-8 jcenter mt-auto">
+        <i class="ic s16 muted" data-i="lock"></i>
+        <div class="t-cap muted">Lời kể được phân tích xong sẽ xoá.</div>
+      </div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+</body>
+</html>

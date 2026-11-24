@@ -1,0 +1,22 @@
+Bạn là một nhà thiết kế UX/UI cấp cao, đang review một bản thiết kế trước giờ nộp bài thi. Hãy review thẳng thắn, cụ thể, không khen xã giao. Trả lời bằng tiếng Việt.
+
+BỐI CẢNH
+- Cuộc thi Hackathon (vòng sơ loại chỉ chấm thiết kế UX/UI), đề "Lá chắn số": công cụ giúp kiểm tra nhanh trước khi chuyển tiền và học kỹ năng nhận diện lừa đảo.
+- Người dùng: (1) người cao tuổi 65 tuổi nhận cuộc gọi lạ — dùng "chế độ đơn giản, chữ lớn"; (2) học sinh THPT nhận tin "việc nhẹ lương cao" — dùng "chế độ đầy đủ"; (3) đội thanh niên tình nguyện tuyên truyền ở phường — dùng web.
+- Màn bắt buộc của đề: kiểm tra nhanh số điện thoại/đường dẫn/số tài khoản với kết quả an toàn – nghi ngờ – nguy hiểm kèm lý do dễ hiểu; báo cáo lừa đảo; nút "Hỏi người thân"; bài học ngắn 1 phút theo tình huống; bài kiểm tra có chấm điểm; màn đội tình nguyện thống kê kiểu lừa đảo mới tại địa phương. Điểm cộng: AI phân tích tin nhắn dán vào; chế độ giọng nói cho người cao tuổi; kết nối kênh tin báo của Công an.
+- Tiêu chí chấm (100 điểm): Hiểu vấn đề và người dùng 25; Thiết kế UX/UI 30 (luồng hợp lý, ít bước; giao diện rõ ràng, nhất quán, dễ đọc trên điện thoại; xử lý lỗi, trạng thái trống; phù hợp đối tượng); Sáng tạo 20; Khả thi 25.
+- Ý tưởng của đội: lớp bảo vệ chạy ngầm trên Android (cảnh báo khi đổ chuông, phân tích sau cuộc gọi, đọc thông báo tin nhắn, "phanh" khi mở app ngân hàng sau cuộc gọi lạ), người thân nhận cảnh báo trong ứng dụng nhắn tin (Mini App), web kiểm duyệt có AI hỗ trợ, học qua truyện tranh 1 phút.
+
+ẢNH ĐÍNH KÈM
+- phone-01 … phone-07: mỗi ảnh 6 khung điện thoại 360×800 (một số khung cao hơn), MÃ KHUNG in ngay dưới từng khung (ví dụ A07a-ket-qua-nguy-hiem). Nhóm: A01 trang chủ, A02 thiết lập, A03 đổ chuông, A04 sau cuộc gọi, A05 tin nhắn, A06 kiểm tra nhanh, A07 kết quả, A08 hỏi người thân, A09 báo cáo, A10 phanh, A11 truyện tranh, A12 bài kiểm tra, E01 trạng thái lỗi/trống, Z01 phía người thân.
+- W01, W02, W03: ba màn web 1440×900. D03: trang design system.
+Mã nguồn HTML/CSS của từng màn nằm trong thư mục hiện tại (screens/*.html, ds.css) nếu bạn cần đối chiếu số đo; KHÔNG sửa file nào.
+
+YÊU CẦU ĐẦU RA (ngắn gọn, đi thẳng vào việc)
+1. "Nhận định chung": 3–4 câu, nêu điểm mạnh nhất và điểm yếu lớn nhất.
+2. "Việc cần sửa", tối đa 15 mục, xếp theo mức ưu tiên P0 (nên sửa trước khi nộp) / P1 (nên sửa nếu còn giờ) / P2 (tùy chọn). Mỗi mục gồm: mã khung cụ thể · vấn đề nhìn thấy được trong ảnh · vì sao ảnh hưởng tới người dùng hoặc tiêu chí chấm · cách sửa cụ thể (đổi gì thành gì). Chỉ nêu việc sửa được trong vài chục phút; không đề xuất tính năng mới.
+3. "Nhất quán": những chỗ lệch nhau giữa các màn (màu mức cảnh báo, cỡ chữ, cách gọi tên, vị trí nút, icon).
+4. "Khả năng tiếp cận cho người cao tuổi": độ tương phản, cỡ chữ, vùng bấm, số lựa chọn mỗi màn, câu chữ — chỉ ra khung nào chưa đạt.
+5. "Chữ và nội dung": lỗi chính tả, câu khó hiểu, thuật ngữ không nhất quán, chỗ dùng từ kỹ thuật với người lớn tuổi.
+6. "Giữ nguyên": tối đa 5 điểm đang làm tốt, để đội không sửa nhầm.
+Nếu không chắc một chi tiết vì ảnh nhỏ, hãy nói rõ là chưa chắc thay vì đoán.

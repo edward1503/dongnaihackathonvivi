@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>A09 – Báo cáo lừa đảo</title>
+<link rel="stylesheet" href="../ds.css">
+<script src="../icons.js"></script>
+<style>
+  .shot{width:360px}
+  .pick{height:40px;border-radius:20px;padding:0 6px;flex:1 1 auto;justify-content:center}
+  .tile{width:96px;height:72px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;flex:none;color:var(--ink-2)}
+  .tile.add{border:1.5px dashed var(--outline)}
+</style>
+</head>
+<body>
+
+<!-- ============ A09a: biểu mẫu báo cáo (bước 2/3) ============ -->
+<section class="shot">
+  <div class="shot-name">A09a – Báo cáo lừa đảo · Biểu mẫu</div>
+  <div class="frame phone" data-name="A09a-bao-cao-form" style="height:832px">
+    <div class="statusbar"><span>10:48</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <i class="ic" data-i="arrow-left"></i>
+      <div class="title">Báo cáo lừa đảo</div>
+    </div>
+
+    <div class="content" style="padding-top:4px">
+      <div class="row gap-12">
+        <div class="steps grow"><div class="step on"></div><div class="step on"></div><div class="step"></div></div>
+        <div class="t-cap muted">Bước 2/3</div>
+      </div>
+
+      <div class="col gap-8">
+        <div class="t-label bold">Loại</div>
+        <div class="row gap-6">
+          <span class="chip solid-brand pick"><i class="ic s14" data-i="phone"></i>Cuộc gọi</span>
+          <span class="chip outline pick">Tin nhắn</span>
+          <span class="chip outline pick">Đường dẫn</span>
+          <span class="chip outline pick">Tài khoản</span>
+        </div>
+      </div>
+
+      <div class="col gap-8">
+        <div class="t-label bold">Số điện thoại</div>
+        <div class="input">
+          <div class="grow">0912 345 678</div>
+          <span class="chip ai"><i class="ic s14" data-i="sparkles"></i>Tự điền</span>
+        </div>
+      </div>
+
+      <div class="col gap-8">
+        <div class="t-label bold">Chuyện gì đã xảy ra?</div>
+        <div class="input area" style="min-height:112px">
+          <div class="grow">Tự xưng cán bộ điều tra, yêu cầu chuyển tiền vào tài khoản tạm giữ.</div>
+          <div class="icon-box brand round" style="align-self:flex-end"><i class="ic s20" data-i="mic"></i></div>
+        </div>
+      </div>
+
+      <div class="col gap-8">
+        <div class="t-label bold">Bằng chứng</div>
+        <div class="row gap-8">
+          <div class="tile bg-soft"><i class="ic s20" data-i="image"></i><div class="t-cap">Ảnh chụp</div></div>
+          <div class="tile add"><i class="ic s20" data-i="plus"></i><div class="t-cap">Thêm</div></div>
+        </div>
+        <div class="card soft row gap-12" style="padding:12px;border-color:var(--outline-2)">
+          <div class="bg-brand c-white none" style="width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center"><i class="ic s14" data-i="check"></i></div>
+          <div class="col grow gap-2">
+            <div class="t-label semi">Đính kèm bản ghi âm 4:12</div>
+            <div class="t-cap muted">Bản ghi này sẽ được gửi cho đội duyệt.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col gap-8">
+        <div class="t-label bold">Bạn đã mất tiền chưa?</div>
+        <div class="seg">
+          <div class="seg-item active" style="height:40px">Chưa</div>
+          <div class="seg-item" style="height:40px">Rồi</div>
+        </div>
+      </div>
+
+      <div class="btn primary block mt-auto">Gửi báo cáo</div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ A09b: bottom sheet hỏi báo cho cộng đồng ============ -->
+<section class="shot">
+  <div class="shot-name">A09b – Báo cáo lừa đảo · Báo cộng đồng</div>
+  <div class="frame phone bg-white" data-name="A09b-bao-cong-dong">
+    <div class="statusbar"><span>10:49</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+
+    <div class="content">
+      <div class="card soft" style="height:80px"></div>
+      <div class="card soft" style="height:120px"></div>
+      <div class="card soft" style="height:100px"></div>
+    </div>
+
+    <div class="scrim"></div>
+
+    <div class="sheet" style="padding-bottom:0">
+      <div class="grab"></div>
+      <div class="icon-box lgx brand"><i class="ic s28" data-i="megaphone"></i></div>
+      <div class="col gap-8">
+        <div class="t-h1">Báo số này cho cộng đồng?</div>
+        <div class="t-body muted">AI sẽ kiểm tra trước. Ca nào chưa chắc thì đội tình nguyện duyệt. Tên bạn không hiển thị.</div>
+      </div>
+      <div class="card soft row gap-12" style="padding:12px 16px">
+        <i class="ic s20 muted" data-i="phone"></i>
+        <div class="t-body semi grow">0912 345 678</div>
+        <span class="chip danger"><i class="ic s14" data-i="alert-oct"></i>Nghi lừa đảo</span>
+      </div>
+      <div class="col gap-4">
+        <div class="btn primary block">Gửi báo cáo</div>
+        <div class="btn ghost block">Để sau</div>
+      </div>
+      <div class="gesture clear" style="margin-top:-12px"><div class="pill"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ A09c: đã gửi báo cáo ============ -->
+<section class="shot">
+  <div class="shot-name">A09c – Báo cáo lừa đảo · Đã gửi</div>
+  <div class="frame phone" data-name="A09c-bao-cao-xong">
+    <div class="statusbar"><span>10:50</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+
+    <div class="content" style="gap:14px">
+      <div class="col acenter gap-4" style="padding-top:12px">
+        <div class="icon-box xl solid-safe"><i class="ic s48" data-i="check"></i></div>
+        <div class="t-h1 center mt-8">Cảm ơn bạn!</div>
+        <div class="t-body muted center">Bạn là người thứ 15 báo số này.</div>
+      </div>
+
+      <div class="card ai col gap-10">
+        <div class="ai-tag"><i class="ic s14" data-i="sparkles"></i>AI đã phân loại</div>
+        <div class="t-label bold c-ai-ink">Giả danh cơ quan chức năng</div>
+        <div class="col gap-6">
+          <div class="row between"><div class="t-cap c-ai-ink">Độ tin cậy</div><div class="t-cap bold c-ai-ink">94%</div></div>
+          <div class="progress" style="background:#fff"><div class="progress-bar ai" style="width:94%"></div></div>
+        </div>
+        <span class="chip safe" style="align-self:flex-start"><i class="ic s14" data-i="check"></i>Đã xác nhận · đang cảnh báo cộng đồng</span>
+      </div>
+
+      <div class="card warn row gap-8" style="padding:12px">
+        <div class="icon-box warn round" style="background:#fff"><i class="ic s20" data-i="award"></i></div>
+        <div class="t-label bold c-warn-ink grow">+10 điểm đóng góp</div>
+        <div class="t-cap c-warn-ink">Tổng: 130 điểm</div>
+      </div>
+
+      <div class="card row gap-8" style="padding:12px 8px 12px 12px">
+        <div class="icon-box brand"><i class="ic s20" data-i="shield"></i></div>
+        <div class="col grow gap-2">
+          <div class="t-label bold">Gửi tin báo cho Công an phường</div>
+          <div class="t-cap muted">Lá chắn gom sẵn bằng chứng<br>thành hồ sơ</div>
+        </div>
+        <i class="ic s20 faint" data-i="chev-right"></i>
+      </div>
+
+      <div class="card danger row gap-8" style="padding:12px 8px 12px 12px">
+        <div class="icon-box solid-danger"><i class="ic s20" data-i="alert"></i></div>
+        <div class="t-label semi c-danger-ink grow">Đã lỡ chuyển tiền?<br>Xem việc cần làm ngay</div>
+        <i class="ic s20 c-danger" data-i="chev-right"></i>
+      </div>
+
+      <div class="btn primary block mt-auto">Về trang chủ</div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+</body>
+</html>

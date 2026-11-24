@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>A12 – Bài kiểm tra nhận diện lừa đảo</title>
+<link rel="stylesheet" href="../ds.css">
+<script src="../icons.js"></script>
+<style>
+  .opt{height:56px;padding:0 16px;border-radius:14px}
+  .opt.sel{border:1.5px solid var(--brand);background:var(--brand-c)}
+  .opt.ok{border-width:1.5px}
+  .radio{width:22px;height:22px;border-radius:11px;border:1.5px solid var(--outline);flex:none;display:flex;align-items:center;justify-content:center;background:#fff}
+  .radio.on{border-color:var(--brand);background:var(--brand)}
+  .radio-dot{width:8px;height:8px;border-radius:4px;background:#fff}
+  .ring{width:140px;height:140px;border-radius:50%;border:10px solid var(--brand);background:#fff;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .ring-num{font-size:40px;line-height:46px;font-weight:700;color:var(--ink)}
+  .rank{width:20px;flex:none;font-size:14px;line-height:20px;font-weight:700;color:var(--ink-2)}
+  .lb{padding:8px 10px;border-radius:10px}
+</style>
+</head>
+<body>
+
+<!-- ============ A12a: câu hỏi ============ -->
+<section class="shot">
+  <div class="shot-name">A12a – Bài kiểm tra · Câu hỏi</div>
+  <div class="frame phone" data-name="A12a-cau-hoi">
+    <div class="statusbar"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <i class="ic" data-i="x"></i>
+      <div class="title">Bài kiểm tra</div>
+      <div class="t-label muted">Câu 2/5</div>
+    </div>
+
+    <div class="content" style="padding-top:4px;gap:16px">
+      <div class="progress"><div class="progress-bar" style="width:40%"></div></div>
+
+      <div class="col gap-4">
+        <div class="t-over muted">Tình huống</div>
+        <div class="t-body">Bạn nhận được tin nhắn này từ một số lạ</div>
+      </div>
+
+      <div class="card soft col gap-10" style="padding:12px;border-color:var(--outline-2)">
+        <div class="row gap-10">
+          <div class="avatar gray" style="width:36px;height:36px;border-radius:18px"><i class="ic s20" data-i="user"></i></div>
+          <div class="t-label semi">Số lạ · 08:20</div>
+        </div>
+        <div class="bubble in">Chúc mừng! Bạn trúng thưởng xe máy tri ân khách hàng. Bấm vào đường dẫn để nhận trong 24h: <span class="c-brand semi">qua-tri-an.top</span></div>
+      </div>
+
+      <div class="t-h2">Tin nhắn này là gì?</div>
+
+      <div class="col gap-8">
+        <div class="card row gap-12 opt sel">
+          <div class="radio on"><div class="radio-dot"></div></div>
+          <div class="t-body semi c-brand-ink">Lừa đảo</div>
+        </div>
+        <div class="card row gap-12 opt">
+          <div class="radio"></div>
+          <div class="t-body">An toàn</div>
+        </div>
+        <div class="card row gap-12 opt">
+          <div class="radio"></div>
+          <div class="t-body">Chưa chắc, cần kiểm tra thêm</div>
+        </div>
+      </div>
+
+      <div class="row gap-8 jcenter">
+        <i class="ic s16 muted" data-i="info"></i>
+        <div class="t-cap muted">Chọn một đáp án rồi bấm Trả lời</div>
+      </div>
+
+      <div class="btn primary block mt-auto">Trả lời</div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ A12b: giải thích sau khi trả lời ============ -->
+<section class="shot">
+  <div class="shot-name">A12b – Bài kiểm tra · Giải thích đáp án</div>
+  <div class="frame phone" data-name="A12b-giai-thich">
+    <div class="statusbar"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <i class="ic" data-i="x"></i>
+      <div class="title">Bài kiểm tra</div>
+      <div class="t-label muted">Câu 2/5</div>
+    </div>
+
+    <div class="content" style="padding-top:4px;gap:14px">
+      <div class="progress"><div class="progress-bar" style="width:40%"></div></div>
+
+      <div class="card soft row top gap-10" style="padding:12px;border-color:var(--outline-2)">
+        <i class="ic s18 muted" data-i="message"></i>
+        <div class="col grow gap-2">
+          <div class="t-cap semi muted">Số lạ · 08:20</div>
+          <div class="t-label c-ink">Chúc mừng! Bạn trúng thưởng xe máy tri ân khách hàng. Bấm vào đường dẫn để nhận trong 24h: <span class="c-brand semi">qua-tri-an.top</span></div>
+        </div>
+      </div>
+
+      <div class="t-h2">Tin nhắn này là gì?</div>
+
+      <div class="col gap-8">
+        <div class="card safe row gap-12 opt ok">
+          <i class="ic c-safe" data-i="check-circle"></i>
+          <div class="t-body semi c-safe-ink grow">Lừa đảo</div>
+          <span class="chip solid-safe">Chính xác</span>
+        </div>
+        <div class="card row gap-12 opt">
+          <div class="radio" style="border-color:var(--outline-2)"></div>
+          <div class="t-body faint">An toàn</div>
+        </div>
+        <div class="card row gap-12 opt">
+          <div class="radio" style="border-color:var(--outline-2)"></div>
+          <div class="t-body faint">Chưa chắc, cần kiểm tra thêm</div>
+        </div>
+      </div>
+
+      <div class="card ai col gap-10" style="padding:14px 16px">
+        <div class="ai-tag"><i class="ic s14" data-i="sparkles"></i>Vì sao?</div>
+        <div class="row gap-8"><i class="ic s16 c-danger" data-i="alert"></i><div class="t-label c-ink">Trúng thưởng dù không tham gia</div></div>
+        <div class="row gap-8"><i class="ic s16 c-danger" data-i="alert"></i><div class="t-label c-ink">Giục nhận trong 24 giờ</div></div>
+        <div class="row gap-8"><i class="ic s16 c-danger" data-i="alert"></i><div class="t-label c-ink">Đường dẫn lạ, đuôi .top</div></div>
+      </div>
+
+      <div class="row between" style="min-height:40px">
+        <span class="chip warn"><i class="ic s14" data-i="award"></i>+20 điểm</span>
+        <div class="row gap-4 c-brand"><div class="t-cap bold">Xem truyện 1 phút về chiêu này</div><i class="ic s14" data-i="arrow-right"></i></div>
+      </div>
+
+      <div class="btn primary block mt-auto">Câu tiếp theo<i class="ic s20" data-i="arrow-right"></i></div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ A12c: kết quả ============ -->
+<section class="shot">
+  <div class="shot-name">A12c – Bài kiểm tra · Kết quả và xếp hạng</div>
+  <div class="frame phone" data-name="A12c-ket-qua">
+    <div class="statusbar"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <i class="ic" data-i="x"></i>
+      <div class="title">Kết quả</div>
+    </div>
+
+    <div class="content" style="padding-top:4px;gap:14px">
+      <div class="col acenter gap-10">
+        <div class="ring">
+          <div class="ring-num">4/5</div>
+          <div class="t-cap muted">câu đúng</div>
+        </div>
+        <div class="t-h1 mt-4">80 điểm · Khá</div>
+        <div class="row gap-8"><img src="../assets/mascot-cheer.png" width="40" height="40" style="border-radius:20px" alt=""><span class="chip warn"><i class="ic s14" data-i="award"></i>Huy hiệu: Người gác cổng</span></div>
+      </div>
+
+      <div class="card col gap-10">
+        <div class="t-over muted">Câu bạn làm sai</div>
+        <div class="row top gap-12">
+          <div class="icon-box danger"><i class="ic s20" data-i="x"></i></div>
+          <div class="col grow gap-6">
+            <div class="t-label semi">Người thân nhắn mượn tiền qua tài khoản lạ</div>
+            <div class="row gap-4 c-brand"><div class="t-cap bold">Xem truyện 1 phút</div><i class="ic s14" data-i="arrow-right"></i></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card col gap-4">
+        <div class="row between" style="margin-bottom:4px"><div class="t-over muted">Xếp hạng nhóm</div><div class="row gap-4 c-brand"><div class="t-cap bold">THPT Sông Phố</div><i class="ic s14" data-i="chev-down"></i></div></div>
+        <div class="list-item last lb">
+          <div class="rank">1</div>
+          <div class="t-label grow">Nhóm 11A3</div>
+          <div class="t-label semi">86 điểm</div>
+        </div>
+        <div class="list-item last lb bg-brand-c">
+          <div class="rank" style="color:var(--brand)">2</div>
+          <div class="t-label semi grow c-brand-ink">Nhóm 11A1 (nhóm bạn)</div>
+          <div class="t-label bold c-brand-ink">82 điểm</div>
+        </div>
+        <div class="list-item last lb">
+          <div class="rank">3</div>
+          <div class="t-label grow">Nhóm 11A7</div>
+          <div class="t-label semi">79 điểm</div>
+        </div>
+      </div>
+
+      <div class="col gap-10 mt-auto">
+        <div class="btn primary block"><i class="ic s20" data-i="share"></i>Thách bạn bè làm bài</div>
+        <div class="btn outline block"><i class="ic s20" data-i="refresh"></i>Làm lại</div>
+      </div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+</body>
+</html>

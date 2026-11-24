@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>A03 – Cảnh báo khi đổ chuông</title>
+<link rel="stylesheet" href="../ds.css">
+<script src="../icons.js"></script>
+<style>
+/* Màn cuộc gọi đến kiểu Android chung (không theo hãng nào) */
+.call{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 44px 36px}
+.call-avatar{width:96px;height:96px;border-radius:48px;background:#1E293B;color:#94A3B8;display:flex;align-items:center;justify-content:center;flex:none}
+.call-num{font-size:30px;line-height:38px;font-weight:700;color:#fff;margin-top:20px}
+.call-sub{font-size:16px;line-height:24px;font-weight:500;color:#CBD5E1;margin-top:4px}
+.call-actions{display:flex;justify-content:space-between;width:100%;margin-top:64px}
+.call-act{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:14px;line-height:20px;font-weight:500;color:#CBD5E1}
+.call-round{width:68px;height:68px;border-radius:34px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
+.over12{font-size:12px;line-height:16px;font-weight:700;letter-spacing:.8px;text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<!-- ============ A03a: số đã bị báo cáo – nguy hiểm ============ -->
+<section class="shot">
+  <div class="shot-name">A03a – Đổ chuông · Nghi lừa đảo (thẻ nổi trên màn cuộc gọi)</div>
+  <div class="frame phone bg-navy" data-name="A03a-do-chuong-nguy-hiem">
+    <div class="statusbar on-dark"><span>10:38</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+
+    <div class="call">
+      <div class="call-avatar"><i class="ic s48" data-i="user"></i></div>
+      <div class="call-num">0912 345 678</div>
+      <div class="call-sub">Cuộc gọi đến · Số lạ</div>
+      <div class="call-actions">
+        <div class="call-act"><div class="call-round" style="background:#DC2626"><i class="ic s32" data-i="phone-off"></i></div>Từ chối</div>
+        <div class="call-act"><div class="call-round" style="background:#16A34A"><i class="ic s32" data-i="phone"></i></div>Nghe</div>
+      </div>
+    </div>
+
+    <div class="float-card" style="top:44px;background:var(--danger);color:#fff">
+      <div class="row gap-8">
+        <i class="ic s20" data-i="shield-alert"></i>
+        <div class="over12">Lá chắn số cảnh báo</div>
+      </div>
+      <div class="col gap-6">
+        <div class="row gap-10">
+          <i class="ic s28" data-i="alert-oct"></i>
+          <div style="font-size:26px;line-height:32px;font-weight:700">Nghi lừa đảo</div>
+        </div>
+        <div style="font-size:17px;line-height:24px;font-weight:500">14 người đã báo số này giả danh công an.</div>
+      </div>
+      <span class="chip solid-white" style="align-self:flex-start"><i class="ic s14" data-i="clock"></i>Báo cáo gần nhất: hôm qua</span>
+      <div class="btn white block" style="height:56px;font-size:17px">Chặn số này</div>
+    </div>
+
+    <div class="gesture clear on-dark"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ A03b: số lạ, chưa có dữ liệu ============ -->
+<section class="shot">
+  <div class="shot-name">A03b – Đổ chuông · Số chưa lưu: Lá chắn im lặng, chỉ có nhãn nhẹ</div>
+  <div class="frame phone bg-navy" data-name="A03b-do-chuong-chua-ro">
+    <div class="statusbar on-dark"><span>10:38</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+
+    <div class="call">
+      <div class="call-avatar"><i class="ic s48" data-i="user"></i></div>
+      <div class="call-num">0912 345 678</div>
+      <div class="call-sub">Cuộc gọi đến · Số chưa lưu</div>
+      <span class="chip" style="background:#1E293B;color:#CBD5E1;margin-top:14px;height:32px;font-size:13px"><i class="ic s14" data-i="box"></i>23 người từng gắn nhãn “giao hàng”</span>
+      <div class="call-actions">
+        <div class="call-act"><div class="call-round" style="background:#DC2626"><i class="ic s32" data-i="phone-off"></i></div>Từ chối</div>
+        <div class="call-act"><div class="call-round" style="background:#16A34A"><i class="ic s32" data-i="phone"></i></div>Nghe</div>
+      </div>
+    </div>
+
+    <div class="float-card" style="top:44px;background:#1E293B;color:#CBD5E1;padding:12px 16px;gap:0;border-radius:16px">
+      <div class="row gap-10">
+        <i class="ic s20" data-i="shield-check" style="color:#93C5FD"></i>
+        <div style="font-size:14px;line-height:20px;font-weight:500">Lá chắn không thấy dấu hiệu rủi ro nên không cảnh báo và không hỏi lại.</div>
+      </div>
+    </div>
+
+    <div class="gesture clear on-dark"><div class="pill"></div></div>
+  </div>
+</section>
+
+</body>
+</html>

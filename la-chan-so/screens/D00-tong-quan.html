@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>D00 – Bìa, luồng chính, design system</title>
+<link rel="stylesheet" href="../ds.css">
+<script src="../icons.js"></script>
+<style>
+.page{width:1440px;height:900px;background:#fff;padding:52px 64px;display:flex;flex-direction:column;gap:24px}
+.big{font-size:72px;line-height:80px;font-weight:700}
+.sub{font-size:24px;line-height:34px;font-weight:500;color:var(--ink-2)}
+.pg-title{font-size:34px;line-height:42px;font-weight:700}
+.num{width:28px;height:28px;border-radius:14px;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex:none}
+.flow-step{flex:1;min-width:0;background:var(--surface-2);border-radius:16px;padding:14px 12px;display:flex;flex-direction:column;gap:8px}
+.flow-step.key{background:var(--brand-c)}
+.flow-step.red{background:var(--danger-c)}
+.code{font-size:12px;line-height:16px;font-weight:700;color:var(--brand);letter-spacing:.5px}
+.sw{width:100%;height:56px;border-radius:12px}
+.cell{flex:1;min-width:0}
+.c1{width:210px;flex:none}.c2{flex:1;min-width:0}.c3{width:150px;flex:none}
+</style>
+</head>
+<body>
+
+<!-- ================= D01: Bìa và ý tưởng ================= -->
+<section class="shot">
+  <div class="shot-name">D01 – Bìa và ý tưởng</div>
+  <div class="frame page" data-name="D01-bia-y-tuong">
+    <div class="row gap-12">
+      <span class="chip brand">Đề 4 · Lá chắn số</span>
+      <span class="chip outline">An toàn thông tin · Phòng, chống lừa đảo · Kỹ năng số</span>
+      <span class="chip outline">Hackathon thành phố Đồng Nai 2026 · Vòng sơ loại</span>
+    </div>
+
+    <div class="row gap-32 top">
+      <div class="col gap-16" style="width:540px;flex:none">
+        <div class="row gap-16"><img src="../assets/spot-mascot.png" width="160" height="160" style="border-radius:28px" alt=""><div class="col gap-4"><div class="t-h2">Bé Nai</div><div class="t-label muted" style="max-width:300px">Linh vật lấy từ tên Đồng Nai, “cánh đồng nai”. Dẫn truyện, hỏi thăm người cao tuổi bằng giọng nói.</div></div></div>
+        <div class="big">Lá chắn số</div>
+        <div class="sub">Lớp bảo vệ chạy ngầm trước lừa đảo, có người thân và cộng đồng đứng sau.</div>
+        <div class="col gap-10 mt-8">
+          <div class="row gap-12"><div class="icon-box brand"><i class="ic s20" data-i="smartphone"></i></div><div class="col"><div class="t-label bold">App Android</div><div class="t-cap muted">Bà Hoa, 65 tuổi · Vy, học sinh lớp 11</div></div></div>
+          <div class="row gap-12"><div class="icon-box safe"><i class="ic s20" data-i="users"></i></div><div class="col"><div class="t-label bold">Mini App cho người thân</div><div class="t-cap muted">Minh nhận cảnh báo và trả lời một chạm</div></div></div>
+          <div class="row gap-12"><div class="icon-box ai"><i class="ic s20" data-i="chart"></i></div><div class="col"><div class="t-label bold">Web cho đội tình nguyện</div><div class="t-cap muted">Thống kê, kiểm duyệt, tuyên truyền</div></div></div>
+        </div>
+      </div>
+
+      <div class="col gap-16 grow">
+        <div class="row gap-8"><i class="ic s20 c-brand" data-i="refresh"></i><div class="t-over c-brand">Vòng bảo vệ: càng nhiều người báo, lá chắn càng mạnh</div></div>
+        <div class="grid-3">
+          <div class="card col gap-8"><div class="row gap-8"><div class="num">1</div><div class="t-label bold">Phát hiện ngầm</div></div><div class="t-cap muted">Cuộc gọi lạ, tin nhắn đáng ngờ, mở app ngân hàng sau cuộc gọi lạ.</div></div>
+          <div class="card col gap-8"><div class="row gap-8"><div class="num">2</div><div class="t-label bold">Cảnh báo đúng lúc</div></div><div class="t-cap muted">Khi đổ chuông, ngay sau cuộc gọi, và trước khi chuyển tiền.</div></div>
+          <div class="card col gap-8"><div class="row gap-8"><div class="num">3</div><div class="t-label bold">Kéo người thân vào</div></div><div class="t-cap muted">Con nhận tin, trả lời một chạm, lời nhắn hiện to trên máy mẹ.</div></div>
+          <div class="card col gap-8"><div class="row gap-8"><div class="num">4</div><div class="t-label bold">Báo cho cộng đồng</div></div><div class="t-cap muted">Người trẻ được hỏi một chạm. Người lớn tuổi không bị làm phiền.</div></div>
+          <div class="card ai col gap-8"><div class="row gap-8"><div class="num" style="background:#7C3AED">5</div><div class="t-label bold">AI kiểm duyệt trước</div></div><div class="t-cap c-ai-ink">Ca rõ ràng AI tự xử lý. Ca chưa chắc mới tới tình nguyện viên.</div></div>
+          <div class="card col gap-8"><div class="row gap-8"><div class="num">6</div><div class="t-label bold">Thành bài học</div></div><div class="t-cap muted">Kiểu lừa đảo mới thành truyện tranh 1 phút và câu đố.</div></div>
+        </div>
+
+        <div class="card soft col gap-12">
+          <div class="t-over muted">Dữ liệu mẫu của đề (tháng 11/2026)</div>
+          <div class="row gap-24">
+            <div class="col"><div class="t-num">120</div><div class="t-cap muted">lượt báo cáo trong tháng</div></div>
+            <div class="col"><div class="t-num c-danger">35%</div><div class="t-cap muted">là đường dẫn giả mạo (42 lượt)</div></div>
+            <div class="col"><div class="t-num">10</div><div class="t-cap muted">tình huống lừa đảo phổ biến</div></div>
+            <div class="col grow"><div class="t-label semi">Kẻ gian thắng nhờ sự gấp gáp và nỗi sợ.</div><div class="t-cap muted">Lá chắn được thiết kế để cắt sự gấp gáp đó.</div></div>
+          </div>
+        </div>
+
+        <div class="row gap-8 wrap">
+          <span class="chip danger"><i class="ic s14" data-i="alert-oct"></i>Nguy hiểm</span>
+          <span class="chip warn"><i class="ic s14" data-i="alert"></i>Nghi ngờ</span>
+          <span class="chip safe"><i class="ic s14" data-i="check-circle"></i>An toàn</span>
+          <span class="chip"><i class="ic s14" data-i="help"></i>Chưa có dữ liệu</span>
+          <span class="chip ai"><i class="ic s14" data-i="sparkles"></i>Nội dung do AI tạo luôn có nhãn</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card row gap-12 top">
+        <div class="avatar lgx amber">H</div>
+        <div class="col gap-4 grow"><div class="t-label bold">Bà Hoa, 65 tuổi</div><div class="t-cap muted">Nhận cuộc gọi lạ tự xưng công an. Mắt kém, sợ bấm nhầm.</div><div class="t-cap semi c-brand">Cần: chữ lớn, ít bước, có con đứng sau.</div></div>
+      </div>
+      <div class="card row gap-12 top">
+        <div class="avatar lgx">V</div>
+        <div class="col gap-4 grow"><div class="t-label bold">Vy, 17 tuổi, lớp 11</div><div class="t-cap muted">Nhận tin “việc nhẹ lương cao”. Rành điện thoại nhưng chủ quan.</div><div class="t-cap semi c-brand">Cần: giải thích nhanh, học qua truyện và câu đố.</div></div>
+      </div>
+      <div class="card row gap-12 top">
+        <div class="avatar lgx gray">K</div>
+        <div class="col gap-4 grow"><div class="t-label bold">Khoa, 24 tuổi, tình nguyện viên</div><div class="t-cap muted">Đi tuyên truyền ở khu phố, không biết chiêu nào đang nổi.</div><div class="t-cap semi c-brand">Cần: số liệu địa phương, nội dung làm sẵn.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= D02: Luồng chính và các lớp bảo vệ ================= -->
+<section class="shot">
+  <div class="shot-name">D02 – Luồng chính và 4 lớp bảo vệ</div>
+  <div class="frame page" data-name="D02-luong-chinh" style="gap:20px">
+    <div class="col gap-4">
+      <div class="pg-title">Luồng chính: một cuộc gọi lừa đảo được ngăn lại như thế nào</div>
+      <div class="t-body muted">Đi qua cả ba nhóm người dùng: bà Hoa (app), Minh (người thân), Khoa (đội tình nguyện).</div>
+    </div>
+
+    <div class="row gap-8" style="align-items:stretch">
+      <div class="flow-step red"><div class="code">A03</div><i class="ic c-danger" data-i="phone-in"></i><div class="t-label bold">Đổ chuông</div><div class="t-cap muted">Thẻ cảnh báo nổi trên màn cuộc gọi</div></div>
+      <div class="flow-step"><div class="code">A04</div><i class="ic c-brand" data-i="file-audio"></i><div class="t-label bold">Sau cuộc gọi</div><div class="t-cap muted">Trợ lý hỏi một câu bằng giọng nói, AI chép lời bản ghi</div></div>
+      <div class="flow-step key"><div class="code">A08</div><i class="ic c-brand" data-i="users"></i><div class="t-label bold">Báo người thân</div><div class="t-cap muted">Lá chắn tự báo cho con, bà không cần bấm</div></div>
+      <div class="flow-step key"><div class="code">Z01</div><i class="ic c-brand" data-i="send"></i><div class="t-label bold">Con trả lời</div><div class="t-cap muted">“Mẹ đừng chuyển”, hiện to trên máy mẹ</div></div>
+      <div class="flow-step red"><div class="code">A10</div><i class="ic c-danger" data-i="hand"></i><div class="t-label bold">Nhắc dừng</div><div class="t-cap muted">Mở app ngân hàng là bị nhắc dừng</div></div>
+      <div class="flow-step"><div class="code">A09</div><i class="ic c-brand" data-i="flag"></i><div class="t-label bold">Báo cáo</div><div class="t-cap muted">Người thân hoặc người trẻ gửi, số đã điền sẵn</div></div>
+      <div class="flow-step" style="background:#EDE9FE"><div class="code" style="color:#7C3AED">W02</div><i class="ic c-ai" data-i="sparkles"></i><div class="t-label bold">AI kiểm duyệt</div><div class="t-cap muted">Ca chưa chắc mới tới người</div></div>
+      <div class="flow-step"><div class="code">W01</div><i class="ic c-brand" data-i="chart"></i><div class="t-label bold">Thống kê</div><div class="t-cap muted">Kiểu mới nổi thành cảnh báo, truyện tranh</div></div>
+    </div>
+
+    <div class="row gap-20 top grow">
+      <div class="card col grow" style="padding:0">
+        <div class="tr head"><div class="c1">Lớp bảo vệ</div><div class="c2">Cách hoạt động trên Android</div><div class="c3">Bản 24 giờ</div></div>
+        <div class="tr"><div class="c1 semi">1. Khi đổ chuông</div><div class="c2">Quyền nhận diện cuộc gọi, tra danh sách số bị báo cáo</div><div class="c3"><span class="chip safe"><i class="ic s14" data-i="check"></i>Làm thật</span></div></div>
+        <div class="tr"><div class="c1 semi">2. Sau cuộc gọi</div><div class="c2">Nếu được cấp quyền: AI chép lời và phân tích lại file ghi âm do máy ghi; không có thì hỏi một câu bằng giọng nói</div><div class="c3"><span class="chip safe"><i class="ic s14" data-i="check"></i>Làm thật</span></div></div>
+        <div class="tr"><div class="c1 semi">3. Tin nhắn</div><div class="c2">Quyền đọc thông báo (SMS, ứng dụng nhắn tin), lọc trên máy rồi mới gửi AI</div><div class="c3"><span class="chip safe"><i class="ic s14" data-i="check"></i>Làm thật</span></div></div>
+        <div class="tr"><div class="c1 semi">4. Nhắc trước khi chuyển tiền</div><div class="c2">Biết đang hoặc vừa nghe số lạ và app ngân hàng được mở (cần quyền xem app đang mở). Không nghe nội dung</div><div class="c3"><span class="chip safe"><i class="ic s14" data-i="check"></i>Làm thật</span></div></div>
+        <div class="tr last"><div class="c1 semi">Tầm nhìn</div><div class="c2">Phân tích ngay trong lúc gọi: cần hãng máy, nhà mạng, hoặc đường dây gộp cuộc gọi</div><div class="c3"><span class="chip warn">Mô phỏng</span></div></div>
+      </div>
+
+      <div class="col gap-12" style="width:400px;flex:none">
+        <div class="card brand col gap-10">
+          <div class="row gap-8"><i class="ic s20 c-brand" data-i="lock"></i><div class="t-label bold c-brand-ink">Nguyên tắc riêng tư</div></div>
+          <div class="row gap-8 top"><span class="dot brand" style="margin-top:6px"></span><div class="t-cap c-ink">Bỏ qua mọi tin nhắn chứa mã xác thực (OTP)</div></div>
+          <div class="row gap-8 top"><span class="dot brand" style="margin-top:6px"></span><div class="t-cap c-ink">Che số tài khoản, số điện thoại trước khi gửi AI</div></div>
+          <div class="row gap-8 top"><span class="dot brand" style="margin-top:6px"></span><div class="t-cap c-ink">Không lưu nội dung. Bản ghi chỉ gửi đi khi người dùng chọn báo cáo</div></div>
+          <div class="row gap-8 top"><span class="dot brand" style="margin-top:6px"></span><div class="t-cap c-ink">Người thân chỉ thấy mức cảnh báo và tóm tắt đã che</div></div>
+        </div>
+        <div class="card col gap-8">
+          <div class="t-label bold">6 màn bắt buộc của đề</div>
+          <div class="row between"><div class="t-cap">Kiểm tra nhanh, kết quả 3 mức</div><div class="code">A06 · A07</div></div>
+          <div class="row between"><div class="t-cap">Báo cáo một trường hợp lừa đảo</div><div class="code">A09</div></div>
+          <div class="row between"><div class="t-cap">Nút “Hỏi người thân”</div><div class="code">A08 · Z01</div></div>
+          <div class="row between"><div class="t-cap">Bài học 1 phút theo tình huống</div><div class="code">A11</div></div>
+          <div class="row between"><div class="t-cap">Bài kiểm tra có chấm điểm</div><div class="code">A12</div></div>
+          <div class="row between"><div class="t-cap">Màn đội tình nguyện: thống kê</div><div class="code">W01 · W02 · W03</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card soft row gap-12">
+      <div class="t-label bold" style="width:210px;flex:none">Luồng phụ: học sinh nhận tin “việc nhẹ lương cao”</div>
+      <span class="chip solid-white"><span class="code">A05</span>Lá chắn tô đỏ dấu hiệu</span>
+      <i class="ic s18 faint" data-i="chev-right"></i>
+      <span class="chip solid-white"><span class="code">A09</span>Báo cho cộng đồng, +10 điểm</span>
+      <i class="ic s18 faint" data-i="chev-right"></i>
+      <span class="chip solid-white"><span class="code">A11</span>Truyện tranh 1 phút đúng chiêu đó</span>
+      <i class="ic s18 faint" data-i="chev-right"></i>
+      <span class="chip solid-white"><span class="code">A12</span>Bài kiểm tra có chấm điểm</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= D03: Design system ================= -->
+<section class="shot">
+  <div class="shot-name">D03 – Design system</div>
+  <div class="frame page" data-name="D03-design-system" style="gap:20px">
+    <div class="pg-title">Design system</div>
+
+    <div class="row gap-24 top">
+      <div class="col gap-12 grow">
+        <div class="t-over muted">Màu và ý nghĩa</div>
+        <div class="row gap-12">
+          <div class="col gap-6 cell"><div class="sw" style="background:#1D4ED8"></div><div class="t-cap bold">Thương hiệu</div><div class="t-cap muted">#1D4ED8</div></div>
+          <div class="col gap-6 cell"><div class="sw" style="background:#DC2626"></div><div class="t-cap bold">Nguy hiểm</div><div class="t-cap muted">#DC2626</div></div>
+          <div class="col gap-6 cell"><div class="sw" style="background:#D97706"></div><div class="t-cap bold">Nghi ngờ</div><div class="t-cap muted">#D97706</div></div>
+          <div class="col gap-6 cell"><div class="sw" style="background:#15803D"></div><div class="t-cap bold">An toàn</div><div class="t-cap muted">#15803D</div></div>
+          <div class="col gap-6 cell"><div class="sw" style="background:#7C3AED"></div><div class="t-cap bold">AI</div><div class="t-cap muted">#7C3AED</div></div>
+          <div class="col gap-6 cell"><div class="sw" style="background:#0F172A"></div><div class="t-cap bold">Chữ</div><div class="t-cap muted">#0F172A</div></div>
+          <div class="col gap-6 cell"><div class="sw" style="background:#F1F5F9;border:1px solid #CBD5E1"></div><div class="t-cap bold">Nền phụ</div><div class="t-cap muted">#F1F5F9</div></div>
+        </div>
+      </div>
+      <div class="col gap-12" style="width:470px;flex:none">
+        <div class="t-over muted">Bốn mức kết quả: luôn có màu, icon và chữ</div>
+        <div class="grid-2" style="gap:10px">
+          <div class="card danger row gap-10 p-12"><div class="icon-box solid-danger"><i class="ic s20" data-i="alert-oct"></i></div><div class="t-label bold c-danger-ink">Nguy hiểm</div></div>
+          <div class="card warn row gap-10 p-12"><div class="icon-box" style="background:#D97706;color:#fff"><i class="ic s20" data-i="alert"></i></div><div class="t-label bold c-warn-ink">Nghi ngờ</div></div>
+          <div class="card safe row gap-10 p-12"><div class="icon-box solid-safe"><i class="ic s20" data-i="check-circle"></i></div><div class="t-label bold c-safe-ink">An toàn</div></div>
+          <div class="card soft row gap-10 p-12"><div class="icon-box" style="background:#475569;color:#fff"><i class="ic s20" data-i="help"></i></div><div class="t-label bold">Chưa có dữ liệu</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row gap-24 top">
+      <div class="card col gap-10 grow">
+        <div class="t-over muted">Chữ: Be Vietnam Pro · chế độ thường</div>
+        <div class="t-display">Tiêu đề lớn 28</div>
+        <div class="t-h1">Tiêu đề 22 · Lá chắn đang bật</div>
+        <div class="t-h2">Tiêu đề phụ 18 · Hỏi người thân</div>
+        <div class="t-body">Nội dung 16 · Không cơ quan nào thu tiền qua điện thoại.</div>
+        <div class="t-label muted">Nhãn 14 · Chú thích 12</div>
+      </div>
+      <div class="card brand col gap-10 grow">
+        <div class="t-over c-brand-ink">Chế độ chữ lớn cho người cao tuổi</div>
+        <div style="font-size:26px;line-height:32px;font-weight:700">Tiêu đề 26 · Chào bà Hoa</div>
+        <div style="font-size:22px;line-height:28px;font-weight:600">Tiêu đề phụ 22 · Kiểm tra</div>
+        <div style="font-size:20px;line-height:28px">Nội dung 20 · Bà đừng chuyển tiền lúc này.</div>
+        <div class="t-label c-brand-ink">Nút cao 60, mỗi màn tối đa 3 lựa chọn, có đọc to.</div>
+      </div>
+      <div class="col gap-10" style="width:330px;flex:none">
+        <div class="t-over muted">Nút</div>
+        <div class="btn primary block">Nút chính</div>
+        <div class="btn danger block"><i class="ic s20" data-i="users"></i>Hành động khẩn</div>
+        <div class="btn outline block">Nút phụ</div>
+        <div class="row gap-8"><div class="btn tonal sm">Nút nhạt</div><div class="btn primary sm">Nhỏ</div><div class="btn ghost sm">Liên kết</div></div>
+      </div>
+    </div>
+
+    <div class="row gap-24 top">
+      <div class="col gap-10 grow">
+        <div class="t-over muted">Nhãn và nội dung do AI tạo</div>
+        <div class="row gap-8 wrap">
+          <span class="chip brand">Mới</span><span class="chip safe"><i class="ic s14" data-i="check"></i>Đã bật</span><span class="chip danger">Nghi lừa đảo</span><span class="chip warn">Cần cân nhắc</span><span class="chip outline">Người lạ</span><span class="chip solid-brand">Đang chọn</span>
+        </div>
+        <div class="card ai col gap-8">
+          <div class="ai-tag"><i class="ic s16" data-i="sparkles"></i>AI giải thích</div>
+          <div class="t-label">Tin nhắn có cụm <span class="hl">nạp trước 200k</span> và <span class="hl">đăng ký trong hôm nay</span>. Gợi ý của AI luôn có viền tím, nhãn riêng, và người dùng sửa được.</div>
+        </div>
+      </div>
+      <div class="col gap-10" style="width:560px;flex:none">
+        <div class="t-over muted">Icon nét 24, bo tròn</div>
+        <div class="row gap-12 wrap c-ink">
+          <i class="ic" data-i="shield-check"></i><i class="ic" data-i="shield-alert"></i><i class="ic" data-i="phone-in"></i><i class="ic" data-i="message"></i><i class="ic" data-i="link"></i><i class="ic" data-i="card"></i><i class="ic" data-i="bank"></i><i class="ic" data-i="users"></i><i class="ic" data-i="flag"></i><i class="ic" data-i="hand"></i><i class="ic" data-i="book"></i><i class="ic" data-i="award"></i><i class="ic" data-i="mic"></i><i class="ic" data-i="volume"></i><i class="ic" data-i="sparkles"></i>
+        </div>
+        <div class="t-over muted mt-8">Linh vật Bé Nai: một bộ tư thế cho từng tình huống</div>
+        <div class="row gap-10">
+          <div class="col gap-4 acenter"><img src="../assets/spot-mascot.png" width="76" height="76" style="border-radius:16px" alt=""><div class="t-cap muted">Chào</div></div>
+          <div class="col gap-4 acenter"><img src="../assets/mascot-stop.png" width="76" height="76" style="border-radius:16px" alt=""><div class="t-cap muted">Dừng lại</div></div>
+          <div class="col gap-4 acenter"><img src="../assets/mascot-think.png" width="76" height="76" style="border-radius:16px" alt=""><div class="t-cap muted">Suy nghĩ</div></div>
+          <div class="col gap-4 acenter"><img src="../assets/mascot-cheer.png" width="76" height="76" style="border-radius:16px" alt=""><div class="t-cap muted">Cổ vũ</div></div>
+          <div class="col gap-4 grow"><div class="t-label semi">Tranh truyện không có chữ.</div><div class="t-cap muted">Lời kể là chữ thật bên dưới và được đọc thành tiếng. Không quốc huy, không bản đồ, không logo.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= D04: Chuyển động ================= -->
+<section class="shot">
+  <div class="shot-name">D04 – Chuyển động</div>
+  <div class="frame page" data-name="D04-chuyen-dong" style="gap:20px">
+    <div class="col gap-4">
+      <div class="pg-title">Chuyển động: dẫn mắt và báo trạng thái, không trang trí</div>
+      <div class="t-body muted">Mỗi chuyển động trả lời một câu: cái gì vừa xuất hiện, cái gì đang chạy, cần nhìn vào đâu.</div>
+    </div>
+
+    <div class="row gap-20" style="align-items:stretch">
+      <div class="card col grow" style="padding:0">
+        <div class="tr head"><div style="width:170px;flex:none">Thông số</div><div style="width:176px;flex:none">Giá trị</div><div class="grow">Dùng cho</div><div style="width:140px;flex:none">Độ dài tương đối</div></div>
+        <div class="tr"><div class="semi" style="width:170px;flex:none">Nhanh</div><div style="width:176px;flex:none">150 ms</div><div class="grow">Phản hồi khi chạm vào nút, thẻ</div><div class="bar-track" style="width:140px;flex:none"><div class="bar-fill" style="width:22%"></div></div></div>
+        <div class="tr"><div class="semi" style="width:170px;flex:none">Chuẩn</div><div style="width:176px;flex:none">300 ms</div><div class="grow">Nội dung xuất hiện, chuyển màn</div><div class="bar-track" style="width:140px;flex:none"><div class="bar-fill" style="width:44%"></div></div></div>
+        <div class="tr"><div class="semi" style="width:170px;flex:none">Chậm</div><div style="width:176px;flex:none">520 ms</div><div class="grow">Thẻ cảnh báo trượt xuống, bảng trượt lên</div><div class="bar-track" style="width:140px;flex:none"><div class="bar-fill" style="width:76%"></div></div></div>
+        <div class="tr"><div class="semi" style="width:170px;flex:none">Trễ giữa các khối</div><div style="width:176px;flex:none">55 ms</div><div class="grow">Các khối hiện lần lượt từ trên xuống</div><div class="bar-track" style="width:140px;flex:none"><div class="bar-fill gray" style="width:8%"></div></div></div>
+        <div class="tr last"><div class="semi" style="width:170px;flex:none">Đường cong</div><div style="width:176px;flex:none">cubic-bezier(.2, 0, 0, 1)</div><div class="grow">Vào nhanh, dừng êm. Dùng chung cho mọi chuyển động</div><div style="width:140px;flex:none"></div></div>
+      </div>
+
+      <div class="card brand col gap-10" style="width:420px;flex:none">
+        <div class="row gap-8"><i class="ic s20 c-brand" data-i="eye"></i><div class="t-label bold c-brand-ink">Chế độ chữ lớn cho người cao tuổi</div></div>
+        <div class="row gap-8">
+          <span class="chip solid-white">Chuẩn 420 ms</span><span class="chip solid-white">Chậm 680 ms</span><span class="chip solid-white">Trễ 90 ms</span>
+        </div>
+        <div class="row gap-8 top"><span class="dot brand" style="margin-top:6px"></span><div class="t-cap c-ink">Chậm hơn khoảng 40%, không nảy, không lắc</div></div>
+        <div class="row gap-8 top"><span class="dot brand" style="margin-top:6px"></span><div class="t-cap c-ink">Nhịp cảnh báo chạy tối đa 3 lần rồi đứng yên, không nhấp nháy</div></div>
+        <div class="row gap-8 top"><span class="dot brand" style="margin-top:6px"></span><div class="t-cap c-ink">Tôn trọng cài đặt giảm chuyển động của máy: khi bật, mọi chuyển động tắt</div></div>
+      </div>
+    </div>
+
+    <div class="t-over muted">Khoảnh khắc chính</div>
+    <div class="grid-3">
+      <div class="card col gap-8"><div class="row gap-8"><div class="icon-box danger"><i class="ic s20" data-i="phone-in"></i></div><div class="col"><div class="code">A03 · Đổ chuông</div><div class="t-label bold">Thẻ cảnh báo trượt xuống</div></div></div><div class="t-cap muted">Thẻ trượt từ mép trên trong 520 ms. Sóng lan đều quanh ảnh người gọi để báo máy đang đổ chuông.</div></div>
+      <div class="card ai col gap-8"><div class="row gap-8"><div class="icon-box" style="background:#fff;color:#7C3AED"><i class="ic s20" data-i="sparkles"></i></div><div class="col"><div class="code" style="color:#7C3AED">A04 · A05 · AI phân tích</div><div class="t-label bold">Tô đỏ lần lượt từng dấu hiệu</div></div></div><div class="t-cap c-ai-ink">Mỗi cụm đáng ngờ được tô cách nhau 420 ms, theo đúng thứ tự đọc, để người xem kịp nhìn từng cụm.</div></div>
+      <div class="card safe col gap-8"><div class="row gap-8"><div class="icon-box" style="background:#fff;color:#16A34A"><i class="ic s20" data-i="users"></i></div><div class="col"><div class="code" style="color:#15803D">A08 · Hỏi người thân</div><div class="t-label bold">Lời con phóng to dần</div></div></div><div class="t-cap c-safe-ink">Trong lúc chờ, chấm “đang chờ trả lời” nhấp nháy chậm. Khi con trả lời, câu trả lời lớn dần lên.</div></div>
+      <div class="card danger col gap-8"><div class="row gap-8"><div class="icon-box solid-danger"><i class="ic s20" data-i="hand"></i></div><div class="col"><div class="code" style="color:#DC2626">A10 · Dừng lại</div><div class="t-label bold">Nền nhịp chậm 3 lần</div></div></div><div class="t-cap c-danger-ink">Chữ “DỪNG LẠI” đập vào màn hình, nền đỏ đậm nhạt 3 nhịp rồi đứng yên để bà đọc nội dung.</div></div>
+      <div class="card warn col gap-8"><div class="row gap-8"><div class="icon-box" style="background:#fff;color:#D97706"><i class="ic s20" data-i="book"></i></div><div class="col"><div class="code" style="color:#B45309">A11 · Truyện tranh</div><div class="t-label bold">Từng khung bật ra theo thứ tự</div></div></div><div class="t-cap c-warn-ink">Bốn khung tranh hiện cách nhau 300 ms theo thứ tự đọc, dẫn mắt từ khung 1 đến khung 4.</div></div>
+      <div class="card col gap-8"><div class="row gap-8"><div class="icon-box brand"><i class="ic s20" data-i="chart"></i></div><div class="col"><div class="code">W01 · Thống kê</div><div class="t-label bold">Số đếm lên, biểu đồ vẽ dần</div></div></div><div class="t-cap muted">Con số đếm từ 0, thanh ngang dài dần, đường biểu đồ được vẽ từ trái sang phải trong khoảng 1 giây.</div></div>
+    </div>
+
+    <div class="card soft row gap-12">
+      <i class="ic s20 c-brand" data-i="play"></i>
+      <div class="t-label"><span class="semi">Bản có chuyển động:</span> prototype/index.html. Trong Figma dùng Smart Animate với cùng thông số.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================= D05: Khi nào Lá chắn lên tiếng, và khác nhau thế nào theo từng nhóm người dùng ================= -->
+<section class="shot">
+  <div class="shot-name">D05 – Khi nào Lá chắn lên tiếng</div>
+  <div class="frame page" data-name="D05-khi-nao-len-tieng" style="gap:20px">
+    <div class="row between top">
+      <div class="col gap-4">
+        <div class="pg-title">Khi nào Lá chắn lên tiếng</div>
+        <div class="t-body muted">Mặc định im lặng, kể cả với số chưa lưu. Chỉ lên tiếng khi đủ dấu hiệu, để người dùng không bị hỏi quá nhiều.</div>
+      </div>
+      <span class="chip outline">Các ngưỡng là giả thuyết để thử nghiệm</span>
+    </div>
+
+    <div class="card ai col gap-8" style="padding:12px 16px">
+      <div class="row gap-12">
+        <div class="ai-tag" style="font-size:13px"><i class="ic s16" data-i="sparkles"></i>Trợ lý Lá chắn tự chọn mức và dẫn một bước</div>
+        <span class="chip solid-white">Quan sát tín hiệu</span><i class="ic s16 c-ai" data-i="chev-right"></i>
+        <span class="chip solid-white">Cân nhắc bằng chứng</span><i class="ic s16 c-ai" data-i="chev-right"></i>
+        <span class="chip solid-white">Chọn một trong 5 mức</span><i class="ic s16 c-ai" data-i="chev-right"></i>
+        <span class="chip solid-white">Dẫn một bước rõ ràng</span><i class="ic s16 c-ai" data-i="chev-right"></i>
+        <span class="chip solid-white">Học từ câu trả lời</span>
+      </div>
+      <div class="t-cap c-ai-ink">Trợ lý chỉ làm các việc trong danh sách cho phép và không bao giờ hỏi mã xác thực hay bảo chuyển tiền.</div>
+    </div>
+
+    <div class="row gap-12" style="align-items:stretch">
+      <div class="card soft col gap-8 grow" style="min-width:0">
+        <div class="row gap-8"><div class="num" style="background:#64748B">1</div><div class="t-label bold">Im lặng</div></div>
+        <div class="t-cap c-ink">Mặc định. Không cảnh báo, không hỏi lại.</div>
+        <div class="t-cap muted">Shipper gọi 20 giây. Con cháu gọi bằng số mới.</div>
+      </div>
+      <div class="card col gap-8 grow" style="min-width:0">
+        <div class="row gap-8"><div class="num" style="background:#475569">2</div><div class="t-label bold">Nhãn nhẹ</div></div>
+        <div class="t-cap c-ink">Có báo cáo đã duyệt về quảng cáo hoặc giao hàng.</div>
+        <div class="t-cap muted">“23 người từng gắn nhãn giao hàng”. Nhãn không miễn cảnh báo.</div>
+      </div>
+      <div class="card brand col gap-8 grow" style="min-width:0">
+        <div class="row gap-8"><div class="num">3</div><div class="t-label bold c-brand-ink">Hỏi một câu</div></div>
+        <div class="t-cap c-ink">Số chưa quen và đã nghe máy từ 5 phút.</div>
+        <div class="t-cap c-brand-ink">Số mới tinh gọi 15 phút. Mỗi ngày tối đa một câu, bỏ qua được.</div>
+      </div>
+      <div class="card danger col gap-8 grow" style="min-width:0">
+        <div class="row gap-8"><div class="num" style="background:#DC2626">4</div><div class="t-label bold c-danger-ink">Cảnh báo</div></div>
+        <div class="t-cap c-ink">Có báo cáo lừa đảo đã xác minh, bản ghi có câu đòi chuyển tiền, hoặc người dùng trả lời “Có”.</div>
+        <div class="t-cap c-danger-ink">Lúc này mới báo cho người thân.</div>
+      </div>
+      <div class="card solid-danger col gap-8 grow" style="min-width:0">
+        <div class="row gap-8"><div class="num" style="background:#fff;color:#DC2626">5</div><div class="t-label bold c-white">Dừng lại</div></div>
+        <div class="t-cap c-white">Đang nghe số chưa quen từ 5 phút và mở ứng dụng ngân hàng, hoặc mở ứng dụng điều khiển từ xa trong lúc gọi.</div>
+        <div class="t-cap" style="color:#FECACA">Hiện một lần. Lá chắn không khóa giao dịch.</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card row gap-12 top">
+        <div class="icon-box brand"><i class="ic s20" data-i="history"></i></div>
+        <div class="col gap-4 grow"><div class="t-label bold">Số quen là gì</div><div class="t-cap muted">Người dùng từng gọi đi cho số đó ít nhất 2 lần, mỗi lần từ 30 giây, vào 2 ngày khác nhau trong 60 ngày; hoặc đã chọn “Tôi biết số này”. Người lạ gọi nhử nhiều lần không thành số quen.</div></div>
+      </div>
+      <div class="card row gap-12 top">
+        <div class="icon-box warn"><i class="ic s20" data-i="layers"></i></div>
+        <div class="col gap-4 grow"><div class="t-label bold">Kết hợp bằng chứng, không đếm trùng</div><div class="t-cap muted">Đứng riêng thì yếu: mở ứng dụng ngân hàng, có tin mã xác thực đến, bị báo quảng cáo. Mạnh: báo cáo lừa đảo đã xác minh, câu đòi chuyển tiền trong bản ghi, cuộc gọi dài với số chưa quen.</div></div>
+      </div>
+    </div>
+
+    <div class="col gap-10 grow">
+      <div class="t-over muted">Mỗi nhóm người dùng một cách ứng xử, một kiểu giao diện</div>
+      <div class="grid-4" style="gap:12px">
+        <div class="card col gap-8">
+          <div class="row gap-10"><div class="avatar amber">H</div><div class="col"><div class="t-label bold">Bà Hoa</div><div class="t-cap muted">Người cao tuổi · chế độ đơn giản</div></div></div>
+          <div class="t-cap c-ink">Ưu tiên giọng nói: Lá chắn hỏi bằng lời, bà trả lời bằng lời. Là công tắc trong ứng dụng.</div>
+          <div class="t-cap c-ink">Mỗi lần một câu, luôn có nút Có, Không, Bỏ qua.</div>
+          <div class="t-cap c-ink">Nguy hiểm thì tự báo con, bà không cần bấm gì.</div>
+          <div class="row gap-6 wrap"><span class="chip brand">Chữ lớn</span><span class="chip brand">Nút Đọc to mọi màn</span><span class="chip brand">3 lựa chọn</span></div>
+        </div>
+        <div class="card col gap-8">
+          <div class="row gap-10"><div class="avatar">V</div><div class="col"><div class="t-label bold">Vy</div><div class="t-cap muted">Học sinh · chế độ đầy đủ</div></div></div>
+          <div class="t-cap c-ink">Kênh chính là tin nhắn. AI tô đỏ dấu hiệu và giải thích ngắn.</div>
+          <div class="t-cap c-ink">Em tự quyết: kiểm tra, bỏ qua, hỏi người thân. Muốn thì bật giọng nói.</div>
+          <div class="t-cap c-ink">Học như chơi game: truyện có giọng kể, lối rẽ tự chọn, nhập vai có chấm (nghe máy kẻ gian, khuyên chị họ).</div>
+          <div class="row gap-6 wrap"><span class="chip warn">Chuỗi ngày, cấp bậc</span><span class="chip warn">Thi đua theo nhóm</span></div>
+        </div>
+        <div class="card col gap-8">
+          <div class="row gap-10"><div class="avatar" style="background:#DCFCE7;color:#14532D">M</div><div class="col"><div class="t-label bold">Minh</div><div class="t-cap muted">Người thân · trong ứng dụng nhắn tin</div></div></div>
+          <div class="t-cap c-ink">Chỉ nhận tin khi mẹ bấm nhờ, hoặc mẹ xác nhận bị đòi tiền hay mã xác thực.</div>
+          <div class="t-cap c-ink">Một lý do, một nút trả lời, một nút gọi lại.</div>
+          <div class="t-cap c-ink">Không bị báo vì shipper hay vì mẹ mở ứng dụng ngân hàng.</div>
+          <div class="row gap-6 wrap"><span class="chip safe">Thẻ tin nhắn</span><span class="chip safe">Trả lời một chạm</span></div>
+        </div>
+        <div class="card col gap-8">
+          <div class="row gap-10"><div class="avatar gray">K</div><div class="col"><div class="t-label bold">Khoa</div><div class="t-cap muted">Tình nguyện viên · web</div></div></div>
+          <div class="t-cap c-ink">AI gom báo cáo theo số, hiện số người báo độc lập.</div>
+          <div class="t-cap c-ink">Khoa quyết định nhãn: lừa đảo, quảng cáo, giao hàng.</div>
+          <div class="t-cap c-ink">Theo dõi hỏi nhầm và bỏ sót để chỉnh ngưỡng.</div>
+          <div class="row gap-6 wrap"><span class="chip ai">Bảng số liệu</span><span class="chip ai">Hàng chờ duyệt</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

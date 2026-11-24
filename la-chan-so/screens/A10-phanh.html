@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>A10 – Nhắc trước khi chuyển tiền</title>
+<link rel="stylesheet" href="../ds.css">
+<script src="../icons.js"></script>
+<style>
+  .shot{width:360px}
+  .stop{font-size:44px;line-height:52px;font-weight:700;color:#fff;text-align:center}
+  .chip.big{height:36px;border-radius:18px;padding:0 14px;font-size:14px;line-height:20px;color:var(--danger-ink)}
+  .btn.on-red{background:var(--danger);border-color:#fff;color:#fff;padding:0 8px}
+  .card.plain{border-color:#fff}
+</style>
+</head>
+<body>
+
+<!-- ============ A10a: phanh sau cuộc gọi nghi lừa đảo (chữ lớn) ============ -->
+<section class="shot">
+  <div class="shot-name">A10a – Nhắc dừng · Sau cuộc gọi lạ</div>
+  <div class="frame phone lg bg-danger" data-name="A10a-phanh-sau-cuoc-goi">
+    <div class="statusbar on-dark"><span>14:06</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+
+    <div class="content acenter" style="padding:16px 16px 12px;gap:32px">
+      <span class="chip solid-white big"><i class="ic s16 c-danger" data-i="volume"></i>Đang đọc to</span>
+
+      <div class="icon-box xl white"><i class="ic s48" data-i="hand"></i></div>
+
+      <div class="col gap-8 w-full">
+        <div class="stop">DỪNG LẠI</div>
+        <div class="t-body c-white center">Bà vừa nghe một cuộc gọi nghi lừa đảo 4 phút trước và đang mở ứng dụng ngân hàng.</div>
+      </div>
+
+      <div class="card plain r20 col gap-8 w-full" style="padding:28px 20px;margin-top:auto;margin-bottom:auto">
+        <div class="t-h2 c-danger-ink center">Đừng chuyển tiền.</div>
+        <div class="t-label c-ink center">Hãy gọi Minh để kiểm tra.</div>
+      </div>
+
+      <div class="col gap-12 w-full">
+        <div class="btn white xl block"><i class="ic" data-i="users"></i>Hỏi con Minh trước</div>
+        <div class="btn xl block on-red">Đóng cảnh báo</div>
+        <div class="t-cap c-white center">Không cơ quan nào yêu cầu<br>chuyển tiền qua điện thoại.</div>
+      </div>
+    </div>
+
+    <div class="gesture clear on-dark"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ A10b: phanh khi đang nghe máy với số lạ (chữ lớn) ============ -->
+<section class="shot">
+  <div class="shot-name">A10b – Nhắc dừng · Đang gọi số lạ</div>
+  <div class="frame phone lg bg-danger" data-name="A10b-phanh-dang-goi">
+    <div class="statusbar on-dark"><span>14:06</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+
+    <div class="content acenter" style="padding:16px 16px 12px">
+      <span class="chip solid-white big"><i class="ic s16 c-danger" data-i="phone"></i>Đang gọi với số chưa quen · 06:41</span>
+
+      <div class="icon-box xl white"><i class="ic s48" data-i="hand"></i></div>
+
+      <div class="col gap-8 w-full">
+        <div class="stop">DỪNG LẠI</div>
+        <div class="t-body c-white center">Bà đang nghe máy với số chưa quen và mở ứng dụng ngân hàng.<br>Đây là dấu hiệu lừa đảo<br>thường gặp nhất.</div>
+      </div>
+
+      <div class="card plain r20 p-20 col gap-8 w-full" style="margin-top:auto;margin-bottom:auto">
+        <div class="t-h2 c-danger-ink center">Người gọi đang giục bà chuyển tiền?</div>
+        <div class="t-label muted center">Hãy cúp máy.<br>Người thật sẽ không giận.</div>
+      </div>
+
+      <div class="col gap-12 w-full">
+        <div class="btn white xl block"><i class="ic" data-i="phone-off"></i>Cúp máy ngay</div>
+        <div class="btn xl block on-red"><i class="ic" data-i="users"></i>Hỏi con Minh trước</div>
+        <div class="t-cap c-white center">Không cơ quan nào yêu cầu<br>chuyển tiền qua điện thoại.</div>
+      </div>
+    </div>
+
+    <div class="gesture clear on-dark"><div class="pill"></div></div>
+  </div>
+</section>
+
+</body>
+</html>

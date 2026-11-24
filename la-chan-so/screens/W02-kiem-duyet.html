@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>W02 – Kiểm duyệt báo cáo</title>
+<link rel="stylesheet" href="../ds.css">
+<script src="../icons.js"></script>
+<style>
+.w-brand{font-size:16px;line-height:22px;font-weight:700;color:#fff}
+.w-sub{font-size:12px;line-height:16px;font-weight:400;color:#94A3B8}
+.w-user{font-size:14px;line-height:20px;font-weight:700;color:#fff}
+.cnt{height:22px;padding:0 8px;border-radius:11px}
+.sidebar{padding:20px 8px}
+.side-item{padding:0 10px;gap:8px}
+.side-row{padding:0 10px}
+.q{min-height:62px;gap:8px;padding:8px 12px}
+.qh{gap:8px;padding:8px 12px;border-radius:15px 15px 0 0}
+.obj{white-space:nowrap}
+.col-guess{width:150px;flex:none}
+.col-conf{width:60px;flex:none}
+.col-cnt{width:40px;flex:none}
+.act{flex:1 1 auto;padding:0 12px}
+.seg-bar{height:12px;border-radius:6px}
+</style>
+</head>
+<body>
+
+<!-- ============ W02: Kiểm duyệt – AI phân loại trước, người duyệt ca khó ============ -->
+<section class="shot">
+  <div class="shot-name">W02 – Web quản trị · Kiểm duyệt báo cáo</div>
+  <div class="frame web" data-name="W02-kiem-duyet">
+
+    <div class="sidebar">
+      <div class="row gap-12 side-row">
+        <div class="icon-box solid-brand" style="width:36px;height:36px;border-radius:10px"><i class="ic s20" data-i="shield-check"></i></div>
+        <div class="col">
+          <div class="w-brand">Lá chắn số</div>
+          <div class="w-sub">Đội tình nguyện</div>
+        </div>
+      </div>
+      <div class="none" style="height:16px"></div>
+      <div class="side-item"><i class="ic s20" data-i="chart"></i><span class="grow">Tổng quan</span></div>
+      <div class="side-item active"><i class="ic s20" data-i="inbox"></i><span class="grow">Kiểm duyệt</span><span class="chip solid-danger cnt">24</span></div>
+      <div class="side-item"><i class="ic s20" data-i="megaphone"></i><span class="grow">Cảnh báo và tuyên truyền</span></div>
+      <div class="side-item"><i class="ic s20" data-i="book"></i><span class="grow">Thư viện truyện</span></div>
+      <div class="side-item"><i class="ic s20" data-i="calendar"></i><span class="grow">Buổi tuyên truyền</span></div>
+      <div class="side-item"><i class="ic s20" data-i="settings"></i><span class="grow">Cài đặt</span></div>
+      <div class="row gap-12 mt-auto side-row">
+        <div class="avatar">K</div>
+        <div class="col grow">
+          <div class="w-user">Khoa</div>
+          <div class="w-sub">Tình nguyện viên</div>
+          <div class="w-sub">Phường Trấn Biên</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main">
+
+      <!-- Hàng đầu + tab -->
+      <div class="col gap-10 none">
+        <div class="row between">
+          <div class="t-h1">Kiểm duyệt báo cáo</div>
+          <span class="chip ai"><i class="ic s14" data-i="sparkles"></i>AI đã tự xử lý 96/120 ca (80%)</span>
+        </div>
+        <div class="tabs">
+          <div class="tab active">Cần cân nhắc<span class="chip solid-brand cnt">24</span></div>
+          <div class="tab">AI đã xác nhận<span class="chip cnt">78</span></div>
+          <div class="tab">AI đã loại<span class="chip cnt">18</span></div>
+          <div class="tab">Khiếu nại<span class="chip cnt">2</span></div>
+        </div>
+      </div>
+
+      <!-- Thân: danh sách + chi tiết -->
+      <div class="row gap-20 grow" style="align-items:stretch;min-height:0">
+
+        <!-- Trái: hàng chờ -->
+        <div class="col gap-16 none" style="width:500px">
+          <div class="card col none" style="padding:0">
+            <div class="tr head qh">
+              <div class="grow">Đối tượng</div>
+              <div class="col-guess">AI đoán</div>
+              <div class="col-conf">Tin cậy</div>
+              <div class="col-cnt">Báo</div>
+            </div>
+            <div class="tr sel q">
+              <div class="row gap-8 grow obj"><i class="ic s16 c-brand" data-i="phone"></i><div class="bold">0934 567 890</div></div>
+              <div class="col-guess">Giả danh công an</div>
+              <div class="col-conf semi">71%</div>
+              <div class="col-cnt">1</div>
+            </div>
+            <div class="tr q">
+              <div class="row gap-8 grow obj"><i class="ic s16 muted" data-i="link"></i><div class="semi">ngan-hang-xacminh.top</div></div>
+              <div class="col-guess">Đường dẫn giả mạo</div>
+              <div class="col-conf semi">68%</div>
+              <div class="col-cnt">2</div>
+            </div>
+            <div class="tr q">
+              <div class="row gap-8 grow obj"><i class="ic s16 muted" data-i="phone"></i><div class="semi">0283 999 1234</div></div>
+              <div class="col-guess">Spam quảng cáo?</div>
+              <div class="col-conf semi">55%</div>
+              <div class="col-cnt">3</div>
+            </div>
+            <div class="tr q">
+              <div class="row gap-8 grow obj"><i class="ic s16 muted" data-i="card"></i><div class="semi">TK 1903 xxxx 5678</div></div>
+              <div class="col-guess">Việc nhẹ lương cao</div>
+              <div class="col-conf semi">62%</div>
+              <div class="col-cnt">1</div>
+            </div>
+            <div class="tr q">
+              <div class="row gap-8 grow obj"><i class="ic s16 muted" data-i="phone"></i><div class="semi">0987 111 222</div></div>
+              <div class="col-guess">Người thân tai nạn</div>
+              <div class="col-conf semi">59%</div>
+              <div class="col-cnt">1</div>
+            </div>
+            <div class="tr q">
+              <div class="row gap-8 grow obj"><i class="ic s16 muted" data-i="link"></i><div class="semi">qua-tri-an.top</div></div>
+              <div class="col-guess">Quà tri ân</div>
+              <div class="col-conf semi">74%</div>
+              <div class="col-cnt">2</div>
+            </div>
+            <div class="tr q last">
+              <div class="row gap-8 grow obj"><i class="ic s16 muted" data-i="phone"></i><div class="semi">0909 555 666</div></div>
+              <div class="col-guess">Giao hàng?</div>
+              <div class="col-conf semi">40%</div>
+              <div class="col-cnt">1</div>
+            </div>
+            <div class="row between" style="height:44px;padding:0 12px;border-top:1px solid #E2E8F0">
+              <div class="t-cap muted">Hiển thị 7 trong 24 ca</div>
+              <div class="row gap-8 muted"><i class="ic s16 faint" data-i="chev-left"></i><div class="t-cap semi">Trang 1/4</div><i class="ic s16" data-i="chev-right"></i></div>
+            </div>
+          </div>
+
+          <div class="card ai col gap-10 grow">
+            <span class="ai-tag"><i class="ic s16" data-i="sparkles"></i>AI phân loại trước</span>
+            <div class="t-label semi c-ink">Chỉ ca AI chưa chắc mới chuyển tới người duyệt.</div>
+            <div class="row gap-4">
+              <div class="seg-bar" style="flex:78;background:#7C3AED"></div>
+              <div class="seg-bar" style="flex:18;background:#94A3B8"></div>
+              <div class="seg-bar" style="flex:24;background:#D97706"></div>
+            </div>
+            <div class="col gap-6">
+              <div class="row gap-8"><span class="dot ai"></span><div class="t-label grow">AI đã xác nhận</div><div class="t-label bold">78</div></div>
+              <div class="row gap-8"><span class="dot"></span><div class="t-label grow">AI đã loại</div><div class="t-label bold">18</div></div>
+              <div class="row gap-8"><span class="dot warn"></span><div class="t-label grow">Cần cân nhắc · chờ người duyệt</div><div class="t-label bold">24</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phải: chi tiết ca đang xem -->
+        <div class="card col grow" style="padding:20px;gap:18px">
+          <div class="col gap-4">
+            <div class="row gap-12">
+              <div class="t-h1">0934 567 890</div>
+              <span class="chip warn"><i class="ic s14" data-i="alert"></i>Cần cân nhắc</span>
+            </div>
+            <div class="t-label muted">Báo cáo lúc 10:45 hôm nay · 1 người báo · Khu phố 4</div>
+          </div>
+
+          <div class="grid-2" style="grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)">
+            <!-- (a) Bằng chứng -->
+            <div class="col gap-8">
+              <div class="t-over muted">Bằng chứng (đã che thông tin riêng)</div>
+              <div class="card soft col gap-12 grow" style="padding:14px">
+                <div class="col gap-2">
+                  <div class="t-cap muted">Phút 0:12</div>
+                  <div class="t-body">“Tôi là <span class="hl">cán bộ điều tra</span>…”</div>
+                </div>
+                <div class="col gap-2">
+                  <div class="t-cap muted">Phút 1:47</div>
+                  <div class="t-body">“…<span class="hl">chuyển tiền vào tài khoản tạm giữ</span> trong 30 phút.”</div>
+                </div>
+                <div class="col gap-2">
+                  <div class="t-cap muted">Phút 3:30</div>
+                  <div class="t-body">“<span class="hl">Không được nói với ai</span>.”</div>
+                </div>
+              </div>
+              <div class="row gap-10">
+                <div class="icon-box round solid-brand"><i class="ic s20 fill" data-i="play"></i></div>
+                <div class="t-label semi">Bản ghi âm 4:12</div>
+                <div class="row gap-2 muted" style="margin-left:auto"><i class="ic" data-i="wave"></i><i class="ic" data-i="wave"></i><i class="ic" data-i="wave"></i></div>
+              </div>
+              <div class="t-cap muted">Người báo đã đồng ý gửi bản ghi này.</div>
+            </div>
+
+            <!-- (b) AI nhận định -->
+            <div class="col gap-12">
+              <div class="card ai col gap-8" style="padding:14px">
+                <span class="ai-tag"><i class="ic s16" data-i="sparkles"></i>AI nhận định</span>
+                <div class="t-label bold">Giả danh cơ quan chức năng</div>
+                <div class="col gap-6">
+                  <div class="row between"><div class="t-cap c-ai-ink">Độ tin cậy</div><div class="t-label bold c-ai-ink">71%</div></div>
+                  <div class="progress" style="background:#fff"><div class="progress-bar ai" style="width:71%"></div></div>
+                </div>
+                <div class="col gap-6">
+                  <div class="row top gap-8"><i class="ic s16 c-ai" data-i="check" style="margin-top:2px"></i><div class="t-label">Tự xưng cán bộ điều tra</div></div>
+                  <div class="row top gap-8"><i class="ic s16 c-ai" data-i="check" style="margin-top:2px"></i><div class="t-label">Yêu cầu chuyển tiền vào tài khoản tạm giữ</div></div>
+                  <div class="row top gap-8"><i class="ic s16 c-ai" data-i="check" style="margin-top:2px"></i><div class="t-label">Yêu cầu giữ bí mật</div></div>
+                </div>
+              </div>
+              <div class="card warn col gap-4" style="padding:12px 14px">
+                <div class="row gap-8"><i class="ic s16 c-warn" data-i="alert"></i><div class="t-label bold c-warn-ink">Vì sao AI chưa chắc</div></div>
+                <div class="row top gap-8"><span class="dot warn" style="margin:6px 4px 0"></span><div class="t-label c-ink">Mới có 1 người báo</div></div>
+                <div class="row top gap-8"><span class="dot warn" style="margin:6px 4px 0"></span><div class="t-label c-ink">Số mới xuất hiện 2 ngày, chưa có lịch sử</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col gap-8">
+            <div class="t-over muted">Lịch sử của số này</div>
+            <div class="row gap-10"><span class="dot"></span><div class="t-label muted">22/11 — Số xuất hiện lần đầu trong hệ thống</div></div>
+            <div class="row gap-10"><span class="dot brand"></span><div class="t-label semi">24/11 10:45 — Báo cáo đầu tiên (đang xem)</div></div>
+          </div>
+
+          <!-- Thanh hành động -->
+          <div class="col gap-12 mt-auto">
+            <div class="divider"></div>
+            <div class="row gap-12">
+              <span class="btn danger act"><i class="ic s20" data-i="alert-oct"></i>Xác nhận lừa đảo</span>
+              <span class="btn outline act">Spam quảng cáo</span>
+              <span class="btn outline act">Không đủ căn cứ</span>
+            </div>
+            <div class="row between gap-12">
+              <span class="btn outline sm"><i class="ic s18" data-i="box"></i>Gắn nhãn giao hàng</span>
+              <span class="btn ghost" style="height:40px"><i class="ic s20" data-i="shield"></i>Chuyển tin báo cho Công an phường</span>
+            </div>
+            <div class="row top gap-8">
+              <i class="ic s16 muted" data-i="info"></i>
+              <div class="t-cap muted grow">Nhãn tự hết hạn sau 90 ngày nếu không có báo cáo mới, vì số điện thoại có thể được cấp lại cho người khác.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

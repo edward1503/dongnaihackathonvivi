@@ -1,0 +1,13 @@
+Use your image generation tool to create 4 separate square (1:1) comic panel illustrations, then save each one as a PNG file in the current working directory with EXACTLY these filenames: comic1-1.png, comic1-2.png, comic1-3.png, comic1-4.png. After saving, list the files to confirm they exist.
+
+Shared style for all panels: flat vector comic illustration, clean bold dark-navy outlines, simple shapes, limited palette (royal blue #1D4ED8, navy #0F172A, warm amber #F59E0B, soft red #DC2626, lilac, cream background #FFF7ED). Keep the same character design in every panel.
+Hard rules for every panel: absolutely NO text, letters, numbers or writing anywhere (no speech bubbles with writing, no signs, no captions); no logos; no national emblems; no flags; no maps; no police or military uniforms or insignia; no realistic human faces (simple friendly cartoon faces only).
+
+Recurring character "Ba Hoa": a 65-year-old Vietnamese grandmother, grey hair in a low bun, round glasses, lilac blouse.
+Recurring character "son": a Vietnamese man around 30, short black hair, green polo shirt.
+The scammer is always a faceless dark-grey silhouette wearing a phone headset, in a dim room.
+
+Panel 1 (comic1-1.png): Ba Hoa at home in a cozy living room, her smartphone on the table is ringing with vibration lines and a question-mark caller icon; she looks surprised.
+Panel 2 (comic1-2.png): split scene. Left: the faceless silhouette scammer with a headset pointing a finger sternly. Right: Ba Hoa holding the phone to her ear, frightened, sweat drops, red alarm lines around her.
+Panel 3 (comic1-3.png): Ba Hoa's trembling hand about to tap her phone to send money (coins and banknote icons floating toward the phone), but a large glowing blue shield with a raised white stop-hand symbol pops out of the phone and blocks it.
+Panel 4 (comic1-4.png): Ba Hoa relieved and smiling, talking on the phone with her son who appears beside her in a friendly circle frame; a small blue shield with a white check mark in the corner.

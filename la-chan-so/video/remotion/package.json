@@ -1,0 +1,20 @@
+{
+  "name": "scoai-tradeagent-demo-video",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio",
+    "render:en": "remotion render DemoEN out/scoai-tradeagent-demo-en.mp4",
+    "render:vi": "remotion render DemoVI out/scoai-tradeagent-demo-vi.mp4"
+  },
+  "dependencies": {
+    "@fontsource/be-vietnam-pro": "5.3.0",
+    "@fontsource/jetbrains-mono": "5.3.0",
+    "@remotion/cli": "4.0.540",
+    "lucide-react": "1.72.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "remotion": "4.0.540"
+  }
+}

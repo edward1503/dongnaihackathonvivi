@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>A05 – Lá chắn tin nhắn</title>
+<link rel="stylesheet" href="../ds.css">
+<script src="../icons.js"></script>
+<style>
+  .shot{width:360px}
+  .home-grid{display:grid;grid-template-columns:repeat(4,56px);justify-content:space-between;row-gap:32px}
+  .app-ico{width:56px;height:56px;border-radius:16px;background:#fff}
+</style>
+</head>
+<body>
+
+<!-- ============ A05a: thông báo nổi trên màn hình chính ============ -->
+<section class="shot">
+  <div class="shot-name">A05a – Lá chắn tin nhắn · Thông báo nổi</div>
+  <div class="frame phone" data-name="A05a-thong-bao-noi" style="background:#E2E8F0">
+    <div class="statusbar"><span>09:15</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+
+    <div class="content" style="padding:24px 28px 28px">
+      <div class="home-grid mt-auto">
+        <div class="app-ico"></div><div class="app-ico"></div><div class="app-ico"></div><div class="app-ico"></div>
+        <div class="app-ico"></div><div class="app-ico"></div><div class="app-ico"></div><div class="app-ico"></div>
+        <div class="app-ico"></div><div class="app-ico"></div><div class="app-ico"></div><div class="app-ico"></div>
+        <div class="app-ico"></div><div class="app-ico"></div><div class="app-ico"></div><div class="app-ico"></div>
+      </div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+
+    <div class="notif">
+      <div class="row gap-8">
+        <div class="icon-box solid-danger" style="width:28px;height:28px;border-radius:8px"><i class="ic s16" data-i="shield-alert"></i></div>
+        <div class="t-cap bold">Lá chắn số</div>
+        <div class="t-cap muted">· bây giờ</div>
+      </div>
+      <div class="col gap-4">
+        <div class="t-label bold">Tin nhắn đáng ngờ từ người lạ</div>
+        <div class="t-label muted">“Việc nhẹ lương cao 500k/ngày, nạp trước 200k…” có 3 dấu hiệu lừa đảo.</div>
+      </div>
+      <div class="row gap-8">
+        <div class="btn sm primary">Xem phân tích</div>
+        <div class="btn sm outline">Bỏ qua</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ A05b: AI phân tích tin nhắn (chế độ thường, Vy) ============ -->
+<section class="shot">
+  <div class="shot-name">A05b – Lá chắn tin nhắn · AI phân tích</div>
+  <div class="frame phone" data-name="A05b-phan-tich-tin-nhan" style="height:864px">
+    <div class="statusbar"><span>09:16</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <i class="ic" data-i="arrow-left"></i>
+      <div class="title">Phân tích tin nhắn</div>
+    </div>
+
+    <div class="content" style="padding-top:0;gap:12px">
+      <div class="row gap-6">
+        <span class="chip outline"><i class="ic s14" data-i="message"></i>Ứng dụng nhắn tin</span>
+        <span class="chip outline">Người lạ</span>
+        <span class="chip outline"><i class="ic s14" data-i="clock"></i>09:15</span>
+      </div>
+
+      <div class="bubble in" style="max-width:100%">Chào em, bên chị đang tuyển cộng tác viên đặt đơn online, <span class="hl">việc nhẹ lương cao 500k/ngày</span>, không cần kinh nghiệm. Chỉ cần <span class="hl">nạp trước 200k</span> để kích hoạt tài khoản, hoàn tiền kèm <span class="hl">hoa hồng 20%</span> ngay. Số lượng có hạn, <span class="hl">đăng ký trong hôm nay</span> tại <span class="hl warn">bit.ly/viec-nhe-xyz</span></div>
+
+      <div class="card danger row gap-12">
+        <div class="icon-box solid-danger"><i class="ic s20" data-i="alert-oct"></i></div>
+        <div class="col grow">
+          <div class="t-h2 c-danger-ink">Nguy hiểm</div>
+          <div class="t-label c-danger-ink">Lừa đảo tuyển cộng tác viên</div>
+        </div>
+      </div>
+
+      <div class="card soft row gap-12" style="padding:12px 16px;border-color:var(--outline-2)">
+        <i class="ic c-danger" data-i="hand"></i>
+        <div class="t-label bold grow">Đừng nạp 200.000 đồng. Đừng mở đường dẫn trong tin.</div>
+      </div>
+
+      <div class="card ai col gap-8">
+        <div class="ai-tag"><i class="ic s14" data-i="sparkles"></i>AI giải thích</div>
+        <div class="row top gap-10"><span class="dot ai" style="margin-top:6px"></span><div class="t-label c-ai-ink grow">Hứa thu nhập cao bất thường</div></div>
+        <div class="row top gap-10"><span class="dot ai" style="margin-top:6px"></span><div class="t-label c-ai-ink grow">Đòi nạp tiền trước khi làm</div></div>
+        <div class="row top gap-10"><span class="dot ai" style="margin-top:6px"></span><div class="t-label c-ai-ink grow">Giục đăng ký gấp,<br>dùng đường dẫn rút gọn</div></div>
+      </div>
+
+      <div class="card brand col gap-12">
+        <div class="col gap-2">
+          <div class="t-label bold c-brand-ink">Báo số này cho cộng đồng?</div>
+          <div class="t-cap c-brand-ink">Giúp cảnh báo các bạn khác trong trường.</div>
+        </div>
+        <div class="row gap-8">
+          <div class="btn sm primary" style="flex:1">Báo cho cộng đồng</div>
+          <div class="btn sm outline">Không</div>
+        </div>
+      </div>
+
+      <div class="btn ghost" style="height:44px"><i class="ic s20" data-i="book"></i>Xem truyện 1 phút về chiêu này</div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+</body>
+</html>
