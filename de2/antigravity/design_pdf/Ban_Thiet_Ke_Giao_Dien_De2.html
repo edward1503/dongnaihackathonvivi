@@ -8,10 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    @page {
-      size: A4 landscape;
-      margin: 0;
-    }
+    @page { size: A4 landscape; margin: 0; }
     * {
       box-sizing: border-box;
       margin: 0;
@@ -19,13 +16,10 @@
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
     }
-    html, body, button, input, select, textarea, svg, svg text {
+    html, body, button, svg, svg text {
       font-family: "Be Vietnam Pro", "Segoe UI", Tahoma, sans-serif;
     }
-    body {
-      background: #334155;
-      color: #0f172a;
-    }
+    body { background: #334155; color: #0f172a; }
     .toolbar {
       position: sticky;
       top: 0;
@@ -60,7 +54,6 @@
       box-shadow: 0 12px 32px rgba(0,0,0,0.35);
       page-break-after: always;
       overflow: hidden;
-      position: relative;
     }
     .sheet:last-child { page-break-after: auto; }
     @media print {
@@ -68,7 +61,6 @@
       .toolbar { display: none !important; }
       .sheet { margin: 0; box-shadow: none; width: 297mm; height: 209.5mm; }
     }
-
     .sheet-head {
       display: flex;
       justify-content: space-between;
@@ -77,15 +69,8 @@
       padding-bottom: 6px;
       margin-bottom: 8px;
     }
-    .sheet-head h1 {
-      font-size: 14pt;
-      color: #1e3a8a;
-      font-weight: 700;
-    }
-    .sheet-head .sub {
-      font-size: 9pt;
-      color: #475569;
-    }
+    .sheet-head h1 { font-size: 13.5pt; color: #1e3a8a; font-weight: 700; }
+    .sheet-head .sub { font-size: 8.8pt; color: #475569; }
     .sheet-badge {
       background: #1e3a8a;
       color: #fff;
@@ -102,8 +87,6 @@
       border-top: 1px solid #cbd5e1;
       padding-top: 4px;
     }
-
-    /* Two-phone layout */
     .two-screens {
       flex: 1;
       display: grid;
@@ -131,107 +114,36 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      font-size: 8.2pt;
-    }
-    .mp-status {
-      background: #0f172a;
-      color: #fff;
-      font-size: 7pt;
-      padding: 3px 10px;
-      display: flex;
-      justify-content: space-between;
-    }
-    .mp-head {
-      background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
-      color: #fff;
-      padding: 7px 9px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .mp-body {
-      flex: 1;
-      padding: 7px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      overflow: hidden;
-    }
-    .mp-nav {
-      background: #fff;
-      border-top: 1px solid #cbd5e1;
-      padding: 5px 4px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      text-align: center;
-      font-size: 7pt;
-      font-weight: 700;
-      color: #475569;
-    }
-    .mp-card {
-      background: #fff;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      padding: 6px 7px;
-    }
-
-    .spec-notes h2 {
-      font-size: 11pt;
-      color: #1e3a8a;
-      margin-bottom: 4px;
-    }
-    .req-pill {
-      display: inline-block;
-      background: #dbeafe;
-      color: #1e40af;
-      font-size: 7.8pt;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 99px;
-      margin-bottom: 6px;
-      margin-right: 4px;
-    }
-    .req-pill.bonus { background: #dcfce7; color: #166534; }
-    .spec-notes ul {
-      padding-left: 15px;
-      font-size: 8.6pt;
-      line-height: 1.42;
-      color: #334155;
-    }
-    .spec-notes li { margin-bottom: 4px; }
-
-    .mini-btn {
-      background: #1d4ed8;
-      color: #fff;
-      text-align: center;
-      padding: 6px;
-      border-radius: 7px;
-      font-weight: 700;
       font-size: 8pt;
     }
-    .tag-sm {
-      display: inline-block;
-      padding: 1px 5px;
-      border-radius: 99px;
-      font-size: 7pt;
-      font-weight: 700;
-    }
+    .mp-status { background: #0f172a; color: #fff; font-size: 7pt; padding: 3px 10px; display: flex; justify-content: space-between; }
+    .mp-head { background: linear-gradient(135deg, #1e3a8a, #1d4ed8); color: #fff; padding: 7px 9px; display: flex; justify-content: space-between; align-items: center; }
+    .mp-body { flex: 1; padding: 7px; display: flex; flex-direction: column; gap: 6px; overflow: hidden; }
+    .mp-nav { background: #fff; border-top: 1px solid #cbd5e1; padding: 5px 4px; display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; font-size: 7pt; font-weight: 700; color: #475569; }
+    .mp-card { background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 6px 7px; }
+    .spec-notes h2 { font-size: 10.8pt; color: #1e3a8a; margin-bottom: 4px; }
+    .req-pill { display: inline-block; background: #dbeafe; color: #1e40af; font-size: 7.6pt; font-weight: 700; padding: 2px 7px; border-radius: 99px; margin-bottom: 6px; margin-right: 4px; }
+    .req-pill.bonus { background: #dcfce7; color: #166534; }
+    .spec-notes ul { padding-left: 15px; font-size: 8.5pt; line-height: 1.42; color: #334155; }
+    .spec-notes li { margin-bottom: 4px; }
+    .mini-btn { background: #1d4ed8; color: #fff; text-align: center; padding: 6px; border-radius: 7px; font-weight: 700; font-size: 7.8pt; }
+    .tag-sm { display: inline-block; padding: 1px 6px; border-radius: 99px; font-size: 6.8pt; font-weight: 700; }
   </style>
 </head>
 <body>
   <div class="toolbar">
     <div>
-      <strong>🎨 BẢN THIẾT KẾ GIAO DIỆN UX/UI (ĐỀ 2 – ĐỦ 10 MÀN HÌNH ĐẶT TÊN RÕ RÀNG)</strong>
-      <span style="font-size:12px;color:#cbd5e1;margin-left:10px;">Gồm 07 trang A4 Ngang • Bấm Xuất PDF để lưu tệp nộp Sản phẩm số 1</span>
+      <strong>BẢN THIẾT KẾ GIAO DIỆN UX/UI (ĐỀ 2 – ĐỦ 10 MÀN HÌNH ĐẶT TÊN RÕ RÀNG)</strong>
+      <span style="font-size:12px;color:#cbd5e1;margin-left:10px;">Gồm 07 trang A4 Ngang • Khớp 1:1 với Prototype &amp; Thuyết minh</span>
     </div>
-    <button onclick="window.print()">🖨️ Xuất Tệp PDF Nộp Bài (Ctrl + P)</button>
+    <button onclick="window.print()">Xuất Tệp PDF Nộp Bài (Ctrl + P)</button>
   </div>
 
-  <!-- ==================== TRANG 1: HỆ THỐNG THIẾT KẾ & LUỒNG TỔNG THỂ ==================== -->
+  <!-- TRANG 1: TỔNG QUAN LUỒNG BÀN GIAO & DANH MỤC 10 MÀN HÌNH -->
   <section class="sheet">
     <div class="sheet-head">
       <div>
-        <h1>HỆ THỐNG THIẾT KẾ UX/UI &amp; SƠ ĐỒ LUỒNG NGƯỜI DÙNG – TRẤNBIÊN TRỰC TUYẾN</h1>
+        <h1>HỆ THỐNG THIẾT KẾ UX/UI &amp; LUỒNG BÀN GIAO 04 TÁC NHÂN – TRẤNBIÊN TRỰC TUYẾN</h1>
         <div class="sub">Cuộc thi Hackathon TP. Đồng Nai 2026 • Đề 2: Phản ánh hiện trường (Chính quyền số – Đô thị thông minh)</div>
       </div>
       <div class="sheet-badge">TRANG 01 / 07 • TỔNG QUAN</div>
@@ -240,42 +152,42 @@
     <div style="flex:1;display:grid;grid-template-columns:1.25fr 1fr;gap:14px;align-items:stretch;">
       <div style="background:#fff;border:1px solid #cbd5e1;border-radius:12px;padding:12px;display:flex;flex-direction:column;justify-content:space-between;">
         <div>
-          <h3 style="font-size:10.5pt;color:#1e3a8a;margin-bottom:8px;">1. SƠ ĐỒ LUỒNG KHÉP KÍN 03 VAI TRÒ (END-TO-END USER FLOW)</h3>
-          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;font-size:8.4pt;">
+          <h3 style="font-size:10pt;color:#1e3a8a;margin-bottom:8px;">1. CHUỖI BÀN GIAO TRÁCH NHIỆM RÕ RÀNG (AI NHẬN – AI XỬ LÝ – AI BÁO KẾT QUẢ)</h3>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;font-size:8.2pt;">
             <div style="border:1.5px solid #93c5fd;background:#eff6ff;border-radius:8px;padding:8px;">
-              <strong style="color:#1e3a8a;">① Người dân &amp; Người cao tuổi (MH-01..04)</strong>
-              <p style="margin-top:3px;">Mở link/QR Zalo (PWA) &rarr; Bật <em>Chữ lớn 1.5x</em> nếu cần &rarr; <strong>Chụp ảnh (B1)</strong> &rarr; AI gợi ý loại + <em>Độ tin cậy %</em> &rarr; <strong>Vị trí GPS (B2)</strong> quét trùng <code>50m</code> (+1 Đồng tình nếu trùng) &rarr; <strong>Chọn loại &amp; Gửi (B3)</strong>.</p>
+              <strong style="color:#1e3a8a;">1. Người dân &amp; Người cao tuổi (MH-01..04)</strong>
+              <p style="margin-top:3px;">Wizard gửi phản ánh <strong>03 màn hình tuần tự</strong> (mỗi màn 1 quyết định): Chụp ảnh &rarr; Xác nhận vị trí GPS &amp; gộp trùng <code>50m</code> &rarr; Chốt loại sự cố (tôn trọng khi dân chọn khác AI).</p>
             </div>
             <div style="border:1.5px solid #7dd3fc;background:#f0f9ff;border-radius:8px;padding:8px;">
-              <strong style="color:#0369a1;">② Đội Thanh niên Tình nguyện (MH-07)</strong>
-              <p style="margin-top:3px;">Nhận thông báo sự cố cách <code>&lt;500m</code> hoặc có <strong>Độ tin cậy AI trung bình (60–84%)</strong> &rarr; Kiểm chứng thực địa 1 chạm &amp; hỗ trợ gửi phản ánh hộ cô chú lớn tuổi.</p>
+              <strong style="color:#0369a1;">2. Đội Thanh niên Tình nguyện (MH-07)</strong>
+              <p style="margin-top:3px;">Kiểm chứng thực địa cho tin báo chụp đêm thiếu sáng; xác nhận chuyển Phường hoặc <strong>Đóng lưu vết đối soát</strong> nếu sự cố đã tự hết; gửi hộ người cao tuổi.</p>
             </div>
             <div style="border:1.5px solid #cbd5e1;background:#f8fafc;border-radius:8px;padding:8px;">
-              <strong style="color:#0f172a;">③ Cán bộ UBND Phường Trấn Biên (MH-08..09)</strong>
-              <p style="margin-top:3px;">Tiếp nhận bảng điều phối ưu tiên theo cụm gộp trùng &rarr; Phân loại, giao đơn vị chuyên môn, gắn <strong>Hạn xử lý (SLA)</strong> &rarr; Cập nhật kết quả kèm <strong>Ảnh sau xử lý</strong>.</p>
+              <strong style="color:#0f172a;">3. Cán bộ tiếp nhận UBND Phường (MH-08)</strong>
+              <p style="margin-top:3px;">Tiếp nhận bảng ưu tiên theo cụm gộp trùng &rarr; Phân loại &amp; <strong>bàn giao Đơn vị thực thi chuyên môn + Hạn xử lý (SLA)</strong> &rarr; Duyệt công khai kết quả.</p>
             </div>
             <div style="border:1.5px solid #86efac;background:#f0fdf4;border-radius:8px;padding:8px;">
-              <strong style="color:#166534;">④ Minh bạch Kết quả &amp; Hài lòng (MH-05..06)</strong>
-              <p style="margin-top:3px;">Ghim bản đồ chuyển <strong>Xanh lá</strong> &rarr; Người dân theo dõi Timeline 4 mốc, kéo thanh trượt xem <strong>Ảnh Trước/Sau</strong> &amp; chấm <strong>1–5 sao hài lòng</strong>.</p>
+              <strong style="color:#166534;">4. Đơn vị thực thi &amp; Giám sát dân (MH-09, MH-06)</strong>
+              <p style="margin-top:3px;">Đơn vị chuyên môn sửa chữa thực tế, tải lên <strong>Ảnh sau xử lý</strong> &rarr; Ghim bản đồ đổi sang Xanh lá &rarr; Dân kéo xem <strong>Trước/Sau</strong> &amp; đánh giá 1–5 sao.</p>
             </div>
           </div>
         </div>
 
         <div>
-          <h3 style="font-size:10.5pt;color:#1e3a8a;margin:10px 0 6px;">2. QUY TẮC MÀU NGỮ NGHĨA &amp; KHẢ NĂNG TIẾP CẬN (WCAG AAA)</h3>
-          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;font-size:7.8pt;text-align:center;">
+          <h3 style="font-size:10pt;color:#1e3a8a;margin:10px 0 6px;">2. BẢNG MÀU NGỮ NGHĨA &amp; HỆ THỐNG BIỂU TƯỢNG VECTOR (WCAG AAA)</h3>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;font-size:7.6pt;text-align:center;">
             <div style="background:#1d4ed8;color:#fff;padding:7px 4px;border-radius:6px;"><strong>#1D4ED8</strong><br/>Chính quyền số</div>
-            <div style="background:#dc2626;color:#fff;padding:7px 4px;border-radius:6px;"><strong>#DC2626</strong><br/>Mới / Khẩn cấp</div>
-            <div style="background:#d97706;color:#fff;padding:7px 4px;border-radius:6px;"><strong>#D97706</strong><br/>Đang sửa / Xác minh</div>
-            <div style="background:#16a34a;color:#fff;padding:7px 4px;border-radius:6px;"><strong>#16A34A</strong><br/>Đã khắc phục</div>
+            <div style="background:#dc2626;color:#fff;padding:7px 4px;border-radius:6px;"><strong>#DC2626</strong><br/>Mới tiếp nhận</div>
+            <div style="background:#d97706;color:#fff;padding:7px 4px;border-radius:6px;"><strong>#D97706</strong><br/>Đang xử lý / Xác minh</div>
+            <div style="background:#16a34a;color:#fff;padding:7px 4px;border-radius:6px;"><strong>#16A34A</strong><br/>Đã xử lý xong</div>
             <div style="background:#facc15;color:#0f172a;padding:7px 4px;border-radius:6px;"><strong>Chữ lớn 1.5x</strong><br/>Người cao tuổi</div>
           </div>
         </div>
       </div>
 
       <div style="background:#fff;border:1px solid #cbd5e1;border-radius:12px;padding:12px;">
-        <h3 style="font-size:10.5pt;color:#1e3a8a;margin-bottom:6px;">3. DANH MỤC 10 MÀN HÌNH ĐỐI CHIẾU YÊU CẦU ĐỀ 2</h3>
-        <table style="width:100%;border-collapse:collapse;font-size:8pt;">
+        <h3 style="font-size:10pt;color:#1e3a8a;margin-bottom:6px;">3. DANH MỤC 10 MÀN HÌNH ĐỐI CHIẾU YÊU CẦU ĐỀ 2</h3>
+        <table style="width:100%;border-collapse:collapse;font-size:7.9pt;">
           <thead>
             <tr style="background:#eff6ff;color:#1e3a8a;">
               <th style="border:1px solid #cbd5e1;padding:4px 6px;text-align:left;">Mã MH</th>
@@ -285,14 +197,14 @@
           </thead>
           <tbody>
             <tr><td style="border:1px solid #cbd5e1;padding:4px 6px;"><strong>MH-01</strong></td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Trang chủ &amp; Bản đồ các phản ánh quanh tôi</td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Bắt buộc #3</td></tr>
-            <tr><td style="border:1px solid #cbd5e1;padding:4px 6px;"><strong>MH-02</strong></td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Gửi phản ánh 03 bước &amp; AI gợi ý kèm Độ tin cậy</td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Bắt buộc #1 + AI</td></tr>
-            <tr><td style="border:1px solid #cbd5e1;padding:4px 6px;"><strong>MH-03</strong></td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Phát hiện &amp; Gộp phản ánh trùng vị trí (50m)</td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Điểm cộng Gộp</td></tr>
-            <tr><td style="border:1px solid #cbd5e1;padding:4px 6px;"><strong>MH-04</strong></td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Chế độ Chữ lớn cho Người cao tuổi</td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Điểm cộng Chữ lớn</td></tr>
+            <tr><td style="border:1px solid #cbd5e1;padding:4px 6px;"><strong>MH-02</strong></td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Wizard Gửi phản ánh 03 bước &amp; Chọn khác gợi ý AI</td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Bắt buộc #1 + AI</td></tr>
+            <tr><td style="border:1px solid #cbd5e1;padding:4px 6px;"><strong>MH-03</strong></td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Bước 2: Quét &amp; Gộp phản ánh trùng vị trí (50m)</td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Điểm cộng Gộp</td></tr>
+            <tr><td style="border:1px solid #cbd5e1;padding:4px 6px;"><strong>MH-04</strong></td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Chế độ Chữ lớn xuyên suốt cho Người cao tuổi</td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Điểm cộng Chữ lớn</td></tr>
             <tr><td style="border:1px solid #cbd5e1;padding:4px 6px;"><strong>MH-05</strong></td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Theo dõi trạng thái phản ánh của tôi</td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Bắt buộc #2</td></tr>
             <tr><td style="border:1px solid #cbd5e1;padding:4px 6px;"><strong>MH-06</strong></td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Đối chiếu Trước/Sau &amp; Đánh giá mức độ hài lòng</td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Bắt buộc #6</td></tr>
             <tr><td style="border:1px solid #cbd5e1;padding:4px 6px;"><strong>MH-07</strong></td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Đội Thanh niên tình nguyện xác minh tại chỗ</td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Vai trò #3 của đề</td></tr>
-            <tr><td style="border:1px solid #cbd5e1;padding:4px 6px;"><strong>MH-08</strong></td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Màn hình Cán bộ tiếp nhận: Phân loại, Giao &amp; SLA</td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Bắt buộc #4</td></tr>
-            <tr><td style="border:1px solid #cbd5e1;padding:4px 6px;"><strong>MH-09</strong></td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Cập nhật kết quả kèm Ảnh sau xử lý</td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Bắt buộc #5</td></tr>
+            <tr><td style="border:1px solid #cbd5e1;padding:4px 6px;"><strong>MH-08</strong></td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Cán bộ Phường: Tiếp nhận, Phân loại &amp; Giao đơn vị</td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Bắt buộc #4</td></tr>
+            <tr><td style="border:1px solid #cbd5e1;padding:4px 6px;"><strong>MH-09</strong></td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Đơn vị thực thi cập nhật kết quả kèm Ảnh sau xử lý</td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Bắt buộc #5</td></tr>
             <tr><td style="border:1px solid #cbd5e1;padding:4px 6px;"><strong>MH-10</strong></td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Xử lý Trạng thái Lỗi (Ảnh mờ, Mất GPS) &amp; Trống</td><td style="border:1px solid #cbd5e1;padding:4px 6px;">Tiêu chí UX (30đ)</td></tr>
           </tbody>
         </table>
@@ -301,36 +213,35 @@
 
     <div class="sheet-foot">
       <span>Giải pháp: TrấnBiên Trực Tuyến – Đề 2: Phản ánh hiện trường</span>
-      <span>Dữ liệu chuẩn: Phường Trấn Biên (64 phản ánh • 47 đã xử lý • TB 3,2 ngày)</span>
+      <span>Dữ liệu gốc: Phường Trấn Biên (64 phản ánh • 47 đã xử lý • 17 đang xử lý • TB 3,2 ngày)</span>
     </div>
   </section>
 
-  <!-- ==================== TRANG 2: MH-01 & MH-02 ==================== -->
+  <!-- TRANG 2: MH-01 & MH-02 -->
   <section class="sheet">
     <div class="sheet-head">
       <div>
-        <h1>MH-01: BẢN ĐỒ PHẢN ÁNH QUANH TÔI &nbsp;|&nbsp; MH-02: GỬI PHẢN ÁNH TRONG 03 BƯỚC</h1>
+        <h1>MH-01: BẢN ĐỒ PHẢN ÁNH QUANH TÔI &nbsp;|&nbsp; MH-02: WIZARD GỬI PHẢN ÁNH 03 BƯỚC TUẦN TỰ</h1>
         <div class="sub">Phân hệ Người dân (Mobile-First PWA – Khung chuẩn 390 x 844 px)</div>
       </div>
       <div class="sheet-badge">TRANG 02 / 07 • LUỒNG NGƯỜI DÂN</div>
     </div>
 
     <div class="two-screens">
-      <!-- MH-01 -->
       <div class="screen-panel">
         <div class="mock-phone">
           <div class="mp-status"><span>09:30</span><span>5G • 95%</span></div>
           <div class="mp-head">
-            <div><strong>TrấnBiên Trực Tuyến</strong><div style="font-size:6.8pt;opacity:0.9;">📍 KP.2, P. Trấn Biên</div></div>
-            <span style="background:rgba(255,255,255,0.2);padding:2px 6px;border-radius:99px;font-size:6.8pt;">👁️ Chữ lớn</span>
+            <div><strong>TrấnBiên Trực Tuyến</strong><div style="font-size:6.8pt;opacity:0.9;">KP.2, P. Trấn Biên</div></div>
+            <span style="background:rgba(255,255,255,0.2);padding:2px 6px;border-radius:99px;font-size:6.8pt;">Chữ lớn</span>
           </div>
           <div style="background:#fff;padding:4px 7px;font-size:6.8pt;display:flex;justify-content:space-between;border-bottom:1px solid #e2e8f0;">
-            <span>Tổng: <b>64</b></span><span style="color:#16a34a;">Đã xử lý: <b>47 (73,4%)</b></span><span>TB: <b>3,2 ngày</b></span>
+            <span>Tổng: <b>64</b></span><span style="color:#16a34a;">Đã xử lý: <b>47/64</b></span><span>TB: <b>3,2 ngày</b></span>
           </div>
           <div style="display:flex;gap:3px;padding:4px 6px;background:#fff;font-size:6.5pt;">
             <span style="background:#1d4ed8;color:#fff;padding:2px 6px;border-radius:99px;">Tất cả (64)</span>
-            <span style="border:1px solid #cbd5e1;padding:2px 5px;border-radius:99px;">🗑️ Rác (21)</span>
-            <span style="border:1px solid #cbd5e1;padding:2px 5px;border-radius:99px;">💡 Đèn (18)</span>
+            <span style="border:1px solid #cbd5e1;padding:2px 5px;border-radius:99px;">Rác (21)</span>
+            <span style="border:1px solid #cbd5e1;padding:2px 5px;border-radius:99px;">Đèn (18)</span>
           </div>
           <div style="height:210px;background:#dbeafe;position:relative;">
             <svg viewBox="0 0 230 210" width="100%" height="100%">
@@ -346,216 +257,208 @@
               <text x="132" y="98" text-anchor="middle" font-size="7" fill="#fff" font-weight="bold">3</text>
               <circle cx="72" cy="145" r="7" fill="#d97706" stroke="#fff" stroke-width="2"/>
               <circle cx="168" cy="60" r="7" fill="#16a34a" stroke="#fff" stroke-width="2"/>
-              <circle cx="52" cy="68" r="7" fill="#16a34a" stroke="#fff" stroke-width="2"/>
             </svg>
           </div>
           <div class="mp-body">
             <div class="mp-card">
               <div style="display:flex;justify-content:space-between;margin-bottom:2px;">
-                <span class="tag-sm" style="background:#fef2f2;color:#dc2626;">🔴 Mới tiếp nhận</span>
+                <span class="tag-sm" style="background:#fef2f2;color:#dc2626;">Mới tiếp nhận</span>
                 <span style="font-size:6.8pt;color:#64748b;">#TB-1162 • Cách 18m</span>
               </div>
               <div style="font-weight:700;">Ổ gà đọng nước 140 Hưng Đạo Vương</div>
-              <div style="font-size:7pt;color:#475569;margin:2px 0 4px;">👥 Đã gộp 3 người dân báo • ✓ Đoàn viên xác minh</div>
-              <div style="border:1px solid #cbd5e1;border-radius:5px;text-align:center;padding:3px;font-weight:700;font-size:7pt;">👍 +1 Đồng tình thúc đẩy</div>
+              <div style="font-size:7pt;color:#475569;margin:2px 0 4px;">Gộp 3 người dân báo • Đoàn viên đã xác minh</div>
+              <div style="border:1px solid #cbd5e1;border-radius:5px;text-align:center;padding:3px;font-weight:700;font-size:7pt;">+1 Đồng tình (3)</div>
             </div>
           </div>
-          <div class="mp-nav"><span style="color:#1d4ed8;">🗺️ Quanh tôi</span><span style="background:#1d4ed8;color:#fff;border-radius:99px;padding:1px 4px;">+ Gửi 3 bước</span><span>📋 Của tôi (2)</span></div>
+          <div class="mp-nav"><span style="color:#1d4ed8;">Quanh tôi</span><span style="background:#1d4ed8;color:#fff;border-radius:99px;padding:1px 4px;">Gửi 3 bước</span><span>Của tôi (2)</span></div>
         </div>
 
         <div class="spec-notes">
           <span class="req-pill">Màn hình bắt buộc #3</span>
           <h2>MH-01: Bản đồ các phản ánh quanh tôi</h2>
           <ul>
-            <li><strong>Công khai số liệu tức thì:</strong> Thanh đầu trang hiển thị minh bạch tiến độ Phường Trấn Biên (64 đơn, 47 đã xong – 73,4%, TB 3,2 ngày).</li>
-            <li><strong>Ghim màu trực quan:</strong> Đỏ (Chờ xử lý), Cam (Đang sửa), Xanh lá (Đã khắc phục xong). Số trên ghim thể hiện số người dân cùng phản ánh.</li>
-            <li><strong>Tương tác 1 chạm:</strong> Chạm vào ghim bất kỳ để xem tóm tắt ngay bên dưới, bấm <em>+1 Đồng tình</em> hoặc xem ảnh kết quả mà không phải chuyển nhiều trang.</li>
-            <li><strong>Lối tắt trợ năng:</strong> Nút <code>👁️ Chữ lớn</code> đặt cố định góc trên phải cho người cao tuổi.</li>
+            <li><strong>Số liệu minh bạch đúng đề bài:</strong> Thanh đầu trang hiển thị rõ tiến độ Phường Trấn Biên (64 phản ánh, 47/64 đã xử lý, TB 3,2 ngày).</li>
+            <li><strong>Ghim màu ngữ nghĩa:</strong> Đỏ (Mới tiếp nhận), Cam (Đang xử lý), Xanh lá (Đã xử lý xong). Số trên ghim thể hiện số lượt người dân đồng tình.</li>
+            <li><strong>Thao tác nhanh tại bản đồ:</strong> Chạm vào ghim xem ngay tóm tắt bên dưới, bấm <em>+1 Đồng tình</em> hoặc mở xem ảnh Trước/Sau xử lý.</li>
           </ul>
         </div>
       </div>
 
-      <!-- MH-02 -->
+      <!-- MH-02: Wizard Step-by-Step + AI Override -->
       <div class="screen-panel">
         <div class="mock-phone">
-          <div class="mp-status"><span>09:31</span><span>5G • 95%</span></div>
-          <div class="mp-head">
-            <strong>📷 Gửi phản ánh nhanh (3 bước)</strong>
-            <span style="font-size:7pt;">Hủy</span>
-          </div>
+          <div class="mp-status"><span>09:32</span><span>5G • 95%</span></div>
+          <div class="mp-head"><strong>Gửi phản ánh (Bước 3 / 3)</strong><span style="font-size:7pt;">Hủy</span></div>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:5px;background:#fff;border-bottom:1px solid #e2e8f0;font-size:6.8pt;text-align:center;font-weight:700;">
-            <span style="background:#dcfce7;color:#166534;padding:2px;border-radius:4px;">1. Ảnh ✓</span>
-            <span style="background:#dcfce7;color:#166534;padding:2px;border-radius:4px;">2. Vị trí ✓</span>
-            <span style="background:#dbeafe;color:#1d4ed8;padding:2px;border-radius:4px;">3. Chọn loại</span>
+            <span style="background:#dcfce7;color:#166534;padding:3px;border-radius:4px;">1. Ảnh ✓</span>
+            <span style="background:#dcfce7;color:#166534;padding:3px;border-radius:4px;">2. Vị trí ✓</span>
+            <span style="background:#dbeafe;color:#1d4ed8;padding:3px;border-radius:4px;border:1px solid #93c5fd;">3. Chọn loại</span>
           </div>
           <div class="mp-body">
             <div class="mp-card">
-              <div style="height:68px;border-radius:5px;margin-bottom:5px;overflow:hidden;position:relative;border:1.5px solid #ef4444;">
-                <img src="../prototype/assets/pothole_before.jpg" style="width:100%;height:100%;object-fit:cover;" alt="Ổ gà"/>
+              <div style="height:64px;border-radius:5px;margin-bottom:5px;overflow:hidden;border:1px solid #cbd5e1;">
+                <img src="../prototype/assets/pothole_before.jpg" style="width:100%;height:100%;object-fit:cover;" alt="Sự cố"/>
               </div>
-              <div style="background:#f8fafc;border:1px solid #bfdbfe;border-radius:6px;padding:5px 7px;display:flex;align-items:center;gap:8px;">
-                <div style="text-align:center;padding-right:7px;border-right:1px solid #cbd5e1;min-width:46px;">
-                  <div style="font-size:12.5pt;font-weight:700;color:#16a34a;line-height:1;">92%</div>
-                  <div style="font-size:5.8pt;font-weight:700;color:#16a34a;margin-top:2px;">TIN CẬY CAO</div>
+              <div style="font-weight:700;font-size:7.3pt;margin-bottom:4px;">Xác nhận loại sự cố (Chạm chọn lại nếu khác AI):</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:6.8pt;font-weight:700;">
+                <div style="border:1px solid #cbd5e1;padding:5px;border-radius:6px;position:relative;">
+                  <span style="font-size:5.5pt;background:#64748b;color:#fff;padding:1px 4px;border-radius:99px;">AI gợi ý ban đầu</span><br/>Hư hỏng mặt đường
                 </div>
-                <div style="flex:1;">
-                  <div style="font-size:6.8pt;font-weight:700;color:#0f172a;">✨ Dấu hiệu AI phát hiện:</div>
-                  <div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:2px;font-size:6.2pt;">
-                    <span style="background:#fff;border:1px solid #cbd5e1;padding:1px 4px;border-radius:4px;">Mặt nhựa nứt vỡ</span>
-                    <span style="background:#fff;border:1px solid #cbd5e1;padding:1px 4px;border-radius:4px;">Đọng nước mưa</span>
-                  </div>
-                </div>
+                <div style="border:1px solid #cbd5e1;padding:5px;border-radius:6px;">Đèn đường hỏng</div>
+                <div style="border:2px solid #1d4ed8;background:#eff6ff;color:#1e3a8a;padding:5px;border-radius:6px;">Ngập nước sau mưa</div>
+                <div style="border:1px solid #cbd5e1;padding:5px;border-radius:6px;">Rác thải tự phát</div>
+              </div>
+              <div style="background:#f0fdfa;border:1px solid #5eead4;color:#115e59;border-radius:5px;padding:4px 6px;font-size:6.5pt;margin-top:5px;">
+                <b>Đã đổi theo lựa chọn của bạn:</b> Gửi theo phân loại <u>Ngập nước sau mưa</u> thay cho gợi ý của AI.
               </div>
             </div>
-
-            <div class="mp-card" style="font-size:7pt;">
-              <strong>📌 Bước 2 – Vị trí GPS:</strong> 142 Hưng Đạo Vương, KP.2 <span style="color:#16a34a;">(±8m)</span>
+            <div class="mp-card" style="font-size:6.8pt;">
+              <b>Mô tả ngắn (tự cập nhật theo loại đã chọn):</b><br/>Ngập nước sau mưa ghi nhận tại 142 Hưng Đạo Vương.
             </div>
-
-            <div class="mp-card">
-              <div style="font-weight:700;font-size:7.2pt;margin-bottom:4px;">Bước 3 – Chọn loại sự cố:</div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:7pt;font-weight:700;">
-                <div style="border:1.5px solid #1d4ed8;background:#eff6ff;color:#1e3a8a;padding:5px;border-radius:6px;">🚧 Mặt đường ✨</div>
-                <div style="border:1px solid #cbd5e1;padding:5px;border-radius:6px;">💡 Đèn đường</div>
-                <div style="border:1px solid #cbd5e1;padding:5px;border-radius:6px;">🌊 Ngập nước</div>
-                <div style="border:1px solid #cbd5e1;padding:5px;border-radius:6px;">🗑️ Rác thải</div>
-              </div>
+            <div style="display:grid;grid-template-columns:1fr 1.8fr;gap:4px;">
+              <div style="border:1px solid #cbd5e1;background:#fff;text-align:center;padding:5px;border-radius:6px;font-weight:700;font-size:7pt;">&larr; Vị trí</div>
+              <div class="mini-btn">Gửi phản ánh</div>
             </div>
-
-            <div class="mini-btn">🚀 Gửi phản ánh ngay</div>
           </div>
-          <div class="mp-nav"><span>🗺️ Quanh tôi</span><span style="color:#1d4ed8;">📷 Đang gửi</span><span>📋 Của tôi</span></div>
         </div>
 
         <div class="spec-notes">
           <span class="req-pill">Màn hình bắt buộc #1</span>
-          <span class="req-pill bonus">Điểm cộng AI + Độ tin cậy</span>
-          <h2>MH-02: Gửi phản ánh 03 bước &amp; AI nhận diện ảnh</h2>
+          <span class="req-pill bonus">Điểm cộng AI + Dân sửa gợi ý AI</span>
+          <h2>MH-02: Wizard 03 bước tuần tự &amp; Sửa gợi ý AI</h2>
           <ul>
-            <li><strong>Đúng 03 bước trên 1 luồng cuộn mượt:</strong> (1) Chụp ảnh &rarr; (2) Tự ghim vị trí bản đồ &rarr; (3) Chạm chọn loại, hoàn tất dưới 15 giây, không bắt gõ bàn phím dài.</li>
-            <li><strong>AI có Độ tin cậy minh bạch (%):</strong> Hiển thị thanh tiến trình <code>92% (Cao)</code> kèm từ khóa giải thích bằng chứng hình ảnh, tự động khoanh chọn ô <em>🚧 Mặt đường</em>.</li>
-            <li><strong>Trao quyền kiểm soát cho người dân:</strong> Dù AI chọn sẵn, người dân vẫn đổi lại phân loại khác chỉ bằng 1 cú chạm vào 4 ô biểu tượng lớn.</li>
+            <li><strong>Tách 3 màn hình tuần tự (Không dồn toa):</strong> Người dân đi lần lượt từng quyết định <em>Bước 1 (Chụp ảnh) &rarr; Bước 2 (Vị trí) &rarr; Bước 3 (Chọn loại)</em>, giao diện thoáng và không quá tải thông tin.</li>
+            <li><strong>Không hiển thị % tự báo thiếu căn cứ:</strong> AI gợi ý danh mục kèm dấu hiệu quan sát trực quan từ ảnh.</li>
+            <li><strong>Xử lý rõ khi người dân không đồng ý với AI:</strong> Khi chạm sang loại khác, giao diện xác nhận rõ lựa chọn mới của người dân, tự cập nhật lại câu mô tả và hỗ trợ nút khôi phục gợi ý AI.</li>
           </ul>
         </div>
       </div>
     </div>
 
     <div class="sheet-foot">
-      <span>MH-01 &amp; MH-02 • Phân hệ Người dân (Mobile PWA)</span>
+      <span>MH-01 &amp; MH-02 • Phân hệ Người dân (Wizard tuần tự 3 bước)</span>
       <span>TrấnBiên Trực Tuyến – Đề 2</span>
     </div>
   </section>
 
-  <!-- ==================== TRANG 3: MH-03 & MH-04 ==================== -->
+  <!-- TRANG 3: MH-03 & MH-04 -->
   <section class="sheet">
     <div class="sheet-head">
       <div>
-        <h1>MH-03: GỘP PHẢN ÁNH TRÙNG VỊ TRÍ &nbsp;|&nbsp; MH-04: CHẾ ĐỘ CHỮ LỚN NGƯỜI CAO TUỔI</h1>
-        <div class="sub">Nhóm tính năng Điểm cộng Sáng tạo &amp; Thiết kế Hòa nhập (Inclusive UX)</div>
+        <h1>MH-03: QUÉT &amp; GỘP TRÙNG NGAY BƯỚC 2 &nbsp;|&nbsp; MH-04: CHẾ ĐỘ CHỮ LỚN NGƯỜI CAO TUỔI</h1>
+        <div class="sub">Nhóm tính năng Điểm cộng Sáng tạo &amp; Trợ năng Xuyên suốt</div>
       </div>
-      <div class="sheet-badge">TRANG 03 / 07 • ĐIỂM CỘNG UX &amp; AI</div>
+      <div class="sheet-badge">TRANG 03 / 07 • ĐIỂM CỘNG UX &amp; KHÔNG GIAN</div>
     </div>
 
     <div class="two-screens">
-      <!-- MH-03 -->
       <div class="screen-panel">
         <div class="mock-phone">
-          <div class="mp-status"><span>09:32</span><span>5G • 95%</span></div>
-          <div class="mp-head"><strong>📷 Kiểm tra trùng vị trí</strong><span>✕</span></div>
-          <div style="background:#cbd5e1;padding:8px;font-size:7pt;color:#475569;text-align:center;">
-            [Nền bản đồ bán kính quét Haversine 50m quanh 142 Hưng Đạo Vương]
+          <div class="mp-status"><span>09:31</span><span>5G • 95%</span></div>
+          <div class="mp-head"><strong>Bước 2 / 3: Xác nhận vị trí</strong><span>GPS thiết bị</span></div>
+          <div style="height:145px;background:#e2e8f0;position:relative;">
+            <svg viewBox="0 0 230 145" width="100%" height="100%">
+              <rect width="230" height="145" fill="#e5eef7"/>
+              <line x1="0" y1="75" x2="230" y2="75" stroke="#fff" stroke-width="11"/>
+              <line x1="115" y1="0" x2="115" y2="145" stroke="#fff" stroke-width="10"/>
+              <text x="20" y="70" font-size="6.5" fill="#475569" font-weight="bold">Đ. Hưng Đạo Vương</text>
+              <circle cx="110" cy="75" r="6" fill="#dc2626" stroke="#fff" stroke-width="1.5"/>
+              <circle cx="122" cy="80" r="32" fill="rgba(37,99,235,0.12)" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="4 3"/>
+              <circle cx="122" cy="80" r="5.5" fill="#2563eb" stroke="#fff" stroke-width="2"/>
+            </svg>
           </div>
-          <div class="mp-body" style="background:#fff;border-radius:14px 14px 0 0;margin-top:-6px;padding-top:10px;">
-            <span class="tag-sm" style="background:#fef3c7;color:#b45309;width:fit-content;">📡 Phát hiện sự cố trùng vị trí (cách 18m)</span>
-            <div style="font-weight: 700;font-size:9.2pt;margin-top:2px;">Đã có 03 hàng xóm báo ổ gà này!</div>
-            <div class="mp-card" style="background:#f8fafc;">
-              <strong>#TB-1162: Ổ gà lớn trước 140 Hưng Đạo Vương</strong>
-              <div style="font-size:7pt;color:#475569;margin-top:2px;">📍 KP.2, P. Trấn Biên • AI: 92%</div>
-              <div style="font-size:7pt;color:#0284c7;font-weight:700;margin-top:2px;">✓ Đoàn viên KP.2 đã xác minh tại chỗ</div>
+          <div class="mp-body">
+            <div class="mp-card" style="font-size:6.9pt;">
+              <b>Vị trí:</b> 142 Hưng Đạo Vương, KP.2, P. Trấn Biên
             </div>
-            <p style="font-size:7.2pt;color:#475569;">Gộp phản ánh giúp Phường đẩy điểm nóng này lên <strong>Ưu tiên Cao</strong> thay vì tách nhiều đơn trùng lặp.</p>
-            <div class="mini-btn" style="margin-top:4px;">👍 +1 Đồng tình &amp; Đính kèm thêm ảnh</div>
-            <div style="border:1px solid #cbd5e1;text-align:center;padding:5px;border-radius:7px;font-size:7.2pt;font-weight:600;color:#475569;">Đây là sự cố khác – Vẫn tạo đơn mới</div>
+            <div class="mp-card" style="background:#fffbeb;border-color:#f59e0b;">
+              <div style="font-weight:700;color:#92400e;font-size:7.3pt;margin-bottom:4px;">Đã có 3 người báo "Hư hỏng mặt đường" cách bạn 17m</div>
+              <div style="display:flex;gap:6px;align-items:center;background:#fff;padding:4px;border-radius:6px;border:1px solid #fde68a;margin-bottom:5px;">
+                <img src="../prototype/assets/pothole_before.jpg" style="width:44px;height:36px;object-fit:cover;border-radius:4px;" alt="Trùng"/>
+                <div style="font-size:6.6pt;"><b>#TB-1162:</b> Ổ gà lớn trước 140 Hưng Đạo Vương</div>
+              </div>
+              <div class="mini-btn" style="background:#d97706;">+1 Đồng tình &amp; gộp ảnh ngay (Khỏi qua Bước 3)</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1.5fr;gap:4px;font-size:7pt;font-weight:700;text-align:center;">
+              <div style="border:1px solid #cbd5e1;background:#fff;padding:5px;border-radius:6px;">&larr; Bước 1</div>
+              <div class="mini-btn">Báo sự cố khác &rarr;</div>
+            </div>
           </div>
         </div>
 
         <div class="spec-notes">
           <span class="req-pill bonus">Điểm cộng: Gộp phản ánh trùng vị trí</span>
-          <h2>MH-03: Phát hiện &amp; Gộp phản ánh trùng (50m)</h2>
+          <h2>MH-03: Quét &amp; Gộp trùng ngay tại Bước 2 (50m)</h2>
           <ul>
-            <li><strong>Giải quyết nỗi đau quá tải của Phường:</strong> Một ổ gà trên trục đường chính thường có 5–10 người đi đường cùng chụp báo.</li>
-            <li><strong>Cơ chế Haversine 50m:</strong> Tự động so khớp tọa độ GPS bán kính <code>&le; 50m</code> + cùng danh mục sự cố chưa đóng.</li>
-            <li><strong>Biến trùng lặp thành độ ưu tiên:</strong> Thay vì chặn người dân, nút <em>"+1 Đồng tình &amp; Đính kèm thêm ảnh"</em> vừa ghi nhận đóng góp của người báo sau, vừa tăng trọng số ưu tiên xử lý trên Dashboard Phường.</li>
+            <li><strong>Rút ngắn thao tác cho người dân:</strong> Quét bán kính <code>&le; 50m</code> kết hợp cùng loại sự cố ngay tại Bước 2; nếu trùng, người dân bấm <em>+1 Đồng tình</em> hoàn tất luôn mà không phải đi tiếp sang Bước 3.</li>
+            <li><strong>Vòng tròn Radar trực quan &amp; Ảnh thật:</strong> Hiển thị vùng quét 50m trên bản đồ cùng ảnh chụp thật của người báo trước để người dân đối chiếu chính xác.</li>
           </ul>
         </div>
       </div>
 
-      <!-- MH-04 -->
       <div class="screen-panel">
         <div class="mock-phone" style="background:#fff;">
           <div class="mp-status"><span>09:33</span><span>Chữ lớn</span></div>
           <div class="mp-head" style="background:#0f172a;">
-            <strong style="font-size:9.5pt;">TrấnBiên Trực Tuyến</strong>
-            <span style="background:#facc15;color:#0f172a;padding:2px 6px;border-radius:99px;font-weight: 700;font-size:7pt;">Chữ lớn: BẬT</span>
+            <strong style="font-size:9.2pt;">TrấnBiên Trực Tuyến</strong>
+            <span style="background:#facc15;color:#0f172a;padding:2px 6px;border-radius:99px;font-weight:700;font-size:6.8pt;">Chữ lớn: BẬT</span>
           </div>
-          <div class="mp-body" style="padding:9px;gap:8px;background:#fff;">
-            <div style="background:#fef9c3;border:2px solid #ca8a04;border-radius:8px;padding:6px;font-size:8pt;font-weight:700;">
-              👋 Xin chào Bác! Bác chạm vào 1 trong 3 nút lớn bên dưới:
+          <div class="mp-body" style="padding:9px;gap:7px;background:#fff;">
+            <div style="background:#fef9c3;border:2px solid #ca8a04;border-radius:8px;padding:6px;font-size:7.8pt;font-weight:700;">
+              Xin chào Bác! Giao diện Chữ Lớn dẫn dắt từng bước một:
             </div>
-            <div style="border:2.5px solid #dc2626;background:#fef2f2;color:#991b1b;padding:10px;border-radius:10px;font-weight: 700;font-size:9.5pt;">
-              1. 📷 CHỤP ẢNH BÁO SỰ CỐ
-              <div style="font-size:7.4pt;font-weight:600;margin-top:2px;">Đèn tắt, ổ gà, rác, ngập (Máy tự điền giúp)</div>
+            <div style="border:2.5px solid #dc2626;background:#fef2f2;color:#991b1b;padding:9px;border-radius:10px;font-weight:700;font-size:9pt;">
+              1. CHỤP ẢNH BÁO SỰ CỐ
+              <div style="font-size:7.2pt;font-weight:600;margin-top:2px;">Hướng dẫn từng màn hình, chữ lớn dễ nhìn</div>
             </div>
-            <div style="border:2.5px solid #1d4ed8;background:#eff6ff;color:#1e3a8a;padding:10px;border-radius:10px;font-weight: 700;font-size:9.5pt;">
-              2. 📋 XEM VIỆC BÁC ĐÃ BÁO
-              <div style="font-size:7.4pt;font-weight:600;margin-top:2px;">Có 01 việc Phường vừa sửa xong!</div>
+            <div style="border:2.5px solid #1d4ed8;background:#eff6ff;color:#1e3a8a;padding:9px;border-radius:10px;font-weight:700;font-size:9pt;">
+              2. XEM VIỆC BÁC ĐÃ BÁO
+              <div style="font-size:7.2pt;font-weight:600;margin-top:2px;">Có 01 phản ánh Phường đã xử lý xong</div>
             </div>
-            <div style="border:2.5px solid #16a34a;background:#f0fdf4;color:#14532d;padding:10px;border-radius:10px;font-weight: 700;font-size:9.5pt;">
-              3. 🤝 NHỜ ĐOÀN VIÊN HỖ TRỢ
-              <div style="font-size:7.4pt;font-weight:600;margin-top:2px;">Nhắn Thanh niên Khu phố đến báo giúp</div>
+            <div style="border:2.5px solid #16a34a;background:#f0fdf4;color:#14532d;padding:9px;border-radius:10px;font-weight:700;font-size:9pt;">
+              3. NHỜ ĐOÀN VIÊN HỖ TRỢ
+              <div style="font-size:7.2pt;font-weight:600;margin-top:2px;">Nhắn Thanh niên Khu phố đến báo giúp</div>
             </div>
           </div>
+          <div class="mp-nav" style="font-size:7.5pt;border-top:2px solid #cbd5e1;"><span style="color:#1e3a8a;">Trang chính</span><span>Báo sự cố</span><span>Đã báo (2)</span></div>
         </div>
 
         <div class="spec-notes">
           <span class="req-pill bonus">Điểm cộng: Chế độ chữ lớn người cao tuổi</span>
-          <span class="req-pill">Tiêu chí UX phù hợp đối tượng (30đ)</span>
-          <h2>MH-04: Chế độ Người cao tuổi (Xuyên suốt toàn luồng)</h2>
+          <h2>MH-04: Chế độ Người cao tuổi (Wizard chữ lớn)</h2>
           <ul>
-            <li><strong>Đồng bộ chữ lớn xuyên suốt (End-to-End):</strong> Khi bật, cả Trang chủ, biểu mẫu Gửi sự cố lẫn Danh sách theo dõi đều duy trì chữ lớn <code>18–26px</code>, lược bỏ mọi nút thừa và không bị nhảy về giao diện chữ nhỏ.</li>
-            <li><strong>Giảm tải nhận thức (Zero Clutter):</strong> Tạm ẩn bản đồ chi tiết và ô gõ chữ, giữ đúng 3 nút hành động lớn đánh số <code>1 – 2 – 3</code> và thanh điều hướng đáy cỡ lớn.</li>
-            <li><strong>Cầu nối nhân văn:</strong> Nút số 3 gọi Đội thanh niên tình nguyện khu phố hỗ trợ trực tiếp.</li>
+            <li><strong>Đồng bộ chữ lớn xuyên suốt 100%:</strong> Khi bật, cả Trang chính, 3 bước gửi sự cố và Danh sách theo dõi đều giữ nguyên chữ lớn <code>18–26px</code>, không bị nhảy về giao diện chữ nhỏ.</li>
+            <li><strong>Mỗi màn hình chỉ 1 câu hỏi lớn:</strong> Lược bỏ toàn bộ nút kỹ thuật phụ, giúp người lớn tuổi thao tác dễ dàng ngoài trời nắng.</li>
           </ul>
         </div>
       </div>
     </div>
 
     <div class="sheet-foot">
-      <span>MH-03 &amp; MH-04 • Gộp phản ánh trùng bán kính 50m &amp; Chế độ Người cao tuổi</span>
+      <span>MH-03 &amp; MH-04 • Gộp trùng bán kính 50m tại Bước 2 &amp; Chế độ Người cao tuổi xuyên suốt</span>
       <span>TrấnBiên Trực Tuyến – Đề 2</span>
     </div>
   </section>
 
-  <!-- ==================== TRANG 4: MH-05 & MH-06 ==================== -->
+  <!-- TRANG 4: MH-05 & MH-06 -->
   <section class="sheet">
     <div class="sheet-head">
       <div>
         <h1>MH-05: THEO DÕI TRẠNG THÁI CỦA TÔI &nbsp;|&nbsp; MH-06: ĐỐI CHIẾU TRƯỚC/SAU &amp; ĐÁNH GIÁ</h1>
-        <div class="sub">Giải quyết triệt để nỗi đau "Báo xong không biết đã được xử lý chưa"</div>
+        <div class="sub">Minh bạch tiến độ bàn giao 4 mốc &amp; Đánh giá hài lòng thực chất</div>
       </div>
       <div class="sheet-badge">TRANG 04 / 07 • THEO DÕI &amp; HÀI LÒNG</div>
     </div>
 
     <div class="two-screens">
-      <!-- MH-05 -->
       <div class="screen-panel">
         <div class="mock-phone">
           <div class="mp-status"><span>09:35</span><span>5G • 94%</span></div>
-          <div class="mp-head"><strong>📋 Phản ánh của tôi (02)</strong><span>Lọc</span></div>
+          <div class="mp-head"><strong>Phản ánh của tôi (02)</strong><span>Lọc</span></div>
           <div class="mp-body">
             <div class="mp-card" style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
               <div>
-                <span class="tag-sm" style="background:#e0f2fe;color:#0369a1;">🔵 Đang xử lý</span>
+                <span class="tag-sm" style="background:#e0f2fe;color:#0369a1;">Đang xử lý</span>
                 <div style="font-weight:700;margin-top:3px;">Đèn đường tắt tối hẻm 45 Nguyễn Ái Quốc</div>
               </div>
               <span style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;padding:4px 7px;border-radius:6px;font-weight:700;font-size:6.8pt;white-space:nowrap;">Chi tiết &rarr;</span>
@@ -563,67 +466,63 @@
 
             <div class="mp-card" style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
               <div>
-                <span class="tag-sm" style="background:#dcfce7;color:#166534;">🟢 Đã xử lý xong</span>
+                <span class="tag-sm" style="background:#dcfce7;color:#166534;">Đã xử lý</span>
                 <div style="font-weight:700;margin-top:3px;">Rác thải tự phát đường Cách Mạng Tháng 8</div>
               </div>
               <span style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;padding:4px 7px;border-radius:6px;font-weight:700;font-size:6.8pt;white-space:nowrap;">Chi tiết &rarr;</span>
             </div>
 
             <div class="mp-card" style="background:#f8fafc;border:1.5px solid #93c5fd;">
-              <div style="font-size:6.8pt;font-weight:700;color:#1e3a8a;margin-bottom:3px;">🔍 Khung nổi khi bấm "Chi tiết &rarr;" (#TB-1158):</div>
-              <div style="border-left:2px solid #93c5fd;margin-left:4px;padding-left:7px;font-size:6.6pt;display:flex;flex-direction:column;gap:3px;">
-                <div>✅ <b>Đã tiếp nhận:</b> 08:15 23/11 (Gộp 2 dân)</div>
-                <div>✅ <b>Đoàn viên xác minh:</b> Đúng bóng cháy trụ Đ45</div>
-                <div style="color:#1d4ed8;font-weight:700;">🔄 <b>Giao xử lý:</b> Đội Chiếu sáng (Hạn 17:00)</div>
+              <div style="font-size:6.8pt;font-weight:700;color:#1e3a8a;margin-bottom:3px;">Khung nổi khi bấm "Chi tiết &rarr;" (#TB-1158):</div>
+              <div style="border-left:2px solid #93c5fd;margin-left:4px;padding-left:7px;font-size:6.5pt;display:flex;flex-direction:column;gap:3px;">
+                <div><b>1. Tiếp nhận:</b> 08:15 23/11 (Gộp 2 phản ánh)</div>
+                <div><b>2. Xác minh thực địa:</b> Đoàn viên KP.4 xác nhận</div>
+                <div style="color:#1d4ed8;font-weight:700;"><b>3. Bàn giao thực thi:</b> Đội Chiếu sáng (Hạn 17:00)</div>
+                <div style="color:#64748b;"><b>4. Nghiệm thu:</b> Chờ đơn vị nộp ảnh sau xử lý</div>
               </div>
             </div>
           </div>
-          <div class="mp-nav"><span>🗺️ Quanh tôi</span><span>+ Gửi</span><span style="color:#1d4ed8;">📋 Của tôi (2)</span></div>
+          <div class="mp-nav"><span>Quanh tôi</span><span>Gửi 3 bước</span><span style="color:#1d4ed8;">Của tôi (2)</span></div>
         </div>
 
         <div class="spec-notes">
           <span class="req-pill">Màn hình bắt buộc #2</span>
           <h2>MH-05: Theo dõi trạng thái phản ánh của tôi</h2>
           <ul>
-            <li><strong>Timeline 4 mốc như theo dõi đơn hàng:</strong> Người dân biết chính xác hồ sơ đang nằm ở khâu nào, đơn vị nào chịu trách nhiệm và <strong>hạn cam kết xử lý (SLA)</strong> là mấy giờ.</li>
-            <li><strong>Không cần tài khoản phức tạp:</strong> Mã theo dõi lưu tự động trên trình duyệt PWA (hoặc gắn số điện thoại Zalo), mở lên là thấy ngay.</li>
-            <li><strong>Thông báo chủ động:</strong> Ngay khi đơn vị tải ảnh khắc phục xong, thẻ chuyển màu xanh mời người dân nghiệm thu.</li>
+            <li><strong>Danh sách thu gọn dễ quét mắt:</strong> Chỉ hiển thị Trạng thái + Tiêu đề + 1 nút <em>Chi tiết</em>, tránh xổ tràn lan gây rối.</li>
+            <li><strong>Timeline 4 mốc bàn giao rõ ràng:</strong> Người dân biết chính xác đơn vị nào đã nhận việc và hạn cam kết xử lý.</li>
           </ul>
         </div>
       </div>
 
-      <!-- MH-06 -->
       <div class="screen-panel">
         <div class="mock-phone">
           <div class="mp-status"><span>09:36</span><span>5G • 94%</span></div>
-          <div class="mp-head" style="background:#15803d;"><strong>🌟 Kết quả &amp; Đánh giá #TB-1149</strong><span>✕</span></div>
+          <div class="mp-head" style="background:#15803d;"><strong>Kết quả &amp; Đánh giá #TB-1149</strong><span>Đóng</span></div>
           <div class="mp-body">
-            <div style="font-size:7pt;font-weight:700;color:#1e3a8a;">↔ Kéo thanh trượt so sánh Trước &amp; Sau xử lý:</div>
+            <div style="font-size:7pt;font-weight:700;color:#1e3a8a;">Kéo thanh trượt so sánh Ảnh Trước &amp; Sau xử lý:</div>
             <div style="height:105px;border-radius:8px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;border:1px solid #cbd5e1;">
               <div style="position:relative;border-right:2px solid #fff;overflow:hidden;">
                 <img src="../prototype/assets/trash_before.jpg" style="width:100%;height:100%;object-fit:cover;" alt="Trước"/>
-                <span style="position:absolute;top:4px;left:4px;background:#dc2626;color:#fff;padding:1px 4px;border-radius:3px;font-weight:700;font-size:6.5pt;">TRƯỚC (21/11)</span>
+                <span style="position:absolute;top:4px;left:4px;background:#dc2626;color:#fff;padding:1px 4px;border-radius:3px;font-weight:700;font-size:6.2pt;">TRƯỚC</span>
               </div>
               <div style="position:relative;overflow:hidden;">
                 <img src="../prototype/assets/trash_after.jpg" style="width:100%;height:100%;object-fit:cover;" alt="Sau"/>
-                <span style="position:absolute;top:4px;right:4px;background:#16a34a;color:#fff;padding:1px 4px;border-radius:3px;font-weight:700;font-size:6.5pt;">SAU (23/11)</span>
+                <span style="position:absolute;top:4px;right:4px;background:#16a34a;color:#fff;padding:1px 4px;border-radius:3px;font-weight:700;font-size:6.2pt;">SAU XỬ LÝ</span>
               </div>
             </div>
-
-            <div class="mp-card" style="font-size:6.9pt;background:#f8fafc;">
-              <b>Phản hồi từ Công ty Môi trường Sonadezi:</b> Đã thu gom 450kg rác lúc 06:30 sáng và xịt rửa sạch vỉa hè KP.1.
+            <div class="mp-card" style="font-size:6.8pt;background:#f8fafc;">
+              <b>Đơn vị thực hiện (Công ty Môi trường Sonadezi):</b> Đã thu gom sạch rác tồn đọng và xịt rửa vỉa hè KP.1.
             </div>
-
             <div class="mp-card" style="text-align:center;">
-              <div style="font-weight:700;font-size:7.5pt;">Mức độ hài lòng của Bác:</div>
-              <div style="color:#eab308;font-size:15pt;letter-spacing:2px;">★★★★★</div>
-              <div style="display:flex;gap:3px;justify-content:center;flex-wrap:wrap;margin-top:3px;font-size:6.5pt;">
-                <span style="background:#dbeafe;color:#1e40af;padding:2px 5px;border-radius:99px;font-weight:700;">⚡ Xử lý nhanh</span>
-                <span style="background:#dbeafe;color:#1e40af;padding:2px 5px;border-radius:99px;font-weight:700;">✨ Dọn rất sạch</span>
+              <div style="font-weight:700;font-size:7.3pt;">Đánh giá mức độ hài lòng:</div>
+              <div style="color:#eab308;font-size:14pt;letter-spacing:2px;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+              <div style="display:flex;gap:3px;justify-content:center;margin-top:2px;font-size:6.4pt;">
+                <span style="background:#dbeafe;color:#1e40af;padding:2px 5px;border-radius:99px;font-weight:700;">Xử lý đúng hạn</span>
+                <span style="background:#dbeafe;color:#1e40af;padding:2px 5px;border-radius:99px;font-weight:700;">Thu dọn sạch sẽ</span>
               </div>
             </div>
-
-            <div class="mini-btn">Gửi đánh giá công khai</div>
+            <div class="mini-btn">Gửi đánh giá</div>
           </div>
         </div>
 
@@ -631,57 +530,54 @@
           <span class="req-pill">Màn hình bắt buộc #6</span>
           <h2>MH-06: Người dân đánh giá mức độ hài lòng</h2>
           <ul>
-            <li><strong>Đối chiếu Trước – Sau trực quan:</strong> Thanh kéo ảnh cùng góc chụp giúp người dân kiểm chứng thực chất kết quả làm việc của chính quyền phường.</li>
-            <li><strong>Đánh giá 2 giây không cần gõ chữ:</strong> Chấm 1–5 sao kết hợp các nhãn cảm nhận nhanh (<em>Xử lý nhanh, Dọn rất sạch, Lo ngại tái diễn</em>).</li>
-            <li><strong>Giám sát ngược hiệu quả:</strong> Nếu người dân chấm 1–2 sao kèm nhãn <em>"Chưa triệt để"</em>, hồ sơ tự động cảnh báo lại cho Cán bộ Phường kiểm tra lại.</li>
+            <li><strong>Đối chiếu bằng chứng hình ảnh thực tế:</strong> Thanh kéo trực quan đặt <em>Ảnh trước</em> của người dân cạnh <em>Ảnh sau xử lý</em> của đơn vị thi công.</li>
+            <li><strong>Phản hồi 2 giây:</strong> Chấm 1–5 sao kết hợp chọn nhanh các nhãn cảm nhận thực tế.</li>
           </ul>
         </div>
       </div>
     </div>
 
     <div class="sheet-foot">
-      <span>MH-05 &amp; MH-06 • Minh bạch hóa kết quả xử lý &amp; Chỉ số hài lòng nhân dân</span>
+      <span>MH-05 &amp; MH-06 • Minh bạch hóa kết quả xử lý &amp; Đánh giá hài lòng người dân</span>
       <span>TrấnBiên Trực Tuyến – Đề 2</span>
     </div>
   </section>
 
-  <!-- ==================== TRANG 5: MH-07 & MH-09 ==================== -->
+  <!-- TRANG 5: MH-07 & MH-09 -->
   <section class="sheet">
     <div class="sheet-head">
       <div>
-        <h1>MH-07: ĐOÀN VIÊN XÁC MINH TẠI CHỖ &nbsp;|&nbsp; MH-09: CẬP NHẬT ẢNH SAU XỬ LÝ</h1>
-        <div class="sub">Tác nghiệp hiện trường của Đội Thanh niên Tình nguyện &amp; Đơn vị chuyên môn</div>
+        <h1>MH-07: ĐOÀN VIÊN XÁC MINH TẠI CHỖ &nbsp;|&nbsp; MH-09: ĐƠN VỊ BÁO KẾT QUẢ &amp; NGHIỆM THU</h1>
+        <div class="sub">Làm rõ vai trò hiện trường của Đoàn viên Khu phố &amp; Đơn vị thực thi chuyên môn</div>
       </div>
       <div class="sheet-badge">TRANG 05 / 07 • HIỆN TRƯỜNG &amp; NGHIỆM THU</div>
     </div>
 
     <div class="two-screens">
-      <!-- MH-07 -->
       <div class="screen-panel">
         <div class="mock-phone">
           <div class="mp-status"><span>09:38</span><span>Đoàn viên • 5G</span></div>
           <div class="mp-head" style="background:#0284c7;">
-            <div><strong>🦺 Đội TNTN Phường Trấn Biên</strong><div style="font-size:6.6pt;">Bí thư KP.3: Nguyễn Minh Khoa (14 ca)</div></div>
+            <div><strong>Đội TNTN Phường Trấn Biên</strong><div style="font-size:6.6pt;">Bí thư KP.3: Nguyễn Minh Khoa</div></div>
           </div>
           <div class="mp-body">
-            <div class="mp-card" style="background:#f0f9ff;border-color:#7dd3fc;font-size:6.9pt;">
-              <b>⚡ Cần kiểm chứng thực địa (&lt;500m):</b> Ưu tiên các ca có <em>Độ tin cậy AI trung bình (60–84%)</em>.
+            <div class="mp-card" style="background:#f0f9ff;border-color:#7dd3fc;font-size:6.8pt;">
+              <b>Xác minh thực địa (&lt;500m):</b> Kiểm tra các tin báo ảnh tối hoặc hỗ trợ báo hộ người cao tuổi.
             </div>
             <div class="mp-card">
               <div style="display:flex;justify-content:space-between;margin-bottom:3px;">
-                <span class="tag-sm" style="background:#fef3c7;color:#b45309;">⚠️ AI tin cậy: 68% (Ảnh tối)</span>
-                <span style="font-size:6.8pt;">#TB-1164 • 150m</span>
+                <span class="tag-sm" style="background:#fef3c7;color:#b45309;">Ảnh thiếu sáng – Cần kiểm tra</span>
+                <span style="font-size:6.6pt;">#TB-1164</span>
               </div>
               <div style="font-weight:700;">Ngập nước miệng cống hẻm 88 Hà Huy Tập</div>
               <div style="height:64px;border-radius:5px;margin:4px 0;overflow:hidden;">
                 <img src="../prototype/assets/flood_before.jpg" style="width:100%;height:100%;object-fit:cover;" alt="Ngập đêm"/>
               </div>
-              <div class="mini-btn" style="background:#0284c7;margin-bottom:4px;">✓ Xác nhận ĐÚNG &amp; Khẩn cấp (Gần trường)</div>
-              <div style="border:1px solid #cbd5e1;text-align:center;padding:4px;border-radius:6px;font-size:7pt;">✕ Báo nhầm / Nước đã tự rút</div>
+              <div class="mini-btn" style="background:#0284c7;margin-bottom:4px;">Xác nhận đúng sự cố &rarr; Chuyển Phường</div>
+              <div style="border:1px solid #cbd5e1;text-align:center;padding:4px;border-radius:6px;font-size:6.8pt;font-weight:600;">Không phát sinh sự cố (Đóng lưu vết)</div>
             </div>
-
-            <div class="mp-card" style="border:1.5px dashed #0284c7;text-align:center;font-weight:700;color:#0284c7;font-size:7.3pt;">
-              🤝 Mở biểu mẫu Gửi phản ánh hộ Người cao tuổi
+            <div class="mp-card" style="border:1.5px dashed #0284c7;text-align:center;font-weight:700;color:#0284c7;font-size:7pt;">
+              Mở biểu mẫu Gửi phản ánh hộ Người cao tuổi
             </div>
           </div>
         </div>
@@ -690,45 +586,38 @@
           <span class="req-pill">Vai trò người dùng #3 của Đề</span>
           <h2>MH-07: Đội Thanh niên Tình nguyện xác minh</h2>
           <ul>
-            <li><strong>Mắt xích khác biệt tại cơ sở:</strong> Kết nối lực lượng Đoàn viên khu phố làm "bộ lọc tin cậy" cho UBND Phường đối với các tin báo chụp đêm/mờ (AI tin cậy <code>60–84%</code>).</li>
-            <li><strong>Phân luồng khẩn cấp chuẩn xác:</strong> Đoàn viên tại chỗ gắn nhãn <em>"Gần cổng trường học / Ngã tư đông xe"</em> giúp Phường điều động sửa chữa ngay trong 24h.</li>
-            <li><strong>Hỗ trợ chuyển đổi số cộng đồng:</strong> Có chế độ gửi phản ánh hộ cho các hộ dân lớn tuổi không dùng smartphone.</li>
+            <li><strong>Lọc nhiễu thực địa cho Phường:</strong> Kiểm tra tại chỗ các phản ánh chụp ban đêm thiếu sáng trước khi điều động đơn vị kỹ thuật.</li>
+            <li><strong>Đóng lưu vết minh bạch (Không xóa mất hồ sơ):</strong> Nếu nước đã tự rút hoặc báo nhầm, hồ sơ chuyển sang trạng thái <code>Đã đóng sau xác minh</code> để lưu lịch sử đối soát tại Phường.</li>
           </ul>
         </div>
       </div>
 
-      <!-- MH-09 -->
       <div class="screen-panel">
         <div class="mock-phone">
-          <div class="mp-status"><span>15:20</span><span>Tác nghiệp • 5G</span></div>
-          <div class="mp-head" style="background:#15803d;"><strong>📸 Cập nhật Kết quả &amp; Ảnh Sau xử lý</strong></div>
+          <div class="mp-status"><span>15:20</span><span>Thực thi • 5G</span></div>
+          <div class="mp-head" style="background:#15803d;"><strong>Báo hoàn thành &amp; Nghiệm thu</strong></div>
           <div class="mp-body">
-            <div class="mp-card" style="font-size:7pt;">
-              <b>Hồ sơ #TB-1162:</b> Vá ổ gà 140–142 Hưng Đạo Vương<br/>
-              <span style="color:#0369a1;font-weight:700;">Đơn vị: Ban Duy tu Giao thông • Còn 14h hạn SLA</span>
+            <div class="mp-card" style="font-size:6.9pt;background:#f0fdf4;border-color:#86efac;">
+              <b>Hồ sơ #TB-1162 (Đang xử lý):</b><br/>
+              Đơn vị nhận bàn giao: <b>Ban Quản lý Duy tu Giao thông</b>
             </div>
-
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;">
-              <div class="mp-card" style="text-align:center;font-size:6.8pt;">
+              <div class="mp-card" style="text-align:center;font-size:6.6pt;">
                 <b>Ảnh TRƯỚC</b>
-                <div style="height:64px;border-radius:4px;margin-top:3px;overflow:hidden;"><img src="../prototype/assets/pothole_before.jpg" style="width:100%;height:100%;object-fit:cover;" alt="Trước"/></div>
+                <div style="height:62px;border-radius:4px;margin-top:3px;overflow:hidden;"><img src="../prototype/assets/pothole_before.jpg" style="width:100%;height:100%;object-fit:cover;" alt="Trước"/></div>
               </div>
-              <div class="mp-card" style="text-align:center;font-size:6.8pt;border-color:#22c55e;background:#f0fdf4;">
+              <div class="mp-card" style="text-align:center;font-size:6.6pt;border-color:#22c55e;">
                 <b style="color:#166534;">Ảnh SAU XỬ LÝ</b>
-                <div style="height:64px;border-radius:4px;margin-top:3px;overflow:hidden;"><img src="../prototype/assets/pothole_after.jpg" style="width:100%;height:100%;object-fit:cover;" alt="Sau"/></div>
+                <div style="height:62px;border-radius:4px;margin-top:3px;overflow:hidden;"><img src="../prototype/assets/pothole_after.jpg" style="width:100%;height:100%;object-fit:cover;" alt="Sau"/></div>
               </div>
             </div>
-
-            <div style="background:#dcfce7;border:1px solid #86efac;border-radius:6px;padding:5px;font-size:6.8pt;color:#14532d;">
-              <b>✓ AI Kiểm tra nghiệm thu:</b> Khớp vị trí GPS (Độ tin cậy 95%) – Mặt đường đã khắc phục phẳng.
+            <div style="border:1.5px dashed #16a34a;background:#fff;padding:5px;border-radius:6px;text-align:center;font-size:6.8pt;font-weight:700;color:#15803d;">
+              Tải tệp Ảnh thực tế Sau xử lý từ thiết bị
             </div>
-
-            <div class="mp-card" style="font-size:6.9pt;">
-              <b>Nội dung công khai cho người dân:</b><br/>
-              "Tổ Duy tu đã thảm nhựa nóng mặt đường phẳng đẹp lúc 15:10 chiều 24/11, đảm bảo an toàn giao thông."
+            <div class="mp-card" style="font-size:6.8pt;">
+              <b>Nội dung khắc phục công khai:</b><br/>"Tổ Duy tu đã thảm nhựa nóng mặt đường phẳng đẹp chiều 24/11."
             </div>
-
-            <div class="mini-btn" style="background:#15803d;">✅ Hoàn tất &amp; Công khai kết quả</div>
+            <div class="mini-btn" style="background:#15803d;">Nghiệm thu &amp; Công khai kết quả cho Dân</div>
           </div>
         </div>
 
@@ -736,98 +625,97 @@
           <span class="req-pill">Màn hình bắt buộc #5</span>
           <h2>MH-09: Cập nhật kết quả kèm Ảnh sau xử lý</h2>
           <ul>
-            <li><strong>Bắt buộc nghiệm thu bằng hình ảnh thực tế:</strong> Không cho phép đóng hồ sơ chỉ bằng chữ viết suông; bắt buộc tải lên <em>Ảnh sau xử lý</em> tại đúng hiện trường.</li>
-            <li><strong>AI chống báo cáo hình thức:</strong> Đối chiếu nhanh tọa độ GPS và bối cảnh ảnh Sau với ảnh Trước (Độ tin cậy 95%) để đảm bảo chất lượng sửa chữa.</li>
-            <li><strong>Tự động khép vòng thông tin:</strong> Vừa bấm Hoàn tất, hệ thống tự động đổi ghim bản đồ sang Xanh lá và gửi thông báo cho cả cụm 4 người dân đã báo.</li>
+            <li><strong>Khóa chặt thứ tự trạng thái:</strong> Khung báo hoàn thành chỉ mở cho hồ sơ đã được Cán bộ Phường bàn giao sang trạng thái <em>Đang xử lý</em> (không nhảy cóc từ <em>Mới tiếp nhận</em>).</li>
+            <li><strong>Tải tệp ảnh nghiệm thu thật:</strong> Đơn vị thi công tải ảnh thực tế sau sửa chữa để Cán bộ Phường duyệt công khai cho người dân.</li>
           </ul>
         </div>
       </div>
     </div>
 
     <div class="sheet-foot">
-      <span>MH-07 &amp; MH-09 • Phối hợp Thanh niên tình nguyện &amp; Nghiệm thu minh bạch</span>
+      <span>MH-07 &amp; MH-09 • Xác minh lưu vết &amp; Bàn giao nghiệm thu chặt chẽ</span>
       <span>TrấnBiên Trực Tuyến – Đề 2</span>
     </div>
   </section>
 
-  <!-- ==================== TRANG 6: MH-08 DASHBOARD CÁN BỘ PHƯỜNG ==================== -->
+  <!-- TRANG 6: MH-08 DASHBOARD CÁN BỘ PHƯỜNG -->
   <section class="sheet">
     <div class="sheet-head">
       <div>
-        <h1>MH-08: MÀN HÌNH CÁN BỘ TIẾP NHẬN PHƯỜNG – PHÂN LOẠI, GIAO XỬ LÝ &amp; HẠN XỬ LÝ</h1>
-        <div class="sub">Giao diện Web Dashboard (1440 x 900 px) • Tối ưu điều hành tập trung tại UBND Phường Trấn Biên</div>
+        <h1>MH-08: MÀN HÌNH CÁN BỘ TIẾP NHẬN PHƯỜNG – PHÂN LOẠI, BÀN GIAO ĐƠN VỊ &amp; HẠN XỬ LÝ</h1>
+        <div class="sub">Giao diện Web Dashboard (1440 x 900 px) • Tách bạch rõ Cán bộ điều phối Phường và Đơn vị thực thi chuyên môn</div>
       </div>
       <div class="sheet-badge">TRANG 06 / 07 • MÀN HÌNH BẮT BUỘC #4</div>
     </div>
 
     <div style="flex:1;background:#fff;border:4px solid #1e293b;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;">
       <div style="background:#1e3a8a;color:#fff;padding:8px 14px;display:flex;justify-content:space-between;align-items:center;font-size:9pt;">
-        <strong>🏛️ TRUNG TÂM ĐIỀU HÀNH PHẢN ÁNH HIỆN TRƯỜNG – UBND PHƯỜNG TRẤN BIÊN (THÁNG 11/2026)</strong>
-        <span>Cán bộ trực: Trần Văn Hùng • 🟢 Trực tuyến</span>
+        <strong>HỆ THỐNG ĐIỀU PHỐI &amp; BÀN GIAO XỬ LÝ – UBND PHƯỜNG TRẤN BIÊN (THÁNG 11/2026)</strong>
+        <span>Cán bộ tiếp nhận: Trần Văn Hùng</span>
       </div>
 
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:8px 14px;background:#f8fafc;border-bottom:1px solid #cbd5e1;font-size:8pt;">
         <div style="background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:6px 10px;">
           <div style="color:#475569;font-weight:700;">TỔNG PHẢN ÁNH THÁNG 11</div>
-          <div style="font-size:15pt;font-weight: 700;">64</div>
-          <div style="color:#64748b;font-size:7.3pt;">🗑️ Rác: 21 • 💡 Đèn: 18 • 🌊 Ngập: 15 • 🚧 Đường: 10</div>
+          <div style="font-size:15pt;font-weight:700;">64</div>
+          <div style="color:#64748b;font-size:7.3pt;">Rác: 21 • Đèn: 18 • Ngập: 15 • Đường: 10</div>
         </div>
         <div style="background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:6px 10px;">
-          <div style="color:#475569;font-weight:700;">ĐÃ XỬ LÝ HOÀN TẤT</div>
-          <div style="font-size:15pt;font-weight: 700;color:#16a34a;">47 <span style="font-size:10pt;">(73,4%)</span></div>
-          <div style="color:#64748b;font-size:7.3pt;">Đang xử lý &amp; chờ xác minh: 17 đơn</div>
+          <div style="color:#475569;font-weight:700;">ĐÃ XỬ LÝ CÔNG KHAI</div>
+          <div style="font-size:15pt;font-weight:700;color:#16a34a;">47 <span style="font-size:10pt;">(73,4%)</span></div>
+          <div style="color:#64748b;font-size:7.3pt;">Đơn vị thực thi đã nộp ảnh sau xử lý</div>
+        </div>
+        <div style="background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:6px 10px;">
+          <div style="color:#475569;font-weight:700;">CHỜ GIAO / ĐƠN VỊ ĐANG SỬA</div>
+          <div style="font-size:15pt;font-weight:700;color:#d97706;">17</div>
+          <div style="color:#64748b;font-size:7.3pt;">Theo dõi theo hạn xử lý (SLA)</div>
         </div>
         <div style="background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:6px 10px;">
           <div style="color:#475569;font-weight:700;">THỜI GIAN XỬ LÝ TRUNG BÌNH</div>
-          <div style="font-size:15pt;font-weight: 700;color:#1d4ed8;">3,2 ngày</div>
-          <div style="color:#64748b;font-size:7.3pt;">Rút ngắn nhờ AI phân loại &amp; gộp cụm 50m</div>
-        </div>
-        <div style="background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:6px 10px;">
-          <div style="color:#475569;font-weight:700;">MỨC ĐỘ HÀI LÒNG NGƯỜI DÂN</div>
-          <div style="font-size:15pt;font-weight: 700;color:#ca8a04;">4,8 / 5,0 ★</div>
-          <div style="color:#64748b;font-size:7.3pt;">100% đơn đóng có ảnh Sau xử lý công khai</div>
+          <div style="font-size:15pt;font-weight:700;color:#1d4ed8;">3,2 ngày</div>
+          <div style="color:#64748b;font-size:7.3pt;">Số liệu thống kê Phường Trấn Biên</div>
         </div>
       </div>
 
       <div style="flex:1;display:grid;grid-template-columns:1.5fr 1fr;gap:12px;padding:10px 14px;font-size:8.2pt;">
         <div style="border:1px solid #cbd5e1;border-radius:8px;overflow:hidden;">
           <div style="background:#f1f5f9;padding:6px 10px;font-weight:700;display:flex;justify-content:space-between;">
-            <span>Danh sách tiếp nhận tập trung (Tự động xếp ưu tiên theo cụm gộp trùng)</span>
-            <span style="color:#1d4ed8;">Bộ lọc: Tất cả (64) | Mới | Sắp trễ SLA</span>
+            <span>Danh sách tiếp nhận &amp; theo dõi bàn giao</span>
+            <span style="color:#1d4ed8;">Tất cả (64) | Chờ Phường giao | Đơn vị đang sửa | Đã xong | Đã đóng</span>
           </div>
           <table style="width:100%;border-collapse:collapse;">
             <thead>
               <tr style="background:#f8fafc;border-bottom:1px solid #cbd5e1;font-size:7.6pt;color:#475569;">
                 <th style="padding:6px 8px;text-align:left;">Mã / Cụm gộp</th>
                 <th style="padding:6px 8px;text-align:left;">Phân loại &amp; Địa điểm</th>
-                <th style="padding:6px 8px;text-align:left;">AI / Xác minh</th>
-                <th style="padding:6px 8px;text-align:left;">Trạng thái &amp; Hạn xử lý (SLA)</th>
+                <th style="padding:6px 8px;text-align:left;">Đơn vị nhận việc</th>
+                <th style="padding:6px 8px;text-align:left;">Trạng thái &amp; Hạn xử lý</th>
               </tr>
             </thead>
             <tbody>
               <tr style="background:#eff6ff;border-bottom:1px solid #e2e8f0;">
-                <td style="padding:7px 8px;"><b>#TB-1162</b><br/><span style="background:#fee2e2;color:#991b1b;padding:1px 5px;border-radius:99px;font-size:7pt;font-weight:700;">🔥 Cụm 4 dân</span></td>
-                <td style="padding:7px 8px;"><b>🚧 Mặt đường (Ổ gà)</b><br/>140–142 Hưng Đạo Vương, KP.2</td>
-                <td style="padding:7px 8px;"><b style="color:#16a34a;">AI: 92%</b><br/><span style="color:#0284c7;font-size:7pt;font-weight:700;">✓ Đoàn viên xác nhận</span></td>
-                <td style="padding:7px 8px;"><span class="tag-sm" style="background:#fef2f2;color:#dc2626;">🔴 Chờ giao xử lý</span><br/>Đề xuất SLA: 48 giờ</td>
+                <td style="padding:7px 8px;"><b>#TB-1162</b><br/><span style="background:#fee2e2;color:#991b1b;padding:1px 5px;border-radius:99px;font-size:7pt;font-weight:700;">Gộp 4 phản ánh</span></td>
+                <td style="padding:7px 8px;"><b>Hư hỏng mặt đường</b><br/>140–142 Hưng Đạo Vương, KP.2</td>
+                <td style="padding:7px 8px;"><span style="color:#0369a1;font-size:7.3pt;font-weight:700;">Đoàn viên đã xác minh &rarr; Chờ giao</span></td>
+                <td style="padding:7px 8px;"><span class="tag-sm" style="background:#fef2f2;color:#dc2626;">Mới tiếp nhận</span><br/>Chờ Phường giao đơn vị</td>
               </tr>
               <tr style="border-bottom:1px solid #e2e8f0;">
-                <td style="padding:7px 8px;"><b>#TB-1158</b><br/><span style="font-size:7pt;color:#64748b;">Cụm 2 dân</span></td>
-                <td style="padding:7px 8px;"><b>💡 Đèn đường hỏng</b><br/>Hẻm 45 Nguyễn Ái Quốc, KP.4</td>
-                <td style="padding:7px 8px;"><b style="color:#16a34a;">AI: 96%</b><br/><span style="color:#0284c7;font-size:7pt;">✓ Đoàn viên xác nhận</span></td>
-                <td style="padding:7px 8px;"><span class="tag-sm" style="background:#e0f2fe;color:#0369a1;">🔵 Đang xử lý</span><br/>Đội Chiếu sáng • Còn 7h</td>
+                <td style="padding:7px 8px;"><b>#TB-1158</b><br/><span style="font-size:7pt;color:#64748b;">Gộp 2 phản ánh</span></td>
+                <td style="padding:7px 8px;"><b>Đèn đường hỏng</b><br/>Hẻm 45 Nguyễn Ái Quốc, KP.4</td>
+                <td style="padding:7px 8px;"><b>Đội Quản lý Điện chiếu sáng</b></td>
+                <td style="padding:7px 8px;"><span class="tag-sm" style="background:#e0f2fe;color:#0369a1;">Đang xử lý</span><br/>Hạn xử lý: 17:00 24/11</td>
               </tr>
               <tr style="border-bottom:1px solid #e2e8f0;">
-                <td style="padding:7px 8px;"><b>#TB-1164</b><br/><span style="font-size:7pt;color:#64748b;">1 người báo</span></td>
-                <td style="padding:7px 8px;"><b>🌊 Ngập nước sau mưa</b><br/>Hẻm 88 Hà Huy Tập, KP.3</td>
-                <td style="padding:7px 8px;"><b style="color:#d97706;">AI: 68% (TB)</b><br/><span style="color:#b45309;font-size:7pt;">⏳ Chờ Đoàn viên KP.3</span></td>
-                <td style="padding:7px 8px;"><span class="tag-sm" style="background:#fef3c7;color:#b45309;">🟠 Đang xác minh</span><br/>Chờ kiểm tra thực địa</td>
+                <td style="padding:7px 8px;"><b>#TB-1164</b><br/><span style="font-size:7pt;color:#64748b;">1 phản ánh</span></td>
+                <td style="padding:7px 8px;"><b>Ngập nước sau mưa</b><br/>Hẻm 88 Hà Huy Tập, KP.3</td>
+                <td style="padding:7px 8px;"><span style="color:#b45309;font-size:7.3pt;">Đội TNTN Khu phố 3</span></td>
+                <td style="padding:7px 8px;"><span class="tag-sm" style="background:#fef3c7;color:#b45309;">Chờ xác minh</span><br/>Kiểm tra thực địa</td>
               </tr>
               <tr>
-                <td style="padding:7px 8px;"><b>#TB-1149</b><br/><span style="font-size:7pt;color:#64748b;">Cụm 4 dân</span></td>
-                <td style="padding:7px 8px;"><b>🗑️ Rác thải tự phát</b><br/>Đường Cách Mạng Tháng 8, KP.1</td>
-                <td style="padding:7px 8px;"><b style="color:#16a34a;">AI: 94%</b></td>
-                <td style="padding:7px 8px;"><span class="tag-sm" style="background:#dcfce7;color:#166534;">🟢 Đã xong (1,8 ngày)</span><br/>Sonadezi • Dân chấm 5★</td>
+                <td style="padding:7px 8px;"><b>#TB-1149</b><br/><span style="font-size:7pt;color:#64748b;">Gộp 4 phản ánh</span></td>
+                <td style="padding:7px 8px;"><b>Rác thải tự phát</b><br/>Đường Cách Mạng Tháng 8, KP.1</td>
+                <td style="padding:7px 8px;"><b>Công ty Môi trường Sonadezi</b></td>
+                <td style="padding:7px 8px;"><span class="tag-sm" style="background:#dcfce7;color:#166534;">Đã xử lý</span><br/>Đã công khai ảnh sau xử lý</td>
               </tr>
             </tbody>
           </table>
@@ -835,111 +723,101 @@
 
         <div style="border:1px solid #93c5fd;background:#f8fafc;border-radius:8px;padding:10px;display:flex;flex-direction:column;justify-content:space-between;">
           <div>
-            <div style="font-weight: 700;color:#1e3a8a;margin-bottom:4px;">⚡ Khung Điều phối nhanh hồ sơ đang chọn (#TB-1162)</div>
-            <div style="background:#fff;border:1px solid #cbd5e1;border-radius:6px;padding:6px;margin-bottom:6px;font-size:7.6pt;">
-              <b>Ghi chú Đoàn viên KP.2:</b> "Ổ gà rộng 60cm đọng nước ngay khúc cua đông học sinh THPT Trấn Biên đi qua."
+            <div style="font-weight:700;color:#1e3a8a;margin-bottom:4px;">Bước 1 – Cán bộ Phường phân loại &amp; bàn giao (#TB-1162)</div>
+            <div style="background:#fff;border:1px solid #cbd5e1;border-radius:6px;padding:6px;margin-bottom:6px;font-size:7.5pt;">
+              <b>Xác minh thực địa:</b> "Đoàn viên KP.2 xác nhận ổ gà rộng 60cm ngay khúc cua đông học sinh đi qua."
             </div>
             <div style="margin-bottom:5px;">
               <div style="font-weight:700;font-size:7.5pt;margin-bottom:2px;">1. Xác nhận Phân loại sự cố:</div>
-              <div style="background:#fff;border:1px solid #cbd5e1;padding:5px 8px;border-radius:5px;">🚧 Hư hỏng mặt đường / Ổ gà (AI gợi ý 92%) ▾</div>
+              <div style="background:#fff;border:1px solid #cbd5e1;padding:5px 8px;border-radius:5px;">Hư hỏng mặt đường (AI gợi ý từ ảnh)</div>
             </div>
             <div style="margin-bottom:5px;">
-              <div style="font-weight:700;font-size:7.5pt;margin-bottom:2px;">2. Giao bộ phận chuyên trách xử lý:</div>
-              <div style="background:#fff;border:1.5px solid #1d4ed8;padding:5px 8px;border-radius:5px;font-weight:700;color:#1e3a8a;">Ban Quản lý Dự án &amp; Duy tu Giao thông Đô thị ▾</div>
+              <div style="font-weight:700;font-size:7.5pt;margin-bottom:2px;">2. Đơn vị thực thi chuyên môn nhận bàn giao:</div>
+              <div style="background:#fff;border:1.5px solid #1d4ed8;padding:5px 8px;border-radius:5px;font-weight:700;color:#1e3a8a;">Ban Quản lý Duy tu Giao thông Đô thị</div>
             </div>
             <div>
-              <div style="font-weight:700;font-size:7.5pt;margin-bottom:2px;">3. Thiết lập Hạn xử lý cam kết (SLA):</div>
-              <div style="background:#fff;border:1px solid #cbd5e1;padding:5px 8px;border-radius:5px;">⏰ 48 giờ – Hoàn thành trước 09:30 ngày 26/11/2026 ▾</div>
+              <div style="font-weight:700;font-size:7.5pt;margin-bottom:2px;">3. Ấn định Hạn xử lý (SLA):</div>
+              <div style="background:#fff;border:1px solid #cbd5e1;padding:5px 8px;border-radius:5px;">48 giờ (Hạn: 09:30 ngày 26/11/2026)</div>
             </div>
           </div>
-          <div class="mini-btn" style="padding:8px;font-size:8.5pt;">📤 Phê duyệt &amp; Giao đơn vị thi công ngay</div>
+          <div class="mini-btn" style="padding:8px;font-size:8.3pt;">Bàn giao cho Đơn vị thực thi</div>
         </div>
       </div>
     </div>
 
     <div class="sheet-foot">
-      <span>MH-08 • Đáp ứng đầy đủ: Danh sách tập trung, Phân loại, Giao đúng bộ phận, Đặt hạn xử lý (SLA)</span>
+      <span>MH-08 • Số liệu bám sát 100% đề bài &amp; Tách rõ bàn giao từ Cán bộ Phường sang Đơn vị thực thi</span>
       <span>TrấnBiên Trực Tuyến – Đề 2</span>
     </div>
   </section>
 
-  <!-- ==================== TRANG 7: MH-10 ERROR & EMPTY STATES ==================== -->
+  <!-- TRANG 7: MH-10 ERROR & EMPTY STATES -->
   <section class="sheet">
     <div class="sheet-head">
       <div>
         <h1>MH-10: XỬ LÝ TRƯỜNG HỢP LỖI (ERROR STATES) &amp; TRẠNG THÁI TRỐNG (EMPTY STATE)</h1>
-        <div class="sub">Đáp ứng trực tiếp Tiêu chí chấm điểm số 2 (30 điểm UX/UI): Xử lý mượt mà các tình huống biên thực tế</div>
+        <div class="sub">Đáp ứng trực tiếp Tiêu chí chấm điểm số 2 (30 điểm UX/UI): Xử lý các tình huống biên thực tế</div>
       </div>
       <div class="sheet-badge">TRANG 07 / 07 • ERROR &amp; EMPTY STATES</div>
     </div>
 
     <div style="flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-items:stretch;">
-      <!-- MH-10A -->
       <div style="background:#fff;border:1px solid #cbd5e1;border-radius:12px;padding:10px;display:flex;flex-direction:column;align-items:center;">
-        <span class="req-pill" style="background:#fee2e2;color:#991b1b;">MH-10A • Error State 1: Ảnh mờ / AI &lt; 60%</span>
+        <span class="req-pill" style="background:#fee2e2;color:#991b1b;">MH-10A • Error State 1: Ảnh bị mờ / thiếu sáng</span>
         <div class="mock-phone" style="height:375px;width:220px;margin:4px 0 8px;">
           <div class="mp-status"><span>19:45</span><span>4G</span></div>
-          <div class="mp-head" style="background:#991b1b;"><strong>⚠️ Kiểm tra chất lượng ảnh</strong></div>
+          <div class="mp-head" style="background:#991b1b;"><strong>Bước 1 / 3: Kiểm tra ảnh</strong></div>
           <div class="mp-body">
             <div style="height:90px;border-radius:6px;overflow:hidden;">
               <img src="../prototype/assets/blurry_error.jpg" style="width:100%;height:100%;object-fit:cover;" alt="Ảnh mờ"/>
             </div>
             <div style="background:#fef2f2;border:1.5px solid #fca5a5;border-radius:7px;padding:7px;font-size:7pt;color:#991b1b;">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;padding-bottom:5px;border-bottom:1px dashed #fca5a5;">
-                <div style="text-align:center;padding-right:7px;border-right:1px solid #fca5a5;">
-                  <div style="font-size:13pt;font-weight:700;color:#dc2626;line-height:1;">38%</div>
-                  <div style="font-size:5.8pt;font-weight:700;">TIN CẬY THẤP</div>
-                </div>
-                <div style="font-size:6.6pt;"><b>Dấu hiệu:</b> Ảnh nhòe chuyển động • Độ sáng &lt; 15%</div>
-              </div>
-              Bác vui lòng bật đèn Flash hoặc đứng gần hơn để chụp lại rõ sự cố nhé!
+              <b>Chưa nhận diện được sự cố:</b><br/>
+              Ảnh bị rung nhòe hoặc quá tối. Vui lòng bật đèn Flash đứng gần hơn để chụp lại rõ sự cố trước khi sang Bước 2.
             </div>
-            <div class="mini-btn" style="background:#dc2626;">📷 Chụp lại ảnh có bật Flash</div>
+            <div class="mini-btn" style="background:#dc2626;">Chụp lại ảnh rõ nét</div>
           </div>
         </div>
-        <p style="font-size:8pt;color:#475569;text-align:center;">Ngăn chặn ảnh lỗi ngay từ đầu bằng lời nhắc lịch sự, dễ hiểu thay vì báo mã lỗi kỹ thuật.</p>
+        <p style="font-size:8pt;color:#475569;text-align:center;">Khóa bước Tiếp tục và hướng dẫn lịch sự khi ảnh lỗi ngay tại Bước 1.</p>
       </div>
 
-      <!-- MH-10B -->
       <div style="background:#fff;border:1px solid #cbd5e1;border-radius:12px;padding:10px;display:flex;flex-direction:column;align-items:center;">
         <span class="req-pill" style="background:#fef3c7;color:#92400e;">MH-10B • Error State 2: Mất định vị GPS</span>
         <div class="mock-phone" style="height:375px;width:220px;margin:4px 0 8px;">
           <div class="mp-status"><span>09:40</span><span>4G</span></div>
-          <div class="mp-head" style="background:#b45309;"><strong>📍 Chọn vị trí thủ công</strong></div>
+          <div class="mp-head" style="background:#b45309;"><strong>Bước 2 / 3: Vị trí thủ công</strong></div>
           <div class="mp-body">
             <div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:7px;padding:7px;font-size:7.1pt;color:#92400e;">
-              <b>Chưa lấy được tín hiệu GPS tự động</b><br/>
-              Điện thoại đang tắt quyền vị trí hoặc khuất sóng. Bác vẫn gửi được bình thường bằng cách chọn tên đường dưới đây:
+              <b>Không lấy được tín hiệu GPS tự động</b><br/>
+              Thiết bị tắt quyền vị trí hoặc khuất sóng. Bạn chọn nhanh Khu phố &amp; Tuyến đường dưới đây:
             </div>
             <div class="mp-card" style="font-size:7.2pt;">
-              <b>1. Chọn Khu phố &amp; Tuyến đường:</b>
-              <div style="border:1px solid #cbd5e1;padding:5px;border-radius:5px;margin:4px 0;background:#f8fafc;">Đường Hưng Đạo Vương (KP.2) ▾</div>
+              <b>1. Khu phố &amp; Tuyến đường:</b>
+              <div style="border:1px solid #cbd5e1;padding:5px;border-radius:5px;margin:4px 0;background:#f8fafc;">Đường Hưng Đạo Vương (KP.2)</div>
               <b>2. Số nhà / Mốc dễ nhận biết:</b>
               <div style="border:1px solid #cbd5e1;padding:5px;border-radius:5px;margin-top:4px;">Đối diện cổng trường Trấn Biên</div>
             </div>
-            <div class="mini-btn">✓ Xác nhận vị trí &amp; Tiếp tục</div>
+            <div class="mini-btn">Tiếp tục sang Bước 3 &rarr;</div>
           </div>
         </div>
-        <p style="font-size:8pt;color:#475569;text-align:center;">Không bao giờ chặn đứng người dân khi lỗi quyền GPS trên trình duyệt di động.</p>
+        <p style="font-size:8pt;color:#475569;text-align:center;">Dự phòng mượt mà khi trình duyệt không cấp quyền định vị GPS.</p>
       </div>
 
-      <!-- MH-10C -->
       <div style="background:#fff;border:1px solid #cbd5e1;border-radius:12px;padding:10px;display:flex;flex-direction:column;align-items:center;">
         <span class="req-pill bonus">MH-10C • Empty State: Khu vực không có sự cố</span>
         <div class="mock-phone" style="height:375px;width:220px;margin:4px 0 8px;">
           <div class="mp-status"><span>09:42</span><span>5G</span></div>
-          <div class="mp-head"><strong>🗺️ Quanh tôi • Khu phố 6</strong></div>
+          <div class="mp-head"><strong>Quanh tôi • Khu phố 6</strong></div>
           <div class="mp-body" style="justify-content:center;align-items:center;text-align:center;background:#f0fdf4;">
-            <div style="font-size:28pt;">🌿</div>
-            <div style="font-weight: 700;color:#166534;font-size:9pt;">Khu phố quanh bạn sạch đẹp, an toàn!</div>
-            <p style="font-size:7.2pt;color:#15803d;padding:0 6px;">
-              Trong bán kính 500m tại Khu phố 6 hiện không có phản ánh hạ tầng nào đang chờ xử lý.
+            <div style="font-weight:700;color:#166534;font-size:9pt;">Khu phố 6 hiện không có phản ánh tồn đọng</div>
+            <p style="font-size:7.2pt;color:#15803d;padding:4px 6px;">
+              Trong bán kính 500m quanh vị trí đang chọn chưa ghi nhận sự cố hạ tầng nào chờ xử lý.
             </p>
-            <div class="mini-btn" style="background:#16a34a;width:90%;margin-top:6px;">📷 Báo ngay nếu phát hiện sự cố mới</div>
+            <div class="mini-btn" style="background:#16a34a;width:90%;margin-top:6px;">Gửi phản ánh nếu phát hiện sự cố mới</div>
             <div style="font-size:7pt;color:#1d4ed8;font-weight:700;margin-top:4px;">Xem toàn Phường Trấn Biên (64)</div>
           </div>
         </div>
-        <p style="font-size:8pt;color:#475569;text-align:center;">Trạng thái trống truyền tải thông điệp đô thị tích cực và dẫn hướng hành động tiếp theo rõ ràng.</p>
+        <p style="font-size:8pt;color:#475569;text-align:center;">Trạng thái trống rõ ràng kèm lối dẫn hành động tiếp theo.</p>
       </div>
     </div>
 
