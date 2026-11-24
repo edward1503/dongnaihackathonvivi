@@ -102,6 +102,13 @@ textarea,select,input[type=search]{border-radius:12px;border:1px solid var(--lin
   .desk .toast{left:12px;right:12px;width:auto;bottom:12px;position:fixed}
 }
 @media (prefers-reduced-motion:reduce){.spin{animation:none}}
+body.embed{background:transparent;min-height:0}
+body.embed .stage{padding:0;display:block}
+body.embed .phone{width:390px;height:844px;border-radius:0;box-shadow:none}
+body.embed .phone.big .scr{zoom:1.12}
+body.embed .desk{width:1280px;height:820px;border-radius:0;box-shadow:none}
+body.embed .desk .side{display:flex}
+body.embed .desk .kpis{grid-template-columns:repeat(4,1fr)}
 </style>
 </head>
 <body>
@@ -153,6 +160,7 @@ function guide(){
 }
 
 function render(){
+  if(EMBED){document.getElementById('app').innerHTML=`<div class="stage">${S.role==='staff'?staffView():`<div class="phone ${S.big&&S.role==='citizen'?'big':''}">${S.role==='citizen'?citizen():S.role==='volunteer'?volunteer():unitView()}${S.toast?`<div class="toast" role="status">${S.toast}</div>`:''}</div>`}</div>`;return}
   const roles=[['citizen','Người dân'],['volunteer','Đoàn viên'],['staff','Cán bộ phường'],['unit','Đơn vị xử lý']];
   let h=`<div class="ctl"><span class="brand">PHẢN ÁNH TRẤN BIÊN</span>${roles.map(([k,l])=>`<button class="rt ${S.role===k?'on':''}" data-a="role" data-v="${k}">${l}</button>`).join('')}
   <button class="rt warn ${S.offline?'on':''}" data-a="offline">${S.offline?'Đang mất mạng – bấm để có mạng':'Mô phỏng mất mạng'}</button>
@@ -443,6 +451,30 @@ document.addEventListener('input',e=>{const k=e.target.dataset.in;if(!k)return;c
   else if(k==='desc'&&S.draft)S.draft.desc=v;
   else if(k==='result')S.unit.result=v;
   else if(k==='dept')S.staff.dept=v;});
+/* Embed mode for slides: index.html?embed=1&p=<preset> shows only the screen */
+const QS=new URLSearchParams(location.search);
+const EMBED=QS.get('embed')==='1';
+function preset(p){
+  const D='Ổ gà đọng nước giữa làn xe máy, dễ gây té ngã.',r=R('PA-0461');
+  const mineAssigned=()=>Object.assign(r,{mine:true,reporters:5,status:'assigned',dept:'Tổ quản lý đô thị',hours:48,assignedAt:'24/11 · 09:30'});
+  switch(p){
+    case 'capture':S.draft={photo:true,time:'24/11 · 08:12',analyzing:false,ai:'pothole',desc:D};S.scr='capture';break;
+    case 'dup':S.draft={photo:true,time:'24/11 · 08:12',ai:'pothole',desc:D,locOk:true};S.scr='loc';break;
+    case 'type':S.draft={photo:true,time:'24/11 · 08:12',ai:'pothole',desc:D,locOk:true,dupSkip:true,type:'pothole'};S.scr='type';break;
+    case 'typediff':S.draft={photo:true,time:'24/11 · 08:12',ai:'pothole',desc:D,locOk:true,dupSkip:true,type:'flood'};S.scr='type';break;
+    case 'detail':mineAssigned();S.sel='PA-0461';S.scr='detail';break;
+    case 'rate':mineAssigned();Object.assign(r,{status:'done',doneAt:'25/11 · 16:20',result:'Đã vá ổ gà bằng bê tông nhựa, cắm biển cảnh báo trong 24 giờ.'});S.sel='PA-0461';S.rate={pos:46,stars:5,tags:{'Xử lý nhanh':true,'Sạch sẽ':true}};S.scr='rate';break;
+    case 'notif':mineAssigned();Object.assign(r,{status:'done',doneAt:'25/11 · 16:20'});S.notifs=[{rid:'PA-0461',text:'PA-0461 đã khắc phục xong – mời bạn đánh giá'}];break;
+    case 'elder':S.big=true;break;
+    case 'blur':S.draft={time:'24/11 · 08:12'};S.scr='blur';break;
+    case 'pick':S.draft={photo:true,ai:'pothole',desc:D};S.scr='pick';break;
+    case 'queued':S.queue=[{type:'pothole',addr:'45 Hưng Đạo Vương'}];S.scr='queued';break;
+    case 'volunteer':S.role='volunteer';break;
+    case 'unit':mineAssigned();S.role='unit';S.unit={sel:'PA-0461',shot:false};break;
+    case 'staff':S.role='staff';break;
+  }
+}
+if(EMBED){document.body.classList.add('embed');preset(QS.get('p')||'home')}
 render();
 </script>
 </body>

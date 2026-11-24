@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prototype Đề 2: TrấnBiên Trực Tuyến – Phản Ánh Hiện Trường</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <!-- Thanh chuyển đổi vai trò phục vụ Demo Ban Giám Khảo -->
+  <header class="presenter-bar">
+    <div class="presenter-brand">
+      <span class="presenter-badge">ĐỀ 2 • PROTOTYPE</span>
+      <div>
+        <div class="presenter-title">TrấnBiên Trực Tuyến – Phản Ánh Hiện Trường &amp; Đô Thị Minh Bạch</div>
+        <div class="presenter-sub">Chạy độc lập ngoại tuyến 100% • Tích hợp AI Độ tin cậy + Gộp trùng 50m + Chế độ Chữ lớn</div>
+      </div>
+    </div>
+
+    <div class="role-switcher">
+      <button class="role-btn active" data-view="split" onclick="App.setView('split')">⚡ Song song (Dân + Phường)</button>
+      <button class="role-btn" data-view="citizen" onclick="App.setView('citizen')">👤 1. Người dân (Mobile)</button>
+      <button class="role-btn" data-view="volunteer" onclick="App.setView('volunteer')">🦺 2. Đoàn viên xác minh</button>
+      <button class="role-btn" data-view="officer" onclick="App.setView('officer')">🏛️ 3. Cán bộ Phường (Web)</button>
+    </div>
+  </header>
+
+  <!-- Thanh bấm nhanh các tình huống ăn điểm Rubric khi BGK hỏi -->
+  <div class="scenario-bar">
+    <strong style="color:#93c5fd;">🎯 Kịch bản Demo nhanh:</strong>
+    <button class="scen-btn" onclick="App.runScenario('standard')">✨ 1. Gửi 3 bước (AI 92% + Gộp trùng 50m)</button>
+    <button class="scen-btn" onclick="App.runScenario('medium_ai')">⚠️ 2. AI Trung bình 68% &rarr; Đoàn viên</button>
+    <button class="scen-btn" onclick="App.runScenario('senior')">👴 3. Chế độ Người cao tuổi</button>
+    <button class="scen-btn" onclick="App.runScenario('error_blur')">❌ 4. Lỗi: Ảnh mờ (AI 38%)</button>
+    <button class="scen-btn" onclick="App.runScenario('error_gps')">📍 5. Lỗi: Mất sóng GPS</button>
+    <button class="scen-btn" onclick="App.runScenario('empty')">🌿 6. Trạng thái trống (KP.6)</button>
+  </div>
+
+  <!-- Khung hiển thị thiết bị -->
+  <main id="stage-root" class="stage"></main>
+  <div id="toast-root"></div>
+
+  <script src="./data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

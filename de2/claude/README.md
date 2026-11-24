@@ -8,6 +8,7 @@ Thư mục này chỉ chứa sản phẩm Claude tạo ra. Các thư mục khác
 |---|---|---|
 | `prototype/index.html` | Web prototype bấm được, 4 vai trò (Người dân, Đoàn viên, Cán bộ phường, Đơn vị xử lý) dùng chung dữ liệu, có thanh gợi ý kịch bản demo 3 phút | Mở thẳng file bằng trình duyệt. Trên điện thoại tự chuyển sang toàn màn hình |
 | `ux/ho-so-ux.html` | Hồ sơ UX: sơ đồ 5 làn, vòng đời phản ánh, luồng gửi 3 bước và các nhánh lỗi, quy tắc gắn cờ tin cậy, kịch bản demo, user journey 3 nhân vật, 20 user stories có ưu tiên MVP | Mở thẳng file bằng trình duyệt |
+| `slides/index.html` | Deck 18 slide 16:9 trình bày bài toán và giải pháp. Bên phải mỗi slide là màn hình prototype thật (bấm được) hoặc sơ đồ / user journey. Nút **Xuất PDF** | Mở bằng Chrome hoặc Edge. Phím ← → để chuyển slide. Xuất PDF: chọn "Lưu dưới dạng PDF", bật "Đồ họa nền" |
 | `design-canvas/` | Mã nguồn 11 artboard MH-01 → MH-10 (`.dc.html`) và `canvas.json` | Chỉ hiển thị trên canvas claude.ai (cần runtime của canvas), giữ ở đây để lưu trữ |
 
 ## Bản online (riêng tư, cần bấm Share trên trang để người khác xem)

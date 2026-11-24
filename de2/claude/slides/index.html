@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Phản ánh Trấn Biên – Slide trình bày</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: 16:9 slides 1280x720 on the poster's navy circuit ground; text column left, live phone or diagram right */
+:root{
+  --navy:#071A6B; --deep:#040E3D; --blue:#1747D6; --cyan:#3FD0FF; --ink:#0A1A44;
+  --text:#FFFFFF; --sub:#D6E4FF; --dim:#8FB0FF; --soft:#E5EDFF; --muted:#47567A; --line:#DCE4F5;
+  --red:#B42318; --amb:#9A5B00; --grn:#1C7445;
+  --f:'Be Vietnam Pro',system-ui,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:#020A2E;color:var(--text);font-family:var(--f);overflow:hidden}
+.viewport{position:fixed;inset:0 0 60px 0}
+.slide{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform:translate(-50%,-50%) scale(var(--k,1));display:none;grid-template-columns:1fr auto;gap:56px;align-items:center;padding:64px 72px 72px;overflow:hidden;
+  background:
+    linear-gradient(rgba(63,208,255,.05) 1px,transparent 1px) 0 0/40px 40px,
+    linear-gradient(90deg,rgba(63,208,255,.05) 1px,transparent 1px) 0 0/40px 40px,
+    radial-gradient(circle at 10% 0%,#1747D6 0,#071A6B 46%,#040E3D 100%);
+  box-shadow:0 0 0 1px rgba(63,208,255,.25)}
+.slide.on{display:grid}
+.slide.wide{grid-template-columns:400px 1fr;gap:40px}
+.col{display:flex;flex-direction:column;gap:18px;min-width:0}
+.tagp{align-self:flex-start;font-size:13px;font-weight:700;letter-spacing:.08em;padding:6px 14px;border-radius:16px;border:1.5px solid var(--cyan);color:#BFEFFF;background:rgba(63,208,255,.12);box-shadow:0 0 14px rgba(63,208,255,.35)}
+h1{margin:0;font-size:68px;line-height:1.08;font-weight:800;letter-spacing:-.01em;text-wrap:balance}
+h1 .glow{color:#fff;text-shadow:0 0 18px rgba(63,208,255,.8),0 0 2px #fff}
+h2{margin:0;font-size:40px;line-height:1.18;font-weight:800;text-wrap:balance}
+.lead{margin:0;font-size:21px;line-height:1.5;color:var(--sub);max-width:34em}
+ul.pts{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px}
+ul.pts li{font-size:19px;line-height:1.45;color:var(--sub);padding-left:26px;position:relative}
+ul.pts li::before{content:"";position:absolute;left:4px;top:10px;width:9px;height:9px;border-radius:5px;background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+ul.pts b{color:#fff}
+.box{background:rgba(255,255,255,.06);border:1px solid rgba(63,208,255,.35);border-radius:16px;padding:14px 18px;font-size:17px;line-height:1.45;color:var(--sub)}
+.box b{color:#fff}
+.mh{display:inline-block;font-size:12px;font-weight:700;color:var(--ink);background:var(--cyan);border-radius:7px;padding:2px 8px;margin-right:6px;vertical-align:2px}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.chip{font-size:14px;font-weight:600;padding:6px 12px;border-radius:14px;border:1px solid rgba(63,208,255,.45);color:#E6F7FF;background:rgba(255,255,255,.05)}
+.meta{font-size:16px;color:var(--dim);line-height:1.6}
+.phwrap{width:281px;height:608px;border-radius:30px;overflow:hidden;position:relative;box-shadow:0 0 0 2px var(--cyan),0 0 44px rgba(63,208,255,.45),0 30px 60px rgba(0,0,0,.45);background:#F0F4FF;flex:none}
+.phwrap iframe{position:absolute;left:0;top:0;width:390px;height:844px;border:0;transform:scale(.7205);transform-origin:0 0}
+.deskwrap{width:704px;height:451px;border-radius:14px;overflow:hidden;position:relative;box-shadow:0 0 0 2px var(--cyan),0 0 40px rgba(63,208,255,.4);background:#F0F4FF}
+.deskwrap iframe{position:absolute;left:0;top:0;width:1280px;height:820px;border:0;transform:scale(.55);transform-origin:0 0}
+.livebadge{position:absolute;right:72px;bottom:30px;font-size:12px;color:var(--dim)}
+.foot{position:absolute;left:72px;bottom:26px;font-size:13px;color:var(--dim);letter-spacing:.04em}
+.num{position:absolute;right:72px;top:28px;font-size:13px;color:var(--dim);font-variant-numeric:tabular-nums}
+.wpanel{background:#fff;color:var(--ink);border-radius:20px;padding:20px 22px;box-shadow:0 0 0 2px var(--cyan),0 0 40px rgba(63,208,255,.35);min-width:0}
+.wpanel h3{margin:0 0 4px;font-size:17px}
+.wpanel .sm{font-size:13px;color:var(--muted)}
+/* data panel */
+.stat{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0 16px}
+.stat div{background:#F2F6FF;border-radius:14px;padding:12px}
+.stat b{display:block;font-size:34px;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat span{font-size:13px;color:var(--muted)}
+.bars{display:grid;grid-template-columns:110px 1fr 34px;gap:9px 12px;align-items:center;font-size:15px}
+.bars i{display:block;height:14px;border-radius:7px;background:var(--blue)}
+.bars b{font-variant-numeric:tabular-nums;text-align:right}
+/* journey */
+.jr{display:grid;position:relative}
+.jr .stg{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#0B2A8C;background:var(--soft);padding:5px 6px;border-radius:8px;margin:0 3px;text-align:center}
+.jr .curve{position:relative;height:150px;margin:6px 0;background:linear-gradient(to bottom,rgba(20,83,45,.07),transparent 40%,transparent 60%,rgba(180,35,24,.08));border-radius:10px}
+.jr .curve svg{position:absolute;inset:0;width:100%;height:100%}
+.jr .dot{position:absolute;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:15px;color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;border:3px solid #fff;box-shadow:0 2px 6px rgba(10,26,68,.25)}
+.jr .yl{position:absolute;left:6px;font-size:10.5px;font-weight:700;color:var(--muted)}
+.jr .st{font-size:12.5px;line-height:1.3;text-align:center;padding:0 3px;color:var(--ink)}
+.jr.small .curve{height:110px}
+/* architecture */
+.arch{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.arch .a{border-radius:14px;padding:12px 14px;background:#F2F6FF;font-size:14px;line-height:1.4}
+.arch .a b{display:block;font-size:15px;margin-bottom:2px;color:#0B2A8C}
+.arch .a.core{grid-column:1 / 3;background:var(--ink);color:#fff}
+.arch .a.core b{color:var(--cyan)}
+.mvp{display:flex;flex-direction:column;gap:7px;font-size:15px}
+.mvp span{display:flex;gap:8px;align-items:baseline}
+.mvp em{font-style:normal;font-size:11px;font-weight:800;color:#fff;background:var(--red);border-radius:6px;padding:1px 6px}
+.personas{display:flex;flex-direction:column;gap:10px}
+.persona{display:flex;gap:12px;align-items:flex-start}
+.av{width:42px;height:42px;border-radius:21px;background:var(--cyan);color:var(--ink);font-weight:800;font-size:18px;display:flex;align-items:center;justify-content:center;flex:none;box-shadow:0 0 12px rgba(63,208,255,.5)}
+.persona b{display:block;font-size:18px;color:#fff}
+.persona span{font-size:15.5px;color:var(--sub);line-height:1.4}
+/* controls */
+.bar{position:fixed;left:0;right:0;bottom:0;height:60px;display:flex;align-items:center;justify-content:center;gap:10px;background:#020A2E;border-top:1px solid rgba(63,208,255,.25)}
+.bar button{height:40px;padding:0 16px;border-radius:20px;border:1.5px solid rgba(63,208,255,.55);background:rgba(255,255,255,.06);color:#fff;font:600 14px var(--f);cursor:pointer}
+.bar button:hover,.bar button:focus-visible{background:var(--blue);border-color:var(--cyan);outline:none}
+.bar button.pdf{background:var(--blue);border-color:var(--cyan);box-shadow:0 0 14px rgba(63,208,255,.5)}
+.bar .ctr{min-width:70px;text-align:center;font-variant-numeric:tabular-nums;color:var(--dim)}
+.bar .hint{font-size:12px;color:var(--dim);margin-left:6px}
+@media print{
+  @page{size:1280px 720px;margin:0}
+  html,body{height:auto;overflow:visible;background:#040E3D}
+  .bar{display:none}
+  .viewport{position:static}
+  .slide{display:grid!important;position:relative;left:0;top:0;transform:none;break-after:page;page-break-after:always;box-shadow:none}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="viewport" id="vp">
+
+<!-- 1 -->
+<section class="slide">
+  <div class="col">
+    <span class="tagp">HACKATHON TP. ĐỒNG NAI 2026 · ĐỀ 2</span>
+    <h1>Phản ánh<br><span class="glow">Trấn Biên</span></h1>
+    <p class="lead">Báo sự cố đô thị trong 3 bước. Theo dõi như theo dõi đơn hàng. Minh bạch bằng ảnh trước và sau xử lý.</p>
+    <div class="row"><span class="chip">Chính quyền số</span><span class="chip">Đô thị thông minh</span><span class="chip">AI nhận diện ảnh</span></div>
+    <p class="meta">Đội: [Tên đội] · Vòng sơ loại UX/UI · 24/11/2026</p>
+  </div>
+  <div class="phwrap"><iframe title="Màn hình trang chủ" src="../prototype/index.html?embed=1&p=home"></iframe></div>
+</section>
+
+<!-- 2 -->
+<section class="slide">
+  <div class="col">
+    <span class="tagp">BÀI TOÁN</span>
+    <h2>Người dân thấy sự cố, nhưng không biết báo ai</h2>
+    <ul class="pts">
+      <li><b>Đèn hỏng, ổ gà, ngập sau mưa, rác tự phát</b> xuất hiện hằng ngày trong khu phố.</li>
+      <li>Phản ánh đi qua nhiều kênh rời rạc. <b>Báo xong không biết đã xử lý chưa.</b></li>
+      <li>Phường nhận tin trùng, tin sai vị trí, khó giao đúng bộ phận và khó theo dõi hạn.</li>
+      <li>Người cao tuổi ít dùng công nghệ gần như bị bỏ ngoài kênh số.</li>
+    </ul>
+  </div>
+  <div class="wpanel" style="width:480px">
+    <h3>Phường Trấn Biên · tháng 11/2026</h3>
+    <span class="sm">Số liệu mẫu của đề</span>
+    <div class="stat"><div><b>64</b><span>phản ánh</span></div><div><b>47</b><span>đã xử lý · 73,4%</span></div><div><b>3,2</b><span>ngày xử lý TB</span></div></div>
+    <div class="bars">
+      <span>Rác thải</span><i style="width:100%"></i><b>21</b>
+      <span>Đèn đường</span><i style="width:85.7%"></i><b>18</b>
+      <span>Ngập nước</span><i style="width:71.4%"></i><b>15</b>
+      <span>Mặt đường</span><i style="width:47.6%"></i><b>10</b>
+    </div>
+    <p class="sm" style="margin:14px 0 0">17 phản ánh còn mở. Mục tiêu: rút ngắn 3,2 ngày và cho người dân thấy kết quả.</p>
+  </div>
+  <span class="foot">PHẢN ÁNH TRẤN BIÊN</span>
+</section>
+
+<!-- 3 -->
+<section class="slide wide">
+  <div class="col">
+    <span class="tagp">NGƯỜI DÙNG</span>
+    <h2>3 người dùng, 3 nỗi đau</h2>
+    <div class="personas">
+      <div class="persona"><span class="av">L</span><div><b>Cô Lan, 67 tuổi</b><span>Mắt kém, ngại gõ chữ. Không biết kênh báo.</span></div></div>
+      <div class="persona"><span class="av">M</span><div><b>Anh Minh, cán bộ phường</b><span>Tin trùng, tin sai, cuối tháng đếm tay.</span></div></div>
+      <div class="persona"><span class="av">T</span><div><b>Thảo, đoàn viên KP5</b><span>Muốn giúp nhưng không biết việc nào cần mình.</span></div></div>
+    </div>
+  </div>
+  <div class="wpanel">
+    <h3>Hành trình của Cô Lan khi có ứng dụng</h3>
+    <span class="sm">Mức cảm xúc từ 1 (bực) đến 5 (hài lòng). Đáy là lúc không biết báo ai.</span>
+    <div class="jr" data-j="lan" style="margin-top:10px"></div>
+  </div>
+  <span class="foot">PHẢN ÁNH TRẤN BIÊN</span>
+</section>
+
+<!-- 4 -->
+<section class="slide wide">
+  <div class="col">
+    <span class="tagp">GIẢI PHÁP</span>
+    <h2>Một phản ánh, một luồng khép kín</h2>
+    <ul class="pts">
+      <li><b>Gửi trong 3 bước</b>, AI gợi ý loại sự cố từ ảnh.</li>
+      <li><b>Gộp trùng trong 50m</b> bằng nút +1, đoàn viên chỉ xác minh khi bị gắn cờ.</li>
+      <li><b>Minh bạch</b>: có hạn xử lý, ảnh trước/sau, người dân chấm điểm.</li>
+    </ul>
+  </div>
+  <div class="wpanel" style="padding:12px">
+    <svg viewBox="0 0 980 500" role="img" aria-label="Luồng phản ánh qua 5 làn: người dân, hệ thống, đoàn viên, cán bộ phường, đơn vị xử lý" style="display:block;width:100%;height:auto;font-family:var(--f)">
+      <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#47567A"/></marker><marker id="aha" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#9A5B00"/></marker></defs>
+      <rect x="0" y="0" width="980" height="100" fill="#F7F9FF"/><rect x="0" y="100" width="980" height="100" fill="#FFFFFF"/><rect x="0" y="200" width="980" height="100" fill="#F7F9FF"/><rect x="0" y="300" width="980" height="100" fill="#FFFFFF"/><rect x="0" y="400" width="980" height="100" fill="#F7F9FF"/>
+      <rect x="0" y="0" width="112" height="500" fill="#0B2A8C"/>
+      <g font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle"><text x="56" y="55">Người dân</text><text x="56" y="155">Hệ thống</text><text x="56" y="255">Đoàn viên</text><text x="56" y="347">Cán bộ</text><text x="56" y="364">phường</text><text x="56" y="447">Đơn vị</text><text x="56" y="464">xử lý</text></g>
+      <line x1="112" y1="0" x2="112" y2="500" stroke="#3FD0FF" stroke-width="2"/>
+      <g fill="none" stroke="#47567A" stroke-width="1.8"><path d="M260 50 H330 V125" marker-end="url(#ah)"/><path d="M390 150 H460 V75" marker-end="url(#ah)"/><path d="M520 50 H590 V125" marker-end="url(#ah)"/><path d="M650 150 H720 V325" marker-end="url(#ah)"/><path d="M590 275 V350 H658" marker-end="url(#ah)"/><path d="M780 350 H850 V425" marker-end="url(#ah)"/><path d="M910 450 H950 V150 H912" marker-end="url(#ah)"/><path d="M850 125 V77" marker-end="url(#ah)"/></g>
+      <path d="M590 175 V225" fill="none" stroke="#9A5B00" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#aha)"/>
+      <g font-size="12.5" fill="#47567A"><text x="268" y="42">ảnh + GPS</text><text x="398" y="142">gợi ý</text><text x="528" y="42">gửi</text><text x="726" y="232">tin cậy cao</text><text x="598" y="320">đúng</text><text x="788" y="342">giao + hạn</text><text x="944" y="300" text-anchor="end">ảnh sau</text><text x="858" y="106">báo</text></g>
+      <text x="598" y="206" font-size="12.5" font-weight="700" fill="#7A4800">bị gắn cờ</text>
+      <g font-size="13.5" fill="#0A1A44" text-anchor="middle">
+        <rect x="140" y="27" width="120" height="46" rx="12" fill="#FFFFFF" stroke="#1747D6" stroke-width="1.5"/><text y="47"><tspan x="200">Chụp ảnh</tspan><tspan x="200" dy="16">sự cố</tspan></text>
+        <rect x="270" y="127" width="120" height="46" rx="12" fill="#E5EDFF" stroke="#1747D6" stroke-width="1.5"/><text y="147"><tspan x="330">AI gợi ý</tspan><tspan x="330" dy="16">loại + mô tả</tspan></text>
+        <rect x="400" y="27" width="120" height="46" rx="12" fill="#FFFFFF" stroke="#1747D6" stroke-width="1.5"/><text y="47"><tspan x="460">Xác nhận vị trí</tspan><tspan x="460" dy="16">+1 nếu trùng</tspan></text>
+        <rect x="530" y="127" width="120" height="46" rx="12" fill="#FFF1D6" stroke="#9A5B00" stroke-width="2"/><text y="147" font-weight="700"><tspan x="590">Chấm mức</tspan><tspan x="590" dy="16">tin cậy</tspan></text>
+        <rect x="530" y="227" width="120" height="46" rx="12" fill="#FFFFFF" stroke="#9A5B00" stroke-width="1.5" stroke-dasharray="5 4"/><text y="247"><tspan x="590">Xác minh</tspan><tspan x="590" dy="16">tại chỗ</tspan></text>
+        <rect x="660" y="327" width="120" height="46" rx="12" fill="#FFFFFF" stroke="#1747D6" stroke-width="1.5"/><text y="347" font-size="12.5"><tspan x="720">Gộp trùng, giao</tspan><tspan x="720" dy="16">bộ phận, đặt hạn</tspan></text>
+        <rect x="790" y="427" width="120" height="46" rx="12" fill="#FFFFFF" stroke="#1747D6" stroke-width="1.5"/><text y="447"><tspan x="850">Khắc phục,</tspan><tspan x="850" dy="16">chụp ảnh sau</tspan></text>
+        <rect x="790" y="127" width="120" height="46" rx="12" fill="#E5EDFF" stroke="#1747D6" stroke-width="1.5"/><text y="147"><tspan x="850">Thông báo</tspan><tspan x="850" dy="16">Zalo / SMS</tspan></text>
+        <rect x="790" y="27" width="120" height="46" rx="12" fill="#1747D6" stroke="#3FD0FF" stroke-width="2"/><text y="47" fill="#FFFFFF" font-weight="700" font-size="12.5"><tspan x="850">Xem Trước/Sau</tspan><tspan x="850" dy="16">chấm sao</tspan></text>
+      </g>
+    </svg>
+  </div>
+  <span class="foot">PHẢN ÁNH TRẤN BIÊN</span>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <div class="col">
+    <span class="tagp">BƯỚC 1 · CHỤP ẢNH</span>
+    <h2>Chụp một tấm ảnh, AI điền phần còn lại</h2>
+    <ul class="pts">
+      <li>Vị trí GPS được ghi <b>đúng lúc bấm chụp</b>, không dựa vào dữ liệu trong ảnh.</li>
+      <li>AI khoanh vùng hư hỏng, gợi ý <b>loại sự cố và mô tả</b>. Người dân không cần gõ chữ.</li>
+      <li>AI chỉ gợi ý. Người dân là người chốt ở bước 3.</li>
+    </ul>
+    <div class="box"><span class="mh">MH-02</span>Ảnh mờ hoặc AI lỗi vẫn gửi được: chụp lại hoặc tự chọn loại.</div>
+  </div>
+  <div class="phwrap"><iframe title="Bước 1 chụp ảnh" src="../prototype/index.html?embed=1&p=capture"></iframe></div>
+  <span class="foot">PHẢN ÁNH TRẤN BIÊN</span>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <div class="col">
+    <span class="tagp">BƯỚC 2 · VỊ TRÍ &amp; GỘP TRÙNG</span>
+    <h2>"Đã có 3 người báo cách bạn 20m"</h2>
+    <ul class="pts">
+      <li>Địa chỉ hiện <b>bằng chữ</b> để xác nhận Đúng hay Không phải, không bắt đọc bản đồ.</li>
+      <li>Cùng loại, còn mở, trong <b>50m</b> thì hệ thống hỏi: <b>+1 Đồng tình</b> hay gửi mới.</li>
+      <li>Mỗi lượt +1 đẩy phản ánh lên cao trong danh sách của phường. Phường bớt tin trùng.</li>
+    </ul>
+    <div class="box"><span class="mh">MH-03</span>Khoảng cách tính bằng công thức Haversine trên tọa độ thật.</div>
+  </div>
+  <div class="phwrap"><iframe title="Bước 2 gộp trùng" src="../prototype/index.html?embed=1&p=dup"></iframe></div>
+  <span class="foot">PHẢN ÁNH TRẤN BIÊN</span>
+</section>
+
+<!-- 7 -->
+<section class="slide">
+  <div class="col">
+    <span class="tagp">BƯỚC 3 · CHỌN LOẠI &amp; GỬI</span>
+    <h2>4 ô to, AI chọn sẵn, người dân chốt</h2>
+    <ul class="pts">
+      <li>Đèn đường, ổ gà, ngập nước, rác thải: <b>icon lớn</b>, một chạm.</li>
+      <li>Chọn khác AI vẫn gửi bình thường. Phản ánh được <b>gắn cờ để xác minh</b>.</li>
+      <li>Danh tính người gửi được ẩn trên bản đồ công khai.</li>
+    </ul>
+    <div class="box"><span class="mh">MH-02c</span>Không hiện % độ tin cậy cho người dân. Chỉ hỏi "đúng không?".</div>
+  </div>
+  <div class="phwrap"><iframe title="Bước 3 chọn loại" src="../prototype/index.html?embed=1&p=typediff"></iframe></div>
+  <span class="foot">PHẢN ÁNH TRẤN BIÊN</span>
+</section>
+
+<!-- 8 -->
+<section class="slide">
+  <div class="col">
+    <span class="tagp">THEO DÕI</span>
+    <h2>Theo dõi phản ánh như theo dõi đơn hàng</h2>
+    <ul class="pts">
+      <li>Timeline 4 mốc có giờ: <b>Đã tiếp nhận → Đã giao → Đang xử lý → Hoàn thành</b>.</li>
+      <li>Mốc "Đã giao" hiện <b>bộ phận và hạn xử lý</b>: lời hứa của phường với người dân.</li>
+      <li>Bước xác minh chỉ hiện khi phản ánh thật sự cần kiểm tra.</li>
+    </ul>
+    <div class="box"><span class="mh">MH-05</span>Người dân nhận tin qua Zalo/SMS, không cần mở app để kiểm tra.</div>
+  </div>
+  <div class="phwrap"><iframe title="Theo dõi phản ánh" src="../prototype/index.html?embed=1&p=detail"></iframe></div>
+  <span class="foot">PHẢN ÁNH TRẤN BIÊN</span>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+  <div class="col">
+    <span class="tagp">MINH BẠCH</span>
+    <h2>Kéo để thấy trước và sau</h2>
+    <ul class="pts">
+      <li>Ảnh trước và sau xử lý trên cùng một khung, <b>kéo tay nắm</b> để so sánh.</li>
+      <li>Chấm 1–5 sao, chọn nhanh nhận xét: Xử lý nhanh, Sạch sẽ, Chưa triệt để.</li>
+      <li>Nút <b>"Vẫn còn tái diễn?"</b> mở lại phản ánh. Không đóng cho có.</li>
+    </ul>
+    <div class="box"><span class="mh">MH-06</span>Ghim trên bản đồ chuyển xanh khi phường khắc phục xong.</div>
+  </div>
+  <div class="phwrap"><iframe title="Trước sau và đánh giá" src="../prototype/index.html?embed=1&p=rate"></iframe></div>
+  <span class="foot">PHẢN ÁNH TRẤN BIÊN</span>
+</section>
+
+<!-- 10 -->
+<section class="slide">
+  <div class="col">
+    <span class="tagp">NGƯỜI CAO TUỔI</span>
+    <h2>Chế độ chữ lớn: 3 nút, không cần gõ</h2>
+    <ul class="pts">
+      <li>Bật bằng <b>một nút "Aa"</b> ngay trang chủ. Chữ lớn, tương phản cao đen – vàng.</li>
+      <li>Nút bấm cao trên 60px, hướng dẫn một câu: "Bác bấm nút xanh để chụp ảnh".</li>
+      <li>Không có smartphone? <b>"Nhờ đoàn viên gửi giúp"</b>.</li>
+    </ul>
+    <div class="box"><span class="mh">MH-04</span>Truy cập bằng mã QR dán ở nhà văn hóa khu phố, không phải cài app.</div>
+  </div>
+  <div class="phwrap"><iframe title="Chế độ người cao tuổi" src="../prototype/index.html?embed=1&p=elder"></iframe></div>
+  <span class="foot">PHẢN ÁNH TRẤN BIÊN</span>
+</section>
+
+<!-- 11 -->
+<section class="slide">
+  <div class="col">
+    <span class="tagp">ĐOÀN VIÊN TÌNH NGUYỆN</span>
+    <h2>Xác minh tại chỗ, chỉ khi cần</h2>
+    <p class="lead" style="font-size:18px">Hệ thống tự gắn cờ khi có một trong các tín hiệu:</p>
+    <div class="row"><span class="chip">Không có ảnh</span><span class="chip">Chọn khác AI</span><span class="chip">Lệch GPS &gt; 200m</span><span class="chip">Tài khoản hay bị từ chối</span></div>
+    <ul class="pts">
+      <li>Đoàn viên chỉ thấy <b>việc bị gắn cờ gần mình</b>, sắp theo khoảng cách.</li>
+      <li>Một chạm: <b>Đúng</b>, <b>Chụp lại</b> hoặc <b>Không đúng</b> (báo lý do cho người gửi).</li>
+      <li>Gặp người không có smartphone thì <b>gửi hộ</b>.</li>
+    </ul>
+  </div>
+  <div class="phwrap"><iframe title="Màn đoàn viên" src="../prototype/index.html?embed=1&p=volunteer"></iframe></div>
+  <span class="foot">PHẢN ÁNH TRẤN BIÊN</span>
+</section>
+
+<!-- 12 -->
+<section class="slide wide">
+  <div class="col">
+    <span class="tagp">CÁN BỘ PHƯỜNG</span>
+    <h2>Một màn hình để tiếp nhận và giao việc</h2>
+    <ul class="pts">
+      <li>Phản ánh <b>nhiều người báo</b> lên đầu.</li>
+      <li><b>Gợi ý gộp</b> phản ánh trùng, cán bộ bấm xác nhận.</li>
+      <li>Giao bộ phận, hạn <b>24/48/72 giờ</b>, cảnh báo quá hạn.</li>
+      <li>Nhãn tin cậy luôn kèm lý do.</li>
+    </ul>
+    <div class="box"><span class="mh">MH-08</span>Số liệu tháng tự cập nhật.</div>
+  </div>
+  <div class="deskwrap"><iframe title="Dashboard cán bộ phường" src="../prototype/index.html?embed=1&p=staff"></iframe></div>
+  <span class="foot">PHẢN ÁNH TRẤN BIÊN</span>
+</section>
+
+<!-- 13 -->
+<section class="slide">
+  <div class="col">
+    <span class="tagp">ĐƠN VỊ XỬ LÝ</span>
+    <h2>Nộp kết quả qua link, không cần tài khoản</h2>
+    <ul class="pts">
+      <li>Điện lực, Công ty Môi trường mở <b>link được giao</b>, không phải đăng nhập.</li>
+      <li>Ảnh trước <b>hiện mờ trên camera</b> để chụp ảnh sau đúng góc.</li>
+      <li>Bấm Hoàn thành: ghim chuyển xanh, người gửi nhận tin mời đánh giá.</li>
+    </ul>
+    <div class="box"><span class="mh">MH-09</span>Ảnh trước và sau cùng góc thì thanh kéo so sánh mới có ý nghĩa.</div>
+  </div>
+  <div class="phwrap"><iframe title="Màn đơn vị xử lý" src="../prototype/index.html?embed=1&p=unit"></iframe></div>
+  <span class="foot">PHẢN ÁNH TRẤN BIÊN</span>
+</section>
+
+<!-- 14 -->
+<section class="slide">
+  <div class="col">
+    <span class="tagp">TRẠNG THÁI LỖI &amp; TRỐNG</span>
+    <h2>Không có ngõ cụt</h2>
+    <ul class="pts">
+      <li><b>Ảnh mờ</b>: chụp lại, hoặc dùng ảnh và tự chọn loại.</li>
+      <li><b>Không lấy được GPS</b>: chọn tên đường hoặc khu phố.</li>
+      <li><b>Mất mạng</b>: lưu nháp, tự gửi khi có mạng.</li>
+      <li><b>Không có sự cố quanh bạn</b>: báo khu phố đang ổn và số việc phường đã xử lý.</li>
+    </ul>
+    <div class="box"><span class="mh">MH-10</span>Mỗi lỗi đều có một nút để đi tiếp.</div>
+  </div>
+  <div class="phwrap"><iframe title="Chọn vị trí khi không có GPS" src="../prototype/index.html?embed=1&p=pick"></iframe></div>
+  <span class="foot">PHẢN ÁNH TRẤN BIÊN</span>
+</section>
+
+<!-- 15 -->
+<section class="slide wide">
+  <div class="col">
+    <span class="tagp">HÀNH TRÌNH</span>
+    <h2>Cán bộ và đoàn viên cũng được giảm tải</h2>
+    <ul class="pts">
+      <li>Anh Minh vui nhất khi <b>gộp trùng</b> và khi <b>báo cáo tự tổng hợp</b>.</li>
+      <li>Thảo vui nhất khi việc của mình <b>đẩy phản ánh lên danh sách phường</b>.</li>
+      <li>Điểm thấp còn lại (3/5) là chỗ cần cải tiến tiếp.</li>
+    </ul>
+  </div>
+  <div class="col" style="gap:12px">
+    <div class="wpanel" style="padding:14px 16px"><h3>Anh Minh · cán bộ tiếp nhận</h3><div class="jr small" data-j="minh" style="margin-top:6px"></div></div>
+    <div class="wpanel" style="padding:14px 16px"><h3>Thảo · đoàn viên KP5</h3><div class="jr small" data-j="thao" style="margin-top:6px"></div></div>
+  </div>
+  <span class="foot">PHẢN ÁNH TRẤN BIÊN</span>
+</section>
+
+<!-- 16 -->
+<section class="slide wide">
+  <div class="col">
+    <span class="tagp">KIẾN TRÚC &amp; MVP 24 GIỜ</span>
+    <h2>Một bảng dữ liệu, chạy được trong 24 giờ</h2>
+    <div class="mvp" style="font-size:16px;color:var(--sub)">
+      <span><em>MUST</em>Gửi 3 bước + AI gợi ý loại</span>
+      <span><em>MUST</em>Gộp trùng 50m, nút +1</span>
+      <span><em>MUST</em>Timeline, thông báo trong app</span>
+      <span><em>MUST</em>Dashboard giao việc, hạn, gắn cờ</span>
+      <span><em>MUST</em>Đoàn viên xác minh, đơn vị nộp ảnh</span>
+      <span><em>MUST</em>Trước/Sau, đánh giá, chữ lớn</span>
+    </div>
+  </div>
+  <div class="wpanel">
+    <div class="arch">
+      <div class="a"><b>Web PWA (mobile-first)</b>Mở bằng link hoặc QR, không cài app. Một codebase cho người dân và cán bộ.</div>
+      <div class="a"><b>Bản đồ</b>Leaflet + OpenStreetMap, miễn phí. Đổi tọa độ ra địa chỉ bằng Nominatim.</div>
+      <div class="a core"><b>Bảng Reports (Postgres)</b>status · type · lat/lng · reporters · needs_verification · flag_reason · dept · due_at · before/after photo</div>
+      <div class="a"><b>AI nhận diện ảnh</b>Một lần gọi Vision LLM, trả JSON {loại, mô tả}. Lỗi thì chọn tay.</div>
+      <div class="a"><b>Supabase</b>Đăng nhập OTP, lưu ảnh, truy vấn khoảng cách 50m.</div>
+    </div>
+    <p class="sm" style="margin:12px 0 0">Lộ trình sau cuộc thi: Zalo Mini App và thông báo qua Zalo OA, kết nối kênh tiếp nhận của phường.</p>
+  </div>
+  <span class="foot">PHẢN ÁNH TRẤN BIÊN</span>
+</section>
+
+<!-- 17 -->
+<section class="slide">
+  <div class="col">
+    <span class="tagp">TRIỂN KHAI &amp; TÁC ĐỘNG</span>
+    <h2>Bắt đầu từ một khu phố, đo bằng số liệu thật</h2>
+    <ul class="pts">
+      <li><b>Thí điểm</b>: dán QR ở nhà văn hóa KP5, tập huấn đoàn viên trong một buổi sinh hoạt.</li>
+      <li><b>Đo</b>: thời gian xử lý trung bình (mốc 3,2 ngày), tỷ lệ phản ánh trùng được gộp, điểm hài lòng.</li>
+      <li><b>Nhân rộng</b>: cùng mô hình cho các phường khác của TP. Đồng Nai.</li>
+    </ul>
+    <div class="box"><b>Công cụ AI đã dùng</b>: Claude (phân tích đề, mock UI, prototype, sơ đồ). Trong sản phẩm: Vision LLM gợi ý loại sự cố.</div>
+  </div>
+  <div class="phwrap"><iframe title="Thông báo đã khắc phục" src="../prototype/index.html?embed=1&p=notif"></iframe></div>
+  <span class="foot">PHẢN ÁNH TRẤN BIÊN</span>
+</section>
+
+<!-- 18 -->
+<section class="slide">
+  <div class="col">
+    <span class="tagp">DEMO</span>
+    <h1>Cảm ơn<br><span class="glow">Ban Giám khảo</span></h1>
+    <p class="lead">Màn hình bên phải là prototype thật, bấm thử được ngay: Gửi phản ánh → Chụp ảnh → Dùng ảnh này → Đúng → +1 Đồng tình.</p>
+    <p class="meta">Prototype đầy đủ 4 vai trò: de2/claude/prototype/index.html</p>
+  </div>
+  <div class="phwrap"><iframe title="Prototype bấm thử" src="../prototype/index.html?embed=1&p=home"></iframe></div>
+  <span class="foot">PHẢN ÁNH TRẤN BIÊN</span>
+</section>
+
+</div>
+
+<div class="bar" role="toolbar" aria-label="Điều khiển slide">
+  <button id="prev" aria-label="Slide trước">← Trước</button>
+  <span class="ctr" id="ctr">1 / 18</span>
+  <button id="next" aria-label="Slide sau">Sau →</button>
+  <button id="fs">Toàn màn hình</button>
+  <button id="pdf" class="pdf">Xuất PDF</button>
+  <span class="hint">Chọn "Lưu dưới dạng PDF", bật "Đồ họa nền"</span>
+</div>
+
+<script>
+(function(){
+  var S=[].slice.call(document.querySelectorAll('.slide')),i=0;
+  S.forEach(function(s,k){var n=document.createElement('span');n.className='num';n.textContent=(k+1)+' / '+S.length;s.appendChild(n)});
+  function fit(){var vp=document.getElementById('vp');var k=Math.min(vp.clientWidth/1280,vp.clientHeight/720);document.documentElement.style.setProperty('--k',k)}
+  function go(n){i=Math.max(0,Math.min(S.length-1,n));S.forEach(function(s,k){s.classList.toggle('on',k===i)});document.getElementById('ctr').textContent=(i+1)+' / '+S.length;try{history.replaceState(null,'','#'+(i+1))}catch(e){}}
+  document.getElementById('prev').onclick=function(){go(i-1)};
+  document.getElementById('next').onclick=function(){go(i+1)};
+  document.getElementById('pdf').onclick=function(){window.print()};
+  document.getElementById('fs').onclick=function(){var d=document.documentElement;(d.requestFullscreen?d.requestFullscreen():Promise.reject()).catch(function(){})};
+  document.addEventListener('keydown',function(e){
+    if(e.target.closest&&e.target.closest('iframe,input,textarea'))return;
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();go(i+1)}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(i-1)}
+    else if(e.key==='Home')go(0);else if(e.key==='End')go(S.length-1);
+  });
+  window.addEventListener('resize',fit);
+  window.addEventListener('hashchange',function(){var n=parseInt(location.hash.slice(1),10);if(n&&n-1!==i)go(n-1)});
+  fit();go((parseInt(location.hash.slice(1),10)||1)-1);
+
+  var J={
+    lan:[['Phát hiện','Thấy ổ gà đọng nước',2],['Phát hiện','Không biết báo ai',1],['Gửi','Quét QR ở nhà văn hóa',3],['Gửi','Bật chữ lớn, chụp ảnh',4],['Gửi','Bấm Đúng địa chỉ',4],['Gửi','Thấy 3 người đã báo, bấm +1',5],['Chờ','Zalo báo đã giao, hạn 48 giờ',4],['Kết quả','Kéo xem Trước/Sau',5],['Kết quả','Chấm 5 sao',5]],
+    minh:[['Tiếp nhận','Thấy 64 phản ánh',4],['Tiếp nhận','Việc 5 người báo nằm đầu',5],['Phân loại','Gợi ý gộp cách 47m',5],['Phân loại','Gặp phản ánh chọn khác AI',3],['Giao việc','Chọn bộ phận, hạn 48 giờ',4],['Giao việc','Lọc việc sắp quá hạn',3],['Báo cáo','Số liệu tự tổng hợp',5]],
+    thao:[['Nhận việc','Nhận 3 việc cần xác minh',4],['Nhận việc','Xem lý do, khoảng cách',4],['Hiện trường','Đi 150m, thấy ngập thật',4],['Hiện trường','Bấm Đúng',5],['Gửi hộ','Gặp bác không có smartphone',3],['Gửi hộ','Gửi hộ trong 1 phút',5]]
+  };
+  var col=function(v){return v<=2?'#B42318':v===3?'#9A5B00':'#1C7445'};
+  var y=function(v){return 14+(5-v)/4*72};
+  document.querySelectorAll('.jr[data-j]').forEach(function(el){
+    var d=J[el.dataset.j],n=d.length,h='',a=0;
+    el.style.gridTemplateColumns='repeat('+n+',minmax(0,1fr))';
+    while(a<n){var s=d[a][0],b=a;while(b<n&&d[b][0]===s)b++;h+='<div class="stg" style="grid-column:'+(a+1)+' / '+(b+1)+'">'+s+'</div>';a=b}
+    var pts=d.map(function(x,j){return ((j+.5)*100/n).toFixed(2)+','+y(x[2]).toFixed(2)}).join(' ');
+    h+='<div class="curve" style="grid-column:1 / '+(n+1)+'"><span class="yl" style="top:4px">Hài lòng</span><span class="yl" style="bottom:4px">Bực</span><svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polyline points="'+pts+'" fill="none" stroke="#1747D6" stroke-width="2.5" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg>'+
+      d.map(function(x,j){return '<span class="dot" style="left:'+((j+.5)*100/n)+'%;top:'+y(x[2])+'%;background:'+col(x[2])+'">'+x[2]+'</span>'}).join('')+'</div>';
+    h+=d.map(function(x){return '<div class="st">'+x[1]+'</div>'}).join('');
+    el.innerHTML=h;el.setAttribute('role','img');el.setAttribute('aria-label',d.map(function(x){return x[1]+' '+x[2]+'/5'}).join('; '));
+  });
+})();
+</script>
+</body>
+</html>
