@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><title>Thuyết minh – Lá chắn số</title>
+<style>
+@page{size:A4;margin:1.6cm 1.7cm}
+body{font-family:Arial,"Liberation Sans",sans-serif;font-size:10pt;line-height:1.32;color:#111}
+h1{font-size:15pt;margin:0 0 2pt;color:#344D9C}
+h2{font-size:11.5pt;margin:9pt 0 3pt;color:#344D9C}
+p{margin:0 0 4pt}
+ul,ol{margin:0 0 4pt 16pt;padding:0}
+li{margin:0 0 1.5pt}
+table{border-collapse:collapse;width:100%;margin:3pt 0 5pt}
+th,td{border:0.5pt solid #9aa5bd;padding:2.5pt 4pt;vertical-align:top;font-size:9.5pt;text-align:left}
+th{background:#E9EDF8}
+.meta{color:#444;margin-bottom:6pt}
+</style></head><body>
+
+<h1>THUYẾT MINH SẢN PHẨM – ĐỀ 4 “LÁ CHẮN SỐ”</h1>
+<p class="meta">Hackathon Đồng Nai 2026 – Vòng sơ loại thiết kế UX/UI · Đội: [mã đội] – [tên đội] · Thành viên: [họ tên 1], [họ tên 2]<br>
+Tên sản phẩm: <b>An Tâm</b>. Sản phẩm kèm theo: PDF giao diện 48 màn (trang “V3 – Gọn, 3 đối tượng”, chia theo nhóm A người lớn tuổi, B học sinh, C đội tình nguyện) và prototype bấm được trên Figma. Mọi dữ liệu trong thiết kế là giả lập.</p>
+
+<h2>(a) Vấn đề và người dùng</h2>
+<p>Người bị lừa thường quyết định chuyển tiền trong vài phút, khi đang hoảng và chỉ có một mình. An Tâm chen vào đúng khoảnh khắc đó với ba việc: kiểm tra nhanh trước khi chuyển tiền, hỏi người thân bằng một chạm, và học cách nhận diện trong 1 phút. Dữ liệu mẫu của đề: 120 lượt báo cáo mỗi tháng, 35% là đường dẫn giả mạo.</p>
+<table>
+<tr><th style="width:21%">Người dùng</th><th style="width:27%">Bối cảnh tại Đồng Nai</th><th style="width:22%">Khó khăn</th><th>Thiết kế đáp lại</th></tr>
+<tr><td>Bác 65 tuổi nhận cuộc gọi lạ</td><td>Ở nhà một mình, con cháu đi làm ở khu công nghiệp; người gọi tự xưng công an, đòi chuyển tiền</td><td>Hoảng, bị giục, mắt kém, gõ chậm</td><td>Chữ từ 16–20px, nút chính cao 60px trở lên; thẻ khẩn cấp “Đang bị gọi đòi tiền?”; 4 câu Có/Không sau cuộc gọi; hỏi người thân một chạm; nút loa đọc to kết quả, “Đọc số” thay cho gõ</td></tr>
+<tr><td>Học sinh THPT nhận tin “việc nhẹ lương cao”</td><td>Tin tuyển cộng tác viên chốt đơn qua mạng xã hội</td><td>Tò mò, chưa biết chiêu bắt nộp tiền trước</td><td>Dán tin nhắn để phân tích dấu hiệu; bài học 1 phút dạng thẻ; bài kiểm tra 5 câu có chấm điểm và huy hiệu</td></tr>
+<tr><td>Đội thanh niên tình nguyện xã, phường</td><td>Đi tuyên truyền ở khu phố, nhà văn hóa</td><td>Không biết tuần này bà con đang bị lừa kiểu gì, ở đâu</td><td>Thống kê theo kiểu lừa đảo, bản đồ ô theo phường, kiểu mới nổi trong tuần, chia sẻ cảnh báo vào nhóm Zalo</td></tr>
+</table>
+<p><b>Phân quyền.</b> Người dân (người lớn tuổi, học sinh) không cần đăng nhập: kiểm tra, báo cáo, học. Đội tình nguyện và cán bộ cơ sở vào bằng mã đội do phường cấp (C0): xem thống kê và duyệt báo cáo (C4); chỉ báo cáo đã duyệt mới khiến một số bị xếp “Nguy hiểm”. Việc cấp mã đội và cập nhật danh bạ số chính thức thuộc quản trị, để giai đoạn sau.</p>
+<p><b>Nguyên tắc thiết kế.</b> Ít chữ: tiêu đề tối đa 4 từ, nút tối đa 3 từ. Ba mức kết quả thể hiện bằng cả màu, hình biểu tượng và chữ. Chưa đủ dữ liệu thì báo “Nghi ngờ”, không bao giờ báo “An toàn”. Ứng dụng chỉ xin một quyền là micro và nói rõ không đọc danh bạ, tin nhắn, cuộc gọi. Màu chủ đạo lấy theo biểu trưng tỉnh Đồng Nai (xanh #344D9C, điểm nhấn vàng #FFCE02). Biểu trưng của tỉnh được đặt ở màn chào, màn chọn vai trò và đầu trang chủ để thể hiện địa phương triển khai; màn chào ghi rõ đây là sản phẩm dự thi.</p>
+
+<h2>(b) Luồng chính</h2>
+<ol>
+<li><b>00. Màn chào → 0. Chọn vai trò → 0b. Quyền riêng tư</b> (hiện một lần).</li>
+<li><b>A1. Trang chủ</b> (danh sách “Gần đây” như một ứng dụng nhắn tin): bấm ô tìm kiếm.</li>
+<li><b>A2. Kiểm tra nhanh:</b> chọn Điện thoại, Đường dẫn hoặc Tài khoản; nhập bằng bàn phím số, dán, hoặc đọc số; bấm “Kiểm tra”.</li>
+<li><b>A3. Kết quả kiểm tra:</b> Nguy hiểm, Nghi ngờ hoặc An toàn, kèm 2 lý do ngắn; bấm “Hỏi người thân”.</li>
+<li><b>A4. Hỏi người thân:</b> xem tin nhắn soạn sẵn, bấm “Gửi cho Lan” hoặc “Gọi điện”; màn chờ nhắc “Đừng chuyển tiền”.</li>
+</ol>
+<p>Từ trang chủ tới kết quả là 2 chạm, tới người thân là 3 chạm. Ba đối tượng có ba lối vào riêng. <b>A – Người lớn tuổi:</b> ngoài luồng trên còn có khẩn cấp (A5 → A6 trả lời 4 câu → kết quả) và đọc số bằng giọng nói (A7). <b>B – Học sinh:</b> B1 trang chủ → B2 dán tin nhắn → B3 phân tích dấu hiệu → B4 báo cáo ẩn danh; B5 bài học → B6 thẻ → B7 bài kiểm tra → B8 điểm. <b>C – Đội tình nguyện:</b> C0 nhập mã đội → C1 trang chủ → C2 điểm nóng và kiểu lừa đảo, C3 kiểu mới trong tuần, C4 duyệt báo cáo.</p>
+<table>
+<tr><th style="width:46%">Màn bắt buộc của đề</th><th>Khung trong PDF</th></tr>
+<tr><td>Kiểm tra nhanh số điện thoại, đường dẫn, số tài khoản; kết quả 3 mức kèm lý do</td><td>A2 (số điện thoại, số tài khoản), B2 (tin nhắn, đường dẫn), A2a, A2b, A3 (ba khung)</td></tr>
+<tr><td>Báo cáo một trường hợp lừa đảo</td><td>B4, B4a, B4b</td></tr>
+<tr><td>Nút “Hỏi người thân” gửi cho người được chỉ định trước</td><td>A4 (danh bạ, soạn tin), A4a, A4b, A4c, A8 (màn gọi, mô phỏng trình gọi của máy)</td></tr>
+<tr><td>Bài học ngắn 1 phút theo tình huống</td><td>B5, B6 (thẻ 1, thẻ 2)</td></tr>
+<tr><td>Bài kiểm tra nhận diện có chấm điểm</td><td>B7 (ba khung), B8</td></tr>
+<tr><td>Màn đội tình nguyện thống kê kiểu lừa đảo tại địa phương</td><td>C1, C2, C2a, C3, C4, C5</td></tr>
+<tr><td>Điểm cộng: AI phân tích tin nhắn; giọng nói; kênh Công an</td><td>B3; A7, A7a, A7b và nút loa đọc to ở A3, B3; nút “Gọi 113” ở A4 và dòng “Dự kiến chuyển Công an (mô phỏng)” ở B4b</td></tr>
+</table>
+<p><b>Trạng thái lỗi và trống đã thiết kế:</b> đang kiểm tra (A2a), mất mạng (A2b), chưa có người thân (A4a), chưa có quyền micro (A7b), thiếu thông tin (B4a), chọn sai (B7a), sai mã đội (C0a), chưa có dữ liệu (C2a), đã duyệt hết (C4a).</p>
+
+<h2>(c) Tính năng sẽ làm trong 24 giờ nếu vào chung kết (MVP)</h2>
+<p><b>Tính năng chính (chắc chắn làm).</b></p>
+<table>
+<tr><th style="width:19%">Nhóm</th><th>Tính năng</th><th style="width:17%">Màn</th></tr>
+<tr><td>Chung</td><td>Chọn vai trò và phường; màn quyền riêng tư (chỉ xin quyền micro); trang cá nhân</td><td>00, 0, 0b, 0c, 0d</td></tr>
+<tr><td rowspan="3">A. Người lớn tuổi</td><td>Kiểm tra nhanh số điện thoại, số tài khoản; kết quả 3 mức kèm lý do; đọc to kết quả</td><td>A1, A2, A3</td></tr>
+<tr><td>Người thân: danh bạ người tin cậy, gửi tin soạn sẵn, gọi điện; gọi nhanh đường dây nóng 113 và 156</td><td>A4</td></tr>
+<tr><td>Khẩn cấp “Đang bị gọi đòi tiền?” và 4 câu Có/Không sau cuộc gọi lạ</td><td>A5, A6</td></tr>
+<tr><td rowspan="3">B. Học sinh</td><td>Dán tin nhắn hoặc đường dẫn; phân tích dấu hiệu bằng bộ từ khóa</td><td>B1, B2, B3</td></tr>
+<tr><td>Báo cáo ẩn danh một trường hợp lừa đảo</td><td>B4</td></tr>
+<tr><td>3 bài học 1 phút; bài kiểm tra 5 câu có chấm điểm và huy hiệu</td><td>B5–B8</td></tr>
+<tr><td rowspan="2">C. Đội tình nguyện</td><td>Vào bằng mã đội; số liệu tháng, bản đồ ô theo phường, biểu đồ kiểu lừa đảo, kiểu mới trong tuần; chia sẻ cảnh báo vào nhóm Zalo</td><td>C0–C3</td></tr>
+<tr><td>Duyệt báo cáo của người dân trước khi đưa vào dữ liệu kiểm tra</td><td>C4</td></tr>
+</table>
+<p><b>Làm thêm nếu còn thời gian.</b></p>
+<table>
+<tr><th style="width:36%">Tính năng</th><th>Ghi chú</th></tr>
+<tr><td>Phân tích tin nhắn bằng mô hình ngôn ngữ</td><td>Thay cho bộ từ khóa ở B3; mất mạng hoặc lỗi thì quay về bộ từ khóa</td></tr>
+<tr><td>Đọc số bằng giọng nói (A7)</td><td>Chạy tốt trên Chrome Android; máy không hỗ trợ thì ẩn nút “Đọc số”</td></tr>
+<tr><td>Thẻ cảnh báo dạng ảnh</td><td>Để đội tình nguyện gửi vào nhóm Zalo thay cho đoạn chữ</td></tr>
+<tr><td>Thông báo kiểu lừa đảo mới theo phường</td><td>Người dân nhận cảnh báo khi phường mình có kiểu mới</td></tr>
+</table>
+<p><b>Giai đoạn sau:</b> kết nối kênh tiếp nhận tin báo của Công an (bản 24 giờ là mô phỏng); đóng gói thành Zalo Mini App; màn quản trị để cấp mã đội và cập nhật danh bạ số chính thức. Ước lượng phần chắc chắn làm: khoảng 34 giờ làm việc của hai người. Thiết kế đã bỏ những thứ không kịp hoặc không làm được: ghi âm cuộc gọi, tải ảnh lên, đăng nhập bằng tài khoản, thư viện bản đồ.</p>
+
+<h2>(d) Kiến trúc và công nghệ dự kiến</h2>
+<ul>
+<li><b>Ứng dụng web chạy trên điện thoại (PWA):</b> React + Vite + Tailwind; mở bằng mã QR hoặc đường dẫn, không cần cài từ chợ ứng dụng. 48 màn dùng lại khoảng 14 thành phần.</li>
+<li><b>Dữ liệu:</b> ba bảng trên Supabase (Postgres): danh sách số, đường dẫn, tài khoản đã được duyệt cùng danh bạ số chính thức của phường; bảng báo cáo (chờ duyệt, đã duyệt); bảng mã đội. Vai trò, phường, người thân, lịch sử lưu ngay trên máy nên không cần tài khoản.</li>
+<li><b>Chấm mức rủi ro:</b> có trong danh sách đã được đội tình nguyện duyệt thì “Nguy hiểm”; có trong danh bạ chính thức thì “An toàn”; còn lại “Nghi ngờ”. Lý do ghép từ kiểu lừa đảo và số lượt báo cáo.</li>
+<li><b>AI và giọng nói:</b> bộ từ khóa chạy ngay trên máy để tô cụm từ đáng ngờ; nếu kịp thì gọi mô hình ngôn ngữ qua một hàm phía máy chủ. Đọc to và nhận giọng nói dùng Web Speech API có sẵn của trình duyệt.</li>
+<li><b>Nhắn và gọi:</b> liên kết <i>sms:</i> và <i>tel:</i> mở ứng dụng tin nhắn và trình quay số của máy (người thân, 113, 156); ứng dụng không tự làm tổng đài gọi thoại. Bản đồ ô và biểu đồ dựng bằng CSS.</li>
+</ul>
+<p><b>Triển khai tại xã, phường, trường học:</b> dán mã QR ở nhà văn hóa và bảng tin trường; đội tình nguyện dùng màn thống kê trong buổi sinh hoạt khu phố; danh bạ số chính thức do xã, phường cung cấp.</p>
+
+<h2>(e) Công cụ AI đã dùng</h2>
+<table>
+<tr><th style="width:30%">Công cụ</th><th>Dùng vào việc gì</th></tr>
+<tr><td>Antigravity + Figma MCP</td><td>Dựng bảng màu và bản giao diện đầu tiên trên Figma (trang đầu tiên trong file, không dùng để nộp)</td></tr>
+<tr><td>Claude (Claude Code) + Figma MCP</td><td>Rà soát bản đầu theo tiêu chí chấm; đề xuất hướng thiết kế lại; dựng mockup HTML; viết mã dựng 48 khung và nối prototype trên Figma (trang “V3 – Gọn, 3 đối tượng”); soạn nháp thuyết minh này</td></tr>
+<tr><td>[Công cụ khác nếu có]</td><td>[Việc đã dùng, ví dụ đọc đề bằng OCR]</td></tr>
+</table>
+<p>Thành viên đội quyết định yêu cầu, hướng thiết kế, tính năng giữ hay bỏ, và duyệt kết quả cuối. Thiết kế không dùng ảnh chụp; biểu tượng lấy từ bộ mã nguồn mở Lucide (giấy phép ISC); font Be Vietnam Pro (giấy phép OFL); biểu trưng tỉnh Đồng Nai thuộc UBND tỉnh, tệp lấy từ Wikipedia tiếng Việt. Thiết kế không sao chép giao diện sản phẩm có sẵn.</p>
+</body></html>
