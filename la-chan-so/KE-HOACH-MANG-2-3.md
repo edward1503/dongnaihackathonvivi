@@ -2,7 +2,7 @@
 
 Đội 18 · Lá chắn số · bản MVP 24 giờ. Mảng 1 và 4: Hoàng. Mảng 2 và 3: Tún. Mảng 5 và 6: Đức.
 
-Tài liệu này là **kế hoạch bằng chữ, chưa có mã**. Mã viết trong 24 giờ chung kết. Nếu BTC xác nhận được chuẩn bị gì trước thì cập nhật lại tài liệu này.
+Mã đã có: máy chủ trong [`server/`](server/README.md), app React trong [`app/`](app/README.md). Đội hỏi BTC xem có được mang mã viết trước vào chung kết không; nếu không được thì chỉ dùng tài liệu này làm kế hoạch.
 
 Mọi màn nhắc tới đều có trong `screens/` và bản mẫu https://la-chan-so-doi18.vercel.app. Làm đúng như thiết kế, không thêm màn mới.
 
@@ -61,13 +61,14 @@ Dùng chung cho kiểm tra nhanh (A07a–d), phân tích tin nhắn (A05b), phâ
 | `kind` | `phone` · `link` · `account` · `message` · `call` | loại đầu vào |
 | `display` | chuỗi | giá trị hiện trên màn, đã che (ví dụ `1903 xxxx 5678`) |
 | `level` | `danger` · `suspicious` · `safe` · `unknown` | 4 mức, xem bảng dưới |
-| `reason` | `null` · `insufficient` · `offline` | `insufficient` mở E01d, `offline` mở E01c |
+| `reason` | `null` · `insufficient` · `otp` | `insufficient` mở E01d; `otp`: tin có mã xác thực, không gửi AI (cũng hiện ở E01d). Mất mạng thì app tự mở E01c |
 | `scamType` | mã ở mục 2.4 hoặc `null` | để mở đúng truyện (H1) và gom thống kê (W1) |
 | `scamLabel` | chuỗi | ví dụ "Giả danh công an" |
 | `headline` | chuỗi | câu lớn dưới mức độ, ví dụ "14 người đã báo số này giả danh công an." |
+| `note` | chuỗi hoặc `null` | dòng thứ hai, ví dụ "Điều đó không có nghĩa là an toàn." (A07c, A07d) |
 | `why` | mảng chuỗi | mục "Vì sao?" |
 | `todo` | mảng chuỗi | mục "Bạn nên làm gì" |
-| `signs` | mảng `{text, quote}` | dấu hiệu AI thấy; `quote` là đoạn nguyên văn trong `maskedText` để tô đỏ (A05b, A04b) |
+| `signs` | mảng `{text, quotes}` | dấu hiệu AI thấy; `quotes` là các đoạn nguyên văn trong `maskedText` để tô đỏ (A05b, A04b) |
 | `maskedText` | chuỗi hoặc `null` | tin nhắn hoặc bản chép lời đã che |
 | `reports` | `{count, last7d, lastAt, verified}` | số báo cáo đã duyệt còn hạn |
 | `source` | `directory` · `community` · `heuristic` · `ai` · `fallback` | kết quả đến từ đâu |
@@ -90,7 +91,7 @@ Ví dụ khớp màn A07a:
   "headline": "14 người đã báo số này giả danh công an.",
   "why": ["14 báo cáo trong 7 ngày, gần nhất hôm qua", "Tự xưng cán bộ điều tra, đòi chuyển tiền", "Đội tình nguyện đã xác nhận"],
   "todo": ["Cúp máy, không gọi lại.", "Không chuyển tiền, không đọc mã xác thực (OTP)."],
-  "signs": [], "maskedText": null,
+  "note": null, "signs": [], "maskedText": null,
   "reports": {"count": 14, "last7d": 14, "lastAt": "2026-11-23T16:20:00+07:00", "verified": true},
   "source": "community", "confidence": 0.94
 }
@@ -172,7 +173,7 @@ Danh sách mẫu lấy từ `prototype/mock-data.js` (`DANGER_NUM`, `OFFICIAL_NU
 - Chờ AI tối đa khoảng 6 giây, quá thì dùng kết quả dự phòng.
 - **Kết quả dự phòng:** bảng trả lời sẵn cho các mẫu demo (tin "việc nhẹ lương cao", tin "khóa trong 24h", "Alo, gọi lại anh nhé"), đánh `source: fallback`. Mất mạng hay hết lượt AI thì demo vẫn chạy.
 - **Chặn trên máy chủ:** AI trả `safe` thì hạ thành `unknown`. Tin quá ngắn hoặc không có dấu hiệu thì trả `unknown` kèm `reason: insufficient` (E01d "AI không đoán bừa").
-- Lời dặn cho AI viết trong giờ thi, gồm: chỉ phân tích dấu hiệu lừa đảo; trả `quote` đúng nguyên văn; giải thích bằng lời dễ hiểu cho người lớn tuổi; không bao giờ khuyên chuyển tiền hay đọc mã xác thực.
+- Lời dặn cho AI (đã viết trong `server/lcs/ai.py`): chỉ phân tích dấu hiệu lừa đảo; trả `quotes` đúng nguyên văn; giải thích bằng lời dễ hiểu cho người lớn tuổi; không bao giờ khuyên chuyển tiền hay đọc mã xác thực.
 
 ### 3.4 Chép lời và phân tích cuộc gọi (S3)
 
@@ -213,7 +214,7 @@ Tách từ `ds.css`, `icons.js` và các màn HTML: `Icon` (từ `icons.js`), `A
 |---|---|---|---|
 | U1 | A01a trang chủ đơn giản · A01b đầy đủ | hồ sơ mẫu; `GET /api/stats` cho "Kiểu lừa đảo mới ở khu vực bạn" | Đơn giản: chữ lớn, tối đa 3 lựa chọn, đọc to, chuyển động chậm (D04). "Nói với Lá chắn" gọi cầu nối Android |
 | U2 | A06a → A07a, A07b, A07c, A07d | `POST /api/check` | Chọn màn theo `level`; "Từ nhật ký gọi" gọi cầu nối; "Vừa kiểm tra" lưu trên máy |
-| U3 | A06b → A05b | `POST /api/analyze/message` | Tô đỏ từng `signs[].quote` trong `maskedText`; "Báo cho cộng đồng" mở A09b |
+| U3 | A06b → A05b | `POST /api/analyze/message` | Tô đỏ từng `signs[].quotes` trong `maskedText`; "Báo cho cộng đồng" mở A09b |
 | U4 | A08a → A08b → A08c | S5: gửi `ask.sent`, nghe `ask.seen`, `ask.reply` | A08c đọc to lời Minh (cầu nối hoặc giọng đọc của trình duyệt); "Đã chặn số" gọi cầu nối |
 | U5 | A09a → A09b → A09c | `POST /api/reports` | A09c lấy `ai.scamLabel`, `confidence`, `reporterCount` từ phản hồi |
 | U6 | E01b · E01c · E01d | | E01b khi chưa có người thân; E01c khi gọi API thất bại hoặc mất mạng; E01d khi `reason: insufficient` |

@@ -21,6 +21,8 @@ Phải mở qua `may-chu.py` (không mở thẳng tệp html): máy chủ này t
 |---|---|
 | `screens/` | 53 màn thiết kế bằng HTML, dùng chung `ds.css` (design system), `icons.js`, `motion.css`, `motion.js` |
 | `prototype/` | Bản mẫu bấm được: vỏ `index.html`, chỗ bấm `hotspots.js`, dữ liệu giả lập `mock-data.js`, gọi video `video-call.html`, giọng `audio/` |
+| `server/` | Máy chủ và AI (Mảng 2): FastAPI, kiểm tra nhanh, phân tích tin nhắn và cuộc gọi, đồng bộ ba máy, báo cáo. Xem `server/README.md` |
+| `app/` | App React (Mảng 3), 18 màn của bà Hoa và Vy, chạy trong WebView hoặc trình duyệt. Xem `app/README.md` |
 | `assets/` | Tranh truyện, linh vật Bé Nai, phông chữ |
 | `vendor/vlearn-avatar/` | Bộ avatar khớp miệng (LiteAvatar) cho nhân vật chị Lan. Xem điều khoản của bộ avatar trước khi dùng công khai |
 | `export/` | Bản xuất từng màn: `svg/` (kéo vào Figma), `png/` (bản mẫu dùng làm ảnh dự phòng) |
