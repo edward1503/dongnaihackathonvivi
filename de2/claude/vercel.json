@@ -2,6 +2,14 @@
   "redirects": [
     { "source": "/", "destination": "/slides/", "permanent": false },
     { "source": "/ux", "destination": "/ux/ho-so-ux.html", "permanent": false },
-    { "source": "/ux/", "destination": "/ux/ho-so-ux.html", "permanent": false }
+    { "source": "/ux/", "destination": "/ux/ho-so-ux.html", "permanent": false },
+    { "source": "/prototype", "destination": "/slides/", "permanent": false },
+    { "source": "/prototype/", "destination": "/slides/", "permanent": false },
+    {
+      "source": "/prototype/index.html",
+      "missing": [{ "type": "query", "key": "embed", "value": "1" }],
+      "destination": "/slides/",
+      "permanent": false
+    }
   ]
 }
