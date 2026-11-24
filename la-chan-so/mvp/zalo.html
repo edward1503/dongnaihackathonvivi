@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lá chắn số · Phía người thân (Zalo)</title>
+<link rel="stylesheet" href="../ds.css">
+<script src="../icons.js"></script>
+<style>
+  /* Bản chạy thật: dùng lại ds.css nhưng cho cuộn và co theo màn hình */
+  body{display:block;padding:0;background:#D9DEE8;min-height:100vh}
+  .stage{display:flex;gap:32px;justify-content:center;align-items:flex-start;padding:16px;flex-wrap:wrap}
+  .phone{width:min(100%,400px);height:min(100vh - 32px,840px);border-radius:28px;border:1px solid var(--outline);background:var(--bg)}
+  .content{overflow:auto}
+  .view{display:none;flex:1;min-height:0;flex-direction:column}.view.on{display:flex}
+  .chat-head{height:56px;padding:0 16px;display:flex;align-items:center;gap:12px;flex:none;background:var(--brand);color:#fff}
+  .chat-logo{width:36px;height:36px;border-radius:18px;background:#fff;color:var(--brand);display:flex;align-items:center;justify-content:center;flex:none}
+  .chat-body{flex:1;min-height:0;overflow:auto;background:#E8EEF7;padding:16px;display:flex;flex-direction:column;gap:12px}
+  .msg-card{width:300px;max-width:100%;align-self:flex-start;background:#fff;border:1px solid var(--outline-2);border-radius:16px;display:flex;flex-direction:column}
+  .msg-head{height:44px;margin:-1px -1px 0 -1px;padding:0 14px;border-radius:16px 16px 0 0;color:#fff;display:flex;align-items:center;gap:8px;flex:none}
+  .msg-head.danger{background:var(--danger)}.msg-head.warn{background:var(--warn)}.msg-head.brand{background:var(--brand)}
+  .msg-body{padding:14px;display:flex;flex-direction:column;gap:10px}
+  .bubble{align-self:flex-end;max-width:80%;background:var(--brand);color:#fff;border-radius:16px 16px 4px 16px;padding:10px 14px;font-size:14px;line-height:20px}
+  .oa-bar{height:44px;display:flex;align-items:center;flex:none;background:#fff;border-bottom:1px solid var(--outline-2)}
+  .oa-bar .it{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;font-size:14px;line-height:20px;font-weight:600;color:var(--ink-2)}
+  .oa-quick{height:52px;padding:0 12px;display:flex;align-items:center;gap:8px;flex:none;background:#E8EEF7;overflow:auto}
+  .q{height:36px;padding:0 14px;border-radius:18px;background:#fff;border:1px solid var(--outline-2);display:flex;align-items:center;font-size:13px;line-height:18px;font-weight:600;color:var(--ink);flex:none;cursor:pointer}
+  .chat-input{height:56px;padding:0 16px;display:flex;align-items:center;gap:12px;flex:none;background:#fff;border-top:1px solid var(--outline-2)}
+  .chat-field{flex:1;height:36px;border-radius:18px;background:var(--surface-2);padding:0 14px;display:flex;align-items:center;font-size:14px;color:var(--ink-3)}
+  .mini-bar{height:48px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;flex:none;background:#fff;border-bottom:1px solid var(--outline-2)}
+  .mini-title{font-size:16px;line-height:24px;font-weight:600}
+  .mini-pill{height:32px;border-radius:16px;border:1px solid var(--outline);padding:0 10px;display:flex;align-items:center;gap:8px;flex:none;background:#fff}
+  .mini-sep{width:1px;height:16px;background:var(--outline)}
+  .tl-item{display:flex;align-items:stretch;gap:12px}
+  .tl-rail{width:10px;flex:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding-top:3px}
+  .tl-rail .dot{width:10px;height:10px;border-radius:5px}
+  .tl-line{width:2px;flex:1;border-radius:1px;background:var(--outline-2)}
+  .tl-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;padding-bottom:12px}
+  .tl-item.last .tl-text{padding-bottom:0}
+  .btn{cursor:pointer;user-select:none}.btn:active{opacity:.85}.btn[disabled],.btn.off{opacity:.5;pointer-events:none}
+  .field{width:100%;border:1.5px solid var(--outline);border-radius:14px;padding:12px 14px;font:inherit;font-size:16px;line-height:24px;background:#fff;color:var(--ink);outline:none}
+  .field:focus{border-color:var(--brand)}
+  textarea.field{min-height:84px;resize:vertical}
+  .toast{position:absolute;left:16px;right:16px;bottom:36px;background:var(--navy);color:#fff;border-radius:12px;padding:12px 14px;font-size:14px;line-height:20px;display:none;z-index:5}
+  .toast.on{display:block}
+  .ctl{width:300px;display:flex;flex-direction:column;gap:12px}
+  .ctl .card{display:flex;flex-direction:column;gap:10px}
+  .hist-row{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--outline-2)}
+  .empty{padding:24px 8px;text-align:center;color:var(--ink-2)}
+  .frame.phone{position:relative}
+</style>
+</head>
+<body>
+<div class="stage">
+
+<div class="frame phone" id="phone">
+  <div class="statusbar bg-brand on-dark" id="sb"><span id="clock">10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+
+  <!-- ===== Z01a: tin trong Zalo ===== -->
+  <div class="view on" id="v-chat">
+    <div class="chat-head">
+      <i class="ic" data-i="arrow-left"></i>
+      <div class="chat-logo"><i class="ic s20" data-i="shield-check"></i></div>
+      <div class="col grow">
+        <div class="row gap-8"><div style="font-size:16px;line-height:20px;font-weight:700">Lá chắn số</div><i class="ic s16" data-i="check-circle" style="color:#FCD34D"></i></div>
+        <div style="font-size:12px;line-height:16px;font-weight:500;color:#DBEAFE">Official Account · mô phỏng</div>
+      </div>
+      <i class="ic" data-i="more"></i>
+    </div>
+    <div class="oa-bar">
+      <div class="it"><i class="ic s18" data-i="check" style="color:var(--brand)"></i><div>Đã quan tâm</div></div>
+      <div class="it"><i class="ic s18" data-i="bell"></i><div>Đang bật thông báo</div></div>
+    </div>
+    <div class="chat-body" id="feed"></div>
+    <div class="oa-quick">
+      <div class="q" id="q-call">Gọi mẹ ngay</div>
+      <div class="q" id="q-hist">Lịch sử cảnh báo</div>
+      <div class="q" id="q-report">Báo số lạ</div>
+    </div>
+    <div class="chat-input"><i class="ic muted" data-i="plus"></i><div class="chat-field">Tin nhắn</div><i class="ic c-brand" data-i="send"></i></div>
+  </div>
+
+  <!-- ===== Mini App ===== -->
+  <div class="view" id="v-mini">
+    <div class="mini-bar">
+      <div class="mini-title" id="mini-title">Lá chắn số · Mini App</div>
+      <div class="mini-pill"><i class="ic s18" data-i="more"></i><div class="mini-sep"></div><i class="ic s18" data-i="x" id="btn-close" style="cursor:pointer"></i></div>
+    </div>
+    <div class="content" id="mini"></div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <div class="gesture"><div class="pill"></div></div>
+</div>
+
+<!-- Bảng điều khiển cho người trình diễn (không thuộc sản phẩm) -->
+<div class="ctl">
+  <div class="card">
+    <div class="t-over muted">Điều khiển trình diễn</div>
+    <div class="t-label muted">Phần này mô phỏng máy của bà Hoa gửi lên máy chủ. Khi mảng Android xong, cảnh báo thật sẽ thay nút này.</div>
+    <div class="btn outline sm" id="sim-danger"><i class="ic s18" data-i="alert-oct"></i>Bà Hoa: cuộc gọi nguy hiểm</div>
+    <div class="btn outline sm" id="sim-warn"><i class="ic s18" data-i="alert"></i>Bà Hoa: tin nhắn nghi ngờ</div>
+    <div class="btn ghost sm" id="sim-reset">Đặt lại dữ liệu demo</div>
+  </div>
+  <div class="card ai">
+    <span class="ai-tag"><i class="ic s14" data-i="sparkles"></i>Quyền riêng tư</span>
+    <div class="t-label">Minh chỉ thấy mức cảnh báo và bản tóm tắt đã che số dài. Không có nội dung cuộc gọi hay tin nhắn gốc.</div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const post = (u, b) => fetch(u, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(b || {}) }).then(r => r.json());
+const hm = iso => new Date(iso).toTimeString().slice(0, 5);
+let alerts = [], broadcasts = [], cur = null, lastRep = null;
+
+function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('on'), 2600); }
+function show(view) {
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('on', v.id === 'v-' + view));
+  const mini = view === 'mini';
+  $('#sb').className = 'statusbar on-dark bg-brand'; if (mini) $('#sb').className = 'statusbar bg-white';
+  paintIcons();
+}
+const toneOf = a => a.level === 'danger' ? ['Nguy hiểm', 'alert-oct', 'danger'] : ['Nghi ngờ', 'alert', 'warn'];
+
+/* ---------- Z01a: luồng tin ---------- */
+function renderFeed() {
+  const items = [];
+  alerts.forEach(a => items.push({ at: a.at, html: alertCard(a) + (a.reply ? `<div class="bubble">${esc(a.reply.text)}</div><div class="t-cap muted" style="align-self:flex-end">${hm(a.reply.at)} · Đã gửi tới mẹ</div>` : '') }));
+  broadcasts.forEach(b => items.push({ at: b.at, html: `<div class="msg-card"><div class="msg-head brand"><i class="ic s20" data-i="megaphone"></i><div class="t-label bold">Cảnh báo từ đội tình nguyện</div></div><div class="msg-body"><div class="t-h2">${esc(b.title)}</div><div class="t-label">${esc(b.body)}</div></div></div>` }));
+  items.sort((x, y) => new Date(x.at) - new Date(y.at));
+  $('#feed').innerHTML = items.length
+    ? '<span class="chip solid-white" style="align-self:center">Hôm nay</span>' + items.map(i => i.html).join('')
+    : '<div class="empty">Chưa có cảnh báo nào. Khi Lá chắn phát hiện điều đáng ngờ trên máy mẹ, tin sẽ hiện ở đây.</div>';
+  $('#feed').scrollTop = $('#feed').scrollHeight;
+  paintIcons($('#feed'));
+}
+function alertCard(a) {
+  const [label, icon, tone] = toneOf(a);
+  return `<div class="msg-card" data-id="${a.id}">
+    <div class="msg-head ${tone}"><i class="ic s20" data-i="shield-alert"></i><div class="t-label bold">Cảnh báo lừa đảo · ${label}</div></div>
+    <div class="msg-body">
+      <div class="t-h2">${esc(a.who)} vừa nhận ${a.level === 'danger' ? 'cuộc gọi' : 'tin nhắn'} nghi lừa đảo</div>
+      <div class="row gap-8"><i class="ic s16 muted" data-i="phone"></i><div class="t-label">Số: ${esc(a.number)}</div></div>
+      <div class="row gap-8"><i class="ic s16 muted" data-i="message-alert"></i><div class="t-label">Kịch bản: ${esc(a.scenario.toLowerCase())}</div></div>
+      ${a.askedTransfer ? '<div class="row gap-8"><i class="ic s16 muted" data-i="alert"></i><div class="t-label">Có yêu cầu chuyển tiền</div></div>' : ''}
+      ${a.reply ? '' : `<div class="btn danger block" data-act="quick" style="padding:0 8px;font-size:15px">Mẹ đừng chuyển, con gọi ngay</div>`}
+      <div class="btn outline block" data-act="open">Xem chi tiết</div>
+    </div></div>`;
+}
+$('#feed').addEventListener('click', async e => {
+  const card = e.target.closest('.msg-card[data-id]'); const act = e.target.closest('[data-act]');
+  if (!card || !act) return;
+  cur = alerts.find(a => a.id === card.dataset.id);
+  if (act.dataset.act === 'quick') { await sendReply('dung-chuyen'); } else openDetail();
+});
+
+/* ---------- Z01b: Mini App · chi tiết ---------- */
+function openDetail() {
+  if (!cur) cur = alerts[0]; if (!cur) return toast('Chưa có cảnh báo nào');
+  $('#mini-title').textContent = 'Lá chắn số · Mini App'; renderDetail(); show('mini');
+}
+function renderDetail() {
+  const a = cur; const [label, icon, tone] = toneOf(a);
+  const dotTone = t => t === 'danger' ? 'danger' : t === 'warn' ? 'warn' : t === 'safe' ? 'safe' : '';
+  $('#mini').innerHTML = `
+    <div class="card ${tone} row gap-12">
+      <div class="icon-box solid-${tone === 'danger' ? 'danger' : 'brand'}" style="${tone === 'warn' ? 'background:var(--warn)' : ''}"><i class="ic" data-i="${icon}"></i></div>
+      <div class="col grow"><div class="t-h2 c-${tone}-ink">${label}</div><div class="t-cap">Hôm nay ${hm(a.at)} · ${a.level === 'danger' ? 'cuộc gọi lạ' : 'tin nhắn lạ'}</div></div>
+    </div>
+    <div class="row gap-12">
+      <div class="avatar amber">${esc(a.who.slice(-1))}</div>
+      <div class="col grow"><div class="t-label bold">${esc(a.who)}</div><div class="t-cap muted">Đang dùng Lá chắn · chế độ đơn giản</div></div>
+    </div>
+    <div class="card col gap-12">
+      <div class="t-over muted">Diễn biến</div>
+      <div class="col">${a.timeline.map((t, i, arr) => `
+        <div class="tl-item ${i === arr.length - 1 ? 'last' : ''}">
+          <div class="tl-rail"><span class="dot ${dotTone(t.tone)}"></span>${i < arr.length - 1 ? '<div class="tl-line"></div>' : ''}</div>
+          <div class="tl-text"><div class="t-cap bold">${esc(t.t)}</div><div class="t-label">${esc(t.text)}</div></div>
+        </div>`).join('')}</div>
+    </div>
+    <div class="card ai col gap-8">
+      <span class="ai-tag"><i class="ic s14" data-i="sparkles"></i>Tóm tắt của AI (đã che thông tin riêng)</span>
+      <div class="t-label">${esc(a.summary)}</div>
+    </div>
+    <div class="col gap-10 mt-auto">
+      <div class="btn safe block" id="b-call"><i class="ic s20" data-i="phone"></i>Gọi mẹ ngay</div>
+      <div class="btn danger block" id="b-stop"><i class="ic s20" data-i="send"></i>Nhắn: Mẹ đừng chuyển!</div>
+      <div class="btn outline block" id="b-known">An toàn, đây là người quen</div>
+    </div>`;
+  paintIcons($('#mini'));
+  $('#b-call').onclick = callMom;
+  $('#b-stop').onclick = () => sendReply('dung-chuyen');
+  $('#b-known').onclick = () => sendReply('nguoi-quen');
+}
+async function callMom() {
+  if (!cur) cur = alerts[0]; if (!cur) return toast('Chưa có cảnh báo nào');
+  await post(`/api/alerts/${cur.id}/call`); toast('Đang gọi mẹ… (mô phỏng)');
+}
+
+/* ---------- Z01c: đã gửi ---------- */
+async function sendReply(choice) {
+  if (!cur) return;
+  const a = await post(`/api/alerts/${cur.id}/reply`, { choice }); cur = a; show('mini'); renderSent();
+}
+function renderSent() {
+  const r = cur.reply; const known = r.choice === 'nguoi-quen';
+  $('#mini').innerHTML = `
+    <div class="col acenter jcenter gap-8" style="padding:8px 0">
+      <div class="icon-box xl solid-safe"><i class="ic s48" data-i="check"></i></div>
+      <div class="t-h1 center mt-8">Đã gửi cho mẹ</div>
+      <div class="t-body muted center">${known ? 'Lá chắn sẽ hạ mức cảnh báo trên máy mẹ.' : 'Lời nhắn đang hiện to trên máy mẹ và được đọc thành tiếng.'}</div>
+    </div>
+    <div class="col gap-8" style="border:2px solid var(--ink);border-radius:20px;background:var(--safe-c);padding:16px">
+      <div class="t-over c-safe-ink">Trên máy mẹ lúc này</div>
+      <div style="font-size:20px;line-height:28px;font-weight:700">${esc(r.text)}</div>
+    </div>
+    <div class="card brand row gap-12">
+      <div class="icon-box solid-brand"><i class="ic" data-i="shield-check"></i></div>
+      <div class="t-label grow">Tuần này Lá chắn đã cảnh báo mẹ 3 cuộc gọi và 2 tin nhắn đáng ngờ.</div>
+    </div>
+    <div class="col gap-10 mt-auto">
+      <div class="btn safe block" id="s-call"><i class="ic s20" data-i="phone"></i>Gọi mẹ ngay</div>
+      <div class="btn outline block" id="s-report"><i class="ic s20" data-i="megaphone"></i>Báo số này cho cộng đồng</div>
+      <div class="btn ghost block" id="s-back">Về cuộc trò chuyện</div>
+    </div>`;
+  paintIcons($('#mini'));
+  $('#s-call').onclick = callMom;
+  $('#s-report').onclick = () => openReport(cur.number);
+  $('#s-back').onclick = () => { show('chat'); renderFeed(); };
+}
+
+/* ---------- Z3: báo số cho cộng đồng ---------- */
+function openReport(value = '') {
+  $('#mini-title').textContent = 'Báo cho cộng đồng'; show('mini');
+  $('#mini').innerHTML = `
+    <div class="t-h1">Báo số hoặc đường dẫn lạ</div>
+    <div class="t-label muted">Đội tình nguyện sẽ xem và gắn nhãn để người khác được cảnh báo. Không cần nêu tên bạn.</div>
+    <div class="col gap-8"><div class="t-label bold">Số điện thoại, đường dẫn hoặc tài khoản</div>
+      <input class="field" id="r-value" placeholder="Ví dụ: 0912 345 678" value="${esc(value)}" autocomplete="off"></div>
+    <div class="col gap-8"><div class="t-label bold">Chuyện gì đã xảy ra? (không bắt buộc)</div>
+      <textarea class="field" id="r-note" placeholder="Ví dụ: tự xưng công an, đòi chuyển tiền"></textarea></div>
+    <label class="row gap-10 top" style="cursor:pointer"><input type="checkbox" id="r-consent" checked style="width:20px;height:20px;margin-top:2px">
+      <span class="t-label">Tôi đồng ý gửi thông tin trên cho đội tình nguyện. Số dài sẽ được che trước khi gửi.</span></label>
+    <div class="t-cap c-danger" id="r-err" style="display:none"></div>
+    <div class="col gap-10 mt-auto">
+      <div class="btn primary block" id="r-send"><i class="ic s20" data-i="send"></i>Gửi báo cáo</div>
+      <div class="btn ghost block" id="r-back">Quay lại</div>
+    </div>`;
+  paintIcons($('#mini'));
+  $('#r-back').onclick = () => { show('chat'); renderFeed(); };
+  $('#r-send').onclick = async () => {
+    const v = $('#r-value').value.trim(), err = $('#r-err');
+    if (!v) { err.textContent = 'Bạn nhập số hoặc đường dẫn cần báo nhé.'; err.style.display = 'block'; return; }
+    if (!$('#r-consent').checked) { err.textContent = 'Cần bạn đồng ý thì mới gửi được.'; err.style.display = 'block'; return; }
+    const look = await fetch('/api/lookup?v=' + encodeURIComponent(v)).then(r => r.json());
+    const r = await post('/api/reports', { value: v, note: $('#r-note').value, source: 'zalo-minh' });
+    renderReported(r, look);
+  };
+}
+function renderReported(r, look) {
+  const auto = r.status === 'confirmed';
+  $('#mini').innerHTML = `
+    <div class="col acenter jcenter gap-8" style="padding:8px 0">
+      <div class="icon-box xl solid-safe"><i class="ic s48" data-i="check"></i></div>
+      <div class="t-h1 center mt-8">Đã gửi báo cáo</div>
+      <div class="t-body muted center">Cảm ơn bạn. Nhờ bạn mà người khác được cảnh báo sớm hơn.</div>
+    </div>
+    <div class="card ${auto ? 'danger' : 'warn'} col gap-6">
+      <div class="t-over muted">${esc(r.value)}</div>
+      <div class="row gap-8"><i class="ic s18 ${auto ? 'c-danger' : 'c-warn'}" data-i="${auto ? 'alert-oct' : 'alert'}"></i>
+        <div class="t-label bold">${auto ? 'AI đã xác nhận: ' + esc(r.aiGuess) : 'Đang chờ đội tình nguyện xem (' + r.count + ' người báo)'}</div></div>
+      ${look.level === 'danger' ? '<div class="t-cap">Số này đã có nhãn cảnh báo từ trước.</div>' : ''}
+    </div>
+    <div class="card ai"><span class="ai-tag"><i class="ic s14" data-i="sparkles"></i>AI phân loại trước</span>
+      <div class="t-label" style="margin-top:6px">Đoán: ${esc(r.aiGuess)} · độ tin cậy ${r.confidence}%</div></div>
+    <div class="col gap-10 mt-auto">
+      <div class="btn outline block" id="r-more">Báo thêm một số khác</div>
+      <div class="btn ghost block" id="r-back">Về cuộc trò chuyện</div>
+    </div>`;
+  paintIcons($('#mini'));
+  $('#r-more').onclick = () => openReport('');
+  $('#r-back').onclick = () => { show('chat'); renderFeed(); };
+}
+
+/* ---------- Lịch sử ---------- */
+function openHistory() {
+  $('#mini-title').textContent = 'Lịch sử cảnh báo'; show('mini');
+  $('#mini').innerHTML = alerts.length ? alerts.map((a, i) => { const [label, icon, tone] = toneOf(a); return `
+    <div class="card row gap-12" data-i="${i}" style="cursor:pointer"><div class="icon-box ${tone}"><i class="ic" data-i="${icon}"></i></div>
+      <div class="col grow"><div class="t-label bold">${label} · ${esc(a.scenario)}</div><div class="t-cap muted">${hm(a.at)} · ${esc(a.number)}${a.reply ? ' · đã nhắn mẹ' : ''}</div></div></div>`; }).join('')
+    : '<div class="empty">Chưa có cảnh báo nào.</div>';
+  paintIcons($('#mini'));
+  $('#mini').onclick = e => { const c = e.target.closest('[data-i]'); if (c && c.dataset.i !== undefined && c.classList.contains('card')) { cur = alerts[+c.dataset.i]; $('#mini-title').textContent = 'Lá chắn số · Mini App'; renderDetail(); } };
+}
+
+/* ---------- Gắn nút ---------- */
+$('#btn-close').onclick = () => { show('chat'); renderFeed(); };
+$('#q-call').onclick = callMom;
+$('#q-hist').onclick = openHistory;
+$('#q-report').onclick = () => openReport('');
+$('#sim-danger').onclick = () => post('/api/alerts', { level: 'danger', number: '0' + (900000000 + Math.floor(Math.random() * 99999999)), scenario: 'Giả danh công an' });
+$('#sim-warn').onclick = () => post('/api/alerts', { level: 'warn', scenario: 'Việc nhẹ lương cao', askedTransfer: false, summary: 'Tin nhắn mời làm việc nhẹ lương cao, yêu cầu nạp trước 200k để kích hoạt.', timeline: [{ t: new Date().toTimeString().slice(0, 5), text: 'Lá chắn tin nhắn lọc thấy dấu hiệu "nạp trước", "hoa hồng"', tone: 'warn' }] });
+$('#sim-reset').onclick = async () => { await post('/api/reset'); cur = null; await load(); show('chat'); };
+setInterval(() => $('#clock').textContent = new Date().toTimeString().slice(0, 5), 20000); $('#clock').textContent = new Date().toTimeString().slice(0, 5);
+
+/* ---------- Dữ liệu và đồng bộ ---------- */
+async function load() { alerts = await fetch('/api/alerts').then(r => r.json()); renderFeed(); }
+load();
+const es = new EventSource('/api/events');
+es.addEventListener('alert', e => { const a = JSON.parse(e.data); alerts.unshift(a); renderFeed(); if (!$('#v-chat').classList.contains('on')) toast('Có cảnh báo mới từ ' + a.who); });
+es.addEventListener('reply', e => { const { alertId, reply } = JSON.parse(e.data); const a = alerts.find(x => x.id === alertId); if (a) { a.reply = reply; renderFeed(); } });
+es.addEventListener('broadcast', e => { broadcasts.unshift(JSON.parse(e.data)); renderFeed(); });
+es.addEventListener('reset', () => { broadcasts = []; load(); });
+</script>
+</body>
+</html>
