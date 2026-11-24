@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>A08 – Hỏi người thân</title>
+<link rel="stylesheet" href="../ds.css">
+<script src="../icons.js"></script>
+<style>
+/* Dòng thời gian dọc: chấm 12px, vạch nối 2px là div riêng */
+.tl-row{display:flex;align-items:center;gap:12px}
+.tl-dot{width:12px;height:12px;border-radius:6px;flex:none;background:var(--ink-3)}
+.tl-dot.safe{background:var(--safe)}.tl-dot.brand{background:var(--brand)}
+.tl-line{width:2px;height:20px;margin:-6px 0 -6px 5px;border-radius:1px;background:var(--outline);flex:none}
+.tl-line.safe{background:var(--safe)}
+.answer{font-size:34px;line-height:42px;font-weight:700}
+</style>
+</head>
+<body>
+
+<!-- ============ A08a: soạn và gửi ============ -->
+<section class="shot">
+  <div class="shot-name">A08a – Hỏi người thân · Gửi (chữ lớn)</div>
+  <div class="frame phone lg" data-name="A08a-hoi-nguoi-than-gui">
+    <div class="statusbar"><span>10:43</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <i class="ic" data-i="arrow-left"></i>
+      <div class="title">Hỏi người thân</div>
+      <i class="ic c-brand" data-i="volume"></i>
+    </div>
+
+    <div class="content" style="padding-top:4px">
+      <div class="card row top gap-12">
+        <div class="avatar lgx">M</div>
+        <div class="col grow gap-2">
+          <div class="t-h2">Minh (con trai)</div>
+          <div class="t-cap muted">Nhận qua ứng dụng nhắn tin</div>
+          <span class="chip safe" style="align-self:flex-start;margin-top:6px"><i class="ic s14" data-i="check"></i>Đã ghép</span>
+        </div>
+      </div>
+
+      <div class="card row gap-12" style="padding:12px 16px">
+        <div class="avatar amber">L</div>
+        <div class="t-label semi grow">Lan (con gái)</div>
+        <span class="chip outline">Dự phòng</span>
+      </div>
+
+      <div class="card brand col gap-8">
+        <div class="t-over c-brand-ink">Tin sẽ gửi</div>
+        <div class="t-body c-ink">Mẹ vừa nhận cuộc gọi từ số 0912 345 678. Lá chắn báo <span class="bold c-danger-ink">NGUY HIỂM</span>: giả danh công an, đòi chuyển tiền. Con xem giúp mẹ.</div>
+      </div>
+
+      <div class="col gap-12 mt-auto">
+        <div class="btn primary xl block"><i class="ic" data-i="send"></i>Gửi cho Minh</div>
+        <div class="btn outline xl block"><i class="ic" data-i="phone"></i>Gọi điện cho Minh</div>
+      </div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ A08b: đã gửi, đang chờ ============ -->
+<section class="shot">
+  <div class="shot-name">A08b – Hỏi người thân · Đang chờ trả lời (chữ lớn)</div>
+  <div class="frame phone lg" data-name="A08b-hoi-nguoi-than-cho">
+    <div class="statusbar"><span>10:43</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <i class="ic" data-i="arrow-left"></i>
+      <div class="title">Hỏi người thân</div>
+      <i class="ic c-brand" data-i="volume"></i>
+    </div>
+
+    <div class="content" style="padding-top:4px">
+      <div class="col acenter" style="padding:36px 0 16px">
+        <div class="icon-box xl brand"><i class="ic s40" data-i="send"></i></div>
+        <div class="t-h1 mt-16">Đã gửi cho Minh</div>
+        <div class="t-label muted mt-4">lúc 10:43</div>
+      </div>
+
+      <div class="card col" style="padding:18px 20px">
+        <div class="tl-row"><div class="tl-dot safe"></div><div class="t-body">Đã gửi</div></div>
+        <div class="tl-line safe"></div>
+        <div class="tl-row"><div class="tl-dot safe"></div><div class="t-body">Minh đã xem</div></div>
+        <div class="tl-line"></div>
+        <div class="tl-row"><div class="tl-dot brand"></div><div class="t-body bold">Đang chờ trả lời…</div></div>
+      </div>
+
+      <div class="card warn row top gap-12">
+        <i class="ic s28 c-warn" data-i="hand"></i>
+        <div class="t-body c-warn-ink medium grow">Trong lúc chờ, bà đừng chuyển tiền và đừng nghe lại số lạ.</div>
+      </div>
+
+      <div class="btn outline xl block mt-auto"><i class="ic" data-i="phone"></i>Gọi điện cho Minh</div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ A08c: người thân trả lời ============ -->
+<section class="shot">
+  <div class="shot-name">A08c – Hỏi người thân · Đã trả lời (chữ lớn)</div>
+  <div class="frame phone lg" data-name="A08c-hoi-nguoi-than-tra-loi">
+    <div class="statusbar"><span>10:44</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <i class="ic" data-i="arrow-left"></i>
+      <div class="title">Hỏi người thân</div>
+      <i class="ic c-brand" data-i="volume"></i>
+    </div>
+
+    <div class="content" style="padding-top:4px">
+      <div class="card safe r24 col gap-20" style="padding:24px 20px 28px">
+        <div class="row gap-12">
+          <div class="avatar lgx">M</div>
+          <div class="t-label bold c-safe-ink grow">Minh trả lời</div>
+          <div class="t-cap muted">10:44</div>
+        </div>
+        <div class="answer c-ink">Mẹ đừng chuyển! Con gọi mẹ ngay.</div>
+        <span class="chip solid-white" style="align-self:flex-start"><i class="ic s14" data-i="volume"></i>Đang đọc to</span>
+      </div>
+
+      <div class="col gap-12 mt-auto">
+        <div class="card row gap-12">
+          <div class="icon-box danger"><i class="ic s20" data-i="ban"></i></div>
+          <div class="col grow gap-2">
+            <div class="t-label bold">Đã chặn số 0912 345 678</div>
+            <div class="t-cap muted">Số này không gọi được cho bà nữa</div>
+          </div>
+        </div>
+        <div class="btn primary xl block"><i class="ic" data-i="flag"></i>Báo cáo số này</div>
+        <div class="btn outline xl block"><i class="ic" data-i="home"></i>Về trang chủ</div>
+      </div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+</body>
+</html>

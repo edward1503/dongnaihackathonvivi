@@ -1,0 +1,9 @@
+Use your image generation tool to create 2 separate square (1:1) illustrations, then save each one as a PNG file in the current working directory with EXACTLY these filenames: avatar-huong.png, avatar-huong-noi.png. After saving, list the files to confirm they exist.
+
+Shared style (must match an existing comic series): flat vector comic illustration, clean bold dark-navy outlines, simple shapes, limited palette (royal blue #1D4ED8, navy #0F172A, warm amber #F59E0B, soft red #DC2626, lilac, mint green, cream). Friendly cartoon face, clearly a drawn character, NOT photorealistic, must not resemble any real person.
+Hard rules: absolutely NO text, letters, numbers or writing anywhere; no logos; no national emblems; no flags; no maps; no police or military uniforms or insignia.
+
+Character "Chị Hương": a fictional Vietnamese woman in her early 30s, shoulder-length dark hair, light blue blouse, wearing a small phone headset with a microphone, polished professional smile that feels a little too eager (she is a scammer pretending to be a recruiter, but she must look friendly, not evil). Head-and-shoulders portrait, centered, facing the viewer, in front of a soft out-of-focus generic office background in navy and blue tones (desk lamp shapes, no screens with content).
+
+avatar-huong.png: mouth closed in a polite smile.
+avatar-huong-noi.png: exactly the same character, framing, pose and background, but mouth open mid-sentence as if talking, one hand slightly raised in a persuasive gesture.

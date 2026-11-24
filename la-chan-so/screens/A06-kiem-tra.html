@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>A06 – Kiểm tra nhanh</title>
+<link rel="stylesheet" href="../ds.css">
+<script src="../icons.js"></script>
+<style>
+/* Chip bấm được: cao 40px cho đủ vùng chạm */
+.chip.tap{height:40px;border-radius:20px;padding:0 14px;font-size:13px}
+.caret{width:2px;height:22px;border-radius:1px;background:var(--brand);flex:none}
+</style>
+</head>
+<body>
+
+<!-- ============ A06a: kiểm tra số điện thoại ============ -->
+<section class="shot">
+  <div class="shot-name">A06a – Kiểm tra nhanh · Số điện thoại</div>
+  <div class="frame phone" data-name="A06a-kiem-tra-so">
+    <div class="statusbar"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <div class="title">Kiểm tra nhanh</div>
+    </div>
+
+    <div class="content" style="padding-top:4px">
+      <div class="seg">
+        <div class="seg-item active">Số ĐT</div>
+        <div class="seg-item">Đường dẫn</div>
+        <div class="seg-item">Tài khoản</div>
+        <div class="seg-item">Tin nhắn</div>
+      </div>
+
+      <div class="input focus">
+        <i class="ic s20 muted" data-i="phone"></i>
+        <div class="row grow gap-2"><div class="medium">0912 345 678</div><div class="caret"></div></div>
+        <i class="ic s20 faint" data-i="x-circle"></i>
+      </div>
+
+      <div class="row gap-8">
+        <span class="chip outline tap"><i class="ic s16" data-i="clipboard"></i>Dán</span>
+        <span class="chip outline tap"><i class="ic s16" data-i="mic"></i>Nói</span>
+        <span class="chip outline tap"><i class="ic s16" data-i="history"></i>Từ nhật ký gọi</span>
+      </div>
+
+      <div class="btn primary block"><i class="ic s20" data-i="search"></i>Kiểm tra</div>
+
+      <div class="col gap-8 mt-8">
+        <div class="t-label bold">Vừa kiểm tra</div>
+        <div class="card" style="padding:4px 16px">
+          <div class="list-item">
+            <div class="icon-box danger"><i class="ic s20" data-i="phone"></i></div>
+            <div class="col grow gap-4">
+              <div class="t-label semi">028 9999 1234</div>
+              <div class="row between">
+                <div class="t-cap muted">Hôm nay 09:12</div>
+                <span class="chip danger"><i class="ic s14" data-i="alert-oct"></i>Nguy hiểm</span>
+              </div>
+            </div>
+          </div>
+          <div class="list-item">
+            <div class="icon-box warn"><i class="ic s20" data-i="link"></i></div>
+            <div class="col grow gap-4">
+              <div class="t-label semi">qua-tri-an-khach-hang.top</div>
+              <div class="row between">
+                <div class="t-cap muted">Hôm qua</div>
+                <span class="chip warn"><i class="ic s14" data-i="alert"></i>Nghi ngờ</span>
+              </div>
+            </div>
+          </div>
+          <div class="list-item last">
+            <div class="icon-box"><i class="ic s20" data-i="card"></i></div>
+            <div class="col grow gap-4">
+              <div class="t-label semi">TK 1903 xxxx 5678</div>
+              <div class="row between">
+                <div class="t-cap muted">20/11</div>
+                <span class="chip"><i class="ic s14" data-i="help"></i>Chưa có dữ liệu</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottomnav">
+      <div class="nav-item"><i class="ic" data-i="shield"></i>Lá chắn</div>
+      <div class="nav-item active"><i class="ic" data-i="search"></i>Kiểm tra</div>
+      <div class="nav-item"><i class="ic" data-i="book"></i>Học</div>
+      <div class="nav-item"><i class="ic" data-i="user"></i>Tôi</div>
+    </div>
+    <div class="gesture"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ A06b: dán tin nhắn để AI phân tích ============ -->
+<section class="shot">
+  <div class="shot-name">A06b – Kiểm tra nhanh · Tin nhắn</div>
+  <div class="frame phone" data-name="A06b-kiem-tra-tin-nhan">
+    <div class="statusbar"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <div class="title">Kiểm tra nhanh</div>
+    </div>
+
+    <div class="content" style="padding-top:4px">
+      <div class="seg">
+        <div class="seg-item">Số ĐT</div>
+        <div class="seg-item">Đường dẫn</div>
+        <div class="seg-item">Tài khoản</div>
+        <div class="seg-item active">Tin nhắn</div>
+      </div>
+
+      <div class="input area focus" style="height:150px">
+        <div class="grow">Tài khoản ngân hàng của quý khách sẽ bị khóa trong 24h. Xác minh ngay tại ngan-hang-xacminh.top để tránh gián đoạn.</div>
+      </div>
+
+      <div class="row gap-8">
+        <span class="chip outline tap"><i class="ic s16" data-i="clipboard"></i>Dán</span>
+        <span class="chip outline tap"><i class="ic s16" data-i="image"></i>Chọn ảnh chụp màn hình</span>
+      </div>
+
+      <div class="card ai col gap-4" style="padding:12px 14px">
+        <div class="ai-tag"><i class="ic s14" data-i="sparkles"></i>AI sẽ phân tích nội dung</div>
+        <div class="t-cap c-ai-ink">Tô đỏ từng dấu hiệu và giải thích bằng lời dễ hiểu.</div>
+      </div>
+
+      <div class="col gap-12">
+        <div class="row top gap-8">
+          <i class="ic s14 muted" data-i="lock" style="margin-top:1px"></i>
+          <div class="t-cap muted grow">Số tài khoản và số điện thoại được che trước khi gửi phân tích.</div>
+        </div>
+        <div class="btn primary block">Phân tích tin nhắn</div>
+      </div>
+    </div>
+
+    <div class="bottomnav">
+      <div class="nav-item"><i class="ic" data-i="shield"></i>Lá chắn</div>
+      <div class="nav-item active"><i class="ic" data-i="search"></i>Kiểm tra</div>
+      <div class="nav-item"><i class="ic" data-i="book"></i>Học</div>
+      <div class="nav-item"><i class="ic" data-i="user"></i>Tôi</div>
+    </div>
+    <div class="gesture"><div class="pill"></div></div>
+  </div>
+</section>
+
+</body>
+</html>

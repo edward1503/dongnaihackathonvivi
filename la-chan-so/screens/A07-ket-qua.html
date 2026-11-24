@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>A07 – Kết quả kiểm tra</title>
+<link rel="stylesheet" href="../ds.css">
+<script src="../icons.js"></script>
+<style>
+/* Bốn mức dùng chung một bố cục: đối tượng → banner mức độ → vì sao → nên làm gì → nút */
+.obj{padding:12px 14px}
+.sec{padding:14px;display:flex;flex-direction:column;gap:8px}
+.why,.todo{display:flex;align-items:flex-start;gap:8px}
+.why .ic{margin-top:1px}
+.why .t-label,.todo .t-label{flex:1;min-width:0}
+.todo .t-label{padding-top:1px}
+.num{width:22px;height:22px;border-radius:11px;background:var(--ink);color:#fff;font-size:12px;line-height:16px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.tick-row{display:flex;align-items:center;gap:12px;min-height:40px}
+.tick{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--outline);background:#fff;flex:none}
+.sum{min-height:48px}
+.level,.nw{white-space:nowrap}
+/* Dòng liên kết cuối thẻ: vùng bấm cao 40px, lề âm để không làm thẻ phình */
+.story-link{min-height:40px;margin:-4px 0 -12px}
+</style>
+</head>
+<body>
+
+<!-- ============ A07a: Nguy hiểm ============ -->
+<section class="shot">
+  <div class="shot-name">A07a – Kết quả kiểm tra · Nguy hiểm</div>
+  <div class="frame phone" data-name="A07a-ket-qua-nguy-hiem" style="height:856px">
+    <div class="statusbar"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <i class="ic" data-i="arrow-left"></i>
+      <div class="title">Kết quả kiểm tra</div>
+    </div>
+
+    <div class="content" style="padding-top:4px;gap:12px">
+      <div class="card obj row gap-12">
+        <div class="icon-box"><i class="ic s20" data-i="phone"></i></div>
+        <div class="col grow">
+          <div class="t-body semi">0912 345 678</div>
+          <div class="t-cap muted">Số điện thoại</div>
+        </div>
+      </div>
+
+      <div class="card danger r24 p-20 col gap-12">
+        <div class="row gap-12">
+          <div class="icon-box lgx solid-danger"><i class="ic s32" data-i="alert-oct"></i></div>
+          <div class="col grow">
+            <div class="t-over c-danger-ink">Kết quả</div>
+            <div class="t-display c-danger-ink level">Nguy hiểm</div>
+          </div>
+        </div>
+        <div class="t-body c-ink sum">14 người đã báo số này <span class="nw">giả danh công an.</span></div>
+      </div>
+
+      <div class="card sec">
+        <div class="t-label bold">Vì sao?</div>
+        <div class="why"><i class="ic s18 c-danger" data-i="users"></i><div class="t-label">14 báo cáo trong 7 ngày, <span class="nw">gần nhất hôm qua</span></div></div>
+        <div class="why"><i class="ic s18 c-danger" data-i="message-alert"></i><div class="t-label">Tự xưng cán bộ điều tra, <span class="nw">đòi chuyển tiền</span></div></div>
+        <div class="why"><i class="ic s18 c-danger" data-i="shield-check"></i><div class="t-label">Đội tình nguyện đã xác nhận</div></div>
+      </div>
+
+      <div class="card soft sec">
+        <div class="t-label bold">Bạn nên làm gì</div>
+        <div class="todo"><div class="num">1</div><div class="t-label">Cúp máy, không gọi lại.</div></div>
+        <div class="todo"><div class="num">2</div><div class="t-label">Không chuyển tiền, <span class="nw">không đọc mã xác thực (OTP).</span></div></div>
+        <div class="row gap-6 c-brand story-link"><i class="ic s16" data-i="book"></i><div class="t-cap bold">Xem truyện 1 phút về chiêu này</div></div>
+      </div>
+
+      <div class="col gap-8 mt-auto">
+        <div class="btn primary block"><i class="ic s20" data-i="users"></i>Hỏi người thân</div>
+        <div class="btn outline block"><i class="ic s20" data-i="flag"></i>Báo cáo số này</div>
+      </div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ A07b: Nghi ngờ ============ -->
+<section class="shot">
+  <div class="shot-name">A07b – Kết quả kiểm tra · Nghi ngờ</div>
+  <div class="frame phone" data-name="A07b-ket-qua-nghi-ngo">
+    <div class="statusbar"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <i class="ic" data-i="arrow-left"></i>
+      <div class="title">Kết quả kiểm tra</div>
+    </div>
+
+    <div class="content" style="padding-top:4px;gap:12px">
+      <div class="card obj row gap-12">
+        <div class="icon-box"><i class="ic s20" data-i="link"></i></div>
+        <div class="col grow">
+          <div class="t-body semi">qua-tri-an-khach-hang.top</div>
+          <div class="t-cap muted">Đường dẫn</div>
+        </div>
+      </div>
+
+      <div class="card warn r24 p-20 col gap-12">
+        <div class="row gap-12">
+          <div class="icon-box lgx" style="background:var(--warn);color:#fff"><i class="ic s32" data-i="alert"></i></div>
+          <div class="col grow">
+            <div class="t-over c-warn-ink">Kết quả</div>
+            <div class="t-display c-warn-ink level">Nghi ngờ</div>
+          </div>
+        </div>
+        <div class="t-body c-ink sum">Trang này có 3 dấu hiệu <span class="nw">của trang giả mạo.</span></div>
+      </div>
+
+      <div class="card sec">
+        <div class="t-label bold">Vì sao?</div>
+        <div class="why"><i class="ic s18 c-warn" data-i="clock"></i><div class="t-label">Tên miền mới đăng ký 3 ngày</div></div>
+        <div class="why"><i class="ic s18 c-warn" data-i="eye"></i><div class="t-label">Tên gần giống trang chính thức</div></div>
+        <div class="why"><i class="ic s18 c-warn" data-i="link"></i><div class="t-label">Đuôi .top ít dùng cho trang chính thống</div></div>
+      </div>
+
+      <div class="card soft sec">
+        <div class="t-label bold">Bạn nên làm gì</div>
+        <div class="todo"><div class="num">1</div><div class="t-label">Không bấm, không nhập mật khẩu <span class="nw">hay mã xác thực (OTP).</span></div></div>
+        <div class="todo"><div class="num">2</div><div class="t-label">Muốn vào trang thật, hãy tự gõ địa chỉ.</div></div>
+      </div>
+
+      <div class="col gap-8 mt-auto">
+        <div class="btn primary block"><i class="ic s20" data-i="users"></i>Hỏi người thân</div>
+        <div class="btn outline block"><i class="ic s20" data-i="flag"></i>Báo cáo đường dẫn này</div>
+      </div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ A07c: An toàn ============ -->
+<section class="shot">
+  <div class="shot-name">A07c – Kết quả kiểm tra · An toàn</div>
+  <div class="frame phone" data-name="A07c-ket-qua-an-toan">
+    <div class="statusbar"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <i class="ic" data-i="arrow-left"></i>
+      <div class="title">Kết quả kiểm tra</div>
+    </div>
+
+    <div class="content" style="padding-top:4px;gap:12px">
+      <div class="card obj row gap-12">
+        <div class="icon-box"><i class="ic s20" data-i="phone"></i></div>
+        <div class="col grow">
+          <div class="t-body semi">1900 5555 88</div>
+          <div class="t-cap muted">Số điện thoại</div>
+        </div>
+      </div>
+
+      <div class="card safe r24 p-20 col gap-12">
+        <div class="row gap-12">
+          <div class="icon-box lgx solid-safe"><i class="ic s32" data-i="check-circle"></i></div>
+          <div class="col grow">
+            <div class="t-over c-safe-ink">Kết quả</div>
+            <div class="t-display c-safe-ink level">An toàn</div>
+          </div>
+        </div>
+        <div class="t-body c-ink sum"><div class="nw">Số này khớp danh bạ tổng đài.</div><div>Lá chắn chưa xác minh <span class="nw">người đang gọi.</span></div></div>
+      </div>
+
+      <div class="card sec">
+        <div class="t-label bold">Vì sao?</div>
+        <div class="why"><i class="ic s18 c-safe" data-i="shield-check"></i><div class="t-label">Tổng đài chăm sóc khách hàng <span class="nw">đã xác thực</span></div></div>
+        <div class="why"><i class="ic s18 c-safe" data-i="users"></i><div class="t-label">Chưa có báo cáo lừa đảo nào</div></div>
+      </div>
+
+      <div class="card soft sec">
+        <div class="why"><i class="ic s18 muted" data-i="info"></i><div class="t-label">Đừng đọc mã xác thực (OTP) cho <span class="nw">bất kỳ ai,</span> kể cả người tự xưng <span class="nw">tổng đài.</span></div></div>
+      </div>
+
+      <div class="col gap-8 mt-auto">
+        <div class="btn outline block"><i class="ic s20" data-i="search"></i>Kiểm tra số khác</div>
+      </div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ A07d: Chưa có dữ liệu ============ -->
+<section class="shot">
+  <div class="shot-name">A07d – Kết quả kiểm tra · Chưa có dữ liệu</div>
+  <div class="frame phone" data-name="A07d-ket-qua-chua-co-du-lieu">
+    <div class="statusbar"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <i class="ic" data-i="arrow-left"></i>
+      <div class="title">Kết quả kiểm tra</div>
+    </div>
+
+    <div class="content" style="padding-top:4px;gap:12px">
+      <div class="card obj row gap-12">
+        <div class="icon-box"><i class="ic s20" data-i="card"></i></div>
+        <div class="col grow">
+          <div class="t-body semi">1903 xxxx 5678</div>
+          <div class="t-cap muted">Số tài khoản</div>
+        </div>
+      </div>
+
+      <div class="card soft r24 p-20 col gap-12" style="border-color:var(--outline)">
+        <div class="row gap-12">
+          <div class="icon-box lgx" style="background:var(--ink-2);color:#fff"><i class="ic s32" data-i="help"></i></div>
+          <div class="col grow">
+            <div class="t-over muted">Kết quả</div>
+            <div class="t-display c-ink level">Chưa có dữ liệu</div>
+          </div>
+        </div>
+        <div class="t-body c-ink sum"><div class="nw">Chưa ai báo cáo tài khoản này.</div><div class="nw semi">Điều đó không có nghĩa là an toàn.</div></div>
+      </div>
+
+      <div class="card sec" style="gap:4px">
+        <div class="t-label bold" style="margin-bottom:4px">Tự kiểm tra trước khi chuyển tiền</div>
+        <div class="tick-row"><div class="tick"></div><div class="t-label grow">Tôi biết người nhận ngoài đời thật</div></div>
+        <div class="tick-row"><div class="tick"></div><div class="t-label grow">Không ai giục tôi chuyển gấp</div></div>
+        <div class="tick-row"><div class="tick"></div><div class="t-label grow">Không ai bảo tôi giữ bí mật</div></div>
+      </div>
+
+      <div class="col gap-8 mt-auto">
+        <div class="btn primary block"><i class="ic s20" data-i="users"></i>Hỏi người thân</div>
+        <div class="btn outline block"><i class="ic s20" data-i="flag"></i>Vẫn nghi ngờ? Báo cáo</div>
+      </div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+</body>
+</html>

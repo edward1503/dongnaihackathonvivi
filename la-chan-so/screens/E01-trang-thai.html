@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>E01 – Trạng thái lỗi và trạng thái trống</title>
+<link rel="stylesheet" href="../ds.css">
+<script src="../icons.js"></script>
+<style>
+  .check-row{display:flex;align-items:center;gap:12px;min-height:60px;border-bottom:1px solid var(--outline-2)}
+  .check-row.last{border-bottom-color:transparent}
+  .check-box{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--outline);background:#fff;flex:none}
+</style>
+</head>
+<body>
+
+<!-- ============ E01a: Lá chắn bị hệ thống tắt (chế độ Đơn giản) ============ -->
+<section class="shot">
+  <div class="shot-name">E01a – Lá chắn đang ngủ (chữ lớn)</div>
+  <div class="frame phone lg" data-name="E01a-la-chan-dang-ngu">
+    <div class="statusbar"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery-low"></i></span></div>
+
+    <div class="content" style="gap:12px;padding-top:12px">
+      <div class="row between">
+        <div class="col gap-2">
+          <div class="t-label muted">Thứ Ba, 24 tháng 11</div>
+          <div class="t-h1">Chào bà Hoa</div>
+        </div>
+        <span class="chip brand"><i class="ic s14" data-i="eye"></i>Chữ lớn</span>
+      </div>
+
+      <div class="card danger r24 col gap-10" style="padding:16px">
+        <div class="row gap-12">
+          <div class="icon-box lgx solid-danger"><i class="ic s32" data-i="shield-off"></i></div>
+          <div class="col grow">
+            <div class="t-h2 c-danger-ink">Lá chắn đang ngủ</div>
+            <div class="t-label">Bà chưa được bảo vệ</div>
+          </div>
+        </div>
+        <div class="t-label">Máy đã tắt Lá chắn để tiết kiệm&nbsp;pin.</div>
+        <div class="btn danger block"><i class="ic" data-i="power"></i>Bật lại ngay</div>
+      </div>
+
+      <div class="card row gap-12" style="padding:10px 16px">
+        <div class="icon-box lgx brand"><i class="ic s28" data-i="search"></i></div>
+        <div class="col grow">
+          <div class="t-h2">Kiểm tra</div>
+          <div class="t-label muted">Số lạ, đường dẫn, tài khoản</div>
+        </div>
+        <i class="ic faint" data-i="chev-right"></i>
+      </div>
+
+      <div class="card row gap-12" style="padding:10px 16px">
+        <div class="icon-box lgx safe"><i class="ic s28" data-i="users"></i></div>
+        <div class="col grow">
+          <div class="t-h2">Hỏi người thân</div>
+          <div class="t-label muted">Gửi ngay cho con: Minh</div>
+        </div>
+        <i class="ic faint" data-i="chev-right"></i>
+      </div>
+
+      <div class="card row gap-12" style="padding:10px 16px">
+        <div class="icon-box lgx danger"><i class="ic s28" data-i="flag"></i></div>
+        <div class="col grow">
+          <div class="t-h2">Báo lừa đảo</div>
+          <div class="t-label muted">Kể lại để cảnh báo mọi người</div>
+        </div>
+        <i class="ic faint" data-i="chev-right"></i>
+      </div>
+    </div>
+
+    <div class="bottomnav">
+      <div class="nav-item active"><i class="ic" data-i="shield"></i>Lá chắn</div>
+      <div class="nav-item"><i class="ic" data-i="search"></i>Kiểm tra</div>
+      <div class="nav-item"><i class="ic" data-i="book"></i>Học</div>
+      <div class="nav-item"><i class="ic" data-i="user"></i>Tôi</div>
+    </div>
+    <div class="gesture"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ E01b: Chưa có người thân (chế độ Đơn giản) ============ -->
+<section class="shot">
+  <div class="shot-name">E01b – Chưa có người thân (chữ lớn)</div>
+  <div class="frame phone lg" data-name="E01b-chua-co-nguoi-than">
+    <div class="statusbar"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <i class="ic" data-i="arrow-left"></i>
+      <div class="title">Hỏi người thân</div>
+      <i class="ic c-brand" data-i="volume"></i>
+    </div>
+
+    <div class="content" style="padding-top:4px;gap:12px">
+      <div class="col acenter jcenter grow gap-8">
+        <img src="../assets/spot-family.png" width="200" height="200" alt="" style="border-radius:24px;display:block">
+        <div class="t-h1 center mt-12">Chưa có người thân nào</div>
+        <div class="t-body muted center">Thêm con, cháu để Lá chắn báo ngay khi có nguy hiểm.</div>
+      </div>
+
+      <div class="btn primary xl block"><i class="ic" data-i="users"></i>Thêm từ danh bạ</div>
+      <div class="btn outline xl block"><i class="ic" data-i="qr"></i>Quét mã ghép đôi</div>
+      <div class="btn ghost block"><i class="ic" data-i="phone"></i>Cần gấp? Gọi 113</div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ E01c: Mất mạng (chế độ thường) ============ -->
+<section class="shot">
+  <div class="shot-name">E01c – Mất mạng</div>
+  <div class="frame phone" data-name="E01c-mat-mang">
+    <div class="statusbar"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi-off"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <div class="title">Kiểm tra nhanh</div>
+    </div>
+
+    <div class="content" style="padding-top:4px;gap:20px">
+      <div class="card warn row gap-12">
+        <div class="icon-box warn" style="background:#fff"><i class="ic" data-i="wifi-off"></i></div>
+        <div class="col grow">
+          <div class="t-h2 c-warn-ink">Không có mạng</div>
+          <div class="t-label">Chưa tra được dữ liệu cộng đồng.</div>
+        </div>
+      </div>
+
+      <div class="btn outline block"><i class="ic s20" data-i="refresh"></i>Thử lại</div>
+
+      <div class="col gap-12 mt-4">
+        <div class="t-label bold">Trong lúc chờ, tự kiểm tra bằng 3 câu</div>
+        <div class="card col" style="padding:4px 16px">
+          <div class="check-row"><div class="check-box"></div><div class="grow" style="font-size:15px;line-height:22px">Tôi biết người nhận ngoài đời thật</div></div>
+          <div class="check-row"><div class="check-box"></div><div class="grow" style="font-size:15px;line-height:22px">Không ai giục tôi chuyển gấp</div></div>
+          <div class="check-row last"><div class="check-box"></div><div class="grow" style="font-size:15px;line-height:22px">Không ai bảo tôi giữ bí mật</div></div>
+        </div>
+      </div>
+
+      <div class="card soft row gap-12">
+        <i class="ic muted" data-i="book"></i>
+        <div class="t-label grow">Các truyện đã tải vẫn đọc được khi mất mạng.</div>
+      </div>
+    </div>
+
+    <div class="bottomnav">
+      <div class="nav-item"><i class="ic" data-i="shield"></i>Lá chắn</div>
+      <div class="nav-item active"><i class="ic" data-i="search"></i>Kiểm tra</div>
+      <div class="nav-item"><i class="ic" data-i="book"></i>Học</div>
+      <div class="nav-item"><i class="ic" data-i="user"></i>Tôi</div>
+    </div>
+    <div class="gesture"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ E01d: AI chưa đủ thông tin (chế độ thường) ============ -->
+<section class="shot">
+  <div class="shot-name">E01d – AI chưa đủ thông tin</div>
+  <div class="frame phone" data-name="E01d-ai-chua-du-thong-tin">
+    <div class="statusbar"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <i class="ic" data-i="arrow-left"></i>
+      <div class="title">Phân tích tin nhắn</div>
+    </div>
+
+    <div class="content" style="padding-top:4px">
+      <div class="bubble in">Alo, gọi lại anh nhé</div>
+
+      <div class="card soft col gap-10" style="border-color:var(--outline)">
+        <span class="ai-tag"><i class="ic s14" data-i="sparkles"></i>Kết quả phân tích của AI</span>
+        <div class="row top gap-12">
+          <div class="icon-box" style="background:var(--ink-2);color:#fff"><i class="ic" data-i="help"></i></div>
+          <div class="col grow gap-4">
+            <div class="t-h2">Chưa đủ thông tin để kết&nbsp;luận</div>
+            <div class="t-label muted">Tin nhắn quá ngắn. AI không đoán&nbsp;bừa.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col gap-10">
+        <div class="t-label bold">Bạn có thể</div>
+        <div class="card row gap-12" style="padding:12px 16px">
+          <div class="icon-box ai"><i class="ic s20" data-i="clipboard"></i></div>
+          <div class="t-label semi grow">Dán thêm các tin trước đó</div>
+          <i class="ic faint" data-i="chev-right"></i>
+        </div>
+        <div class="card row gap-12" style="padding:12px 16px">
+          <div class="icon-box brand"><i class="ic s20" data-i="phone"></i></div>
+          <div class="t-label semi grow">Kiểm tra số gửi tin</div>
+          <i class="ic faint" data-i="chev-right"></i>
+        </div>
+        <div class="card row gap-12" style="padding:12px 16px">
+          <div class="icon-box safe"><i class="ic s20" data-i="users"></i></div>
+          <div class="t-label semi grow">Hỏi người thân</div>
+          <i class="ic faint" data-i="chev-right"></i>
+        </div>
+      </div>
+
+      <div class="col acenter jcenter grow">
+        <img src="../assets/mascot-think.png" width="120" height="120" alt="" style="border-radius:60px;display:block">
+      </div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+</body>
+</html>

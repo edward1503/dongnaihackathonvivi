@@ -1,0 +1,15 @@
+Use your image generation tool to create 7 separate square (1:1) illustrations, then save each one as a PNG file in the current working directory with EXACTLY these filenames: comic2-1.png, comic2-2.png, comic2-3.png, comic2-4.png, spot-mascot.png, spot-family.png, spot-allclear.png. After saving, list the files to confirm they exist.
+
+Shared style for all images: flat vector comic illustration, clean bold dark-navy outlines, simple shapes, limited palette (royal blue #1D4ED8, navy #0F172A, warm amber #F59E0B, soft red #DC2626, mint green, cream background #FFF7ED). Keep the same character design in every panel.
+Hard rules for every image: absolutely NO text, letters, numbers or writing anywhere (no speech bubbles with writing, no signs, no captions); no logos; no national emblems; no flags; no maps; no police or military uniforms or insignia; no realistic human faces (simple friendly cartoon faces only).
+
+Recurring character "Vy": a 17-year-old Vietnamese high-school girl, black ponytail, white school shirt, small blue backpack.
+The scammer is always a faceless dark-grey silhouette.
+
+comic2-1.png: Vy sitting on her bed looking at her smartphone with sparkling excited eyes; chat bubble shapes containing only coin icons and a gift-box icon float out of the phone.
+comic2-2.png: close view of Vy happily receiving a few small gold coins flying out of the phone into her hand; a cheerful anonymous round avatar icon on the phone screen waves at her.
+comic2-3.png: the avatar has turned into the faceless dark silhouette holding a fishing rod; its hook is pulling Vy's wallet and a big pile of coins away from her; Vy looks shocked and worried, red alarm lines.
+comic2-4.png: Vy confidently showing her phone to a friendly adult teacher (woman, short hair, mint cardigan); a blue shield with a white check mark and a small red flag icon appear above the phone; both look relieved.
+spot-mascot.png: a friendly rounded royal-blue shield mascot character with a tiny simple smile and two dot eyes, one small arm raised in a stop gesture, centered, plain cream background.
+spot-family.png: a Vietnamese grandmother (grey bun, round glasses, lilac blouse) and her adult son (short black hair, green polo) each holding a smartphone, connected by a dotted line with a small blue shield in the middle; warm and reassuring.
+spot-allclear.png: a calm smartphone standing upright with a large mint-green check mark on its screen and a small blue shield beside it, a few soft sparkle shapes; peaceful empty-state illustration.

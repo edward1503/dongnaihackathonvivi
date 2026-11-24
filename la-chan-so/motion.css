@@ -1,0 +1,94 @@
+/* ============================================================
+   LÁ CHẮN SỐ — Lớp chuyển động
+   CHỈ nạp khi mở màn với ?frame=<data-name> (prototype).
+   Bản xuất SVG/PNG không nạp file này nên không bị ảnh hưởng.
+   Nguyên tắc: chuyển động để dẫn mắt và báo trạng thái, không trang trí.
+   ============================================================ */
+:root{
+  --m-fast:150ms;   /* phản hồi khi chạm */
+  --m-base:300ms;   /* nội dung xuất hiện */
+  --m-slow:520ms;   /* thẻ cảnh báo, bảng trượt */
+  --m-ease:cubic-bezier(.2,0,0,1);
+  --m-spring:cubic-bezier(.2,.9,.25,1.15);
+  --m-stagger:55ms; /* khoảng trễ giữa các khối */
+}
+/* Chế độ chữ lớn (người cao tuổi): chậm hơn, không nảy */
+.lg{--m-base:420ms;--m-slow:680ms;--m-spring:cubic-bezier(.2,0,0,1);--m-stagger:90ms}
+
+/* ---------- Chế độ xem một khung ---------- */
+html.proto,html.proto body{background:transparent}
+html.proto body{padding:0;gap:0;display:block;overflow-x:hidden;overflow-y:auto;scrollbar-width:none}
+html.proto body::-webkit-scrollbar{display:none}
+html.proto .shot{display:none}
+html.proto .shot.on{display:block}
+html.proto .shot-name{display:none}
+html.proto .frame{cursor:pointer}
+html.proto .content:has(> .lcs-samples){overflow-y:auto;scrollbar-width:none}
+
+/* Mọi chuyển động chỉ bắt đầu khi motion.js thêm class "go" vào <html> (lúc khung được hiện ra),
+   để không bị chạy trước trong lúc trang còn ẩn chờ nạp font. */
+
+/* ---------- Keyframes ---------- */
+@keyframes m-rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes m-fade{from{opacity:0}to{opacity:1}}
+@keyframes m-drop{from{opacity:0;transform:translateY(-130%)}to{opacity:1;transform:none}}
+@keyframes m-sheet{from{transform:translateY(105%)}to{transform:none}}
+@keyframes m-pop{0%{opacity:0;transform:scale(.86)}70%{opacity:1;transform:scale(1.04)}100%{opacity:1;transform:none}}
+@keyframes m-grow{from{transform:scaleX(0)}to{transform:none}}
+@keyframes m-breathe{0%,100%{transform:none}50%{transform:scale(1.07)}}
+@keyframes m-ring{0%{transform:scale(1);opacity:.6}100%{transform:scale(2.2);opacity:0}}
+@keyframes m-hl{from{background-color:rgba(254,226,226,0);color:#0F172A}}
+@keyframes m-blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes m-slam{0%{opacity:0;transform:scale(1.45)}60%{opacity:1;transform:scale(.97)}100%{opacity:1;transform:none}}
+@keyframes m-alarm{0%,100%{background-color:#DC2626}50%{background-color:#B91C1C}}
+@keyframes m-twinkle{0%,100%{transform:none;opacity:1}50%{transform:scale(1.22) rotate(12deg);opacity:.7}}
+@keyframes m-nudge{0%,100%{transform:none}50%{transform:translateX(4px)}}
+
+/* ---------- Nội dung xuất hiện lần lượt ---------- */
+.m-in{animation:m-rise var(--m-base) var(--m-ease) both;animation-delay:calc(var(--i,0) * var(--m-stagger) + 90ms)}
+html.go .appbar{animation:m-fade var(--m-base) var(--m-ease) both}
+
+/* ---------- Lớp phủ ---------- */
+html.go .float-card{animation:m-drop var(--m-slow) var(--m-spring) both;animation-delay:500ms}
+html.go .notif{animation:m-drop var(--m-slow) var(--m-spring) both;animation-delay:650ms}
+html.go .scrim{animation:m-fade var(--m-base) linear both}
+html.go .sheet{animation:m-sheet var(--m-slow) var(--m-ease) both;animation-delay:220ms}
+
+/* ---------- Thanh số liệu, tiến trình ---------- */
+html.go .progress-bar,html.go .bar-fill{transform-origin:left center;animation:m-grow 820ms var(--m-ease) both;animation-delay:calc(var(--b,0) * 80ms + 480ms)}
+html.go .step.on{transform-origin:left center;animation:m-grow 520ms var(--m-ease) both;animation-delay:320ms}
+
+/* ---------- AI: tô lần lượt từng dấu hiệu, icon lấp lánh ---------- */
+html.go .hl{animation:m-hl 480ms var(--m-ease) both;animation-delay:calc(var(--h,0) * 420ms + 950ms)}
+html.go .ai-tag .ic,html.go .chip.ai .ic{animation:m-twinkle 2.4s ease-in-out infinite}
+
+/* ---------- Truyện tranh: từng khung bật ra theo thứ tự đọc ---------- */
+html.go .panel{animation:m-pop var(--m-slow) var(--m-spring) both;animation-delay:calc(var(--p,0) * 300ms + 260ms)}
+
+/* ---------- Phản hồi khi chạm ---------- */
+html.go .btn,html.go .card.row,html.go .seg-item,html.go .chip{transition:transform var(--m-fast) var(--m-ease)}
+html.proto .btn:active,html.proto .card.row:active{transform:scale(.97)}
+html.go .ic[data-i="chev-right"],html.go .ic[data-i="arrow-right"]{animation:m-nudge 1.8s ease-in-out 1.2s 2}
+
+/* ---------- Trang chủ: khiên "thở" để báo lá chắn đang chạy ngầm ---------- */
+html.go .card.solid-brand .icon-box{animation:m-breathe 3.6s ease-in-out infinite}
+
+/* ---------- Đổ chuông: sóng lan quanh ảnh người gọi ---------- */
+html.proto .call-avatar{position:relative}
+html.go .call-avatar::before,html.go .call-avatar::after{content:"";position:absolute;left:0;top:0;right:0;bottom:0;border-radius:50%;border:2px solid #94A3B8;animation:m-ring 2s ease-out infinite}
+html.go .call-avatar::after{animation-delay:1s}
+
+/* ---------- Màn "Dừng lại": nhịp chậm 3 lần rồi đứng yên (không nhấp nháy) ---------- */
+html.go .phone.bg-danger{animation:m-alarm 1.5s ease-in-out 3}
+html.go .phone.bg-danger .icon-box.xl{animation:m-pop 620ms var(--m-spring) both,m-breathe 1.9s ease-in-out 700ms 4}
+.m-slam{animation:m-slam 560ms var(--m-ease) both;animation-delay:260ms}
+
+/* ---------- Trạng thái đang diễn ra ---------- */
+.m-wait{animation:m-blink 1.2s ease-in-out infinite}
+html.go .ic[data-i="volume"]{animation:m-blink 1.3s ease-in-out infinite}
+.m-big{animation:m-pop 640ms var(--m-spring) both;animation-delay:420ms}
+
+/* ---------- Tôn trọng cài đặt giảm chuyển động của máy ---------- */
+@media (prefers-reduced-motion:reduce){
+  html.proto *,html.proto *::before,html.proto *::after{animation:none!important;transition:none!important}
+}

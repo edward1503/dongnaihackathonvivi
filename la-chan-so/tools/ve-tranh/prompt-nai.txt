@@ -1,0 +1,7 @@
+Use your image generation tool to create ONE square (1:1) illustration and save it as a PNG file at EXACTLY this path: assets/spot-mascot.png (overwrite the existing file). After saving, list the file to confirm it exists.
+
+Design a brand-new mascot "Bé Nai" for an anti-scam app of Đồng Nai city. The name Đồng Nai means "the plain of deer", so the mascot is a chibi baby deer (a fawn).
+
+CUTENESS STYLE: copy the cuteness of the two attached mascot reference images as closely as possible: chibi proportions with a big round head about as tall as the whole body, huge round glossy eyes with sparkly star-shaped highlights and a soft gradient shine, rosy blush cheeks, a small happy open smile, a short round chubby body, very short stubby legs, soft plush-like texture with gentle shading, clean bold navy outlines, sticker-like finish. Use the references ONLY for this cuteness style. Do NOT copy that character: no owl, no griffin, no bird, no beak, no wings, no ear tufts, no V mark, no blue body.
+
+Bé Nai: warm caramel-brown fur with a few cream fawn spots on its back, cream face and belly, big soft round ears with pink insides, two tiny rounded antler nubs, a tiny black button nose, a short fluffy white tail. It wears a small royal-blue (#1D4ED8) scarf whose knot holds a little amber shield-shaped charm (no letters, no logo). Standing, full body, centered, one hoof-hand waving hello, the other on its hip, confident and adorable. Plain warm off-white background (#FFF7ED), a soft round shadow under its feet. Absolutely NO text, letters or numbers anywhere.

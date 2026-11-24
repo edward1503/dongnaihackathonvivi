@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Gọi video chị Lan</title>
+<link rel="stylesheet" href="../ds.css">
+<script src="../icons.js"></script>
+<!--
+  Cuộc gọi video nhập vai "giúp chị họ" (khung A11h trong screens/A11-truyen-tranh.html), bài kiểm tra cuối bài "Việc nhẹ lương cao".
+  Chị Lan do avatar LiteAvatar số 21 đóng, miệng khớp giọng ngay trong trình duyệt (runtime chép từ vlearn-lesson-lab, xem ../vendor/vlearn-avatar/).
+
+  ĐỔI GIỌNG / CÂU NÓI:
+  - Sửa mảng LINES bên dưới (audio, caption, lip). Mặc định: audio/chi-lan-1.m4a, chi-lan-2.m4a, chi-lan-3.m4a.
+  - Hoặc qua URL (chỉ thay câu 1):  video-call.html?audio=audio/khac.m4a&caption=Lời%20chị%20Lan
+    &lip=<file .json khẩu hình tính sẵn, không bắt buộc>   ?demo=1 : luôn phát đoạn mẫu tạm.
+  - "Chạy demo tự động" (hoặc ?auto=1): chị Lan câu 1 → Vy trả lời 1 → chị Lan câu 2 → Vy 2 → chị Lan câu 3 → Vy 3 → Xem bảng điểm.
+    Giọng Vy: mảng VY (audio/vy-1.m4a…vy-3.m4a), không có khẩu hình (Vy là người học); thiếu file thì chỉ hiện phụ đề.
+  - Không có file .json khẩu hình thì trang tự tính khẩu hình từ tiếng (hoc-lipfit.js, như câu nói trực tiếp ở /hoc/).
+  - File giọng nào chưa có (404) hoặc không giải mã được: trang phát đoạn mẫu tạm của avatar 21 (giọng Thảo, có khẩu hình tính sẵn).
+-->
+<style>
+  body{background:#05050B;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;gap:0}
+  .call{background:#0B0B14;border-radius:28px;box-shadow:0 0 0 10px #020617}
+  #tile{position:absolute;left:0;top:0;width:360px;height:520px;overflow:hidden;background:#15131F}
+  /* khối 16:9 rộng hơn ô hình: runtime vẽ canvas 1280×720, ta cắt lấy phần giữa (khuôn mặt) cho màn dọc */
+  #avhost{position:absolute;top:0;height:520px;width:924px;left:-282px}
+  #avhost .still{position:absolute;inset:0;background:url(../vendor/vlearn-avatar/stage/d01-tech/call-still.jpg) center/cover no-repeat}
+  .shade-top{position:absolute;left:0;right:0;top:0;height:120px;background:linear-gradient(rgba(11,11,20,.55),rgba(11,11,20,0));pointer-events:none}
+  .pillchip{height:36px;border-radius:18px;background:rgba(11,11,20,.62);color:#fff;padding:0 12px;display:flex;align-items:center;gap:8px;font-size:14px;line-height:20px;font-weight:700;white-space:nowrap;flex:none}
+  .dot{width:8px;height:8px;border-radius:4px;background:#22C55E}
+  .aichip{height:32px;border-radius:16px;background:rgba(124,58,237,.85);color:#fff;padding:0 10px;display:flex;align-items:center;gap:6px;font-size:12px;line-height:16px;font-weight:700;white-space:nowrap;flex:none}
+  .self{width:72px;height:100px;flex:none;border-radius:14px;background:#1E293B;border:2px solid rgba(255,255,255,.7);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#CBD5E1}
+  #caption{position:absolute;left:12px;right:12px;bottom:292px;min-height:42px;background:rgba(11,11,20,.72);border-radius:14px;padding:10px 12px;color:#fff;font-size:15px;line-height:22px;font-weight:500;transition:opacity .2s}
+  #caption.hide{opacity:0}
+  #caption.me{background:rgba(29,78,216,.9)}
+  #capWho{display:none;align-items:center;gap:6px;margin:-2px 0 4px;color:#BFDBFE;font-size:12px;line-height:16px;font-weight:700}
+  #caption.me #capWho{display:flex}
+  .self{transition:border-color .2s,box-shadow .2s}
+  .self.talking{border-color:#60A5FA;box-shadow:0 0 0 4px rgba(96,165,250,.45);color:#fff}
+  #demoTag{display:none;margin:-2px 0 4px;color:#FBBF24;font-size:12px;line-height:16px;font-weight:700}
+  #demoTag.on{display:block}
+  .lower{position:absolute;left:0;right:0;top:520px;bottom:0;padding:12px 16px 0;display:flex;flex-direction:column;gap:10px}
+  .score{background:#16162A;border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:7px}
+  .chip.k{background:#262645;color:#A5A1D0;transition:background .3s,color .3s}
+  .chip.k .ic{display:none}
+  .chip.k.ok{background:#14532D;color:#BBF7D0}
+  .chip.k.ok .ic{display:inline-flex}
+  .ctl{display:flex;justify-content:space-between;align-items:center;padding:0 12px}
+  .cb{font:inherit;border:0;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;color:#CBD5E1;width:64px;touch-action:none;user-select:none;-webkit-user-select:none}
+  .cb .r{width:48px;height:48px;border-radius:24px;background:#262645;display:flex;align-items:center;justify-content:center;transition:transform .12s,background .2s}
+  .cb.talk{color:#fff;width:auto}
+  .cb.talk .r{width:72px;height:72px;border-radius:36px;background:#1D4ED8}
+  .cb.talk.hold .r{background:#DC2626;transform:scale(1.08);box-shadow:0 0 0 8px rgba(220,38,38,.25)}
+  .cb.end .r{background:#DC2626;color:#fff}
+  .cb:disabled{opacity:.45;cursor:default}
+  #finish{display:none;flex-direction:column;gap:8px}
+  #finish.on{display:flex}
+  .primary{display:flex;align-items:center;justify-content:center;gap:8px;height:52px;border-radius:26px;background:#1D4ED8;color:#fff;font-size:16px;line-height:22px;font-weight:700;text-decoration:none}
+  .ctl.auto .cb:not(.end){opacity:.45;pointer-events:none}
+  .ghost{font:inherit;border:0;cursor:pointer;background:none;color:#A5A1D0;font-size:13px;line-height:18px;font-weight:600;padding:6px}
+  #toast{position:absolute;left:24px;right:24px;top:470px;display:none;background:#1C1940;color:#fff;border-radius:12px;padding:8px 12px;font-size:13px;line-height:18px;font-weight:600;text-align:center}
+  #toast.on{display:block}
+  /* lớp bắt đầu: cần một cú chạm để trình duyệt cho phát tiếng */
+  #start{position:absolute;inset:0;z-index:5;background:rgba(8,8,16,.9);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center;color:#fff}
+  #start.off{display:none}
+  .face{width:112px;height:112px;border-radius:56px;border:3px solid rgba(255,255,255,.85);background:url(../vendor/vlearn-avatar/stage/d01-tech/call-still.jpg) 50% 30%/360px auto no-repeat}
+  .kicker{font-size:12px;line-height:16px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#FBBF24}
+  .go{font:inherit;border:0;cursor:pointer;display:flex;align-items:center;gap:10px;height:60px;padding:0 28px;border-radius:30px;background:#16A34A;color:#fff;font-size:18px;line-height:24px;font-weight:700}
+  .go:disabled{background:#334155;cursor:default}
+  .go.alt{height:48px;padding:0 22px;background:#1E293B;border:1.5px solid #475569;font-size:15px;line-height:20px}
+  #prog{font-size:13px;line-height:18px;color:#A5A1D0;min-height:18px}
+  .note{font-size:12px;line-height:16px;color:#8B88B3;max-width:280px}
+</style>
+</head>
+<body>
+<div class="frame phone call" data-name="A11h-giup-chi-ho">
+  <div id="tile"><div id="avhost"><div class="still"></div></div><div class="shade-top"></div></div>
+
+  <div class="statusbar on-dark" style="position:absolute;left:0;right:0;top:0"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+  <div style="position:absolute;left:12px;right:12px;top:36px;display:flex;align-items:center;gap:8px">
+    <div class="pillchip"><span class="dot"></span><span>Chị Lan · <span id="clock">00:00</span></span></div>
+    <div class="aichip"><i class="ic s14" data-i="sparkles"></i>AI đóng vai</div>
+    <div class="grow"></div>
+    <div class="self" id="self"><i class="ic s28" data-i="user"></i><div class="t-cap">Bạn</div></div>
+  </div>
+  <div id="caption" class="hide"><div id="demoTag">ĐOẠN MẪU TẠM · giọng có sẵn của avatar để thử khẩu hình, chưa phải lời chị Lan (thiếu file prototype/audio/chi-lan-…m4a)</div><div id="capWho"><i class="ic s14" data-i="mic"></i>Bạn</div><span id="capText"></span></div>
+  <div id="toast"></div>
+
+  <div class="lower">
+    <div class="score">
+      <div class="row between"><div class="t-label bold c-white">Lá chắn chấm lời khuyên</div><div class="t-cap bold" style="color:#FBBF24"><span id="pts">0</span>/4 ý</div></div>
+      <div class="row gap-6 wrap" id="keys">
+        <span class="chip k" data-k="nap"><i class="ic s14" data-i="check"></i>Đừng nạp tiền</span>
+        <span class="chip k" data-k="dauhieu"><i class="ic s14" data-i="check"></i>Chỉ ra dấu hiệu</span>
+        <span class="chip k" data-k="xacminh"><i class="ic s14" data-i="check"></i>Cách xác minh</span>
+        <span class="chip k" data-k="baocao"><i class="ic s14" data-i="check"></i>Rủ báo cáo</span>
+      </div>
+    </div>
+    <div class="ctl" id="ctl">
+      <button class="cb" id="type"><span class="r"><i class="ic s20" data-i="message"></i></span><span class="t-cap">Gõ chữ</span></button>
+      <button class="cb talk" id="talk"><span class="r"><i class="ic s32" data-i="mic"></i></span><span class="t-cap bold" id="talkLbl">Giữ để nói</span></button>
+      <button class="cb end" id="end"><span class="r"><i class="ic s20" data-i="phone-off"></i></span><span class="t-cap">Kết thúc</span></button>
+    </div>
+    <div id="finish">
+      <a class="primary" href="../screens/A11-truyen-tranh.html?frame=A11i-bang-diem-cuoi-bai"><i class="ic s20" data-i="award"></i>Xem bảng điểm</a>
+      <button class="ghost" id="again">Gọi lại từ đầu</button>
+    </div>
+  </div>
+  <div class="gesture clear on-dark" style="position:absolute;left:0;right:0;bottom:0"><div class="pill"></div></div>
+
+  <div id="start">
+    <div class="kicker">Kiểm tra cuối bài · Việc nhẹ lương cao</div>
+    <div class="face"></div>
+    <div><div style="font-size:22px;line-height:30px;font-weight:700">Chị Lan đang gọi</div>
+      <div class="t-label" style="color:#CBD5E1">Gọi video · chị Lan do AI đóng vai</div></div>
+    <button class="go" id="go"><i class="ic s24" data-i="phone"></i>Bắt đầu cuộc gọi</button>
+    <button class="go alt" id="auto"><i class="ic s20" data-i="play"></i>Chạy demo tự động</button>
+    <div id="prog">Đang chuẩn bị nhân vật…</div>
+    <div class="note">Chị Lan hỏi ý kiến bạn. Nghe chị nói, rồi bấm “Giữ để nói” để trả lời.</div>
+  </div>
+</div>
+
+<script>
+  // mở trực tiếp bằng file:// thì trình duyệt chặn module và fetch: cần chạy qua máy chủ web
+  if (location.protocol === 'file:') document.getElementById('prog').textContent = 'Cần mở qua máy chủ web: chạy "python3 -m http.server" trong thư mục la-chan-so rồi vào http://localhost:8000/prototype/video-call.html';
+</script>
+<script type="module">
+import { mountCall, prepareCall } from '../vendor/vlearn-avatar/player/hoc-avatar.js';
+import { lipFromSamples, to16k } from '../vendor/vlearn-avatar/player/hoc-lipfit.js';
+
+const V = '../vendor/vlearn-avatar/';
+const AVATAR = '21';                                   // avatar LiteAvatar 21 (nữ trẻ)
+const LIPFIT = V + 'stage/d01-tech/lipfit-21.json';    // bộ khớp miệng cho file giọng không có khẩu hình tính sẵn
+
+// ===== CÂU CỦA CHỊ LAN: đổi file / chữ ở đây. lip: file .json khẩu hình tính sẵn (để null = tự tính trong trình duyệt) =====
+const LINES = [
+  { audio: 'audio/chi-lan-1.m4a', lip: null, caption: 'Em ơi, chị thấy trên mạng có chỗ tuyển cộng tác viên đặt đơn, lương năm trăm nghìn một ngày. Họ bảo nạp trước hai trăm nghìn là làm được liền. Chị có nên làm không em?' },
+  { audio: 'audio/chi-lan-2.m4a', lip: null, caption: 'Ừ, chị chưa nạp. Mà sao em biết là lừa vậy?' },
+  { audio: 'audio/chi-lan-3.m4a', lip: null, caption: 'Nhờ em mà chị không bị lừa. Chị báo cáo luôn, để người khác cũng biết nha.' },
+];
+// ===== LỜI ĐÁP MẪU CỦA VY (người học) cho chế độ "Chạy demo tự động"; tick: ý được chấm đạt sau câu đó =====
+const VY = [
+  { audio: 'audio/vy-1.m4a', caption: 'Chị ơi, chị đừng nạp tiền nha. Việc thật không bao giờ bắt mình nạp tiền trước đâu.', tick: 'nap' },
+  { audio: 'audio/vy-2.m4a', caption: 'Tại lương cao bất thường, mà còn bắt nạp trước, lại giục làm liền. Đó là chiêu lừa đó chị.', tick: 'dauhieu' },
+  { audio: 'audio/vy-3.m4a', caption: 'Chị báo cáo số đó cho Lá chắn luôn đi, để người khác khỏi bị.', tick: 'baocao' },
+];   // "Cách xác minh" cố ý không đạt: điểm cuối 3/4
+// Đoạn mẫu TẠM (câu CALL.bridge của avatar 21 trong khoá d01-tech, có khẩu hình tính sẵn): chỉ dùng khi file giọng chị Lan chưa có.
+const DEMO = { audio: V + 'stage/d01-tech/audio/CALL.bridge.m4a', lip: V + 'stage/d01-tech/lip/CALL.bridge.json', caption: 'Mình ghi lại ý này, lát nữa mình bổ sung sau nhé.', demo: true };
+// điểm sau mỗi lượt trả lời (mô phỏng chấm): sau lượt 1 đạt 2 ý, sau lượt 2 đạt đủ 4 ý
+const SCORE_AFTER = [2, 4];
+// chờ tối đa bao lâu cho ảnh dáng khép của nhân vật trước khi nói (phần còn lại tính tiếp giữa các câu)
+const READY_WAIT = 5000;
+const SCORE_URL = '../screens/A11-truyen-tranh.html?frame=A11i-bang-diem-cuoi-bai';
+
+const q = new URLSearchParams(location.search);
+if (q.get('audio')) LINES[0] = { audio: q.get('audio'), lip: q.get('lip') || null, caption: q.get('caption') || LINES[0].caption };
+else if (q.get('caption')) LINES[0].caption = q.get('caption');
+const FORCE_DEMO = q.get('demo') === '1', AUTO_URL = q.get('auto') === '1';
+
+const $ = (s) => document.querySelector(s);
+const S = window.__call = { state: 'idle', line: -1, lip: null, demo: false, errors: [] };   // trạng thái (để kiểm thử tự động)
+let call = null, model = null, timer = 0, t0 = 0, idx = -1, busy = false, ended = false, fallbackAudio = null, gen = 0, auto = false, vyCtx = null, vySrc = null;
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// ---- nạp trước nhân vật (~30 MB) ngay khi mở trang, để bấm gọi là có hình ngay ----
+const prep = prepareCall(AVATAR);
+const lipModel = () => (model ||= fetch(LIPFIT).then((r) => r.json()));
+lipModel().catch(() => {});
+if (prep) prep.progress((p) => { if (S.state === 'idle') $('#prog').textContent = p < 1 ? `Đang chuẩn bị nhân vật… ${Math.round(p * 100)}%` : 'Nhân vật đã sẵn sàng'; });
+else $('#prog').textContent = 'Máy này không vẽ được nhân vật (không có WebGL): chỉ phát tiếng.';
+
+const fmt = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+function toast(msg, ms = 2200) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('on'), ms); }
+function setScore(n) { document.querySelectorAll('#keys .k').forEach((el, i) => el.classList.toggle('ok', i < n)); countScore(); }
+function tick(key) { document.querySelector(`#keys .k[data-k="${key}"]`)?.classList.add('ok'); countScore(); }
+function countScore() { $('#pts').textContent = S.score = document.querySelectorAll('#keys .k.ok').length; }
+
+// Phụ đề từng câu: chia lời theo dấu câu, đặt mỗi chỗ chuyển câu vào khoảng lặng gần nhất trong tiếng
+// (lip.bg ≈ 1 là im lặng, 30 khung/giây); không có thì chia theo số chữ.
+let subT = [];
+function subtitles(text, dur, lip, g, me = false) {
+  subT.forEach(clearTimeout); subT = [];
+  $('#caption').classList.remove('hide'); $('#caption').classList.toggle('me', me);
+  const el = $('#capText'), parts = text.match(/[^.?!…]+[.?!…]*\s*/g)?.map((x) => x.trim()).filter(Boolean) || [text];
+  el.textContent = parts[0];
+  if (parts.length < 2 || !dur) { if (!dur) el.textContent = text; return; }
+  const gaps = [], bg = lip?.bg || [];
+  for (let k = 0, run = 0; k <= bg.length; k++) { if (k < bg.length && bg[k] > 0.85) run++; else { if (run >= 5) gaps.push((k - run / 2) / 30); run = 0; } }
+  const words = (x) => x.split(/\s+/).filter(Boolean).length, total = parts.reduce((a, x) => a + words(x), 0);   // tiếng Việt: mỗi chữ ≈ một âm tiết
+  let acc = 0, prev = 0; const plan = S.subPlan = []; S.subGaps = gaps.map((x) => +x.toFixed(2));
+  parts.slice(0, -1).forEach((p, k) => {
+    acc += words(p); let t = acc / total * dur;
+    const near = gaps.filter((x) => x > prev + 0.6 && Math.abs(x - t) < 2.5).sort((a, b) => Math.abs(a - t) - Math.abs(b - t))[0];
+    if (near != null) t = near; prev = t; plan.push(+t.toFixed(2));
+    subT.push(setTimeout(() => { if (g === gen && !ended) el.textContent = parts[k + 1]; }, t * 1000));
+  });
+}
+
+async function exists(url) {
+  try { const r = await fetch(url, { method: 'HEAD', cache: 'no-store' }); return r.ok; } catch { return false; }
+}
+
+// phát một câu: file của chị Lan nếu có, không thì đoạn mẫu tạm. Trả về false nếu bị ngắt.
+async function speakLan(i) {
+  idx = i; S.line = i; busy = true; S.state = 'loading';
+  const g = gen;
+  let L = LINES[i];
+  if (FORCE_DEMO || !(await exists(L.audio))) L = DEMO;
+  const show = (l, dur, lip) => { subtitles(l.caption, dur, lip, g); $('#demoTag').classList.toggle('on', !!l.demo); S.demo = !!l.demo; };
+  const speak = async (l) => {
+    if (call) {
+      const r = await call.speakFile(l.audio, l.lip, l.lip ? null : await lipModel(), (dur, mode, lip) => { show(l, dur, lip); S.lip = mode; S.state = 'speaking'; });
+      S.lip = r.lip;
+    } else {   // không có WebGL: chỉ phát tiếng, giữ ảnh tĩnh
+      S.state = 'speaking'; S.lip = 'none';
+      fallbackAudio = new Audio(l.audio);
+      fallbackAudio.onloadedmetadata = () => show(l, fallbackAudio.duration, null);
+      await new Promise((ok, no) => { fallbackAudio.onended = ok; fallbackAudio.onerror = () => no(new Error('không phát được ' + l.audio)); fallbackAudio.play().catch(no); });
+    }
+  };
+  try { await speak(L); }
+  catch (e) {
+    console.warn('Không phát được câu', L.audio, e); S.errors.push(String(e));
+    if (!L.demo && !ended && g === gen) { try { await speak(DEMO); } catch (e2) { console.warn('Đoạn mẫu cũng lỗi', e2); S.errors.push(String(e2)); show(LINES[i]); } }
+  }
+  if (ended || g !== gen) return false;   // bị ngắt (Kết thúc, hoặc trả lời khi chị Lan đang nói)
+  busy = false;
+  return true;
+}
+
+// chế độ tay: chị Lan nói xong thì chờ người học bấm "Giữ để nói"
+async function playLine(i) {
+  if (!(await speakLan(i))) return;
+  S.state = 'listening';
+  if (i === LINES.length - 1) finish();
+  else { $('#talk').disabled = false; $('#type').disabled = false; }
+}
+
+// Vy (người học) trả lời: phát giọng, phụ đề xanh có nhãn "Bạn", ô "Bạn" sáng viền; không có khẩu hình
+async function playVy(k) {
+  const g = gen, v = VY[k]; S.state = 'learner'; S.line = 'vy' + (k + 1);
+  $('#self').classList.add('talking'); $('#demoTag').classList.remove('on');
+  try {
+    if (!(await exists(v.audio))) throw new Error('thiếu ' + v.audio);
+    const ctx = call?.ctx || (vyCtx ||= new AudioContext());
+    await ctx.resume().catch(() => {});
+    const buf = await fetch(v.audio, { cache: 'no-store' }).then((r) => r.arrayBuffer()).then((b) => ctx.decodeAudioData(b));
+    let lip = null; try { lip = lipFromSamples(await to16k(buf), await lipModel()); } catch { /* chỉ để tìm khoảng lặng cho phụ đề */ }
+    if (ended || g !== gen) return false;
+    subtitles(v.caption, buf.duration, lip, g, true); S.state = 'learner-speaking';
+    await new Promise((ok) => { const src = ctx.createBufferSource(); src.buffer = buf; src.connect(ctx.destination); src.onended = ok; vySrc = src; src.start(); });
+  } catch (e) {
+    console.warn('Giọng Vy', e); S.errors.push('vy: ' + e);
+    subtitles(v.caption, 0, null, g, true); await sleep(Math.max(2500, v.caption.split(/\s+/).length * 320));
+  }
+  vySrc = null; $('#self').classList.remove('talking');
+  return !ended && g === gen;
+}
+
+// "Chạy demo tự động": chị Lan 1 → Vy 1 → chị Lan 2 → Vy 2 → chị Lan 3 → Vy 3 → bảng điểm
+async function autoRun() {
+  auto = S.auto = true; $('#ctl').classList.add('auto');
+  for (let i = 0; i < LINES.length; i++) {
+    if (!(await speakLan(i))) return;
+    await sleep(500); if (ended) return;
+    if (!(await playVy(i))) return;
+    S.state = 'scoring'; toast('Lá chắn đang chấm lời khuyên…', 900); await sleep(900); if (ended) return;
+    tick(VY[i].tick); await sleep(600); if (ended) return;
+  }
+  finish();
+}
+
+function finish() {
+  S.state = 'done'; clearInterval(timer);
+  $('#ctl').style.display = 'none'; $('#finish').classList.add('on');
+}
+
+async function start(autoMode) {
+  if(parent!==window) parent.postMessage({lcs:'call-start'},location.origin);
+  $('#go').disabled = true; $('#auto').disabled = true; S.state = 'connecting';
+  const off = prep ? prep.progress((p) => { $('#prog').textContent = `Đang kết nối… ${Math.round(p * 100)}%`; }) : null;
+  try { call = await mountCall($('#avhost'), AVATAR, () => {}, READY_WAIT); }
+  catch (e) { console.warn('Avatar không chạy được, dùng ảnh tĩnh', e); S.errors.push('avatar: ' + e); call = null; }
+  off?.();
+  $('#start').classList.add('off');
+  t0 = Date.now(); timer = setInterval(() => { $('#clock').textContent = fmt(Math.floor((Date.now() - t0) / 1000)); }, 500);
+  if (autoMode) autoRun(); else playLine(0);
+}
+
+// "Giữ để nói": bản thử không nghe thật, giữ rồi thả = một lượt trả lời; Lá chắn chấm rồi chị Lan nói câu kế
+function answer() {
+  if (auto || ended || idx < 0 || idx >= LINES.length - 1) return;
+  gen++; busy = false; subT.forEach(clearTimeout);
+  call?.stop(); fallbackAudio?.pause();
+  $('#talk').disabled = true; $('#type').disabled = true;
+  S.state = 'scoring'; toast('Lá chắn đang chấm lời khuyên…', 900);
+  const n = SCORE_AFTER[idx] ?? 4, next = idx + 1;
+  setTimeout(() => { setScore(n); playLine(next); }, 900);
+}
+const talk = $('#talk');
+talk.addEventListener('pointerdown', (e) => { if (talk.disabled) return; talk.setPointerCapture?.(e.pointerId); talk.classList.add('hold'); $('#talkLbl').textContent = 'Đang nghe…'; });
+const release = () => { if (!talk.classList.contains('hold')) return; talk.classList.remove('hold'); $('#talkLbl').textContent = 'Giữ để nói'; answer(); };
+talk.addEventListener('pointerup', release); talk.addEventListener('pointercancel', release);
+talk.addEventListener('keydown', (e) => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); answer(); } });
+$('#type').addEventListener('click', () => toast('Bản thử: bấm và giữ nút “Giữ để nói” để trả lời chị Lan.'));
+$('#end').addEventListener('click', () => {
+  ended = true; subT.forEach(clearTimeout); call?.stop(); fallbackAudio?.pause(); try { vySrc?.stop(); } catch { /* đã dừng */ }
+  $('#self').classList.remove('talking'); $('#caption').classList.remove('me'); clearInterval(timer); S.state = 'ended';
+  $('#capText').textContent = 'Cuộc gọi đã kết thúc.'; $('#caption').classList.remove('hide'); $('#demoTag').classList.remove('on');
+  $('#ctl').style.display = 'none'; $('#finish').classList.add('on');
+});
+$('#again').addEventListener('click', () => location.reload());
+$('#go').addEventListener('click', () => start(AUTO_URL));
+$('#auto').addEventListener('click', () => start(true));
+$('#finish a').href = SCORE_URL;
+if(parent!==window) addEventListener('keydown', e => {
+  if(e.key==='ArrowLeft'||e.key==='ArrowRight'){
+    e.preventDefault(); parent.postMessage({lcs:'key',key:e.key},location.origin);
+  }
+});
+talk.disabled = true; $('#type').disabled = true;
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+Use your image generation tool to create the separate square (1:1) illustrations listed below, then save each one as a PNG file at EXACTLY the given path (overwrite existing files). After saving, list the files to confirm they exist.
+
+STYLE: match the attached style reference images exactly in line weight, colour softness and simplicity: clean flat doodle, bold navy-black outlines, warm off-white pastel background (#FFF7ED), soft pastel colours, spacious layout with lots of empty space, gentle humor, cute and charming, like a page of a children's educational comic. Use the reference panel and figures ONLY for drawing style. NEVER draw the owl/griffin mascot from the reference panel, never any bird, beak or wings.
+
+PEOPLE (cute chibi doodle people drawn in the same hand as the reference figures: big round heads, simple dot eyes, rosy cheeks, small smiles, short bodies):
+- Bà Hoa: chibi Vietnamese grandmother, grey hair in a low bun, round glasses, lilac blouse, dark trousers, cosy living room with a blue sofa and orange curtains.
+- Vy: chibi high-school girl, black ponytail with a blue hair tie, white school shirt, navy skirt, small blue backpack, bedroom with a bookshelf and small lamp.
+- Minh: chibi young man, short black hair, green polo shirt.
+- the scammer: a plain grey bean-shaped doodle figure (like the white bean figure in the reference, but grey) wearing a phone headset and dark sunglasses, with a sly grin. Never a real-looking person, never a uniform.
+
+MASCOT "Bé Nai" (the attached assets/spot-mascot.png shows exactly how to draw it, copy it faithfully): a chibi baby deer with caramel-brown fur, cream fawn spots, cream face and belly, big round ears, tiny antler nubs, huge round glossy sparkly eyes, rosy cheeks, a small royal-blue scarf with an amber shield charm. Exactly ONE Bé Nai per panel, fully inside the frame, small to medium size, acting as a friendly guide (pointing, cheering, holding up a stop hand, giving a thumbs up). Keep its eyes big, round and sparkly in every panel.
+
+HARD RULES: absolutely NO text, letters, numbers or writing anywhere (no headline banners, no words in speech bubbles; a speech bubble may contain only one simple icon such as a coin, a gift box, an exclamation mark, a question mark shape drawn as a curl, an ambulance, a banknote or a red cross); no logos; no national emblems; no flags; no maps; no police or military uniforms or insignia; any phone showing something is turned toward the viewer and shows only simple icons.
+
+PANELS:
+assets/comic2-1.png: Vy sitting on her bed, sparkling excited eyes at her phone; a bubble with a coin icon and another with a gift box float from the phone. Bé Nai sits on the bookshelf raising one eyebrow, doubtful.
+assets/comic2-2.png: Vy happily catching a few small gold coins that fly out of her phone into her palm. Bé Nai peers at the coins through a big magnifying glass, suspicious.
+assets/comic2-3.png: Vy worried, holding a big stack of banknotes toward her phone, where the grey bean scammer's hand reaches out of the screen to grab it; her open wallet beside her is empty. Bé Nai is shocked, paws on its cheeks, little red alarm lines around.
+assets/comic2-4.png: Vy confidently showing her phone to a friendly chibi teacher (short hair, mint cardigan); a bubble with a small red flag icon above the phone. Bé Nai cheers with both paws up.
