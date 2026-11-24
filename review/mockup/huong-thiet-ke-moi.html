@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lá chắn số – Hướng thiết kế mới (mockup tham chiếu)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--pri:#344D9C;--gold:#FFCE02;--sky:#2DC5F4;--safe:#1B7F3B;--safe-t:#E8F5EC;--warn:#9A5B00;--warn-t:#FFF3D6;--dang:#C62828;--dang-t:#FDE7E7;
+--pri-d:#263A7A;--pri-t:#E9EDF8;--bg:#FFFFFF;--fill:#F2F4F7;--card:#FFFFFF;--ink:#14213D;--ink2:#4A5672;--line:#DDE3EE;
+--sh:0 0 0 1px #E3E6EC,0 2px 8px rgba(20,33,61,.05);--sh2:0 8px 24px rgba(20,33,61,.12)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Be Vietnam Pro",system-ui,sans-serif;background:#E6E9F0;color:var(--ink);padding:32px}
+h1.page{font-size:26px;margin-bottom:6px}
+p.page{font-size:16px;color:var(--ink2);max-width:1000px;margin-bottom:28px;line-height:1.5}
+.board{display:flex;flex-wrap:wrap;gap:44px 40px;align-items:flex-start}
+figure{width:390px}
+figcaption{font-size:16px;font-weight:700;margin-bottom:10px}
+.phone{width:390px;height:844px;background:var(--bg);border-radius:36px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:var(--sh2)}
+.phone.tall{height:auto}
+.phone.em{background:var(--dang-t)}
+.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.sb{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 26px;font-size:16px;font-weight:600;flex:none}
+.sb i{display:flex;gap:5px;align-items:center}
+.sb b{width:17px;height:11px;border-radius:3px;background:currentColor;opacity:.9}
+.sb u{width:24px;height:12px;border-radius:4px;border:1.5px solid currentColor;position:relative}
+.sb u:after{content:"";position:absolute;inset:1.5px;right:5px;background:currentColor;border-radius:1.5px}
+.ab{display:flex;align-items:center;gap:12px;padding:6px 20px 10px;flex:none}
+.ab h2{font-size:24px;font-weight:700;flex:1;white-space:nowrap}
+.ib{width:48px;height:48px;border-radius:24px;background:var(--card);box-shadow:var(--sh);display:grid;place-items:center;color:var(--pri);flex:none}
+.pill{height:48px;padding:0 16px;border-radius:24px;background:var(--card);box-shadow:var(--sh);display:flex;align-items:center;gap:8px;color:var(--pri);font-size:16px;font-weight:600;white-space:nowrap}
+.body{padding:8px 20px 20px;display:flex;flex-direction:column;gap:14px;flex:1}
+.card{background:var(--fill);border-radius:24px;padding:18px}
+.em .card{background:#fff}
+.btn{height:60px;border-radius:32px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:20px;font-weight:700;width:100%}
+.btn.p{background:var(--pri);color:#fff;box-shadow:0 6px 16px rgba(52,77,156,.28)}
+.btn.s{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1.5px #C9D0DC}
+.btn.w{background:#fff;color:var(--pri);box-shadow:var(--sh)}
+.btn.sm{height:56px;font-size:18px}
+.btn.xl{height:64px}
+.row{display:flex;gap:12px}
+.stack{margin-top:auto;display:flex;flex-direction:column;gap:12px}
+.chip{width:52px;height:52px;border-radius:50%;background:var(--pri-t);color:var(--pri);display:grid;place-items:center;flex:none}
+.lbl{font-size:16px;font-weight:600;color:var(--ink2);display:flex;justify-content:space-between}
+.lbl a{color:var(--pri)}
+.nav{position:absolute;left:12px;right:12px;bottom:16px;height:74px;border-radius:37px;background:#fff;box-shadow:0 0 0 1px #E3E6EC,0 10px 28px rgba(20,33,61,.14);display:flex;padding:7px}
+.nav a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:16px;font-weight:600;color:var(--ink2);border-radius:30px;white-space:nowrap;letter-spacing:-.2px}
+.nav a.on{color:var(--ink);background:var(--fill)}
+.hero{background:linear-gradient(160deg,#2459A0,var(--pri-d));color:#fff;border-radius:0 0 32px 32px;flex:none}
+.brand{display:flex;align-items:center;gap:8px;font-size:18px;font-weight:700}
+.loc{margin-left:auto;display:flex;align-items:center;gap:6px;height:40px;padding:0 14px;border-radius:20px;background:rgba(255,255,255,.16);font-size:16px;font-weight:600}
+.loc .i{width:18px;height:18px}
+/* 0 */
+.role{display:flex;align-items:center;gap:16px;padding:20px 18px;font-size:22px;font-weight:700}
+.role .chip{width:64px;height:64px;background:#fff}
+.lrow .chip{background:#fff}
+.role .chip .i{width:34px;height:34px}
+.role>.i{color:#9AA5BD;margin-left:auto}
+.role.on{outline:2.5px solid var(--pri)}
+/* 1 */
+.logo{width:76px;height:76px;border-radius:24px;background:var(--pri);color:var(--gold);display:grid;place-items:center}
+.logo .i{width:40px;height:40px}
+.brandp{font-size:19px;font-weight:800;color:var(--ink)}
+.brandp .i{color:var(--pri)}
+.field .go{margin-left:auto;width:46px;height:46px;border-radius:23px;background:var(--pri);color:#fff;display:grid;place-items:center}
+.ban{background:var(--dang);color:#fff;border-radius:28px;padding:18px 20px;display:flex;align-items:center;gap:12px}
+.ban b{font-size:23px;font-weight:800;line-height:1.2;display:block}
+.banb{display:inline-flex;align-items:center;height:48px;padding:0 20px;border-radius:24px;background:#fff;color:var(--dang);font-size:17px;font-weight:700;margin-top:12px}
+.banic{margin-left:auto;width:84px;height:84px;border-radius:42px;background:rgba(255,255,255,.16);display:grid;place-items:center;flex:none}
+.banic .i{width:42px;height:42px}
+.lr{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+.lr .av{width:56px;height:56px;border-radius:28px;background:var(--pri-t);color:var(--pri);display:grid;place-items:center;flex:none}
+.lr b{font-size:20px;display:block}
+.lr small{font-size:17px;color:var(--ink2)}
+.lr>.i:last-child{margin-left:auto;color:#9AA5BD}
+.field{height:60px;border-radius:30px;background:var(--fill);display:flex;align-items:center;gap:10px;padding:0 7px 0 18px;font-size:18px;color:var(--ink2)}
+.field .mic{margin-left:auto;width:42px;height:42px;border-radius:21px;background:#fff;color:var(--pri);display:grid;place-items:center}
+.sos{background:var(--dang-t);border-radius:22px;padding:12px 16px;display:flex;align-items:center;gap:14px;font-size:20px;font-weight:700;color:var(--dang)}
+.sos .c{width:48px;height:48px;border-radius:24px;background:var(--dang);color:#fff;display:grid;place-items:center;flex:none}
+.sos>.i{margin-left:auto}
+.tile{flex:1;display:flex;align-items:center;gap:12px;padding:12px 14px;font-size:18px;font-weight:700;line-height:1.2}
+.tile .chip{width:46px;height:46px;border-radius:14px}
+.strip{display:flex;align-items:center;gap:10px;height:56px;padding:0 16px;font-size:17px;font-weight:600;background:#fff;border-radius:28px;box-shadow:var(--sh)}
+.strip .i{color:var(--pri)}
+.strip>.i:last-child{margin-left:auto;color:#9AA5BD}
+.hrow{display:flex;align-items:center;gap:12px;font-size:18px;font-weight:600;padding:10px 16px}
+.hrow .dot{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:none}
+.hrow .dot .i{width:22px;height:22px}
+.hrow em{margin-left:auto;font-style:normal;font-size:16px;font-weight:700}
+/* 2 */
+.seg{background:var(--card);border-radius:40px;box-shadow:var(--sh);padding:6px;display:flex;gap:6px}
+.seg a{flex:1;height:66px;border-radius:34px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:16px;font-weight:600;color:var(--ink2)}
+.seg a.on{background:var(--pri);color:#fff}
+.disp{display:flex;align-items:center;justify-content:center;height:72px;font-size:34px;font-weight:700;letter-spacing:1px;border-bottom:3px solid var(--pri);margin:0 6px}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;justify-items:center}
+.pad a{width:88px;height:64px;border-radius:32px;background:var(--fill);display:grid;place-items:center;font-size:26px;font-weight:600}
+.pad a.g{background:transparent;box-shadow:none;color:var(--pri)}
+/* 3 */
+.res{--c:var(--dang);--t:var(--dang-t);background:var(--t)}
+.res.warn{--c:var(--warn);--t:var(--warn-t)}
+.res.safe{--c:var(--safe);--t:var(--safe-t)}
+.verdict{display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px 20px 52px;flex:none}
+.badge{width:120px;height:120px;border-radius:60px;background:var(--c);color:#fff;display:grid;place-items:center;box-shadow:0 0 0 14px rgba(255,255,255,.55)}
+.badge .i{width:64px;height:64px;stroke-width:2.2}
+.verdict h3{font-size:36px;font-weight:800;color:var(--c);letter-spacing:.5px;margin-top:12px}
+.what{background:#fff;border-radius:22px;height:44px;padding:0 20px;display:flex;align-items:center;font-size:19px;font-weight:600}
+.sheet{background:var(--card);border-radius:30px 30px 0 0;margin-top:-22px;padding:24px 20px 22px;flex:1;display:flex;flex-direction:column;gap:14px}
+.sheet h4{font-size:24px;line-height:1.25}
+.why{display:flex;gap:12px;align-items:center;font-size:19px;font-weight:500}
+.why span{width:40px;height:40px;border-radius:50%;background:var(--t);color:var(--c);display:grid;place-items:center;flex:none}
+.why .i{width:22px;height:22px}
+.note{background:var(--warn-t);color:var(--warn);border-radius:22px;padding:12px 16px;font-size:17px;font-weight:600;display:flex;gap:10px;align-items:center}
+/* 5 */
+.who{display:flex;align-items:center;gap:14px}
+.ava{width:68px;height:68px;border-radius:34px;background:var(--pri-t);color:var(--pri);display:grid;place-items:center;font-size:28px;font-weight:700;flex:none}
+.who b{font-size:24px;display:block}
+.who small{font-size:17px;color:var(--ink2)}
+.who a{margin-left:auto;font-size:17px;font-weight:600;color:var(--pri)}
+.bubble{background:var(--pri);color:#fff;border-radius:22px 22px 6px 22px;padding:16px 18px;font-size:20px;line-height:1.4;margin-left:36px}
+.hint{display:flex;gap:10px;font-size:17px;color:var(--ink2);align-items:center}
+/* 6-8 */
+.prog{display:flex;gap:6px;padding:4px 20px 0}
+.prog i{flex:1;height:6px;border-radius:3px;background:#CFD7E6}
+.prog i.on{background:var(--pri)}
+.tag{align-self:flex-start;height:34px;padding:0 14px;border-radius:17px;background:var(--pri-t);color:var(--pri);font-size:16px;font-weight:700;display:flex;align-items:center}
+.sms{background:#E4E8F0;border-radius:6px 22px 22px 22px;padding:16px 18px;font-size:20px;line-height:1.4;margin-right:36px}
+.from{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:600;color:var(--ink2)}
+.from span{width:40px;height:40px;border-radius:20px;background:#DDE3EE;display:grid;place-items:center}
+.big{font-size:26px;font-weight:700;line-height:1.25}
+.opt{background:#fff;border-radius:26px;box-shadow:var(--sh);padding:0 18px;height:64px;font-size:19px;font-weight:500;display:flex;gap:10px;align-items:center}
+.opt.ok{background:var(--safe-t);outline:2.5px solid var(--safe);color:var(--safe);font-weight:700;box-shadow:none}
+.fb{background:var(--safe-t);border-radius:24px;padding:14px 16px;font-size:18px;line-height:1.35}
+.fb b{color:var(--safe);font-size:20px;display:block}
+.score{font-size:72px;font-weight:800;color:var(--pri);line-height:1}
+/* 9 */
+.kpi{flex:1;padding:16px}
+.kpi b{font-size:36px;font-weight:800;color:var(--pri);display:block;line-height:1.1}
+.kpi span{font-size:16px;color:var(--ink2);display:block;margin-top:4px}
+.ct{font-size:19px;font-weight:700;margin-bottom:12px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tiles div{height:86px;border-radius:14px;padding:10px;display:flex;flex-direction:column;justify-content:space-between;font-size:16px;font-weight:600;line-height:1.1}
+.tiles b{font-size:22px;font-weight:800}
+.h5{background:#344D9C;color:#fff}.h4{background:#5C72B5;color:#fff}.h3{background:#9AA8D3;color:var(--ink)}.h2{background:#CDD4EA;color:var(--ink)}.h1{background:#E9EDF8;color:var(--ink)}
+.leg{display:flex;align-items:center;gap:6px;font-size:16px;color:var(--ink2);margin-top:12px}
+.leg i{width:26px;height:10px;border-radius:5px}
+.bar{display:grid;grid-template-columns:162px 1fr 30px;align-items:center;gap:10px;font-size:16px;height:34px}
+.bar i{height:12px;border-radius:6px;background:#9AA8D3}
+.bar.top i{background:var(--pri)}
+.bar b{text-align:right}
+/* trạng thái */
+.center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;padding:0 10px}
+.center h3{font-size:28px;line-height:1.25}
+.center p{font-size:19px;color:var(--ink2);line-height:1.4}
+.bigic{width:112px;height:112px;border-radius:56px;display:grid;place-items:center;background:var(--pri-t);color:var(--pri);margin-bottom:10px}
+.bigic .i{width:56px;height:56px}
+.bigic.ok{background:var(--safe);color:#fff;box-shadow:0 0 0 12px var(--safe-t)}
+.bigic.wn{background:var(--warn-t);color:var(--warn)}
+.spin{width:84px;height:84px;border-radius:50%;border:9px solid #DCE2F3;border-top-color:var(--pri);margin-bottom:14px}
+/* 1b 1c */
+.step{display:flex;gap:16px;align-items:center;padding:18px;font-size:24px;font-weight:700}
+.step .n{width:48px;height:48px;border-radius:24px;background:var(--dang);color:#fff;display:grid;place-items:center;font-size:24px;font-weight:800;flex:none}
+.step>.i{margin-left:auto;color:var(--dang);width:30px;height:30px}
+.q{padding:14px 14px 14px 16px;display:flex;align-items:center;gap:10px;font-size:19px;font-weight:700;line-height:1.25}
+.yn{display:flex;gap:8px;margin-left:auto;flex:none}
+.yn a{width:78px;height:56px;border-radius:28px;background:#fff;box-shadow:var(--sh);color:var(--pri);display:grid;place-items:center;font-size:18px;font-weight:700}
+.yn a.on{background:var(--pri);color:#fff;box-shadow:none}
+/* 4 */
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opts a{height:60px;border-radius:30px;background:#fff;box-shadow:var(--sh);display:grid;place-items:center;font-size:18px;font-weight:600}
+.opts a.on{background:var(--pri);color:#fff}
+.inp{padding:14px 18px}
+.inp small{font-size:16px;color:var(--ink2)}
+.inp strong{display:block;font-size:26px;font-weight:700;margin-top:2px}
+.tog{display:flex;align-items:center;padding:16px 18px;font-size:19px;font-weight:700}
+.sw{width:56px;height:32px;border-radius:16px;background:var(--pri);position:relative;margin-left:auto;flex:none}
+.sw:after{content:"";position:absolute;right:3px;top:3px;width:26px;height:26px;border-radius:13px;background:#fff}
+/* 10 11 */
+mark{white-space:nowrap;background:var(--warn-t);color:inherit;border-bottom:2px solid var(--warn);font-weight:700;padding:0 3px;border-radius:4px 4px 0 0}
+.vs{background:var(--dang-t);border-radius:28px;padding:14px 16px;display:flex;align-items:center;gap:14px}
+.vs .c{width:52px;height:52px;border-radius:26px;background:var(--dang);color:#fff;display:grid;place-items:center;flex:none}
+.vs b{font-size:24px;font-weight:800;color:var(--dang);display:block;line-height:1.1}
+.vs small{font-size:17px}
+.wave{display:flex;align-items:center;justify-content:center;gap:5px;height:64px}
+.wave i{width:6px;border-radius:3px;background:var(--pri)}
+.micb{width:104px;height:104px;border-radius:52px;background:var(--pri);color:#fff;display:grid;place-items:center;box-shadow:0 0 0 14px #DCE2F3;margin:18px 0 14px}
+.micb .i{width:48px;height:48px}
+.li{display:flex;align-items:center;height:58px;padding:0 18px;font-size:19px;font-weight:600;border-bottom:1px solid var(--line)}
+.li:last-child{border-bottom:0}
+.rad{margin-left:auto;width:26px;height:26px;border-radius:13px;border:2.5px solid #B8C2D6}
+.rad.on{border-color:var(--pri);background:radial-gradient(var(--pri) 42%,#fff 48%)}
+.lrow{display:flex;align-items:center;gap:14px;padding:14px 16px;font-size:20px;font-weight:700}
+.lrow small{display:block;font-size:16px;color:var(--ink2);font-weight:500}
+.lrow>.i{margin-left:auto;color:#9AA5BD}
+.set{padding:4px 0}
+.srow{display:flex;align-items:center;gap:14px;height:66px;padding:0 18px;font-size:19px;font-weight:600;border-bottom:1px solid var(--line)}
+.srow:last-child{border-bottom:0}
+.srow>.i:first-child{color:var(--pri)}
+.srow em{margin-left:auto;font-style:normal;font-size:17px;font-weight:500;color:var(--ink2)}
+.srow em+.i{color:#9AA5BD;margin-left:-6px}
+.st{margin-left:auto;height:36px;padding:0 14px;border-radius:18px;display:flex;align-items:center;font-size:16px;font-weight:700;white-space:nowrap}
+.st.ok{background:var(--pri-t);color:var(--pri)}
+.st.no{background:#E3E6EC;color:var(--ink2)}
+.st.on{background:var(--safe-t);color:var(--safe)}
+.st.off{background:var(--dang-t);color:var(--dang)}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute">
+<defs>
+<symbol id="search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+<symbol id="phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+<symbol id="phoneoff" viewBox="0 0 24 24"><path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.42 19.42 0 0 1-3.33-2.67m-2.67-3.34a19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91"/><path d="M23 1 1 23"/></symbol>
+<symbol id="link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol>
+<symbol id="cardi" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></symbol>
+<symbol id="users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+<symbol id="user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+<symbol id="book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+<symbol id="vol" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></symbol>
+<symbol id="mic" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/></symbol>
+<symbol id="back" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+<symbol id="next" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+<symbol id="xoct" viewBox="0 0 24 24"><path d="M7.86 2h8.28L22 7.86v8.28L16.14 22H7.86L2 16.14V7.86z"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></symbol>
+<symbol id="tri" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+<symbol id="shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+<symbol id="shieldok" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+<symbol id="flag" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22v-7"/></symbol>
+<symbol id="send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/></symbol>
+<symbol id="home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></symbol>
+<symbol id="pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+<symbol id="clip" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></symbol>
+<symbol id="grad" viewBox="0 0 24 24"><path d="M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/><path d="M22 10v6"/></symbol>
+<symbol id="mega" viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></symbol>
+<symbol id="lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+<symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+<symbol id="x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+<symbol id="dl" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
+<symbol id="info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
+<symbol id="img" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></symbol>
+<symbol id="wifioff" viewBox="0 0 24 24"><path d="M1 1l22 22"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.58 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><path d="M12 20h.01"/></symbol>
+<symbol id="check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+<symbol id="award" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.48 12.89 17 22l-5-3-5 3 1.52-9.11"/></symbol>
+<symbol id="del" viewBox="0 0 24 24"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><path d="m18 9-6 6"/><path d="m12 9 6 6"/></symbol>
+<symbol id="msg" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+<symbol id="hand" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></symbol>
+</defs>
+</svg>
+<h1 class="page">Lá chắn số – Hướng thiết kế mới (phẳng, bo tròn, ít chữ)</h1>
+<p class="page">Mockup tham chiếu 29 màn để dựng lại trên Figma. Quy tắc chữ: tiêu đề tối đa 4 từ, nút tối đa 3 từ, mỗi màn nhiều nhất một câu phụ ngắn; phần còn lại nói bằng biểu tượng, màu và bố cục. Màu chủ đạo lấy theo biểu trưng tỉnh Đồng Nai: xanh bánh răng #344D9C, vàng #FFCE02 làm điểm nhấn (không dùng hình biểu trưng). Dữ liệu trong hình là giả lập.</p>
+<div class="board">
+<figure><figcaption>0. Chọn vai trò</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="body" style="padding-top:26px;gap:16px">
+<div class="logo"><svg class="i"><use href="#shieldok"/></svg></div>
+<div><div style="font-size:36px;font-weight:800">Lá chắn số</div><div style="font-size:19px;color:var(--ink2);margin-top:4px">Kiểm tra trước khi chuyển tiền</div></div>
+<div style="font-size:22px;font-weight:700;margin-top:20px">Bạn là ai?</div>
+<div class="card role on"><div class="chip"><svg class="i"><use href="#user"/></svg></div>Người lớn tuổi<svg class="i"><use href="#next"/></svg></div>
+<div class="card role"><div class="chip"><svg class="i"><use href="#grad"/></svg></div>Học sinh<svg class="i"><use href="#next"/></svg></div>
+<div class="card role"><div class="chip"><svg class="i"><use href="#mega"/></svg></div>Đội tình nguyện<svg class="i"><use href="#next"/></svg></div></div></div></figure>
+
+<figure><figcaption>0b. Quyền riêng tư</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="body" style="padding-top:22px">
+<div class="bigic" style="margin:0;width:76px;height:76px"><svg class="i" style='width:38px;height:38px'><use href="#lock"/></svg></div>
+<div style="font-size:30px;font-weight:800">Quyền riêng tư</div>
+<div class="lbl">Chỉ xin 1 quyền</div>
+<div class="card set"><div class="srow"><svg class="i"><use href="#mic"/></svg>Micro<span class="st ok">Khi đọc số</span></div></div>
+<div class="lbl">Không bao giờ đọc</div>
+<div class="card set"><div class="srow"><svg class="i"><use href="#users"/></svg>Danh bạ<span class="st no">Không</span></div><div class="srow"><svg class="i"><use href="#msg"/></svg>Tin nhắn<span class="st no">Không</span></div><div class="srow"><svg class="i"><use href="#phone"/></svg>Cuộc gọi<span class="st no">Không</span></div></div>
+<div class="stack"><div class="btn p xl">Đồng ý</div></div></div></div></figure>
+
+<figure><figcaption>1. Trang chủ</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="body" style="padding-top:6px">
+<div class="row" style="align-items:center"><div class="pill brandp"><svg class="i"><use href="#shieldok"/></svg>Lá chắn số</div><div class="pill" style="margin-left:auto"><svg class="i"><use href="#pin"/></svg>Trấn Biên</div></div>
+<div style="font-size:34px;font-weight:800;margin-top:4px">Chào Bác!</div>
+<div class="field"><svg class="i"><use href="#search"/></svg>Nhập số lạ, đường dẫn<div class="go"><svg class="i"><use href="#next"/></svg></div></div>
+<div class="ban"><div><b>Đang bị gọi<br>đòi tiền?</b><div class="banb">Xem cách xử lý</div></div><div class="banic"><svg class="i"><use href="#phoneoff"/></svg></div></div>
+<div>
+<div class="lr"><div class="av"><svg class="i"><use href="#users"/></svg></div><div><b>Hỏi người thân</b><small>Lan · con gái</small></div><svg class="i"><use href="#next"/></svg></div>
+<div class="lr"><div class="av"><svg class="i"><use href="#book"/></svg></div><div><b>Bài học 1 phút</b><small>3 bài</small></div><svg class="i"><use href="#next"/></svg></div>
+<div class="lr"><div class="av"><svg class="i"><use href="#pin"/></svg></div><div><b>Trấn Biên tuần này</b><small>Giả danh điện lực</small></div><svg class="i"><use href="#next"/></svg></div>
+<div class="lr"><div class="av" style="background:var(--dang-t);color:var(--dang)"><svg class="i"><use href="#xoct"/></svg></div><div><b>09xx xxx 123</b><small style="color:var(--dang);font-weight:600">Nguy hiểm · hôm nay</small></div><svg class="i"><use href="#next"/></svg></div>
+</div></div>
+<div class="nav"><a class="on"><svg class="i"><use href="#home"/></svg>Trang chủ</a><a><svg class="i"><use href="#book"/></svg>Bài học</a><a><svg class="i"><use href="#flag"/></svg>Báo cáo</a><a><svg class="i"><use href="#user"/></svg>Cá nhân</a></div></div></figure>
+
+<figure><figcaption>1a. Chọn phường</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="ab"><div class="ib"><svg class="i"><use href="#back"/></svg></div><h2>Chọn phường</h2></div><div class="body"><div class="card" style="padding:4px 0"><div class="li">Trấn Biên<i class="rad on"></i></div><div class="li">Biên Hòa<i class="rad"></i></div><div class="li">Tam Hiệp<i class="rad"></i></div><div class="li">Long Bình<i class="rad"></i></div><div class="li">Trảng Dài<i class="rad"></i></div><div class="li">Hố Nai<i class="rad"></i></div><div class="li">Long Hưng<i class="rad"></i></div><div class="li">Tam Phước<i class="rad"></i></div><div class="li">Phước Tân<i class="rad"></i></div></div></div></div></figure>
+
+<figure><figcaption>1b. Khẩn cấp – Đang bị gọi đòi tiền</figcaption>
+<div class="phone em"><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="ab"><div class="ib"><svg class="i"><use href="#x"/></svg></div><h2></h2></div><div class="body" style="gap:16px">
+<div style="font-size:32px;font-weight:800;line-height:1.2;color:var(--dang)">Bình tĩnh.<br>Đừng chuyển tiền.</div>
+<div class="card step"><div class="n">1</div>Dừng lại<svg class="i"><use href="#hand"/></svg></div>
+<div class="card step"><div class="n">2</div>Cúp máy<svg class="i"><use href="#phoneoff"/></svg></div>
+<div class="card step"><div class="n">3</div>Gọi người thân<svg class="i"><use href="#users"/></svg></div>
+<div class="stack"><div class="btn p xl"><svg class="i"><use href="#phone"/></svg>Gọi cho Lan</div><div class="btn w sm">Kể lại cuộc gọi</div></div></div></div></figure>
+
+<figure><figcaption>1c. Sau cuộc gọi lạ – Trả lời 4 câu</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="ab"><div class="ib"><svg class="i"><use href="#back"/></svg></div><h2>Cuộc gọi lạ</h2><div class="pill"><svg class="i"><use href="#vol"/></svg>Nghe</div></div><div class="body"><div style="font-size:20px;font-weight:600">Người gọi có…</div><div class="card q">Xưng công an, ngân hàng?<div class="yn"><a class="on">Có</a><a class="">Không</a></div></div><div class="card q">Đòi tiền hoặc mã OTP?<div class="yn"><a class="on">Có</a><a class="">Không</a></div></div><div class="card q">Giục làm ngay?<div class="yn"><a class="on">Có</a><a class="">Không</a></div></div><div class="card q">Dặn giữ bí mật?<div class="yn"><a class="">Có</a><a class="on">Không</a></div></div>
+<div class="stack"><div class="btn p xl">Xem kết quả</div></div></div></div></figure>
+
+<figure><figcaption>2. Kiểm tra nhanh</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="ab"><div class="ib"><svg class="i"><use href="#back"/></svg></div><h2>Kiểm tra</h2><div class="pill"><svg class="i"><use href="#vol"/></svg>Nghe</div></div><div class="body">
+<div class="seg"><a class="on"><svg class="i"><use href="#phone"/></svg>Điện thoại</a><a><svg class="i"><use href="#link"/></svg>Đường dẫn</a><a><svg class="i"><use href="#cardi"/></svg>Tài khoản</a></div>
+<div class="disp">09xx xxx 123</div>
+<div class="row"><div class="btn s sm"><svg class="i"><use href="#clip"/></svg>Dán</div><div class="btn s sm"><svg class="i"><use href="#mic"/></svg>Đọc số</div></div>
+<div class="pad"><a>1</a><a>2</a><a>3</a><a>4</a><a>5</a><a>6</a><a>7</a><a>8</a><a>9</a><a class="g"></a><a>0</a><a class="g"><svg class="i" style='width:30px;height:30px'><use href="#del"/></svg></a></div>
+<div class="stack"><div class="btn p xl"><svg class="i"><use href="#search"/></svg>Kiểm tra</div></div></div></div></figure>
+
+<figure><figcaption>2. Kiểm tra nhanh – Đường dẫn</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="ab"><div class="ib"><svg class="i"><use href="#back"/></svg></div><h2>Kiểm tra</h2><div class="pill"><svg class="i"><use href="#vol"/></svg>Nghe</div></div><div class="body">
+<div class="seg"><a><svg class="i"><use href="#phone"/></svg>Điện thoại</a><a class="on"><svg class="i"><use href="#link"/></svg>Đường dẫn</a><a><svg class="i"><use href="#cardi"/></svg>Tài khoản</a></div>
+<div class="card" style="min-height:150px;border:2.5px solid var(--pri);font-size:22px;font-weight:700;line-height:1.35;word-break:break-all">quatang-tri-an.example</div>
+<div class="btn s sm"><svg class="i"><use href="#clip"/></svg>Dán</div>
+<div class="hint"><svg class="i"><use href="#msg"/></svg>Dán được cả tin nhắn.</div>
+<div class="stack"><div class="btn p xl"><svg class="i"><use href="#search"/></svg>Kiểm tra</div></div></div></div></figure>
+
+<figure><figcaption>2a. Kiểm tra nhanh – Đang kiểm tra</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="ab"><div class="ib"><svg class="i"><use href="#back"/></svg></div><h2>Kiểm tra</h2></div><div class="body"><div class="center"><div class="spin"></div><h3>Đang kiểm tra…</h3><p>09xx xxx 123</p></div></div></div></figure>
+
+<figure><figcaption>2b. Kiểm tra nhanh – Mất mạng</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="ab"><div class="ib"><svg class="i"><use href="#back"/></svg></div><h2>Kiểm tra</h2></div><div class="body"><div class="center"><div class="bigic wn"><svg class="i"><use href="#wifioff"/></svg></div><h3>Mất mạng</h3><p>Chưa kiểm tra được.<br>Bác đừng chuyển tiền.</p></div>
+<div class="stack"><div class="btn p xl">Thử lại</div><div class="btn s"><svg class="i"><use href="#phone"/></svg>Gọi người thân</div></div></div></div></figure>
+
+<figure><figcaption>3. Kết quả kiểm tra – Nguy hiểm</figcaption>
+<div class="phone res "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="ab"><div class="ib"><svg class="i"><use href="#back"/></svg></div><h2>Kết quả</h2><div class="pill"><svg class="i"><use href="#vol"/></svg>Nghe</div></div><div class="verdict"><div class="badge"><svg class="i"><use href="#xoct"/></svg></div><h3>NGUY HIỂM</h3><div class="what">09xx xxx 123</div></div>
+<div class="sheet"><h4>Đừng chuyển tiền!</h4><div class="why"><span><svg class="i"><use href="#user"/></svg></span>Giả danh công an</div><div class="why"><span><svg class="i"><use href="#clock"/></svg></span>Đòi chuyển tiền gấp</div><div class="why"><span><svg class="i"><use href="#flag"/></svg></span>12 người đã báo cáo</div><div class="stack"><div class="btn p"><svg class="i"><use href="#users"/></svg>Hỏi người thân</div><div class="btn s sm"><svg class="i"><use href="#flag"/></svg>Báo cáo</div></div></div></div></figure>
+
+<figure><figcaption>3. Kết quả kiểm tra – Nghi ngờ</figcaption>
+<div class="phone res warn"><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="ab"><div class="ib"><svg class="i"><use href="#back"/></svg></div><h2>Kết quả</h2><div class="pill"><svg class="i"><use href="#vol"/></svg>Nghe</div></div><div class="verdict"><div class="badge"><svg class="i"><use href="#tri"/></svg></div><h3>NGHI NGỜ</h3><div class="what">09xx xxx 456</div></div>
+<div class="sheet"><h4>Hỏi người thân trước đã.</h4><div class="why"><span><svg class="i"><use href="#clock"/></svg></span>Số mới, chưa ai báo cáo</div><div class="why"><span><svg class="i"><use href="#search"/></svg></span>Không có trong danh bạ phường</div><div class="stack"><div class="btn p"><svg class="i"><use href="#users"/></svg>Hỏi người thân</div><div class="btn s sm"><svg class="i"><use href="#flag"/></svg>Báo cáo</div></div></div></div></figure>
+
+<figure><figcaption>3. Kết quả kiểm tra – An toàn</figcaption>
+<div class="phone res safe"><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="ab"><div class="ib"><svg class="i"><use href="#back"/></svg></div><h2>Kết quả</h2><div class="pill"><svg class="i"><use href="#vol"/></svg>Nghe</div></div><div class="verdict"><div class="badge"><svg class="i"><use href="#shieldok"/></svg></div><h3>AN TOÀN</h3><div class="what">0251 3xxx 888</div></div>
+<div class="sheet"><h4>Số chính thức của phường.</h4><div class="why"><span><svg class="i"><use href="#phone"/></svg></span>Tổng đài dịch vụ công</div><div class="why"><span><svg class="i"><use href="#flag"/></svg></span>Chưa ai báo cáo</div><div class="note"><svg class="i"><use href="#tri"/></svg>Tổng đài thật không đòi chuyển tiền.</div><div class="stack"><div class="btn p"><svg class="i"><use href="#search"/></svg>Kiểm tra số khác</div><div class="btn s sm"><svg class="i"><use href="#users"/></svg>Hỏi người thân</div></div></div></div></figure>
+
+<figure><figcaption>4. Báo cáo</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="ab"><div class="ib"><svg class="i"><use href="#back"/></svg></div><h2>Báo cáo</h2></div><div class="body">
+<div class="opts"><a class="on">Giả công an</a><a>Nhận quà</a><a>Tuyển việc</a><a>Giả người thân</a><a>Giả ngân hàng</a><a>Khác</a></div>
+<div class="card inp"><small>Số hoặc đường dẫn</small><strong>09xx xxx 123</strong></div>
+<div class="strip"><svg class="i"><use href="#pin"/></svg>Trấn Biên<svg class="i"><use href="#next"/></svg></div>
+<div class="hint"><svg class="i"><use href="#lock"/></svg>Ẩn danh, không lưu tên.</div>
+<div class="stack"><div class="btn p xl"><svg class="i"><use href="#send"/></svg>Gửi báo cáo</div></div></div></div></figure>
+
+<figure><figcaption>4b. Báo cáo – Đã gửi</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="ab"><div class="ib"><svg class="i"><use href="#x"/></svg></div><h2>Báo cáo</h2></div><div class="body"><div class="center"><div class="bigic ok"><svg class="i"><use href="#check"/></svg></div><h3>Đã gửi!</h3><p>Đội tình nguyện Trấn Biên đã nhận.</p><p style="font-size:16px">Dự kiến chuyển tới Công an (mô phỏng)</p></div>
+<div class="stack"><div class="btn p xl">Về trang chủ</div></div></div></div></figure>
+
+<figure><figcaption>5. Hỏi người thân</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="ab"><div class="ib"><svg class="i"><use href="#back"/></svg></div><h2>Hỏi người thân</h2></div><div class="body">
+<div class="card who"><div class="ava">L</div><div><b>Lan</b><small>Con gái · 09xx xxx 889</small></div><a>Đổi</a></div>
+<div class="lbl" style="margin-top:8px">Tin nhắn<a>Sửa</a></div>
+<div class="bubble">Lan ơi, số 09xx xxx 123 gọi mẹ đòi chuyển tiền. Có phải lừa đảo không con?</div>
+<div class="hint"><svg class="i"><use href="#lock"/></svg>Chỉ gửi khi Bác bấm nút.</div>
+<div class="stack"><div class="btn p xl"><svg class="i"><use href="#send"/></svg>Gửi cho Lan</div><div class="btn s"><svg class="i"><use href="#phone"/></svg>Gọi điện</div></div></div></div></figure>
+
+<figure><figcaption>5a. Hỏi người thân – Chưa chọn người thân</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="ab"><div class="ib"><svg class="i"><use href="#back"/></svg></div><h2>Hỏi người thân</h2></div><div class="body"><div class="center"><div class="bigic"><svg class="i"><use href="#users"/></svg></div><h3>Chưa có người thân</h3><p>Chọn con hoặc cháu để hỏi nhanh.</p></div>
+<div class="stack"><div class="btn p xl">Chọn người thân</div></div></div></div></figure>
+
+<figure><figcaption>5b. Hỏi người thân – Chờ trả lời</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="ab"><div class="ib"><svg class="i"><use href="#x"/></svg></div><h2>Hỏi người thân</h2></div><div class="body"><div class="center"><div class="bigic"><svg class="i"><use href="#clock"/></svg></div><h3>Chờ Lan trả lời</h3><p>Bác đừng chuyển tiền.</p></div>
+<div class="stack"><div class="btn p xl"><svg class="i"><use href="#phone"/></svg>Gọi điện</div><div class="btn s">Về trang chủ</div></div></div></div></figure>
+
+<figure><figcaption>5c. Hỏi người thân – Thêm người thân</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="ab"><div class="ib"><svg class="i"><use href="#back"/></svg></div><h2>Người thân</h2></div><div class="body">
+<div class="card inp"><small>Tên</small><strong>Lan</strong></div>
+<div class="card inp"><small>Số điện thoại</small><strong>09xx xxx 889</strong></div>
+<div class="opts"><a class="on">Con</a><a>Cháu</a><a>Vợ / chồng</a><a>Khác</a></div>
+<div class="stack"><div class="btn p xl">Lưu</div></div></div></div></figure>
+
+<figure><figcaption>6. Bài học – Danh sách</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="body" style="padding-top:14px"><div style="font-size:30px;font-weight:800">Bài học</div><div class="card lrow"><div class="chip"><svg class="i"><use href="#user"/></svg></div><div>Giả danh công an<small>1 phút</small></div><svg class="i"><use href="#next"/></svg></div><div class="card lrow"><div class="chip"><svg class="i"><use href="#msg"/></svg></div><div>Việc nhẹ lương cao<small>1 phút</small></div><svg class="i"><use href="#next"/></svg></div><div class="card lrow"><div class="chip"><svg class="i"><use href="#link"/></svg></div><div>Đường dẫn nhận quà<small>1 phút</small></div><svg class="i"><use href="#next"/></svg></div>
+<div class="btn p xl" style="margin-top:6px"><svg class="i"><use href="#award"/></svg>Làm bài kiểm tra</div></div>
+<div class="nav"><a><svg class="i"><use href="#home"/></svg>Trang chủ</a><a class="on"><svg class="i"><use href="#book"/></svg>Bài học</a><a><svg class="i"><use href="#flag"/></svg>Báo cáo</a><a><svg class="i"><use href="#user"/></svg>Cá nhân</a></div></div></figure>
+
+<figure><figcaption>6. Bài học 1 phút</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="prog"><i class="on"></i><i></i><i></i><i></i></div><div class="ab" style='padding-top:12px'><div class="ib"><svg class="i"><use href="#x"/></svg></div><h2>Việc nhẹ lương cao</h2><div class="pill">1/4</div></div><div class="body">
+<div class="from" style="margin-top:8px"><span><svg class="i"><use href="#user"/></svg></span>Tài khoản lạ</div>
+<div class="sms">Tuyển cộng tác viên chốt đơn. Bấm thích video, nhận 300.000đ/ngày!</div>
+<div class="big" style="margin-top:14px">Có gì đáng ngờ?</div>
+<div class="stack"><div class="btn p xl">Xem dấu hiệu<svg class="i"><use href="#next"/></svg></div></div></div></div></figure>
+
+<figure><figcaption>7. Bài kiểm tra – Trả lời đúng</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="prog"><i class="on"></i><i></i><i></i><i></i><i></i></div><div class="ab" style='padding-top:12px'><div class="ib"><svg class="i"><use href="#x"/></svg></div><h2>Bài kiểm tra</h2><div class="pill">1/5</div></div><div class="body">
+<div class="sms">Nộp 500.000đ, nhận ngay 650.000đ sau 5 phút.</div>
+<div class="big">Bạn làm gì?</div>
+<div class="opt">Chuyển thử 500.000đ</div>
+<div class="opt ok"><svg class="i"><use href="#check"/></svg>Dừng lại và báo cáo</div>
+<div class="opt">Mượn tiền nạp thêm</div>
+<div class="fb"><b>Đúng rồi!</b>Lãi nhỏ trước, khóa tài khoản sau.</div>
+<div class="stack"><div class="btn p xl">Câu tiếp<svg class="i"><use href="#next"/></svg></div></div></div></div></figure>
+
+<figure><figcaption>8. Kết quả bài kiểm tra</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="ab"><div class="ib"><svg class="i"><use href="#x"/></svg></div><h2>Kết quả</h2></div><div class="body">
+<div class="card" style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:30px 18px">
+<div class="bigic" style="margin:0;background:var(--gold);color:var(--ink)"><svg class="i"><use href="#award"/></svg></div><div class="score">4/5</div><div style="font-size:24px;font-weight:700">Rất tốt!</div><div class="tag" style="align-self:center">Hiệp sĩ Lá chắn số</div></div>
+<div class="lbl">Cần xem lại</div>
+<div class="strip"><svg class="i"><use href="#link"/></svg>Đường dẫn nhận quà<svg class="i"><use href="#next"/></svg></div>
+<div class="stack"><div class="btn p xl"><svg class="i"><use href="#book"/></svg>Học lại</div><div class="btn s">Trang chủ</div></div></div></div></figure>
+
+<figure><figcaption>9. Thống kê đội tình nguyện (màn cuộn)</figcaption>
+<div class="phone tall"><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="ab"><div class="ib"><svg class="i"><use href="#back"/></svg></div><h2>Thống kê</h2></div><div class="body">
+<div class="lbl">Tháng 11/2026 · Biên Hòa</div>
+<div class="row"><div class="card kpi"><b>120</b><span>lượt báo cáo</span></div><div class="card kpi"><b>35%</b><span>đường dẫn giả</span></div></div>
+<div class="card"><div class="ct">Điểm nóng</div><div class="tiles">
+<div class="h5">Trấn Biên<b>28</b></div><div class="h5">Long Bình<b>24</b></div><div class="h4">Tam Hiệp<b>18</b></div>
+<div class="h4">Trảng Dài<b>16</b></div><div class="h3">Hố Nai<b>12</b></div><div class="h3">Biên Hòa<b>10</b></div>
+<div class="h2">Long Hưng<b>5</b></div><div class="h1">Tam Phước<b>4</b></div><div class="h1">Phước Tân<b>3</b></div></div>
+<div class="leg">Ít<i class="h1"></i><i class="h2"></i><i class="h3"></i><i class="h4"></i><i class="h5"></i>Nhiều</div></div>
+<div class="card"><div class="ct">Kiểu lừa đảo</div>
+<div class="bar top"><span>Đường dẫn giả</span><i style="width:100%"></i><b>42</b></div>
+<div class="bar"><span>Giả danh công an</span><i style="width:52%"></i><b>22</b></div>
+<div class="bar"><span>Tuyển cộng tác viên</span><i style="width:43%"></i><b>18</b></div>
+<div class="bar"><span>Giả ngân hàng</span><i style="width:33%"></i><b>14</b></div>
+<div class="bar"><span>Người thân gặp nạn</span><i style="width:29%"></i><b>12</b></div>
+<div class="bar"><span>Kiểu khác</span><i style="width:29%"></i><b>12</b></div></div>
+<div class="lbl">Mới tuần này</div>
+<div class="strip"><svg class="i" style='color:var(--warn)'><use href="#tri"/></svg>Giả danh điện lực thu tiền<svg class="i"><use href="#next"/></svg></div>
+<div class="btn p"><svg class="i"><use href="#send"/></svg>Chia sẻ cảnh báo</div></div></div></figure>
+
+<figure><figcaption>10. AI phân tích tin nhắn</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="ab"><div class="ib"><svg class="i"><use href="#back"/></svg></div><h2>Tin nhắn lạ</h2><div class="pill"><svg class="i"><use href="#vol"/></svg>Nghe</div></div><div class="body" style="--c:var(--dang);--t:var(--dang-t)">
+<div class="sms">Tài khoản sẽ bị <mark>khóa</mark> trong 30 phút. Bấm <mark>nhan-qua-tri-an.example</mark>, nhập <mark>mã OTP</mark>.</div>
+<div class="vs"><div class="c"><svg class="i"><use href="#xoct"/></svg></div><div><b>NGUY HIỂM</b><small>3 dấu hiệu</small></div></div>
+<div class="why"><span><svg class="i"><use href="#clock"/></svg></span>Dọa khóa tài khoản</div>
+<div class="why"><span><svg class="i"><use href="#link"/></svg></span>Đường dẫn lạ</div>
+<div class="why"><span><svg class="i"><use href="#lock"/></svg></span>Đòi mã OTP</div>
+<div class="stack"><div class="btn p"><svg class="i"><use href="#users"/></svg>Hỏi người thân</div><div class="btn s sm"><svg class="i"><use href="#flag"/></svg>Báo cáo</div></div></div></div></figure>
+
+<figure><figcaption>11a. Giọng nói – Xin quyền micro</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="ab"><div class="ib"><svg class="i"><use href="#back"/></svg></div><h2>Đọc số</h2></div><div class="body"><div class="center"><div class="bigic"><svg class="i"><use href="#mic"/></svg></div><h3>Cho dùng micro?</h3><p>Chỉ để nghe Bác đọc số.</p></div>
+<div class="stack"><div class="btn p xl">Cho phép</div><div class="btn s">Để sau</div></div></div></div></figure>
+
+<figure><figcaption>11. Giọng nói – Đọc số</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="ab"><div class="ib"><svg class="i"><use href="#back"/></svg></div><h2>Đọc số</h2></div><div class="body">
+<div class="center" style="gap:6px"><p>Bác đọc số điện thoại</p><div class="wave"><i style="height:14px"></i><i style="height:30px"></i><i style="height:48px"></i><i style="height:22px"></i><i style="height:56px"></i><i style="height:36px"></i><i style="height:18px"></i><i style="height:44px"></i><i style="height:60px"></i><i style="height:28px"></i><i style="height:40px"></i><i style="height:16px"></i><i style="height:52px"></i><i style="height:34px"></i><i style="height:20px"></i><i style="height:46px"></i><i style="height:26px"></i><i style="height:12px"></i></div><h3 style="font-size:34px">09xx xxx 123</h3><div class="micb"><svg class="i"><use href="#mic"/></svg></div><p style="font-weight:600;color:var(--ink)">Giữ để đọc</p></div>
+<div class="stack"><div class="btn p xl"><svg class="i"><use href="#search"/></svg>Kiểm tra</div><div class="btn s">Đọc lại</div></div></div></div></figure>
+
+<figure><figcaption>11b. Giọng nói – Chưa có quyền micro</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="ab"><div class="ib"><svg class="i"><use href="#back"/></svg></div><h2>Đọc số</h2></div><div class="body"><div class="center"><div class="bigic wn"><svg class="i"><use href="#mic"/></svg></div><h3>Chưa có quyền micro</h3><p>Bác nhập số bằng bàn phím nhé.</p></div>
+<div class="stack"><div class="btn p xl">Nhập bằng bàn phím</div><div class="btn s">Cho phép lại</div></div></div></div></figure>
+
+<figure><figcaption>12. Cá nhân</figcaption>
+<div class="phone "><div class="sb"><span>9:41</span><i><b></b><u></u></i></div><div class="body" style="padding-top:14px"><div style="font-size:30px;font-weight:800">Cá nhân</div>
+<div class="card set"><div class="srow"><svg class="i"><use href="#users"/></svg>Người thân<em>Lan</em><svg class="i"><use href="#next"/></svg></div><div class="srow"><svg class="i"><use href="#pin"/></svg>Phường<em>Trấn Biên</em><svg class="i"><use href="#next"/></svg></div><div class="srow"><svg class="i"><use href="#user"/></svg>Vai trò<em>Người lớn tuổi</em><svg class="i"><use href="#next"/></svg></div></div>
+<div class="card set"><div class="srow"><svg class="i"><use href="#vol"/></svg>Tự đọc to kết quả<div class="sw"></div></div><div class="srow"><svg class="i"><use href="#mic"/></svg>Micro<span class="st on">Đã cho phép</span></div><div class="srow"><svg class="i"><use href="#lock"/></svg>Quyền riêng tư<em></em><svg class="i"><use href="#next"/></svg></div></div></div>
+<div class="nav"><a><svg class="i"><use href="#home"/></svg>Trang chủ</a><a><svg class="i"><use href="#book"/></svg>Bài học</a><a><svg class="i"><use href="#flag"/></svg>Báo cáo</a><a class="on"><svg class="i"><use href="#user"/></svg>Cá nhân</a></div></div></figure>
+</div>
+</body></html>

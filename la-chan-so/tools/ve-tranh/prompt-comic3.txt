@@ -1,0 +1,16 @@
+Use your image generation tool to create 5 separate square (1:1) comic panel illustrations, then save each one as a PNG file in the current working directory with EXACTLY these filenames: comic2-3.png (overwrite the existing file), comic3-1.png, comic3-2.png, comic3-3.png, comic3-4.png. After saving, list the files to confirm they exist.
+
+Shared style: flat vector comic illustration, clean bold dark-navy outlines, simple shapes, limited palette (royal blue #1D4ED8, navy #0F172A, warm amber #F59E0B, soft red #DC2626, mint green, lilac, cream background #FFF7ED). Draw literal, concrete everyday scenes that are instantly understandable — no visual metaphors, no symbolism, no surreal elements.
+Hard rules for every panel: absolutely NO text, letters, numbers or writing anywhere; no logos; no national emblems; no flags; no maps; no police or military uniforms or insignia; no realistic human faces (simple friendly cartoon faces only).
+
+Character "Vy": a 17-year-old Vietnamese high-school girl, black ponytail with a blue hair tie, white school shirt, small blue backpack, sitting on her bed in her bedroom (bookshelf, small lamp, plant).
+Character "Ba Hoa": a 65-year-old Vietnamese grandmother, grey hair in a low bun, round glasses, lilac blouse, in a cozy living room with a blue sofa and orange curtains.
+Character "son": a Vietnamese man around 30, short black hair, green polo shirt.
+The scammer is always a faceless dark-grey silhouette person.
+
+comic2-3.png: Vy sitting on her bed, worried and upset, holding her phone in one hand; she is handing a large stack of banknotes and coins toward the phone screen, where the faceless dark silhouette person reaches a hand out of the screen to grab the money. Her open wallet beside her is empty. Red alarm lines around her.
+
+comic3-1.png: Ba Hoa at home reading a message on her smartphone, looking surprised; on the phone screen there is a simple chat bubble containing only a small ambulance icon and a banknote icon.
+comic3-2.png: Ba Hoa very worried, one hand on her chest, hurrying to pick up her handbag and wallet from the table, the phone still in her other hand; small sweat drops.
+comic3-3.png: Ba Hoa pausing calmly and dialing on her phone; beside her in a round frame her son is at his office desk, perfectly healthy and smiling, answering his phone.
+comic3-4.png: Ba Hoa smiling with relief, pressing a button on her phone; a blue shield with a white check mark appears above the phone; the faceless dark silhouette person in the background corner turns and walks away empty-handed.

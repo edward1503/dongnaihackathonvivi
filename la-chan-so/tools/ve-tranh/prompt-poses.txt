@@ -1,0 +1,7 @@
+Use your image generation tool to create 3 separate square (1:1) illustrations of the mascot in the attached assets/spot-mascot.png, then save each one as a PNG file at EXACTLY the given path. After saving, list the files to confirm they exist.
+
+Copy the mascot "Bé Nai" (a chibi baby deer) EXACTLY as in assets/spot-mascot.png: same proportions, same caramel fur and cream spots, same big round glossy sparkly eyes, same rosy cheeks, same royal-blue scarf with the amber shield charm, same line weight and plush shading. Plain warm off-white background (#FFF7ED), soft round shadow, full body, centered. Absolutely NO text, letters or numbers anywhere. No other characters.
+
+- assets/mascot-stop.png: Bé Nai holding up one hand in a firm but friendly stop gesture, eyebrows serious, mouth small.
+- assets/mascot-think.png: Bé Nai with one hand on its chin, looking up thoughtfully, a small curl-shaped thought mark above its head.
+- assets/mascot-cheer.png: Bé Nai jumping with both arms up, eyes closed happily like upside-down crescents, a few sparkles around.

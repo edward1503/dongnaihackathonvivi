@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lá chắn số – Prototype</title>
+<style>
+  @import url('../assets/fonts/be-vietnam-pro.css');
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:'Be Vietnam Pro','Noto Sans',sans-serif;background:#0F172A;color:#fff;display:flex;flex-direction:column;overflow:hidden}
+  header{display:flex;align-items:center;gap:10px;padding:12px 24px;flex:none;border-bottom:1px solid #1E293B;flex-wrap:wrap}
+  header h1{font-size:18px;font-weight:700;flex:1;display:flex;align-items:center;gap:10px;min-width:180px}
+  header h1 img{width:34px;height:34px;border-radius:17px;background:#FFF7ED}
+  button{font:inherit;cursor:pointer;border:0}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap}
+  .tabs button,.hbtn{font-size:14px;font-weight:600;color:#CBD5E1;background:#1E293B;border-radius:10px;padding:8px 14px;transition:background .15s,color .15s}
+  .tabs button.on{background:#1D4ED8;color:#fff}
+  .hbtn.on{background:#15803D;color:#fff}
+  main{flex:1;min-height:0;display:flex;align-items:stretch;gap:28px;padding:20px 24px}
+  .stage{position:relative;flex:1;min-width:0;overflow:hidden}
+  .device{position:absolute;left:50%;top:50%;transform-origin:center center}
+  .dv-in{display:block}
+  .phone-shell{border:10px solid #020617;border-radius:38px;background:#020617;overflow:hidden}
+  .phone-shell iframe,.phone-shell img{display:block;border:0;border-radius:28px;background:#F4F6FB}
+  .clip{overflow:hidden;border-radius:28px}
+  .clip iframe{border-radius:0;margin:-24px}
+  .web-shell{border:1px solid #334155;border-radius:14px;background:#1E293B;overflow:hidden}
+  .web-bar{height:32px;display:flex;align-items:center;gap:7px;padding:0 14px}
+  .web-bar i{width:10px;height:10px;border-radius:5px;background:#475569;display:block}
+  .web-shell iframe,.web-shell img{display:block;border:0;background:#F4F6FB}
+  .toast{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);background:#F8FAFC;color:#0F172A;font-size:15px;font-weight:600;padding:12px 18px;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .25s;max-width:80%;text-align:center;z-index:5}
+  .toast.on{opacity:1}
+  aside{width:350px;flex:none;display:flex;flex-direction:column;justify-content:center;gap:14px;overflow:auto}
+  .who{display:inline-flex;align-self:flex-start;font-size:13px;font-weight:700;border-radius:999px;padding:6px 12px;background:#DBEAFE;color:#1E3A8A}
+  .who.son{background:#DCFCE7;color:#14532D}.who.team{background:#EDE9FE;color:#4C1D95}.who.vy{background:#FEF3C7;color:#78350F}
+  .step{font-size:13px;color:#94A3B8;font-weight:600}
+  .cap{font-size:21px;line-height:29px;font-weight:700}
+  .note{font-size:15px;line-height:23px;color:#CBD5E1}
+  .code{font-size:13px;color:#94A3B8}
+  .scrollhint{font-size:13px;font-weight:600;color:#FCD34D;display:none}
+  .scrollhint.on{display:block}
+  .nav{display:flex;gap:10px;margin-top:4px}
+  .nav button{font-size:15px;font-weight:600;border-radius:12px;height:44px;padding:0 18px;transition:transform .15s cubic-bezier(.2,0,0,1)}
+  .nav button:active{transform:scale(.97)}
+  .prev{background:#1E293B;color:#fff}.next{background:#1D4ED8;color:#fff;flex:1}
+  .dots{display:flex;gap:5px;flex-wrap:wrap}
+  .dots i{width:18px;height:5px;border-radius:3px;background:#334155;display:block;transition:background .3s}
+  .dots i.on{background:#60A5FA}
+  .hint{font-size:13px;color:#64748B}
+  .grp{display:flex;flex-direction:column;gap:8px}
+  .grp > b{font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:#64748B}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chips button{font-size:13px;font-weight:600;background:#1E293B;color:#E2E8F0;border-radius:999px;padding:8px 12px}
+  .chips button.on{background:#1D4ED8;color:#fff}
+  .chips button.sim{background:#3B1D1D;color:#FECACA}
+  .tip{font-size:15px;line-height:22px;color:#FDE68A;background:#1E293B;border-radius:12px;padding:10px 12px}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <h1><img src="../assets/spot-mascot.png" alt="">Lá chắn số · Prototype</h1>
+  <div class="tabs">
+    <button id="mFree" class="on">Dùng thử tự do</button>
+    <button id="t0">Xem luồng: cuộc gọi lừa đảo</button>
+    <button id="t1">Xem luồng: học sinh</button>
+    <button id="tWeb" title="Mở web quản trị của đội tình nguyện">Web quản trị</button>
+    <button id="tZalo" title="Mở phía người thân: Zalo Mini App">Zalo Mini App</button>
+  </div>
+  <button class="hbtn on" id="voice">🔊 Giọng Bé Nai: bật</button>
+  <button class="hbtn" id="auto" hidden>Tự chạy</button>
+</header>
+<main>
+  <div class="stage" id="stage"><div class="toast" id="toast"></div></div>
+  <aside>
+    <div id="info" style="display:flex;flex-direction:column;gap:12px">
+      <span class="who" id="who"></span>
+      <div class="step" id="step"></div>
+      <div class="cap" id="cap"></div>
+      <div class="note" id="note"></div>
+      <div class="tip" id="tip" hidden></div>
+      <div class="code" id="code"></div>
+      <div class="scrollhint" id="scrollhint">Màn này dài hơn màn hình: cuộn để xem tiếp.</div>
+    </div>
+    <div id="freeCtl" class="grp">
+      <div class="grp"><b>Bạn đang là</b><div class="chips" id="personas"></div></div>
+      <div class="grp" id="simGrp"><b>Mô phỏng sự kiện</b><div class="chips" id="sims"></div></div>
+      <div class="grp"><b>Trạng thái lỗi, trống</b><div class="chips" id="errs"></div></div>
+      <div class="nav"><button class="prev" id="back">← Quay lại</button><button class="next" id="homeBtn">Về trang chủ</button></div>
+      <div class="hint">Chạm vào nút trên màn để đi tiếp. Chạm chỗ khác sẽ hiện viền các chỗ bấm được.</div>
+    </div>
+    <div id="flowCtl" class="grp" hidden>
+      <div class="dots" id="dots"></div>
+      <div class="nav"><button class="prev" id="prev">Trước</button><button class="next" id="next">Tiếp</button></div>
+      <div class="hint">Bấm vào màn hình hoặc phím → để đi tiếp, ← để quay lại.</div>
+    </div>
+  </aside>
+</main>
+<script src="hotspots.js"></script>
+<script>
+const FR=window.LCS_FRAMES||{};
+const fileOf=n=>(FR[n]&&FR[n].file)||null;
+const HOA=['','Máy của bà Hoa'], SON=['son','Máy của Minh · nhận qua Zalo'], TEAM=['team','Web đội tình nguyện'], VY=['vy','Máy của Vy (học sinh)'];
+const FLOWS=[[
+  ['A01a-trang-chu-don-gian',HOA,'Lá chắn chạy ngầm, bà không cần mở app','Chữ lớn, ba lựa chọn, có thanh “Bấm và nói”.'],
+  ['A03a-do-chuong-nguy-hiem',HOA,'Số đã bị báo lừa đảo gọi đến: cảnh báo khi đổ chuông','Với số chưa lưu mà không có dấu hiệu rủi ro, Lá chắn im lặng.'],
+  ['A04a-hoi-nhanh',HOA,'Sau cuộc gọi, Bé Nai hiện lên hỏi thăm bằng giọng nói','Bà trả lời bằng lời, hoặc bấm Có hay Không. Lá chắn tự báo cho Minh, bà không cần bấm gì thêm.'],
+  ['A04b-phan-tich-ghi-am',HOA,'Kết luận kèm bằng chứng kết hợp','Báo cáo cộng đồng, lịch sử cuộc gọi và bản ghi âm của máy. Minh đã được báo tự động.'],
+  ['Z01a-tin-canh-bao-trong-chat',SON,'Minh nhận cảnh báo ngay trong Zalo','Tin đến từ tài khoản chính thức Lá chắn số trên Zalo. Trả lời ngay trên thẻ, không cần cài thêm app.'],
+  ['Z01b-mini-app-chi-tiet',SON,'Zalo Mini App: diễn biến và tóm tắt đã che thông tin riêng','Minh chỉ thấy mức cảnh báo và tóm tắt, không đọc được tin nhắn của mẹ.'],
+  ['Z01c-mini-app-da-gui',SON,'Minh bấm “Mẹ đừng chuyển!” và báo số cho cộng đồng','Người thân là người thao tác. Lời nhắn được đẩy sang máy mẹ.'],
+  ['A08c-hoi-nguoi-than-tra-loi',HOA,'Lời nhắn của con hiện thật to và được đọc thành tiếng','Số lừa đảo đã bị chặn.'],
+  ['A10a-phanh-sau-cuoc-goi',HOA,'Nhắc trước khi chuyển tiền: nếu bà vẫn mở ứng dụng ngân hàng','Vừa nghe số lạ + mở app ngân hàng là tín hiệu nguy hiểm nhất. Lá chắn bật cảnh báo toàn màn hình.'],
+  ['W02-kiem-duyet',TEAM,'AI kiểm duyệt trước, ca chưa chắc mới tới người','Khoa thấy lập luận của AI và lý do AI chưa chắc.'],
+  ['W01-thong-ke',TEAM,'Thống kê kiểu lừa đảo mới tại địa phương','120 báo cáo, 35% là đường dẫn giả. AI gom cụm kiểu mới nổi.'],
+  ['W03-tuyen-truyen',TEAM,'Từ báo cáo thành cảnh báo và truyện tranh 1 phút','Tranh do AI vẽ, tình nguyện viên duyệt lời rồi gửi vào nhóm khu phố.'],
+  ['A11b-doc-truyen-4-khung',HOA,'Bài học quay lại với người dân','Truyện 4 khung, mỗi khung một câu, có đọc to.']
+],[
+  ['A01b-trang-chu-day-du',VY,'Vy dùng chế độ đầy đủ','Nút lớn nhất là “Kiểm tra trước khi chuyển tiền”.'],
+  ['A06a-kiem-tra-so',VY,'Kiểm tra nhanh trước khi chuyển tiền','Số điện thoại, đường dẫn, tài khoản, tin nhắn. Gõ, dán hoặc nói.'],
+  ['A07a-ket-qua-nguy-hiem',VY,'Kết quả kèm lý do dễ hiểu','Màu, icon và chữ cùng nói một điều. Hai nút luôn ở cùng chỗ: hỏi người thân, báo cáo.'],
+  ['A07d-ket-qua-chua-co-du-lieu',VY,'Chưa có dữ liệu không có nghĩa là an toàn','Lá chắn không nói “an toàn” khi chưa chắc, và đưa ba câu tự kiểm tra.'],
+  ['A05a-thong-bao-noi',VY,'Tin nhắn lạ đến: Lá chắn phát hiện ngầm','Đọc từ thông báo của máy, bỏ qua mọi tin chứa mã xác thực.'],
+  ['A05b-phan-tich-tin-nhan',VY,'AI tô đỏ từng dấu hiệu và nói rõ việc cần làm','Sau đó người trẻ được hỏi một chạm: báo cho cộng đồng?'],
+  ['A09b-bao-cong-dong',VY,'Báo cho cộng đồng','AI kiểm tra trước, tên người báo không hiển thị. Điểm chỉ hiện sau khi gửi.'],
+  ['A09a-bao-cao-form',VY,'Báo cáo một trường hợp lừa đảo','Thông tin đã điền sẵn. Bản ghi âm chỉ gửi khi người dùng chọn đính kèm.'],
+  ['A09c-bao-cao-xong',VY,'AI phân loại ngay, điểm chỉ hiện sau khi gửi','Có lối gửi tin báo cho Công an phường và lối khẩn “đã lỡ chuyển tiền”.'],
+  ['A11a-thu-vien-truyen',VY,'Học như chơi game','Mỗi tập một cốt truyện và một kiểu chơi: nghe máy kẻ gian, truyện có lối rẽ, giúp chị họ.'],
+  ['A11e-truyen-co-loi-ke',VY,'Truyện có giọng kể','Tranh và lời kể tự chạy như một trò chơi. Chạm để nghe lại.'],
+  ['A11c-doc-tung-khung',VY,'Đến điểm rẽ: bạn quyết định','Mỗi lựa chọn mở ra một kết cục khác.'],
+  ['A11f-chon-sai-chon-lai',VY,'Chọn chưa đúng thì thấy hậu quả, rồi chọn lại','Sai không bị phạt nặng: xem vì sao, quay lại lối đúng.'],
+  ['A11j-chon-dung-hoi-co-giao',VY,'Chọn đúng: Vy hỏi cô giáo','Tranh và lời Bé Nai kể kết cục an toàn, rồi dẫn sang thử thách cuối bài.'],
+  ['A11g-cuoc-goi-nhap-vai',VY,'Cuộc gọi nhập vai có chấm','AI đóng vai kẻ gian và nói bằng giọng. Bạn trả lời bằng lời, được chấm 3 mức, có gợi ý 3 bước.'],
+  ['A11d-dau-tri-voi-ai',VY,'Đấu trí tin nhắn với AI đóng vai kẻ lừa đảo','Chạm vào câu đáng ngờ để bắt bài, chọn cách trả lời. Có nhãn mô phỏng rõ ràng.'],
+  ['@video',VY,'Nhập vai giúp chị họ','Bạn là người khuyên: chị Lan do AI đóng hỏi ý kiến, Lá chắn chấm lời khuyên theo 4 ý.'],
+  ['A11i-bang-diem-cuoi-bai',VY,'Bảng điểm cuối bài','Bạn tự chấm và Lá chắn chấm.'],
+  ['A12a-cau-hoi',VY,'Bài kiểm tra theo tình huống','Mô phỏng tin nhắn thật.'],
+  ['A12b-giai-thich',VY,'Giải thích ngay sau mỗi câu','Sai câu nào, học lại bằng truyện câu đó.'],
+  ['A12c-ket-qua',VY,'Chấm điểm, huy hiệu, xếp hạng nhóm trong trường, phường, thành phố','Thách bạn bè cùng làm.']
+]];
+const PERSONAS={hoa:{label:'Bà Hoa · 65 tuổi',who:HOA,home:'A01a-trang-chu-don-gian',learn:'A11b-doc-truyen-4-khung'},
+  vy:{label:'Vy · học sinh',who:VY,home:'A01b-trang-chu-day-du',learn:'A11a-thu-vien-truyen'},
+  minh:{label:'Minh · người thân (Zalo)',who:SON,home:'Z01a-tin-canh-bao-trong-chat',learn:'A11a-thu-vien-truyen'},
+  khoa:{label:'Khoa · web đội tình nguyện',who:TEAM,home:'W01-thong-ke',learn:'W03-tuyen-truyen'}};
+const SIMS={hoa:[['Có cuộc gọi lạ (số bị báo)','A03a-do-chuong-nguy-hiem'],['Shipper gọi (số chưa lưu)','A03b-do-chuong-chua-ro'],['Bà mở app ngân hàng sau cuộc gọi','A10a-phanh-sau-cuoc-goi'],['Đang nghe số lạ và mở ngân hàng','A10b-phanh-dang-goi'],['Thiết lập lần đầu','A02a-thiet-lap-dang-lam']],
+  vy:[['Có tin nhắn lạ','A05a-thong-bao-noi'],['Dán tin nhắn để kiểm tra','A06b-kiem-tra-tin-nhan'],['Vào học','A11a-thu-vien-truyen'],['Thử thách cuối bài (gọi video)','@video']],
+  minh:[['Mẹ nhận cuộc gọi lừa đảo','Z01a-tin-canh-bao-trong-chat']],
+  khoa:[['Hàng chờ kiểm duyệt','W02-kiem-duyet'],['Soạn cảnh báo','W03-tuyen-truyen']]};
+const ERRS=[['Lá chắn đang ngủ','E01a-la-chan-dang-ngu'],['Chưa có người thân','E01b-chua-co-nguoi-than'],['Mất mạng','E01c-mat-mang'],['AI chưa đủ thông tin','E01d-ai-chua-du-thong-tin']];
+const SPEAK={'A04a-hoi-nhanh':'Bà ơi, con là Bé Nai, trợ lý Lá chắn anh Minh cài cho bà. Người vừa gọi có bảo bà chuyển tiền không ạ?',
+  'A08c-hoi-nguoi-than-tra-loi':'Anh Minh nhắn bà nè. Mẹ đừng chuyển, con gọi mẹ ngay.',
+  'A10a-phanh-sau-cuoc-goi':'Bà ơi, khoan chuyển tiền đã. Bà gọi anh Minh hỏi trước cho chắc nha.',
+  'A11e-truyen-co-loi-ke':'Tối thứ Sáu, Vy đang lướt điện thoại thì có tin nhắn lạ. Người ta mời Vy làm cộng tác viên, việc nhẹ mà lương cao lắm.',
+  'A11c-doc-tung-khung':'Muốn nhận đơn lớn thì phải nạp trước hai triệu. Nếu là Vy, bạn sẽ làm gì?',
+  'A11f-chon-sai-chon-lai':'Vy chuyển hai triệu. Ngay sau đó, người kia chặn Vy rồi biến mất. Hóa ra mấy đồng lúc đầu chỉ là mồi nhử thôi.',
+  'A11b-doc-truyen-4-khung':'Bà Hoa nhận cuộc gọi từ một số lạ. Người gọi tự xưng cán bộ, dọa bà dính vụ án. Họ giục bà chuyển tiền. Bà gọi con trai. Mọi chuyện an toàn.'};
+const CLIPS={'A11e-truyen-co-loi-ke':['benai-1','benai-2'],'A11c-doc-tung-khung':['benai-4'],'A11f-chon-sai-chon-lai':['benai-5','benai-6'],'A11j-chon-dung-hoi-co-giao':['benai-7'],
+  '@video':['benai-7','benai-8'],'A11i-bang-diem-cuoi-bai':['benai-9'],'A04a-hoi-nhanh':['benai-10'],'A10a-phanh-sau-cuoc-goi':['benai-13']};
+const PERSONA_OF=n=>/^Z/.test(n)?'minh':/^W/.test(n)?'khoa':/^(A01a|A03|A04|A08|A10|A11b|E01a|E01b)/.test(n)?'hoa':/^(A01b|A05|A11[acdefghij]|A12)/.test(n)?'vy':null;
+
+const $=id=>document.getElementById(id), stage=$('stage');
+const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const EASE='cubic-bezier(.2,0,0,1)', DUR=REDUCE?1:300;
+const PHONE_MAX_H=800, BEZEL=10, WEB_BAR=32;
+let mode='free', persona='hoa', hist=[], f=0, i=0, cur=null, pending=null, lastWho=null, timer=null, voiceOn=true, askOn=true, toastT=null;
+
+function fit(dev){ const isWeb=dev.kind==='web'; const W=isWeb?dev.w+2:dev.w+BEZEL*2, H=isWeb?dev.vh+WEB_BAR+2:dev.vh+BEZEL*2;
+  const s=Math.min(stage.clientWidth/W, stage.clientHeight/H, 1); dev.el.style.transform='translate(-50%,-50%) scale('+s+')'; }
+function size(dev,w,h){ dev.w=w; dev.h=h; dev.vh=(dev.kind==='web'||dev.view.tagName==='IMG'||dev.video)?h:Math.min(h,PHONE_MAX_H);
+  if(dev.video){ dev.box.style.width=w+'px'; dev.box.style.height=h+'px'; dev.view.style.width=(w+48)+'px'; dev.view.style.height=(h+48)+'px'; }
+  else { dev.view.style.width=w+'px'; dev.view.style.height=dev.vh+'px'; }
+  fit(dev); }
+function build(name,v){
+  const video=name==='@video';
+  const kind=!video&&(name[0]==='W'||name[0]==='D')?'web':'phone';
+  const el=document.createElement('div'); el.className='device';
+  const inn=document.createElement('div'); inn.className='dv-in'; inn.style.opacity='0';
+  const shell=document.createElement('div'); shell.className=kind==='web'?'web-shell':'phone-shell';
+  if(kind==='web'){const bar=document.createElement('div');bar.className='web-bar';bar.innerHTML='<i></i><i></i><i></i>';shell.appendChild(bar);}
+  const fr=document.createElement('iframe'); fr.title=video?'Gọi video':name; fr.allow='autoplay';
+  let box=null;
+  if(video){ box=document.createElement('div'); box.className='clip'; fr.src='video-call.html'; box.appendChild(fr); shell.appendChild(box); }
+  else { fr.src='../screens/'+fileOf(name)+'.html?frame='+encodeURIComponent(name)+(mode==='flow'?'&flow=1':'')+(askOn?'':'&ask=0')+(v?'&v='+encodeURIComponent(v):''); shell.appendChild(fr); }
+  inn.appendChild(shell); el.appendChild(inn); stage.appendChild(el);
+  const dev={name,kind,el,inn,shell,view:fr,box,video,shown:false,v};
+  size(dev, kind==='web'?1440:360, kind==='web'?900:800);
+  if(video) fr.addEventListener('load',()=>setTimeout(()=>reveal(dev),250),{once:true});
+  return dev;
+}
+function fallback(dev){
+  if(dev.shown||dev!==pending) return;
+  if(dev.video){ reveal(dev); return; }
+  const img=new Image(); img.onclick=()=>{ if(mode!=='free') go(1); };
+  img.onload=()=>{ if(dev!==pending) return; dev.view.replaceWith(img); dev.view=img; size(dev,img.naturalWidth/2,img.naturalHeight/2); reveal(dev); };
+  img.onerror=()=>reveal(dev); img.src='../export/png/'+dev.name+'.png';
+}
+function reveal(dev){
+  if(dev.shown||dev!==pending) return;
+  dev.shown=true; pending=null; clearTimeout(dev.to);
+  const old=cur; cur=dev;
+  const sameDevice=old&&old.who===dev.who&&old.kind===dev.kind; const dir=dev.dir||1;
+  if(old){ const out=sameDevice?[{opacity:1,transform:'none'},{opacity:0,transform:'translateX('+(-36*dir)+'px)'}]:[{opacity:1,transform:'none'},{opacity:0,transform:'scale(.97)'}];
+    old.inn.animate(out,{duration:DUR*0.85,easing:EASE,fill:'forwards'}).onfinish=()=>old.el.remove(); }
+  const inn=sameDevice?[{opacity:0,transform:'translateX('+(36*dir)+'px)'},{opacity:1,transform:'none'}]:[{opacity:0,transform:'scale(1.03)'},{opacity:1,transform:'none'}];
+  dev.inn.animate(inn,{duration:DUR,easing:EASE,fill:'forwards',delay:old?DUR*0.25:0});
+  $('scrollhint').className='scrollhint'+(dev.kind==='phone'&&!dev.video&&dev.view.tagName==='IFRAME'&&dev.h>PHONE_MAX_H?' on':'');
+  dev.since=performance.now();
+  speak(dev.name,dev.say);
+  if(mode==='free'&&dev.name==='A11e-truyen-co-loi-ke') setStoryAuto(dev,true);
+}
+function open(name,who,dir,v,say){
+  stopVoice();
+  clearInterval(cur?.storyTimer);
+  if(cur?.video) cur.view.remove();
+  if(pending){ clearTimeout(pending.to); pending.el.remove(); pending=null; }
+  const dev=build(name,v); dev.say=say; dev.dir=dir||1; dev.who=who; pending=dev;
+  dev.to=setTimeout(()=>fallback(dev),2500);
+  return dev;
+}
+// ---------- Giọng đọc (giọng có sẵn của trình duyệt) ----------
+let viVoice=null;
+function pickVoice(){ const vs=speechSynthesis.getVoices(); viVoice=vs.find(x=>/^vi/i.test(x.lang))||null; }
+if('speechSynthesis' in window){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; }
+const player=new Audio(); let queue=[];
+player.addEventListener('ended',()=>playNext());
+function playNext(){ const c=queue.shift(); if(!c) return; player.src='audio/'+c+'.m4a'; player.play().catch(()=>{ if(player.paused) queue=[]; }); }
+function stopVoice(){ queue=[]; player.pause(); if('speechSynthesis' in window) speechSynthesis.cancel(); }
+function speak(name,say){
+  stopVoice();
+  if(!voiceOn) return;
+  if(name==='A04a-hoi-nhanh'&&!askOn) return;
+  const clips=say||CLIPS[name];
+  if(clips&&clips.length){ queue=clips.slice(); playNext(); return; }
+  if(!('speechSynthesis' in window)||!SPEAK[name]||!viVoice) return;
+  const u=new SpeechSynthesisUtterance(SPEAK[name]); u.voice=viVoice; u.lang=viVoice.lang; u.rate=0.95; speechSynthesis.speak(u);
+}
+function readyToAdvance(){
+  return cur&&!pending&&performance.now()-cur.since>=5000&&player.paused&&!queue.length&&!window.speechSynthesis?.speaking;
+}
+function setStoryAuto(dev,on){
+  clearInterval(dev.storyTimer);
+  if(on) dev.storyTimer=setInterval(()=>{
+    if(cur!==dev||!readyToAdvance()) return;
+    if(mode==='flow') go(1); else nav('A11c-doc-tung-khung');
+  },250);
+}
+function toast(t){ if(!t) return; const el=$('toast'); el.textContent=t; el.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('on'),2600); }
+
+// ---------- Chế độ dùng thử tự do ----------
+function resolve(to){ const P=PERSONAS[persona]; if(to==='@home') return P.home; if(to==='@learn') return P.learn; return to; }
+function nav(to,opt){ opt=opt||{};
+  to=resolve(to); if(!to) return;
+  if(to==='@back'){ back(); return; }
+  if(to!=='@video'&&!fileOf(to)) return;
+  if(cur&&opt.push!==false) hist.push({name:cur.name,v:cur.v,persona});
+  const p=to==='@video'?'vy':PERSONA_OF(to); if(p) setPersona(p,false);
+  open(to,PERSONAS[persona].who[0],opt.dir||1,opt.v,opt.say);
+  freeInfo(to);
+}
+function back(){ const h=hist.pop(); if(!h){ stopVoice(); toast('Bạn đang ở đầu lịch sử'); return; } persona=h.persona; renderPersonas(); open(h.name,PERSONAS[persona].who[0],-1,h.v); freeInfo(h.name); }
+function freeInfo(name){
+  const P=PERSONAS[persona];
+  $('who').className='who '+P.who[0]; $('who').textContent=P.who[1];
+  $('step').textContent='Dùng thử tự do';
+  $('cap').textContent=name==='@video'?'Thử thách cuối bài: gọi video khuyên chị Lan':((FR[name]&&FR[name].name)||name);
+  const guided=FLOWS.flat().find(x=>x[0]===name);
+  $('note').textContent=name==='@video'?'Avatar AI nói bằng giọng thật và khép miệng theo lời. Bấm “Bắt đầu cuộc gọi”, rồi “Giữ để nói” để trả lời. Xong cuộc gọi sẽ có bảng điểm.':(guided?guided[3]:'');
+  const tip=name==='@video'?'Muốn bỏ qua cuộc gọi: bấm “Về trang chủ” hoặc chọn màn khác.':(window.LCS_HINTS||{})[name]||'';
+  $('tip').hidden=!tip; $('tip').textContent=tip;
+  $('code').textContent=name==='@video'?'Trang video-call.html':'Màn '+name;
+  $('info').animate([{opacity:0,transform:'translateY(6px)'},{opacity:1,transform:'none'}],{duration:REDUCE?1:220,easing:EASE});
+}
+function setPersona(p,go){ persona=p; renderPersonas(); if(go){ hist=[]; nav(PERSONAS[p].home,{push:false}); } }
+function renderPersonas(){
+  $('personas').innerHTML=Object.entries(PERSONAS).map(([k,P])=>'<button data-p="'+k+'" class="'+(k===persona?'on':'')+'">'+P.label+'</button>').join('');
+  const sims=SIMS[persona]||[]; $('simGrp').hidden=!sims.length;
+  $('sims').innerHTML=sims.map(s=>'<button class="sim" data-to="'+s[1]+'">'+s[0]+'</button>').join('');
+}
+$('personas').onclick=e=>{ const b=e.target.closest('[data-p]'); if(b) setPersona(b.dataset.p,true); };
+$('sims').onclick=e=>{ const b=e.target.closest('[data-to]'); if(b) nav(b.dataset.to); };
+$('errs').innerHTML=ERRS.map(s=>'<button data-to="'+s[1]+'">'+s[0]+'</button>').join('');
+$('errs').onclick=e=>{ const b=e.target.closest('[data-to]'); if(b) nav(b.dataset.to); };
+$('back').onclick=back; $('homeBtn').onclick=()=>nav('@home');
+
+// ---------- Chế độ xem theo luồng ----------
+function show(dir,say){
+  const s=FLOWS[f][i]; open(s[0],s[1][0],dir,null,say);
+  const whoChanged=lastWho!==s[1][0]; lastWho=s[1][0];
+  $('who').className='who '+s[1][0]; $('who').textContent=s[1][1];
+  $('step').textContent='Bước '+(i+1)+'/'+FLOWS[f].length;
+  $('cap').textContent=s[2]; $('note').textContent=s[3]; $('code').textContent='Màn '+s[0]; $('tip').hidden=true;
+  $('scrollhint').className='scrollhint';
+  $('dots').innerHTML=FLOWS[f].map((_,k)=>'<i class="'+(k<=i?'on':'')+'"></i>').join('');
+  $('next').textContent=i===FLOWS[f].length-1?'Xem lại từ đầu':'Tiếp';
+  $('info').animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'none'}],{duration:REDUCE?1:240,easing:EASE});
+  if(whoChanged) $('who').animate([{transform:'scale(.86)'},{transform:'scale(1.06)'},{transform:'none'}],{duration:REDUCE?1:360,easing:EASE});
+}
+const go=d=>{ i=(i+d+FLOWS[f].length)%FLOWS[f].length; show(d); };
+function setMode(m,flow){
+  mode=m; $('mFree').className=m==='free'?'on':''; $('t0').className=m==='flow'&&flow===0?'on':''; $('t1').className=m==='flow'&&flow===1?'on':'';
+  $('freeCtl').hidden=m!=='free'; $('flowCtl').hidden=m==='free'; $('auto').hidden=m==='free';
+  if(timer&&m==='free'){ clearInterval(timer); timer=null; $('auto').className='hbtn'; $('auto').textContent='Tự chạy'; }
+  if(m==='free'){ hist=[]; setPersona(persona,true); } else { f=flow; i=0; lastWho=null; show(1); }
+}
+$('mFree').onclick=()=>setMode('free'); $('t0').onclick=()=>setMode('flow',0); $('t1').onclick=()=>setMode('flow',1);
+$('tWeb').onclick=()=>{ setMode('free'); setPersona('khoa',true); }; $('tZalo').onclick=()=>{ setMode('free'); setPersona('minh',true); };
+$('next').onclick=()=>go(1); $('prev').onclick=()=>go(-1);
+$('auto').onclick=()=>{ if(timer){ clearInterval(timer); timer=null; $('auto').className='hbtn'; $('auto').textContent='Tự chạy'; }
+  else { timer=setInterval(()=>{
+    if(!readyToAdvance()) return;
+    const state=cur.video&&cur.view.contentWindow?.__call?.state;
+    if(!state||['idle','ended','done'].includes(state)) go(1);
+  },250); $('auto').className='hbtn on'; $('auto').textContent='Dừng tự chạy'; } };
+$('voice').onclick=()=>{ voiceOn=!voiceOn; $('voice').className='hbtn'+(voiceOn?' on':''); $('voice').textContent=(voiceOn?'🔊':'🔇')+' Giọng Bé Nai: '+(voiceOn?'bật':'tắt'); if(!voiceOn) stopVoice(); };
+
+// ---------- Tin nhắn từ màn trong khung ----------
+addEventListener('message',e=>{
+  const m=e.data; if(!m||!m.lcs) return;
+  if(m.lcs==='ready'){
+    if(pending&&e.source===pending.view.contentWindow){ size(pending,m.w,m.h); reveal(pending); }
+    else if(!pending&&cur?.video&&e.source===cur.view.contentWindow&&m.name==='A11i-bang-diem-cuoi-bai'){
+      if(mode==='free') nav(m.name); else go(1);
+    }   // trang gọi video chuyển sang bảng điểm
+  }
+  else if(m.lcs==='go'){ if(pending||!cur||e.source!==cur.view.contentWindow) return;
+    if(typeof m.story==='boolean'){ setStoryAuto(cur,m.story); return; }
+    if(m.ask){ askOn=!askOn; e.source.postMessage({lcs:'ask',on:askOn},location.origin); return; }
+    if(m.speak){
+      if(!voiceOn) toast('Giọng Bé Nai đang tắt');
+      else if(cur.name==='A04a-hoi-nhanh'&&!askOn) toast('Hỏi bằng giọng nói đang tắt');
+      else if(!cur.say&&!CLIPS[cur.name]&&!(SPEAK[cur.name]&&viVoice)) toast('Bản mẫu: chưa có giọng đọc cho màn này');
+      else speak(cur.name,cur.say);
+      return;
+    }
+    toast(m.toast);
+    if(m.to){
+      if(mode==='free') nav(m.to,{v:m.v,say:m.say});
+      else if(m.to==='@back') go(-1);
+      else {
+        const P=PERSONAS[f===1?'vy':'hoa'];
+        const target=m.to==='@home'?P.home:m.to==='@learn'?P.learn:m.to;
+        const k=FLOWS[f].findIndex(x=>x[0]===target);
+        if(k>=0){ i=k; show(1,m.say); } else go(1);
+      }
+    } else if(m.say){ if(voiceOn) speak(cur.name,m.say); else toast('Giọng Bé Nai đang tắt'); }
+  }
+  else if(m.lcs==='next'){ if(mode!=='free'&&cur&&e.source===cur.view.contentWindow) go(1); }
+  else if(!pending&&cur&&e.source===cur.view.contentWindow){
+    if(m.lcs==='key') key(m.key);
+    if(m.lcs==='call-start'&&cur.video) stopVoice();
+  }
+});
+function key(k){ if(mode==='free'){ if(k==='ArrowLeft') back(); return; } if(k==='ArrowRight'||k===' ') go(1); else if(k==='ArrowLeft') go(-1); }
+addEventListener('keydown',e=>{
+  if(e.defaultPrevented||!['ArrowLeft','ArrowRight',' '].includes(e.key)||e.key===' '&&e.target.closest('button')) return;
+  e.preventDefault(); key(e.key);
+});
+addEventListener('resize',()=>{ if(cur) fit(cur); if(pending) fit(pending); });
+const start=new URLSearchParams(location.search);
+if(['0','1'].includes(start.get('flow'))){
+  setMode('flow',Number(start.get('flow')));
+  if(start.get('auto')==='1') $('auto').click();
+} else {
+  if(Object.hasOwn(PERSONAS,start.get('p'))) persona=start.get('p');
+  setMode('free');
+}
+</script>
+</body>
+</html>

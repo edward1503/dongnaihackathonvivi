@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>W03 – Cảnh báo và tuyên truyền</title>
+<link rel="stylesheet" href="../ds.css">
+<script src="../icons.js"></script>
+<style>
+.w-brand{font-size:16px;line-height:22px;font-weight:700;color:#fff}
+.w-sub{font-size:12px;line-height:16px;font-weight:400;color:#94A3B8}
+.w-user{font-size:14px;line-height:20px;font-weight:700;color:#fff}
+.cnt{height:22px;padding:0 8px;border-radius:11px}
+.sidebar{padding:20px 8px}
+.side-item{padding:0 10px;gap:8px}
+.side-row{padding:0 10px}
+.pcol{width:125px;flex:none}
+.pbox{width:125px;height:125px}
+.pbox img{width:121px;height:121px}
+.pick{height:40px;border-radius:20px;padding:0 14px;font-size:13px}
+.stage{padding:16px 12px;border-radius:14px;justify-content:center}
+</style>
+</head>
+<body>
+
+<!-- ============ W03: Cảnh báo và tuyên truyền – AI soạn, người duyệt ============ -->
+<section class="shot">
+  <div class="shot-name">W03 – Web quản trị · Cảnh báo và tuyên truyền</div>
+  <div class="frame web" data-name="W03-tuyen-truyen">
+
+    <div class="sidebar">
+      <div class="row gap-12 side-row">
+        <div class="icon-box solid-brand" style="width:36px;height:36px;border-radius:10px"><i class="ic s20" data-i="shield-check"></i></div>
+        <div class="col">
+          <div class="w-brand">Lá chắn số</div>
+          <div class="w-sub">Đội tình nguyện</div>
+        </div>
+      </div>
+      <div class="none" style="height:16px"></div>
+      <div class="side-item"><i class="ic s20" data-i="chart"></i><span class="grow">Tổng quan</span></div>
+      <div class="side-item"><i class="ic s20" data-i="inbox"></i><span class="grow">Kiểm duyệt</span><span class="chip solid-danger cnt">24</span></div>
+      <div class="side-item active"><i class="ic s20" data-i="megaphone"></i><span class="grow">Cảnh báo và tuyên truyền</span></div>
+      <div class="side-item"><i class="ic s20" data-i="book"></i><span class="grow">Thư viện truyện</span></div>
+      <div class="side-item"><i class="ic s20" data-i="calendar"></i><span class="grow">Buổi tuyên truyền</span></div>
+      <div class="side-item"><i class="ic s20" data-i="settings"></i><span class="grow">Cài đặt</span></div>
+      <div class="row gap-12 mt-auto side-row">
+        <div class="avatar">K</div>
+        <div class="col grow">
+          <div class="w-user">Khoa</div>
+          <div class="w-sub">Tình nguyện viên</div>
+          <div class="w-sub">Phường Trấn Biên</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main">
+
+      <!-- Hàng đầu -->
+      <div class="col gap-2 none">
+        <div class="t-h1">Cảnh báo và tuyên truyền</div>
+        <div class="t-label muted">Từ báo cáo của người dân thành nội dung dễ hiểu</div>
+      </div>
+
+      <!-- Thân: trái 520px, phải co giãn -->
+      <div class="grow" style="display:grid;grid-template-columns:520px minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:16px 20px;min-height:0">
+
+        <!-- Trái trên: soạn cảnh báo -->
+        <div class="card col gap-12">
+          <div class="row between">
+            <div class="t-h2">Soạn cảnh báo</div>
+            <span class="chip ai"><i class="ic s14" data-i="sparkles"></i>AI soạn từ 7 báo cáo: giả nhân viên điện lực</span>
+          </div>
+          <div class="col gap-6">
+            <div class="t-label semi muted">Tiêu đề</div>
+            <div class="input">Cảnh báo: giả nhân viên điện lực báo cắt điện</div>
+          </div>
+          <div class="col gap-6 grow">
+            <div class="t-label semi muted">Nội dung</div>
+            <div class="input area grow" style="min-height:150px">Có người gọi điện tự xưng nhân viên điện lực, báo nhà bạn nợ tiền và sắp cắt điện, rồi yêu cầu chuyển khoản ngay. Điện lực không thu tiền qua cuộc gọi. Hãy cúp máy và tự gọi tổng đài chính thức.</div>
+          </div>
+          <div class="col gap-6">
+            <div class="t-label semi muted">Gửi tới</div>
+            <div class="row wrap gap-8">
+              <span class="chip solid-brand pick"><i class="ic s16" data-i="check"></i>Người dùng app (1.240)</span>
+              <span class="chip solid-brand pick"><i class="ic s16" data-i="check"></i>Nhóm khu phố (12 nhóm)</span>
+              <span class="chip outline pick"><i class="ic s16" data-i="plus"></i>Người thân đã ghép (860)</span>
+            </div>
+          </div>
+          <div class="row gap-12">
+            <span class="btn primary"><i class="ic s20" data-i="send"></i>Duyệt và gửi</span>
+            <span class="btn outline"><i class="ic s20" data-i="pencil"></i>Sửa</span>
+          </div>
+        </div>
+
+        <!-- Phải trên: truyện tranh 1 phút -->
+        <div class="card col" style="gap:14px">
+          <div class="col gap-6">
+            <div class="row between">
+              <div class="row gap-8"><i class="ic s18 c-brand" data-i="book"></i><div class="t-over muted">Truyện tranh 1 phút</div></div>
+              <span class="chip ai"><i class="ic s14" data-i="sparkles"></i>Tranh do AI vẽ · người duyệt lời</span>
+            </div>
+            <div class="t-h2">Người thân gặp tai nạn, cần tiền gấp</div>
+          </div>
+
+          <div class="card soft col grow stage">
+          <div class="row top between">
+            <div class="col gap-6 pcol">
+              <div class="panel pbox"><img src="../assets/comic3-1.png" width="121" height="121" alt=""><div class="panel-no">1</div></div>
+              <div class="t-cap semi">Bà Hoa nhận tin báo con gặp tai nạn, cần tiền gấp.</div>
+            </div>
+            <div class="col gap-6 pcol">
+              <div class="panel pbox"><img src="../assets/comic3-2.png" width="121" height="121" alt=""><div class="panel-no">2</div></div>
+              <div class="t-cap semi">Bà hốt hoảng, định mang tiền đi chuyển.</div>
+            </div>
+            <div class="col gap-6 pcol">
+              <div class="panel pbox"><img src="../assets/comic3-3.png" width="121" height="121" alt=""><div class="panel-no">3</div></div>
+              <div class="t-cap semi">Bà dừng lại, gọi thẳng cho con. Con vẫn khỏe.</div>
+            </div>
+            <div class="col gap-6 pcol">
+              <div class="panel pbox"><img src="../assets/comic3-4.png" width="121" height="121" alt=""><div class="panel-no">4</div></div>
+              <div class="t-cap semi">Bà báo cáo số lạ. Kẻ gian bỏ đi.</div>
+            </div>
+          </div>
+          </div>
+
+          <div class="card safe row gap-12" style="padding:12px 14px">
+            <i class="ic c-safe" data-i="check-circle"></i>
+            <div class="t-label c-safe-ink grow"><span class="bold">Thông điệp:</span> Nghe tin dữ, hãy gọi thẳng cho người thân trước khi chuyển tiền.</div>
+          </div>
+
+          <div class="row wrap gap-8">
+            <span class="btn primary sm"><i class="ic s18" data-i="share"></i>Chia sẻ vào nhóm khu phố</span>
+            <span class="btn outline sm"><i class="ic s18" data-i="download"></i>Tải bản in A4</span>
+            <span class="btn outline sm"><i class="ic s18" data-i="sparkles"></i>Tạo truyện mới từ kiểu lừa đảo khác</span>
+          </div>
+        </div>
+
+        <!-- Trái dưới: buổi tuyên truyền -->
+        <div class="card col" style="padding:16px 16px 4px">
+          <div class="t-h2">Buổi tuyên truyền sắp tới</div>
+          <div class="list-item">
+            <div class="icon-box brand"><i class="ic s20" data-i="calendar"></i></div>
+            <div class="col grow">
+              <div class="t-label semi">Thứ Bảy 28/11 · 19:00</div>
+              <div class="t-label semi">Nhà văn hóa Khu phố 4</div>
+              <div class="t-cap muted">45 người đăng ký</div>
+            </div>
+            <span class="btn tonal sm">Mở trình chiếu câu đố</span>
+          </div>
+          <div class="list-item last">
+            <div class="icon-box brand"><i class="ic s20" data-i="calendar"></i></div>
+            <div class="col grow">
+              <div class="t-label semi">Chủ nhật 29/11 · 08:00</div>
+              <div class="t-label semi">Trường THPT (lớp 11)</div>
+              <div class="t-cap muted">3 lớp tham gia</div>
+            </div>
+            <span class="btn outline sm">Chuẩn bị</span>
+          </div>
+        </div>
+
+        <!-- Phải dưới: 3 ô số liệu -->
+        <div class="grid-3">
+          <div class="card col between">
+            <div class="icon-box brand"><i class="ic s20" data-i="eye"></i></div>
+            <div class="col gap-2">
+              <div class="t-num">1.860</div>
+              <div class="t-cap muted" style="min-height:32px">lượt đọc truyện tháng này</div>
+            </div>
+          </div>
+          <div class="card col between">
+            <div class="icon-box safe"><i class="ic s20" data-i="check-circle"></i></div>
+            <div class="col gap-2">
+              <div class="t-num">74%</div>
+              <div class="t-cap muted" style="min-height:32px">đọc hết 4 khung</div>
+            </div>
+          </div>
+          <div class="card col between">
+            <div class="icon-box warn"><i class="ic s20" data-i="award"></i></div>
+            <div class="col gap-2">
+              <div class="t-num">+12 điểm</div>
+              <div class="t-cap muted" style="min-height:32px">điểm kiểm tra trung bình sau khi đọc</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

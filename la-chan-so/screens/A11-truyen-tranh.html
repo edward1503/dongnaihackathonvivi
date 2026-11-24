@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>A11 – Học qua truyện tranh 1 phút</title>
+<link rel="stylesheet" href="../ds.css">
+<script src="../icons.js"></script>
+<style>
+  /* Chip bấm được: cao 40px cho đủ vùng chạm */
+  .chip.tap{height:40px;border-radius:20px;padding:0 12px}
+  .chip.big{height:32px;border-radius:16px;padding:0 12px;font-size:14px;line-height:20px}
+  .story-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .panel-grid{display:grid;grid-template-columns:158px 158px;gap:12px}
+  .cap{font-size:14px;line-height:20px;font-weight:600;color:var(--ink)}
+  .mini{width:68px;height:68px;flex:none;display:flex}
+  .mini.on{border:2.5px solid var(--brand);border-radius:10px}
+</style>
+<style>
+  .stg{background:#0F0D24}
+  .stg .hd{height:52px;padding:0 16px;display:flex;align-items:center;gap:12px;color:#fff;flex:none}
+  .stg .hd .tt{flex:1;min-width:0;display:flex;flex-direction:column}
+  .stg .hd small{font-size:12px;line-height:16px;font-weight:600;color:#A5A1D0}
+  .stg .hd b{font-size:16px;line-height:22px;font-weight:700}
+  .stg .cc{background:#1C1940;border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+  .stg .who{display:flex;align-items:center;gap:8px;font-size:13px;line-height:18px;font-weight:700;color:#FFBF69}
+  .stg .say{font-size:17px;line-height:25px;font-weight:500;color:#fff}
+  .stg .strip{display:flex;gap:6px}
+  .stg .strip div{flex:1;height:6px;border-radius:3px;background:#2E2A5C}
+  .stg .strip .done{background:#8DB8FF}.stg .strip .now{background:#FFBF69}
+  .stg .ctl{display:flex;align-items:center;gap:6px}
+  .stg .ib{width:44px;height:44px;border-radius:22px;background:#1C1940;color:#D6D3F5;display:flex;align-items:center;justify-content:center;flex:none}
+  .stg .pl{height:44px;border-radius:22px;padding:0 12px;background:#1C1940;color:#D6D3F5;display:flex;align-items:center;gap:6px;font-size:13px;line-height:18px;font-weight:700;flex:none}
+  .stg .pl.on{background:#2B3A8C;color:#fff}
+  .stg .chap{flex:1;text-align:center;font-size:13px;line-height:18px;font-weight:700;color:#A5A1D0}
+  .stg .lgd{display:flex;gap:14px;font-size:12px;line-height:16px;font-weight:600;color:#A5A1D0}
+  .stg .lgd span{display:flex;align-items:center;gap:6px}
+</style>
+</head>
+<body>
+
+<!-- ============ A11a: trung tâm luyện tập của học sinh (học bằng cách chơi) ============ -->
+<section class="shot">
+  <div class="shot-name">A11a – Học · Trung tâm luyện tập (học sinh)</div>
+  <div class="frame phone" data-name="A11a-thu-vien-truyen">
+    <div class="statusbar"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <div class="title">Luyện tập</div>
+      <span class="chip warn" style="height:32px"><i class="ic s14" data-i="zap"></i>5 ngày liền</span>
+    </div>
+
+    <div class="content" style="padding-top:0;gap:12px">
+      <div class="card row gap-12" style="padding:12px 14px">
+        <img src="../assets/mascot-cheer.png" width="48" height="48" style="border-radius:24px" alt="">
+        <div class="col grow gap-6">
+          <div class="row between"><div class="t-label bold">Cấp 3 · Thám tử</div><div class="t-cap muted">130/200 điểm</div></div>
+          <div class="progress"><div class="progress-bar warn" style="width:65%"></div></div>
+        </div>
+      </div>
+
+      <div class="card solid-navy r20 row gap-12" style="padding:16px">
+        <div class="col grow gap-6">
+          <div class="t-over" style="color:#FBBF24">Đang chơi dở · Tập 2</div>
+          <div style="font-size:20px;line-height:26px;font-weight:700;color:#fff">Việc nhẹ lương cao</div>
+          <div class="t-cap" style="color:#CBD5E1">Nghe kể, chọn lối đi, rồi nghe máy với kẻ gian do AI đóng.</div>
+          <div class="row gap-8 mt-4">
+            <div class="btn primary sm"><i class="ic s16 fill" data-i="play"></i>Chơi tiếp</div>
+            <span class="chip" style="background:#1E293B;color:#FBBF24">Cảnh 3/6</span>
+          </div>
+        </div>
+        <img class="thumb" src="../assets/comic2-1.png" width="84" height="84" alt="">
+      </div>
+
+      <div class="t-label bold">Chọn tập</div>
+      <div class="card col" style="padding:4px 14px">
+        <div class="list-item">
+          <img class="thumb" src="../assets/avatar-huong.png" width="44" height="44" alt="">
+          <div class="col grow"><div class="t-label semi">Tập 1 · Cuộc gọi tuyển dụng</div><div class="t-cap muted">Nghe máy với kẻ gian do AI đóng</div></div>
+          <span class="chip outline"><i class="ic s14" data-i="phone"></i>Gọi</span>
+        </div>
+        <div class="list-item">
+          <img class="thumb" src="../assets/comic2-1.png" width="44" height="44" alt="">
+          <div class="col grow"><div class="t-label semi">Tập 2 · Việc nhẹ lương cao</div><div class="t-cap muted">Truyện, lối rẽ, cuối bài gọi video chị Lan</div></div>
+          <span class="chip brand">Đang học</span>
+        </div>
+        <div class="list-item last">
+          <img class="thumb" src="../assets/comic3-1.png" width="44" height="44" style="opacity:.55" alt="">
+          <div class="col grow"><div class="t-label semi muted">Tập 3 · Người thân gặp nạn</div><div class="t-cap faint">Mở khi xong tập 2</div></div>
+          <i class="ic s20 faint" data-i="lock"></i>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="bottomnav">
+      <div class="nav-item"><i class="ic" data-i="shield"></i>Lá chắn</div>
+      <div class="nav-item"><i class="ic" data-i="search"></i>Kiểm tra</div>
+      <div class="nav-item active"><i class="ic" data-i="book"></i>Học</div>
+      <div class="nav-item"><i class="ic" data-i="user"></i>Tôi</div>
+    </div>
+    <div class="gesture"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ A11b: đọc truyện 4 khung (chữ lớn, bà Hoa) ============ -->
+<section class="shot">
+  <div class="shot-name">A11b – Học qua truyện 1 phút · Đọc truyện 4 khung (chữ lớn)</div>
+  <div class="frame phone lg" data-name="A11b-doc-truyen-4-khung" style="height:970px">
+    <div class="statusbar"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <i class="ic" data-i="x"></i>
+      <div class="title" style="font-size:20px">Truyện 1/10</div>
+      <span class="chip brand" style="height:40px;border-radius:20px;padding:0 14px;font-size:14px;line-height:20px"><i class="ic s18" data-i="volume"></i>Đọc to</span>
+    </div>
+
+    <div class="content" style="padding-top:4px;gap:14px">
+      <div class="t-h1">Cuộc gọi tự xưng “cơ quan chức năng”</div>
+
+      <div class="panel-grid">
+        <div class="col gap-8">
+          <div class="panel" style="width:158px;height:158px">
+            <img src="../assets/comic1-1.png" width="154" height="154" alt="">
+            <div class="panel-no">1</div>
+          </div>
+          <div class="cap">Bà Hoa nhận cuộc gọi từ một số lạ.</div>
+        </div>
+        <div class="col gap-8">
+          <div class="panel" style="width:158px;height:158px">
+            <img src="../assets/comic1-2.png" width="154" height="154" alt="">
+            <div class="panel-no">2</div>
+          </div>
+          <div class="cap">Người gọi tự xưng cán bộ, dọa bà dính vụ án.</div>
+        </div>
+        <div class="col gap-8">
+          <div class="panel" style="width:158px;height:158px">
+            <img src="../assets/comic1-3.png" width="154" height="154" alt="">
+            <div class="panel-no">3</div>
+          </div>
+          <div class="cap">Họ giục bà chuyển tiền. Bé Nai chặn lại kịp.</div>
+        </div>
+        <div class="col gap-8">
+          <div class="panel" style="width:158px;height:158px">
+            <img src="../assets/comic1-4.png" width="154" height="154" alt="">
+            <div class="panel-no">4</div>
+          </div>
+          <div class="cap">Bà gọi con trai. Mọi chuyện an toàn.</div>
+        </div>
+      </div>
+
+      <div class="card danger col gap-8" style="padding:14px">
+        <div class="row gap-6"><i class="ic s16 c-danger" data-i="alert-oct"></i><div class="t-over c-danger-ink">Dấu hiệu nhận biết</div></div>
+        <div class="row wrap gap-8">
+          <span class="chip big solid-white">Tự xưng cơ quan chức năng</span>
+          <span class="chip big solid-white">Đòi chuyển tiền</span>
+          <span class="chip big solid-white">Bắt giữ bí mật</span>
+        </div>
+      </div>
+
+      <div class="card safe col gap-4" style="padding:14px">
+        <div class="row gap-6"><i class="ic s16 c-safe" data-i="check-circle"></i><div class="t-over c-safe-ink">Nhớ một câu</div></div>
+        <div class="t-body bold c-safe-ink">Ai tự xưng công an và đòi chuyển tiền, bà hãy cúp máy.</div>
+      </div>
+
+      <div class="btn primary block mt-auto">Làm bài kiểm tra 5 câu</div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ A11c: truyện tự chọn kết cục (học sinh) ============ -->
+<section class="shot">
+  <div class="shot-name">A11c – Học · Truyện tự chọn kết cục (học sinh)</div>
+  <div class="frame phone" data-name="A11c-doc-tung-khung">
+    <div class="statusbar"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <i class="ic" data-i="x"></i>
+      <div class="title">Việc nhẹ lương cao</div>
+      <span class="chip warn" style="height:32px">+15 điểm</span>
+    </div>
+
+    <div class="content" style="padding-top:0;gap:12px">
+      <div class="row gap-8">
+        <div class="steps grow"><div class="step on"></div><div class="step on"></div><div class="step"></div><div class="step"></div></div>
+        <div class="t-cap muted">Đến lượt bạn</div>
+      </div>
+
+      <div class="panel-grid">
+        <div class="col gap-6">
+          <div class="panel" style="width:158px;height:158px"><img src="../assets/comic2-1.png" width="154" height="154" alt=""><div class="panel-no">1</div></div>
+          <div class="cap">Vy được mời việc nhẹ, lương cao.</div>
+        </div>
+        <div class="col gap-6">
+          <div class="panel" style="width:158px;height:158px"><img src="../assets/comic2-2.png" width="154" height="154" alt=""><div class="panel-no">2</div></div>
+          <div class="cap">Lần đầu họ trả tiền thật.</div>
+        </div>
+      </div>
+
+      <div class="card brand col gap-4">
+        <div class="t-over c-brand-ink">Khung 3 do bạn quyết định</div>
+        <div class="t-h2 c-ink">Muốn nhận đơn lớn thì phải nạp trước hai triệu. Nếu là Vy, bạn sẽ làm gì?</div>
+      </div>
+
+      <div class="row gap-12" style="align-items:stretch">
+        <div class="card col gap-10 grow acenter" style="min-width:0;padding:26px 10px;border:1.5px solid var(--outline)">
+          <div class="icon-box danger round"><i class="ic s20" data-i="zap"></i></div>
+          <div class="t-label bold center">Nạp ngay kẻo mất suất</div>
+        </div>
+        <div class="card col gap-10 grow acenter" style="min-width:0;padding:26px 10px;border:1.5px solid var(--outline)">
+          <div class="icon-box safe round"><i class="ic s20" data-i="users"></i></div>
+          <div class="t-label bold center">Dừng lại, hỏi cô giáo</div>
+        </div>
+      </div>
+
+      <div class="row gap-8 mt-auto"><i class="ic s16 muted" data-i="lock"></i><div class="t-cap muted">Mỗi lựa chọn mở ra một kết cục khác nhau.</div></div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ A11d: đấu trí với AI đóng vai kẻ lừa đảo (học sinh) ============ -->
+<section class="shot">
+  <div class="shot-name">A11d – Học · Đấu trí với kẻ lừa đảo, AI đóng vai (học sinh)</div>
+  <div class="frame phone" data-name="A11d-dau-tri-voi-ai">
+    <div class="statusbar"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <i class="ic" data-i="x"></i>
+      <div class="title">Đấu trí</div>
+      <span class="chip outline" style="height:32px"><i class="ic s14" data-i="clock"></i>0:42</span>
+    </div>
+
+    <div class="content" style="padding-top:0;gap:10px">
+      <div class="card row gap-12" style="padding:10px 14px">
+        <div class="col grow gap-6">
+          <div class="row between"><div class="t-cap bold">Đã bắt 1/3 chiêu</div><div class="t-cap bold c-warn">+10 điểm</div></div>
+          <div class="progress"><div class="progress-bar safe" style="width:34%"></div></div>
+        </div>
+        <span class="chip ai"><i class="ic s14" data-i="sparkles"></i>AI đóng vai</span>
+      </div>
+
+      <div class="t-cap muted center">Chạm vào câu đáng ngờ để bắt bài</div>
+
+      <div class="col gap-4">
+        <div class="t-cap bold c-danger">Kẻ gian (mô phỏng)</div>
+        <div class="bubble in">Chào em, shop chị tuyển cộng tác viên. Chỉ cần đặt đơn là <span class="hl">nhận 500k mỗi ngày</span>.</div>
+        <div class="row gap-6"><i class="ic s14 c-safe" data-i="check-circle"></i><div class="t-cap bold c-safe">Bắt bài: hứa thu nhập cao bất thường</div></div>
+      </div>
+
+      <div class="bubble out">Có cần đóng tiền gì không ạ?</div>
+
+      <div class="col gap-4">
+        <div class="t-cap bold c-danger">Kẻ gian (mô phỏng)</div>
+        <div class="bubble in">Em nạp trước 200k để kích hoạt, hoàn ngay kèm hoa hồng nha. Nhanh kẻo hết suất!</div>
+      </div>
+
+      <div class="card ai row gap-8" style="padding:10px 12px">
+        <i class="ic s16 c-ai" data-i="sparkles"></i>
+        <div class="t-cap c-ai-ink">Gợi ý của Lá chắn: tìm chỗ họ đòi tiền trước và chỗ họ giục gấp.</div>
+      </div>
+
+      <div class="col gap-8 mt-auto">
+        <div class="t-cap bold muted">Bạn trả lời thế nào?</div>
+        <div class="row gap-8 wrap">
+          <span class="chip tap outline">Dạ em nạp ngay</span>
+          <span class="chip tap outline">Em hỏi cô giáo đã</span>
+          <span class="chip tap outline">Cho em xem giấy phép</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ A11e: cảnh truyện có giọng kể (kiểu chơi game) ============ -->
+<section class="shot">
+  <div class="shot-name">A11e – Học · Chơi truyện có lời kể (học sinh)</div>
+  <div class="frame phone stg" data-name="A11e-truyen-co-loi-ke">
+    <div class="statusbar on-dark"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="hd"><i class="ic" data-i="x"></i><div class="tt"><small>Tập 2 · Bé Nai kể chuyện</small><b>Việc nhẹ lương cao</b></div></div>
+    <div class="content" style="padding-top:0;gap:12px">
+      <div class="panel" style="width:328px;height:328px;border-color:#2E2A5C"><img src="../assets/comic2-1.png" width="324" height="324" alt=""></div>
+      <div class="cc">
+        <div class="who"><img src="../assets/spot-mascot.png" width="28" height="28" style="border-radius:14px" alt="">Bé Nai kể<i class="ic s16" data-i="wave" style="color:#8DB8FF"></i></div>
+        <div class="say">Tối thứ Sáu, Vy đang lướt điện thoại thì có tin nhắn lạ. Người ta mời Vy làm cộng tác viên, việc nhẹ mà lương cao lắm.</div>
+      </div>
+      <div class="col gap-10 mt-auto">
+      <div class="chap" style="text-align:left">Cảnh 2/6 · Lời mời</div>
+      <div class="strip"><div class="done"></div><div class="now"></div><div class=""></div><div></div><div></div><div></div></div>
+      <div class="ctl">
+        <div class="ib"><i class="ic s20" data-i="volume"></i></div>
+        <div class="pl on"><i class="ic s16 fill" data-i="play"></i>Tự chuyển</div>
+        <div class="grow"></div>
+        <div class="ib"><i class="ic s20" data-i="help"></i></div>
+        <div class="ib"><i class="ic s20" data-i="map-off"></i></div>
+        <div class="pl on">CC</div>
+      </div>
+      </div>
+    </div>
+    <div class="gesture clear on-dark"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ A11f: chọn chưa đúng → xem hậu quả rồi chọn lại (đường vòng) ============ -->
+<section class="shot">
+  <div class="shot-name">A11f – Học · Ngõ cụt: xem hậu quả và bản đồ lối rẽ (học sinh)</div>
+  <div class="frame phone stg" data-name="A11f-chon-sai-chon-lai">
+    <div class="statusbar on-dark"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="hd"><i class="ic" data-i="x"></i><div class="tt"><small>Tập 2 · Ngõ cụt</small><b>Việc nhẹ lương cao</b></div><span class="chip solid-danger"><i class="ic s14" data-i="alert"></i>Chưa đúng</span></div>
+    <div class="content" style="padding-top:0;gap:10px">
+      <div class="panel" style="width:328px;height:230px;border-color:#2E2A5C"><img src="../assets/comic2-3.png" width="324" height="226" alt=""></div>
+      <div class="cc">
+        <div class="who"><img src="../assets/spot-mascot.png" width="28" height="28" style="border-radius:14px" alt="">Bé Nai kể</div>
+        <div class="say">Vy chuyển hai triệu. Ngay sau đó, người kia chặn Vy rồi biến mất. Hóa ra mấy đồng lúc đầu chỉ là mồi nhử thôi.</div>
+      </div>
+      <div class="cc" style="gap:6px">
+        <div class="t-cap bold" style="color:#D6D3F5">Bản đồ lối rẽ</div>
+        <svg viewBox="0 0 300 70" width="300" height="70">
+          <line x1="20" y1="22" x2="80" y2="22" stroke="#8DB8FF" stroke-width="4" stroke-linecap="round"/>
+          <line x1="80" y1="22" x2="140" y2="22" stroke="#8DB8FF" stroke-width="4" stroke-linecap="round"/>
+          <line x1="140" y1="22" x2="196" y2="56" stroke="#FF8A80" stroke-width="2" stroke-dasharray="4 4"/>
+          <line x1="140" y1="22" x2="280" y2="22" stroke="#A5A1D0" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round"/>
+          <circle cx="20" cy="22" r="8" fill="#8DB8FF"/><circle cx="80" cy="22" r="8" fill="#8DB8FF"/><circle cx="140" cy="22" r="9" fill="#FFBF69"/>
+          <circle cx="210" cy="22" r="7" fill="#0F0D24" stroke="#A5A1D0" stroke-width="2"/><circle cx="280" cy="22" r="7" fill="#0F0D24" stroke="#A5A1D0" stroke-width="2"/>
+          <circle cx="200" cy="58" r="9" fill="#0F0D24" stroke="#FF8A80" stroke-width="2.5"/>
+          <line x1="195" y1="53" x2="205" y2="63" stroke="#FF8A80" stroke-width="2.5" stroke-linecap="round"/><line x1="205" y1="53" x2="195" y2="63" stroke="#FF8A80" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <div class="lgd"><span><span style="width:18px;height:4px;border-radius:2px;background:#8DB8FF"></span>Lối của bạn</span><span><span style="width:18px;height:0;border-top:2px dashed #A5A1D0"></span>Lối an toàn</span><span><span style="width:12px;height:0;border-top:2px dashed #FF8A80"></span>Ngõ cụt</span></div>
+      </div>
+      <div class="col gap-6 mt-auto">
+        <div class="btn primary block"><i class="ic s20" data-i="refresh"></i>Quay lại điểm rẽ</div>
+        <div class="t-cap center" style="color:#A5A1D0">Chọn lại đúng vẫn được +10 điểm.</div>
+      </div>
+    </div>
+    <div class="gesture clear on-dark"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ A11j: chọn đúng → Vy hỏi cô giáo, rồi tới thử thách cuối bài ============ -->
+<section class="shot">
+  <div class="shot-name">A11j – Học · Chọn đúng: Vy hỏi cô giáo (học sinh)</div>
+  <div class="frame phone stg" data-name="A11j-chon-dung-hoi-co-giao">
+    <div class="statusbar on-dark"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="hd"><i class="ic" data-i="x"></i><div class="tt"><small>Tập 2 · Lối an toàn</small><b>Việc nhẹ lương cao</b></div><span class="chip solid-safe"><i class="ic s14" data-i="check"></i>Chọn đúng</span></div>
+    <div class="content" style="padding-top:0;gap:10px">
+      <div class="panel" style="width:328px;height:230px;border-color:#2E2A5C"><img src="../assets/comic2-4.png" width="324" height="226" alt=""></div>
+      <div class="cc">
+        <div class="who"><img src="../assets/spot-mascot.png" width="28" height="28" style="border-radius:14px" alt="">Bé Nai kể</div>
+        <div class="say">Vy đem tin nhắn hỏi cô giáo. Cô nhìn qua là biết ngay. Việc thật thì không bao giờ bắt mình nạp tiền trước.</div>
+      </div>
+      <div class="cc" style="gap:6px">
+        <div class="t-cap bold" style="color:#D6D3F5">Bản đồ lối rẽ</div>
+        <svg viewBox="0 0 300 70" width="300" height="70">
+          <line x1="20" y1="22" x2="80" y2="22" stroke="#8DB8FF" stroke-width="4" stroke-linecap="round"/>
+          <line x1="80" y1="22" x2="140" y2="22" stroke="#8DB8FF" stroke-width="4" stroke-linecap="round"/>
+          <line x1="140" y1="22" x2="196" y2="56" stroke="#FF8A80" stroke-width="2" stroke-dasharray="4 4"/>
+          <line x1="140" y1="22" x2="210" y2="22" stroke="#8DB8FF" stroke-width="4" stroke-linecap="round"/><line x1="210" y1="22" x2="280" y2="22" stroke="#A5A1D0" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round"/>
+          <circle cx="20" cy="22" r="8" fill="#8DB8FF"/><circle cx="80" cy="22" r="8" fill="#8DB8FF"/><circle cx="140" cy="22" r="8" fill="#8DB8FF"/>
+          <circle cx="210" cy="22" r="9" fill="#FFBF69"/><circle cx="280" cy="22" r="7" fill="#0F0D24" stroke="#A5A1D0" stroke-width="2"/>
+          <circle cx="200" cy="58" r="9" fill="#0F0D24" stroke="#FF8A80" stroke-width="2.5"/>
+          <line x1="195" y1="53" x2="205" y2="63" stroke="#FF8A80" stroke-width="2.5" stroke-linecap="round"/><line x1="205" y1="53" x2="195" y2="63" stroke="#FF8A80" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <div class="lgd"><span><span style="width:18px;height:4px;border-radius:2px;background:#8DB8FF"></span>Lối của bạn</span><span><span style="width:18px;height:0;border-top:2px dashed #A5A1D0"></span>Lối an toàn</span><span><span style="width:12px;height:0;border-top:2px dashed #FF8A80"></span>Ngõ cụt</span></div>
+      </div>
+      <div class="col gap-6 mt-auto">
+        <div class="btn primary block"><i class="ic s20" data-i="phone"></i>Tới thử thách cuối bài</div>
+        <div class="t-cap center" style="color:#A5A1D0">+10 điểm · Cuối bài: gọi video khuyên chị Lan.</div>
+      </div>
+    </div>
+    <div class="gesture clear on-dark"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ A11g: cuộc gọi nhập vai có chấm (AI đóng vai kẻ gian, nói bằng giọng) ============ -->
+<section class="shot">
+  <div class="shot-name">A11g – Học · Cuộc gọi nhập vai có chấm (học sinh)</div>
+  <div class="frame phone bg-navy" data-name="A11g-cuoc-goi-nhap-vai">
+    <div class="statusbar on-dark"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="content" style="padding-top:8px;gap:12px">
+      <div class="row between">
+        <span class="chip" style="background:#1E293B;color:#C4B5FD"><i class="ic s14" data-i="sparkles"></i>Mô phỏng · AI đóng vai</span>
+        <span class="chip" style="background:#1E293B;color:#CBD5E1">Câu 2/3</span>
+      </div>
+
+      <div class="col gap-6 acenter">
+        <img src="../assets/avatar-huong-noi.png" width="132" height="132" style="border-radius:28px;border:3px solid #334155" alt="">
+        <div style="font-size:17px;line-height:22px;font-weight:700;color:#fff">“Chị Hương, shop tuyển dụng”</div>
+        <div class="row gap-6"><i class="ic s14" data-i="wave" style="color:#93C5FD"></i><div class="t-cap bold" style="color:#93C5FD">Đang nói…</div></div>
+      </div>
+
+      <div style="background:#1E293B;border-radius:16px;padding:12px 14px;font-size:16px;line-height:23px;color:#fff">Em ơi, em chuyển trước hai trăm nghìn để giữ suất nha. Chị gửi số tài khoản cho em liền.</div>
+
+      <div class="card col gap-8" style="padding:12px 14px">
+        <div class="t-cap bold muted">Bạn vừa trả lời</div>
+        <div class="t-label c-ink">“Dạ em không chuyển tiền trước đâu ạ.”</div>
+        <div class="row gap-8">
+          <div class="steps" style="width:120px;flex:none"><div class="step" style="background:#D97706"></div><div class="step" style="background:#D97706"></div><div class="step"></div></div>
+          <div class="t-cap bold c-warn">Mức 2/3 · gần đúng</div>
+        </div>
+        <div class="t-cap muted">Còn thiếu: hỏi ngược để xác minh, rồi cúp máy.</div>
+      </div>
+
+      <div class="card ai row gap-10" style="padding:10px 12px">
+        <img class="thumb" src="../assets/comic2-2.png" width="52" height="52" alt="">
+        <div class="col grow gap-2">
+          <div class="ai-tag"><i class="ic s14" data-i="sparkles"></i>Gợi ý 1/3</div>
+          <div class="t-cap c-ai-ink">Nhớ lại cảnh 2: lần đầu họ trả tiền thật để làm gì?</div>
+        </div>
+      </div>
+
+      <div class="row between mt-auto" style="align-items:flex-end;padding:0 8px">
+        <div class="col gap-6 acenter" style="color:#CBD5E1;width:72px"><div style="width:48px;height:48px;border-radius:24px;background:#1E293B;display:flex;align-items:center;justify-content:center"><i class="ic s20" data-i="refresh"></i></div><div class="t-cap">Nói lại</div></div>
+        <div class="col gap-6 acenter" style="color:#fff"><div style="width:76px;height:76px;border-radius:38px;background:#1D4ED8;display:flex;align-items:center;justify-content:center"><i class="ic s32" data-i="mic"></i></div><div class="t-cap bold">Giữ để nói</div></div>
+        <div class="col gap-6 acenter" style="color:#CBD5E1;width:72px"><div style="width:48px;height:48px;border-radius:24px;background:#1E293B;display:flex;align-items:center;justify-content:center"><i class="ic s20" data-i="clock"></i></div><div class="t-cap">Chờ chút</div></div>
+      </div>
+    </div>
+
+    <div class="gesture clear on-dark"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ A11h: nhập vai giúp chị họ qua cuộc gọi video (avatar AI có khẩu hình) ============ -->
+<section class="shot">
+  <div class="shot-name">A11h – Học · Thử thách cuối bài: gọi video khuyên chị họ (học sinh)</div>
+  <div class="frame phone" data-name="A11h-giup-chi-ho" style="background:#0B0B14">
+    <img src="../assets/video-chi-lan.jpg" width="360" height="520" style="position:absolute;left:0;top:0;object-fit:cover" alt="">
+    <div class="statusbar on-dark" style="position:absolute;left:0;right:0;top:0"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div style="position:absolute;left:12px;right:12px;top:36px;display:flex;align-items:center;gap:8px">
+      <div style="height:36px;border-radius:18px;background:rgba(11,11,20,.62);color:#fff;padding:0 12px;display:flex;align-items:center;gap:8px;font-size:14px;line-height:20px;font-weight:700;white-space:nowrap;flex:none"><span style="width:8px;height:8px;border-radius:4px;background:#22C55E"></span>Chị Lan · 01:24</div>
+      <div style="height:32px;border-radius:16px;background:rgba(124,58,237,.85);color:#fff;padding:0 10px;display:flex;align-items:center;gap:6px;font-size:12px;line-height:16px;font-weight:700;white-space:nowrap;flex:none"><i class="ic s14" data-i="sparkles"></i>AI đóng vai</div>
+      <div class="grow"></div>
+      <div style="width:72px;height:100px;flex:none;border-radius:14px;background:#1E293B;border:2px solid rgba(255,255,255,.7);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#CBD5E1"><i class="ic s28" data-i="user"></i><div class="t-cap">Bạn</div></div>
+    </div>
+    <div style="position:absolute;left:12px;right:12px;top:434px;background:rgba(11,11,20,.72);border-radius:14px;padding:10px 12px;color:#fff;font-size:15px;line-height:22px;font-weight:500">Họ bảo nạp trước hai trăm nghìn là làm được liền. Chị có nên làm không em?</div>
+
+    <div style="position:absolute;left:0;right:0;top:520px;bottom:0;padding:12px 16px 0;display:flex;flex-direction:column;gap:10px">
+      <div style="background:#16162A;border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:7px">
+        <div class="row between"><div class="t-label bold c-white">Lá chắn chấm lời khuyên</div><div class="t-cap bold" style="color:#FBBF24">2/4 ý</div></div>
+        <div class="row gap-6 wrap">
+          <span class="chip" style="background:#14532D;color:#BBF7D0"><i class="ic s14" data-i="check"></i>Đừng nạp tiền</span>
+          <span class="chip" style="background:#14532D;color:#BBF7D0"><i class="ic s14" data-i="check"></i>Chỉ ra dấu hiệu</span>
+          <span class="chip" style="background:#262645;color:#A5A1D0">Cách xác minh</span>
+          <span class="chip" style="background:#262645;color:#A5A1D0">Rủ báo cáo</span>
+        </div>
+      </div>
+      <div class="row between" style="padding:0 12px;align-items:center">
+        <div class="col gap-4 acenter" style="color:#CBD5E1;width:64px"><div style="width:48px;height:48px;border-radius:24px;background:#262645;display:flex;align-items:center;justify-content:center"><i class="ic s20" data-i="message"></i></div><div class="t-cap">Gõ chữ</div></div>
+        <div class="col gap-4 acenter" style="color:#fff"><div style="width:72px;height:72px;border-radius:36px;background:#1D4ED8;display:flex;align-items:center;justify-content:center"><i class="ic s32" data-i="mic"></i></div><div class="t-cap bold">Giữ để nói</div></div>
+        <div class="col gap-4 acenter" style="color:#CBD5E1;width:64px"><div style="width:48px;height:48px;border-radius:24px;background:#DC2626;color:#fff;display:flex;align-items:center;justify-content:center"><i class="ic s20" data-i="phone-off"></i></div><div class="t-cap">Kết thúc</div></div>
+      </div>
+    </div>
+    <div class="gesture clear on-dark" style="position:absolute;left:0;right:0;bottom:0"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ A11i: bảng điểm cuối bài sau cuộc gọi video (tự chấm rồi so với Lá chắn chấm) ============ -->
+<section class="shot">
+  <div class="shot-name">A11i – Học · Bảng điểm cuối bài (học sinh)</div>
+  <div class="frame phone" data-name="A11i-bang-diem-cuoi-bai" style="height:880px">
+    <div class="statusbar"><span>10:47</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+    <div class="appbar">
+      <i class="ic" data-i="x"></i>
+      <div class="title">Bảng điểm cuối bài</div>
+      <span class="chip warn" style="height:32px">+30 điểm</span>
+    </div>
+    <div class="content" style="padding-top:0;gap:12px">
+      <div class="card solid-navy r20 row gap-12" style="padding:14px 16px">
+        <img src="../assets/mascot-cheer.png" width="72" height="72" style="border-radius:36px" alt="">
+        <div class="col grow gap-4">
+          <div class="t-cap" style="color:#CBD5E1">Tập 2 · Gọi video khuyên chị Lan</div>
+          <div style="font-size:24px;line-height:30px;font-weight:700;color:#fff">3/4 ý · Khá</div>
+          <div class="progress" style="background:#334155"><div class="progress-bar warn" style="width:75%"></div></div>
+        </div>
+      </div>
+
+      <div class="card col gap-8">
+        <div class="t-label bold">Bạn tự chấm và Lá chắn chấm</div>
+        <div class="row gap-12">
+          <div class="card soft col gap-4 grow acenter" style="padding:10px"><div class="t-cap muted">Bạn tự chấm</div><div class="t-h1">4/4</div></div>
+          <div class="card brand col gap-4 grow acenter" style="padding:10px"><div class="t-cap c-brand-ink">Lá chắn chấm</div><div class="t-h1 c-brand-ink">3/4</div></div>
+        </div>
+        <div class="row gap-8 top"><i class="ic s16 c-warn" data-i="info" style="margin-top:2px"></i><div class="t-cap c-ink">Bạn tự tin hơn kết quả một chút: bạn quên chỉ cho chị cách xác minh.</div></div>
+      </div>
+
+      <div class="card col" style="padding:6px 16px">
+        <div class="row gap-10 top" style="padding:8px 0;border-bottom:1px solid var(--outline-2)"><i class="ic s20 c-safe" data-i="check-circle"></i><div class="col grow gap-2"><div class="t-label semi">Khuyên chị đừng nạp tiền</div><div class="t-cap muted">Bạn nói: “Chị đừng nạp tiền nha.”</div></div></div>
+        <div class="row gap-10 top" style="padding:8px 0;border-bottom:1px solid var(--outline-2)"><i class="ic s20 c-safe" data-i="check-circle"></i><div class="col grow gap-2"><div class="t-label semi">Chỉ ra dấu hiệu lừa đảo</div><div class="t-cap muted">Bạn nói: “Lương cao bất thường mà còn bắt nạp trước.”</div></div></div>
+        <div class="row gap-10 top" style="padding:8px 0;border-bottom:1px solid var(--outline-2)"><div style="width:20px;height:20px;border-radius:10px;border:2px solid var(--warn);flex:none"></div><div class="col grow gap-2"><div class="t-label semi">Chỉ cách xác minh</div><div class="t-cap muted">Chưa nói. Ví dụ: tra tên công ty, hỏi người lớn trước.</div></div></div>
+        <div class="row gap-10 top" style="padding:8px 0;border-bottom:0"><i class="ic s20 c-safe" data-i="check-circle"></i><div class="col grow gap-2"><div class="t-label semi">Rủ chị báo cáo</div><div class="t-cap muted">Bạn nói: “Chị báo cáo số này luôn đi.”</div></div></div>
+      </div>
+
+      <div class="col gap-10 mt-auto">
+        <div class="btn primary block"><i class="ic s20" data-i="award"></i>Làm bài kiểm tra 5 câu</div>
+        <div class="btn outline block"><i class="ic s20" data-i="phone"></i>Gọi lại chị Lan</div>
+      </div>
+    </div>
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Z01 – Phía người thân (tin nhắn + Mini App)</title>
+<link rel="stylesheet" href="../ds.css">
+<script src="../icons.js"></script>
+<style>
+  .chat-head{height:56px;padding:0 16px;display:flex;align-items:center;gap:12px;flex:none;background:var(--brand);color:#fff}
+  .chat-logo{width:36px;height:36px;border-radius:18px;background:#fff;color:var(--brand);display:flex;align-items:center;justify-content:center;flex:none}
+  .chat-body{flex:1;min-height:0;background:#E8EEF7;padding:16px;display:flex;flex-direction:column;gap:12px}
+  .msg-card{width:300px;align-self:flex-start;background:#fff;border:1px solid var(--outline-2);border-radius:16px;display:flex;flex-direction:column}
+  .msg-head{height:44px;margin:-1px -1px 0 -1px;padding:0 14px;background:var(--danger);border-radius:16px 16px 0 0;color:#fff;display:flex;align-items:center;gap:8px;flex:none}
+  .msg-body{padding:14px;display:flex;flex-direction:column;gap:10px}
+  .chat-input{height:56px;padding:0 16px;display:flex;align-items:center;gap:12px;flex:none;background:#fff;border-top:1px solid var(--outline-2)}
+  .chat-field{flex:1;height:36px;border-radius:18px;background:var(--surface-2);padding:0 14px;display:flex;align-items:center;font-size:14px;line-height:20px;color:var(--ink-3)}
+  .oa-bar{height:44px;display:flex;align-items:center;flex:none;background:#fff;border-bottom:1px solid var(--outline-2)}
+  .oa-bar .it{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;font-size:14px;line-height:20px;font-weight:600;color:var(--ink-2)}
+  .oa-quick{height:52px;padding:0 12px;display:flex;align-items:center;gap:8px;flex:none;background:#E8EEF7}
+  .oa-quick .q{height:36px;padding:0 14px;border-radius:18px;background:#fff;border:1px solid var(--outline-2);display:flex;align-items:center;font-size:13px;line-height:18px;font-weight:600;color:var(--ink);flex:none}
+  .mini-bar{height:48px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;flex:none;background:#fff;border-bottom:1px solid var(--outline-2)}
+  .mini-title{font-size:16px;line-height:24px;font-weight:600}
+  .mini-pill{height:32px;border-radius:16px;border:1px solid var(--outline);padding:0 10px;display:flex;align-items:center;gap:8px;flex:none;background:#fff}
+  .mini-sep{width:1px;height:16px;background:var(--outline);flex:none}
+  .tl-item{display:flex;align-items:stretch;gap:12px}
+  .tl-rail{width:10px;flex:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding-top:3px}
+  .tl-rail .dot{width:10px;height:10px;border-radius:5px}
+  .tl-line{width:2px;flex:1;border-radius:1px;background:var(--outline-2)}
+  .tl-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;padding-bottom:12px}
+  .tl-item.last .tl-text{padding-bottom:0}
+</style>
+</head>
+<body>
+
+<!-- ============ Z01a: tin cảnh báo trong ứng dụng nhắn tin ============ -->
+<section class="shot">
+  <div class="shot-name">Z01a – Tin cảnh báo trong Zalo</div>
+  <div class="frame phone" data-name="Z01a-tin-canh-bao-trong-chat">
+    <div class="statusbar on-dark bg-brand"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+
+    <div class="chat-head">
+      <i class="ic" data-i="arrow-left"></i>
+      <div class="chat-logo"><i class="ic s20" data-i="shield-check"></i></div>
+      <div class="col grow">
+        <div class="row gap-8"><div style="font-size:16px;line-height:20px;font-weight:700">Lá chắn số</div><i class="ic s16" data-i="check-circle" style="color:#FCD34D"></i></div>
+        <div style="font-size:12px;line-height:16px;font-weight:500;color:#DBEAFE">Official Account · Zalo</div>
+      </div>
+      <i class="ic" data-i="more"></i>
+    </div>
+
+    <div class="oa-bar">
+      <div class="it"><i class="ic s18" data-i="check" style="color:var(--brand)"></i><div>Đã quan tâm</div></div>
+      <div class="it"><i class="ic s18" data-i="bell"></i><div>Đang bật thông báo</div></div>
+    </div>
+
+    <div class="chat-body">
+      <span class="chip solid-white" style="align-self:center">Hôm nay 10:42</span>
+
+      <div class="msg-card">
+        <div class="msg-head">
+          <i class="ic s20" data-i="shield-alert"></i>
+          <div class="t-label bold">Cảnh báo lừa đảo</div>
+        </div>
+        <div class="msg-body">
+          <div class="t-h2">Mẹ Hoa vừa nhận cuộc gọi nghi lừa đảo</div>
+          <div class="row gap-8"><i class="ic s16 muted" data-i="phone"></i><div class="t-label">Số gọi: 0912 345 678</div></div>
+          <div class="row gap-8"><i class="ic s16 muted" data-i="message-alert"></i><div class="t-label">Kịch bản: giả danh công an</div></div>
+          <div class="row gap-8"><i class="ic s16 muted" data-i="alert"></i><div class="t-label">Có yêu cầu chuyển tiền</div></div>
+          <div class="btn danger block" style="padding:0 8px;font-size:15px">Mẹ đừng chuyển, con gọi ngay</div>
+          <div class="btn outline block">Xem chi tiết</div>
+        </div>
+      </div>
+
+      <div class="t-cap muted">10:42 · Đã nhận</div>
+    </div>
+
+    <div class="oa-quick">
+      <div class="q">Gọi mẹ ngay</div>
+      <div class="q">Lịch sử cảnh báo</div>
+      <div class="q">Cài đặt</div>
+    </div>
+    <div class="chat-input">
+      <i class="ic muted" data-i="plus"></i>
+      <div class="chat-field">Tin nhắn</div>
+      <i class="ic c-brand" data-i="send"></i>
+    </div>
+    <div class="gesture"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ Z01b: Mini App – chi tiết cảnh báo ============ -->
+<section class="shot">
+  <div class="shot-name">Z01b – Mini App · Chi tiết cảnh báo</div>
+  <div class="frame phone" data-name="Z01b-mini-app-chi-tiet" style="height:900px">
+    <div class="statusbar bg-white"><span>10:43</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+
+    <div class="mini-bar">
+      <div class="mini-title">Lá chắn số · Zalo Mini App</div>
+      <div class="mini-pill">
+        <i class="ic s18" data-i="more"></i>
+        <div class="mini-sep"></div>
+        <i class="ic s18" data-i="x"></i>
+      </div>
+    </div>
+
+    <div class="content" style="gap:12px">
+      <div class="card danger row gap-12">
+        <div class="icon-box solid-danger"><i class="ic" data-i="alert-oct"></i></div>
+        <div class="col grow">
+          <div class="t-h2 c-danger-ink">Nguy hiểm</div>
+          <div class="t-cap">Hôm nay 10:42 · cuộc gọi lạ</div>
+        </div>
+      </div>
+
+      <div class="row gap-12">
+        <div class="avatar amber">H</div>
+        <div class="col grow">
+          <div class="t-label bold">Mẹ Hoa</div>
+          <div class="t-cap muted">Đang dùng Lá chắn · chế độ đơn giản</div>
+        </div>
+      </div>
+
+      <div class="card col gap-12">
+        <div class="t-over muted">Diễn biến</div>
+        <div class="col">
+          <div class="tl-item">
+            <div class="tl-rail"><span class="dot"></span><div class="tl-line"></div></div>
+            <div class="tl-text">
+              <div class="t-cap bold">10:38</div>
+              <div class="t-label">Cuộc gọi đến từ 0912 345 678, dài 4 phút 12 giây</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-rail"><span class="dot danger"></span><div class="tl-line"></div></div>
+            <div class="tl-text">
+              <div class="t-cap bold">10:42</div>
+              <div class="t-label">Lá chắn phân tích bản ghi âm: Nguy&nbsp;hiểm</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-rail"><span class="dot danger"></span><div class="tl-line"></div></div>
+            <div class="tl-text">
+              <div class="t-cap bold">10:43</div>
+              <div class="t-label">Mẹ trả lời: có đòi chuyển tiền</div>
+            </div>
+          </div>
+          <div class="tl-item last">
+            <div class="tl-rail"><span class="dot warn"></span></div>
+            <div class="tl-text">
+              <div class="t-cap bold">10:43</div>
+              <div class="t-label">Mẹ mở ứng dụng ngân hàng. Lá chắn đã nhắc dừng.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card ai col gap-8">
+        <span class="ai-tag"><i class="ic s14" data-i="sparkles"></i>Tóm tắt của AI (đã che thông tin riêng)</span>
+        <div class="t-label">Người gọi tự xưng cán bộ điều tra, yêu cầu chuyển tiền vào tài khoản tạm giữ và giữ bí mật.</div>
+      </div>
+
+      <div class="col gap-10 mt-auto">
+        <div class="btn safe block"><i class="ic s20" data-i="phone"></i>Gọi mẹ ngay</div>
+        <div class="btn danger block"><i class="ic s20" data-i="send"></i>Nhắn: Mẹ đừng chuyển!</div>
+        <div class="btn outline block">An toàn, đây là người quen</div>
+      </div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+<!-- ============ Z01c: Mini App – đã gửi lời nhắn ============ -->
+<section class="shot">
+  <div class="shot-name">Z01c – Mini App · Đã gửi cho mẹ</div>
+  <div class="frame phone" data-name="Z01c-mini-app-da-gui">
+    <div class="statusbar bg-white"><span>10:44</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
+
+    <div class="mini-bar">
+      <div class="mini-title">Lá chắn số · Zalo Mini App</div>
+      <div class="mini-pill">
+        <i class="ic s18" data-i="more"></i>
+        <div class="mini-sep"></div>
+        <i class="ic s18" data-i="x"></i>
+      </div>
+    </div>
+
+    <div class="content" style="gap:12px">
+      <div class="col acenter jcenter grow gap-8">
+        <div class="icon-box xl solid-safe"><i class="ic s48" data-i="check"></i></div>
+        <div class="t-h1 center mt-8">Đã gửi cho mẹ</div>
+        <div class="t-body muted center">Lời nhắn đang hiện to trên máy mẹ và được đọc thành tiếng.</div>
+      </div>
+
+      <div class="col gap-8" style="border:2px solid var(--ink);border-radius:20px;background:var(--safe-c);padding:16px">
+        <div class="t-over c-safe-ink">Trên máy mẹ lúc này</div>
+        <div style="font-size:20px;line-height:28px;font-weight:700">Minh: Mẹ đừng chuyển! Con gọi mẹ ngay.</div>
+      </div>
+
+      <div class="card brand row gap-12">
+        <div class="icon-box solid-brand"><i class="ic" data-i="shield-check"></i></div>
+        <div class="t-label grow">Tuần này Lá chắn đã cảnh báo mẹ 3 cuộc gọi và 2 tin nhắn đáng ngờ.</div>
+      </div>
+
+      <div class="col gap-10 mt-8">
+        <div class="btn safe block"><i class="ic s20" data-i="phone"></i>Gọi mẹ ngay</div>
+        <div class="btn outline block"><i class="ic s20" data-i="megaphone"></i>Báo số này cho cộng đồng</div>
+      </div>
+    </div>
+
+    <div class="gesture clear"><div class="pill"></div></div>
+  </div>
+</section>
+
+</body>
+</html>

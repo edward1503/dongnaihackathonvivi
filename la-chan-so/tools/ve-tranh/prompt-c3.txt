@@ -1,0 +1,22 @@
+Use your image generation tool to create the separate square (1:1) illustrations listed below, then save each one as a PNG file at EXACTLY the given path (overwrite existing files). After saving, list the files to confirm they exist.
+
+STYLE: match the attached style reference images exactly in line weight, colour softness and simplicity: clean flat doodle, bold navy-black outlines, warm off-white pastel background (#FFF7ED), soft pastel colours, spacious layout with lots of empty space, gentle humor, cute and charming, like a page of a children's educational comic. Use the reference panel and figures ONLY for drawing style. NEVER draw the owl/griffin mascot from the reference panel, never any bird, beak or wings.
+
+PEOPLE (cute chibi doodle people drawn in the same hand as the reference figures: big round heads, simple dot eyes, rosy cheeks, small smiles, short bodies):
+- Bà Hoa: chibi Vietnamese grandmother, grey hair in a low bun, round glasses, lilac blouse, dark trousers, cosy living room with a blue sofa and orange curtains.
+- Vy: chibi high-school girl, black ponytail with a blue hair tie, white school shirt, navy skirt, small blue backpack, bedroom with a bookshelf and small lamp.
+- Minh: chibi young man, short black hair, green polo shirt.
+- the scammer: a plain grey bean-shaped doodle figure (like the white bean figure in the reference, but grey) wearing a phone headset and dark sunglasses, with a sly grin. Never a real-looking person, never a uniform.
+
+MASCOT "Bé Nai" (the attached assets/spot-mascot.png shows exactly how to draw it, copy it faithfully): a chibi baby deer with caramel-brown fur, cream fawn spots, cream face and belly, big round ears, tiny antler nubs, huge round glossy sparkly eyes, rosy cheeks, a small royal-blue scarf with an amber shield charm. Exactly ONE Bé Nai per panel, fully inside the frame, small to medium size, acting as a friendly guide (pointing, cheering, holding up a stop hand, giving a thumbs up). Keep its eyes big, round and sparkly in every panel.
+
+HARD RULES: absolutely NO text, letters, numbers or writing anywhere (no headline banners, no words in speech bubbles; a speech bubble may contain only one simple icon such as a coin, a gift box, an exclamation mark, a question mark shape drawn as a curl, an ambulance, a banknote or a red cross); no logos; no national emblems; no flags; no maps; no police or military uniforms or insignia; any phone showing something is turned toward the viewer and shows only simple icons.
+
+PANELS:
+assets/comic3-1.png: Bà Hoa reading a message on her phone, surprised; the phone screen faces the viewer and shows a chat bubble with an ambulance icon and a banknote icon. Bé Nai stands alert beside her, ears perked.
+assets/comic3-2.png: Bà Hoa very worried, one hand on her chest, reaching for her handbag and wallet on the table, phone in the other hand. Bé Nai gently tugs her sleeve as if saying wait.
+assets/comic3-3.png: Bà Hoa pausing calmly and dialling her phone; in a round frame beside her Minh is at his office desk, perfectly healthy and smiling, answering. Bé Nai wipes its forehead in relief.
+assets/comic3-4.png: Bà Hoa smiling, pressing a button on her phone; a small blue shield with a white check mark floats above it. In the background corner the grey bean scammer walks away empty-handed, looking grumpy. Bé Nai gives a thumbs up.
+assets/spot-family.png: Bà Hoa and Minh standing a little apart, each holding a smartphone, connected by a dotted line; Bé Nai sits in the middle of the dotted line holding a small blue shield. Warm and reassuring, plenty of empty space.
+assets/spot-allclear.png: a calm smartphone standing upright with a big mint-green check mark on its screen; Bé Nai sits relaxed beside it, eyes closed happily, a few soft sparkle shapes.
+assets/avatar-chi-lan.png: head-and-shoulders portrait for a video call, no Bé Nai in this one: chị Lan, a chibi Vietnamese woman in her late twenties, wavy shoulder-length brown hair, coral cardigan, holding her phone near her chin, a worried but hopeful expression, soft out-of-focus home background in warm cream and peach tones.
