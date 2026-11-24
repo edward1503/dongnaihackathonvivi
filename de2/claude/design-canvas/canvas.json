@@ -1,0 +1,21 @@
+{"v":3,"createdOnFiles":{"v":1,"at":"2026-11-24T02:30:00Z"},"title":"Phản ánh Trấn Biên","launch":{"view":"canvas"},"pages":[],
+"boards":{
+"Main.dc.html":{"x":0,"y":0,"w":390,"h":844,"title":"MH-01 Trang chủ & Bản đồ quanh tôi","is_interactive":true},
+"MH02-ChupAnh.dc.html":{"x":470,"y":0,"w":390,"h":844,"title":"MH-02 Bước 1 – Chụp ảnh & AI nhận diện","is_interactive":true},
+"MH03-ViTriTrung.dc.html":{"x":940,"y":0,"w":390,"h":844,"title":"MH-03 Bước 2 – Vị trí & gộp trùng","is_interactive":true},
+"MH02c-ChonLoai.dc.html":{"x":1410,"y":0,"w":390,"h":844,"title":"MH-02c Bước 3 – Chọn loại & gửi","is_interactive":true},
+"MH05-TheoDoi.dc.html":{"x":1880,"y":0,"w":390,"h":844,"title":"MH-05 Theo dõi phản ánh của tôi","is_interactive":true},
+"MH06-DanhGia.dc.html":{"x":2350,"y":0,"w":390,"h":844,"title":"MH-06 Trước/Sau & đánh giá","is_interactive":true},
+"MH04-CaoTuoi.dc.html":{"x":2820,"y":0,"w":390,"h":844,"title":"MH-04 Chế độ người cao tuổi","is_interactive":true},
+"MH07-DoanVien.dc.html":{"x":0,"y":1244,"w":390,"h":844,"title":"MH-07 Đoàn viên xác minh","is_interactive":true},
+"MH09-KetQua.dc.html":{"x":470,"y":1244,"w":390,"h":844,"title":"MH-09 Cập nhật kết quả"},
+"MH08-CanBo.dc.html":{"x":940,"y":1244,"w":1440,"h":960,"title":"MH-08 Cán bộ phường – Tiếp nhận & giao xử lý","expand":"fill","is_interactive":true},
+"MH10-LoiTrong.dc.html":{"x":0,"y":2604,"w":1720,"h":844,"title":"MH-10 Trạng thái lỗi & trống"}
+},
+"order":["Main.dc.html","MH02-ChupAnh.dc.html","MH03-ViTriTrung.dc.html","MH02c-ChonLoai.dc.html","MH05-TheoDoi.dc.html","MH06-DanhGia.dc.html","MH04-CaoTuoi.dc.html","MH07-DoanVien.dc.html","MH09-KetQua.dc.html","MH08-CanBo.dc.html","MH10-LoiTrong.dc.html"],
+"notes":{
+"t1":{"x":0,"y":-300,"text":"Người dân – luồng chính (prototype)","kind":"title1","maxW":3210},
+"t2":{"x":0,"y":944,"text":"Đoàn viên & Cán bộ phường","kind":"title1","maxW":2380},
+"t3":{"x":0,"y":2304,"text":"Trạng thái lỗi & trống","kind":"title1","maxW":1720}
+},
+"designSystems":[]}

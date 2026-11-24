@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Phản ánh Trấn Biên – Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#1747D6;--blue2:#2B7BFF;--navy:#0A1A44;--deep:#071A6B;--cyan:#3FD0FF;--bg:#F0F4FF;--muted:#47567A;--line:#DCE4F5;--line2:#C5D0EA;--soft:#E5EDFF;--red:#B42318;--redbg:#FDE8E6;--redtx:#9B1C12;--amb:#9A5B00;--ambbg:#FFF1D6;--ambtx:#7A4800;--grn:#1C7445;--grnbg:#E3F3E9;--grntx:#14532D}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Be Vietnam Pro',system-ui,sans-serif;color:var(--navy);min-height:100vh;background:radial-gradient(circle at 15% 0%,#1747D6 0,#071A6B 45%,#040E3D 100%)}
+button,input,select,textarea{font-family:inherit}
+button{cursor:pointer}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;padding:14px 16px 6px;color:#fff}
+.ctl .brand{font-weight:800;letter-spacing:.04em;margin-right:8px;font-size:14px;padding:5px 12px;border:1.5px solid var(--cyan);border-radius:14px;box-shadow:0 0 12px rgba(63,208,255,.4)}
+.rt{height:38px;padding:0 14px;border-radius:19px;border:1.5px solid rgba(63,208,255,.5);background:rgba(255,255,255,.06);color:#DCE9FF;font-weight:600;font-size:14px}
+.rt.on{background:var(--blue);border-color:var(--cyan);color:#fff;box-shadow:0 0 12px rgba(63,208,255,.55)}
+.rt.warn{border-color:#FFB547;color:#FFD08A}.rt.warn.on{background:#7A4800;color:#fff;box-shadow:none}
+.guide{max-width:900px;margin:4px auto 12px;padding:8px 14px;border-radius:12px;background:rgba(63,208,255,.12);border:1px solid rgba(63,208,255,.4);color:#E6F7FF;font-size:14px;text-align:center}
+.stage{display:flex;justify-content:center;padding:0 12px 32px}
+.phone{width:390px;height:844px;background:var(--bg);border-radius:36px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 0 0 2px var(--cyan),0 0 30px rgba(63,208,255,.35),0 24px 60px rgba(0,0,0,.5)}
+.phone.big .scr{zoom:1.12}
+.desk{width:min(1280px,100%);height:820px;background:var(--bg);border-radius:20px;overflow:hidden;display:flex;box-shadow:0 0 0 2px var(--cyan),0 24px 60px rgba(0,0,0,.5)}
+.scr{flex:1;overflow:auto;display:flex;flex-direction:column}
+.scr>*{flex-shrink:0}
+.hdr{padding:18px 20px 14px;background:linear-gradient(135deg,var(--deep),var(--blue));color:#fff;border-bottom:2px solid var(--cyan);box-shadow:0 2px 14px rgba(63,208,255,.35);display:flex;align-items:center;gap:12px}
+.hdr.light{background:#fff;color:var(--navy);border-bottom:1px solid var(--line);box-shadow:none}
+.badge{align-self:flex-start;font-size:11px;font-weight:700;letter-spacing:.06em;padding:3px 10px;border-radius:12px;border:1.5px solid var(--cyan);color:#BFEFFF;background:rgba(63,208,255,.12)}
+.ib{width:44px;height:44px;border-radius:22px;border:none;background:rgba(255,255,255,.14);color:inherit;display:flex;align-items:center;justify-content:center;flex:none}
+.hdr.light .ib{background:#ECF1FC}
+.pill{height:44px;padding:0 14px;border-radius:22px;border:1.5px solid var(--cyan);background:rgba(255,255,255,.08);color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;gap:6px;box-shadow:0 0 12px rgba(63,208,255,.45);margin-left:auto}
+.chips{display:flex;gap:8px;padding:10px 16px;background:#fff;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+td:nth-child(2){min-width:190px}
+.chip{height:36px;padding:0 14px;border-radius:18px;border:1px solid var(--line2);background:#fff;font-weight:500;font-size:14px;color:var(--navy);white-space:nowrap}
+.chip.on{background:var(--blue);color:#fff;border-color:var(--cyan);box-shadow:0 0 8px rgba(63,208,255,.45)}
+.map{position:relative;background:#E3EBF8;overflow:hidden;flex:none}
+.road{position:absolute;background:#fff}
+.pinb{position:absolute;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:17px;border:3px solid #fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.25);padding:0}
+.pinb.sel{outline:3px solid var(--cyan);outline-offset:2px}
+.sheet{background:#fff;border-radius:20px 20px 0 0;margin-top:-16px;position:relative;padding:14px 18px;display:flex;flex-direction:column;gap:10px;box-shadow:0 -4px 16px rgba(0,0,0,.08)}
+.grab{width:40px;height:4px;border-radius:2px;background:var(--line2);align-self:center}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.row{display:flex;gap:12px;align-items:center}
+.muted{color:var(--muted);font-size:13px}
+.st{font-size:12px;font-weight:600;padding:4px 8px;border-radius:8px;white-space:nowrap;align-self:flex-start}
+.st.new{background:var(--redbg);color:var(--redtx)}.st.assigned{background:var(--ambbg);color:var(--ambtx)}.st.done{background:var(--grnbg);color:var(--grntx)}.st.rejected{background:#ECF1FC;color:#34436A}.st.flag{background:var(--ambbg);color:var(--ambtx)}.st.ok{background:var(--grnbg);color:var(--grntx)}.st.info{background:var(--soft);color:#0B2A8C}
+.cta{height:56px;border-radius:16px;border:1.5px solid var(--cyan);background:linear-gradient(135deg,var(--blue),var(--blue2));box-shadow:0 4px 18px rgba(63,208,255,.4);color:#fff;font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;width:100%}
+.cta:disabled{opacity:.45;box-shadow:none}
+.sec{height:50px;border-radius:16px;border:1px solid var(--line2);background:#fff;color:var(--navy);font-size:15px;font-weight:600;width:100%}
+.sec.dark{background:transparent;border:2px solid #fff;color:#fff}
+.nav{height:64px;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,1fr);flex:none}
+.nav button{border:none;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:12px;color:var(--muted);position:relative}
+.nav button.on{color:var(--blue);font-weight:700}
+.dot{position:absolute;top:8px;right:calc(50% - 20px);min-width:18px;height:18px;border-radius:9px;background:var(--red);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.steps{display:flex;gap:6px}.steps span{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.25)}.steps span.on{background:var(--cyan)}
+.hdr.light .steps span{background:var(--line)}.hdr.light .steps span.on{background:var(--blue)}
+.tile{height:100px;border-radius:16px;border:2px solid var(--line);background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:15px;color:var(--navy);position:relative}
+.tile.on{border:3px solid var(--blue);background:var(--soft)}
+.aitag{position:absolute;top:8px;right:8px;font-size:11px;font-weight:700;color:#fff;background:var(--blue);padding:2px 6px;border-radius:6px}
+.photo{background:repeating-linear-gradient(135deg,#2A3C78 0 14px,#24356C 14px 28px)}
+.toast{position:absolute;left:16px;right:16px;bottom:80px;background:var(--navy);color:#fff;border:1.5px solid var(--cyan);border-radius:14px;padding:12px 14px;font-size:14px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.35);z-index:50}
+.desk .toast{left:auto;right:24px;bottom:24px;width:380px}
+.notif{margin:12px 16px 0;padding:12px 14px;border-radius:14px;background:var(--navy);color:#fff;border:1.5px solid var(--cyan);display:flex;gap:10px;align-items:center;font-size:14px;font-weight:600;text-align:left;width:calc(100% - 32px)}
+.tl li{display:flex;gap:12px}
+.tl .d{width:28px;height:28px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex:none}
+.tl .ln{width:3px;flex:1;min-height:20px;margin:4px 0}
+.star{width:52px;height:52px;border:none;background:none;padding:0;display:flex;align-items:center;justify-content:center}
+.tag{height:40px;padding:0 14px;border-radius:20px;border:1px solid var(--line2);background:#fff;font-size:14px;color:var(--navy)}
+.tag.on{background:var(--soft);border-color:var(--blue);color:#0B2A8C;font-weight:700}
+.big1{border-radius:20px;border:3px solid #000;background:#fff;display:flex;align-items:center;gap:16px;padding:0 18px;font-weight:800;font-size:23px;color:#000;text-align:left;width:100%}
+.num{width:48px;height:48px;border-radius:24px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;flex:none}
+.side{width:240px;flex:none;background:linear-gradient(180deg,var(--deep),#0B2A8C);border-right:2px solid var(--cyan);color:#fff;padding:22px 14px;display:flex;flex-direction:column;gap:6px}
+.side .it{height:42px;border-radius:10px;display:flex;align-items:center;padding:0 12px;font-size:14px;color:#C8D6FF}
+.side .it.on{background:rgba(255,255,255,.12);color:#fff;font-weight:700}
+.kpi{background:#fff;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:4px;border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse}
+th{font-size:12px;font-weight:600;color:var(--muted);text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{font-size:14px;padding:11px 12px;border-bottom:1px solid #EEF2FB;vertical-align:middle}
+tr.pick{cursor:pointer}tr.pick:hover{background:#F6F9FF}tr.sel{background:#EAF1FF}
+.btn{height:36px;border-radius:10px;padding:0 12px;font-weight:600;font-size:13px;border:1px solid var(--line2);background:#fff;color:var(--navy)}
+.btn.p{border:none;background:var(--blue);color:#fff}.btn.on{border:2px solid var(--blue);background:var(--soft);color:#0B2A8C}
+.btn.g{border:1px solid #0F5C33;color:#0F5C33}.btn.r{border:1px solid #E7B4AE;color:var(--redtx)}
+.ph{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center}
+.ico{width:96px;height:96px;border-radius:48px;display:flex;align-items:center;justify-content:center}
+label.f{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:600}
+textarea,select,input[type=search]{border-radius:12px;border:1px solid var(--line2);padding:10px 12px;font-size:15px;color:var(--navy);resize:none}
+.spin{width:22px;height:22px;border-radius:11px;border:3px solid rgba(23,71,214,.25);border-top-color:var(--blue);animation:sp 0.8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media (max-width:520px){
+  .ctl{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;padding:8px 10px;scrollbar-width:none}
+  .ctl .brand{display:none}
+  .rt{height:34px;font-size:13px;flex:none;padding:0 12px}
+  .guide{margin:0 10px 8px;font-size:12px;padding:6px 10px;text-align:left}
+  .stage{padding:0}
+  .phone{width:100%;height:calc(100dvh - 118px);border-radius:0;box-shadow:none}
+  .phone.big .scr{zoom:1.08}
+  .desk{border-radius:0;height:auto;min-height:calc(100dvh - 118px);box-shadow:none}
+  .side{display:none}
+  .kpis{grid-template-columns:1fr 1fr}
+  .desk main{padding:14px!important}
+  .desk .toast{left:12px;right:12px;width:auto;bottom:12px;position:fixed}
+}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const P={light:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9V16h7v-2.1A6 6 0 0 0 12 3z"/>',pothole:'<path d="M4 20 9 4M20 20 15 4M12 6v2M12 11v2M12 16v2"/>',flood:'<path d="M12 2.7s-6 6.6-6 11.3a6 6 0 0 0 12 0c0-4.7-6-11.3-6-11.3z"/>',trash:'<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>',cam:'<path d="M4 7h3l2-3h6l2 3h3v13H4z"/><circle cx="12" cy="13" r="4"/>',pin:'<path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/>',check:'<path d="M5 12l5 5L20 7"/>',clock:'<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>',alert:'<path d="M12 6v8M12 18v.5"/>',back:'<path d="M15 5l-7 7 7 7"/>',spark:'<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>',users:'<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 4a3 3 0 0 1 0 6M21 20c0-2.6-1.6-4.8-4-5.6"/>',list:'<path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>',star:'<path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/>',wifi:'<path d="M2 8.8a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0M12 19.5h.01M3 3l18 18"/>',plus:'<path d="M12 5v14M5 12h14"/>',bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10 21h4"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>',arrows:'<path d="M9 6l-5 6 5 6M15 6l5 6-5 6"/>',send:'<path d="M4 12h15M13 6l6 6-6 6"/>'};
+const ic=(n,c='currentColor',s=20,w=2)=>`<svg aria-hidden="true" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${P[n]}</svg>`;
+const T={light:{label:'Đèn đường',short:'Đèn đường',dept:'Điện lực',c:'#9A5B00'},pothole:{label:'Ổ gà mặt đường',short:'Ổ gà',dept:'Tổ quản lý đô thị',c:'#1747D6'},flood:{label:'Ngập nước',short:'Ngập',dept:'Tổ quản lý đô thị',c:'#2B6CB0'},trash:{label:'Rác thải',short:'Rác',dept:'Công ty Môi trường đô thị',c:'#1C7445'}};
+const DEPTS=['Tổ quản lý đô thị','Điện lực','Công ty Môi trường đô thị'];
+const M_PER_PX=2.5, ME={x:158,y:148};
+const pad=n=>String(n).padStart(2,'0');
+const now=()=>{const d=new Date();return `24/11 · ${pad(d.getHours())}:${pad(d.getMinutes())}`};
+const dist=(a,b)=>Math.round(Math.hypot(a.x-b.x,a.y-b.y)*M_PER_PX);
+
+function seed(){return{
+  role:'citizen',scr:'home',big:false,filter:'all',pin:null,draft:null,toast:null,notifs:[],
+  stats:{total:64,done:47},offline:false,queue:[],
+  staff:{sel:'PA-0461',hours:48,dept:null,filter:'all'},unit:{sel:null,shot:false},
+  rate:{pos:52,stars:0,tags:{}},next:470,
+  reports:[
+    {id:'PA-0461',type:'pothole',addr:'43 Hưng Đạo Vương',note:'Gần cổng trường tiểu học',x:150,y:150,status:'new',reporters:3,mine:false,created:'24/11 · 06:10'},
+    {id:'PA-0463',type:'pothole',addr:'49 Hưng Đạo Vương',x:166,y:160,status:'new',reporters:1,mine:false,created:'24/11 · 07:02'},
+    {id:'PA-0458',type:'flood',addr:'Cách Mạng Tháng Tám, gần chợ',x:84,y:262,status:'new',reporters:3,flag:'Người dân chọn khác AI (AI: Rác thải)',created:'23/11 · 17:40'},
+    {id:'PA-0466',type:'light',addr:'Hẻm 30 Phan Chu Trinh',x:330,y:250,status:'new',reporters:1,flag:'Không có ảnh · người cao tuổi gửi',created:'24/11 · 05:55'},
+    {id:'PA-0452',type:'light',addr:'Phan Chu Trinh',x:252,y:228,status:'assigned',dept:'Điện lực',hours:6,assignedAt:'22/11 · 09:00',reporters:2,created:'22/11 · 08:20',dueTxt:'Còn 6 giờ',dueBad:true},
+    {id:'PA-0447',type:'trash',addr:'Hẻm 8 Nguyễn Ái Quốc',x:300,y:40,status:'assigned',dept:'Công ty Môi trường đô thị',hours:48,assignedAt:'21/11 · 10:00',reporters:1,created:'21/11 · 09:30',dueTxt:'Quá hạn 1 ngày',dueBad:true},
+    {id:'PA-0437',type:'trash',addr:'Hẻm 12 Phan Chu Trinh',x:60,y:110,status:'done',dept:'Công ty Môi trường đô thị',hours:48,assignedAt:'22/11 · 14:00',doneAt:'24/11 · 07:30',reporters:2,mine:true,created:'22/11 · 11:05',result:'Đã thu gom 2 xe rác, đặt biển cấm đổ rác.'},
+    {id:'PA-0430',type:'flood',addr:'Đường 30 Tháng 4',x:310,y:330,status:'done',dept:'Tổ quản lý đô thị',reporters:4,created:'20/11 · 16:00',doneAt:'22/11 · 15:00'},
+    {id:'PA-0425',type:'light',addr:'Nguyễn Văn Trị',x:40,y:330,status:'done',dept:'Điện lực',reporters:1,created:'19/11 · 19:10',doneAt:'21/11 · 18:00'}
+  ]}}
+let S=seed();
+const R=id=>S.reports.find(r=>r.id===id);
+const open=r=>r.status==='new'||r.status==='assigned';
+const stTxt=r=>r.status==='new'?'Mới tiếp nhận':r.status==='assigned'?('Đang xử lý · '+(r.dept||'')):r.status==='done'?'✓ Đã khắc phục':r.status==='rejected'?'Đã đóng':'';
+const pinColor=r=>r.status==='new'?'#B42318':r.status==='assigned'?'#9A5B00':'#1C7445';
+const pinIcon=r=>r.status==='new'?'alert':r.status==='assigned'?'clock':'check';
+
+let toastTimer;
+function toast(t){S.toast=t;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{S.toast=null;render()},3200)}
+function notify(r,text){if(r.mine)S.notifs.push({rid:r.id,text})}
+
+function guide(){
+  const r=R('PA-0461');
+  if(!r.mine&&r.status==='new')return 'Bước 1 · <b>Người dân</b>: bấm “Gửi phản ánh” → Chụp ảnh → Đúng vị trí → <b>+1 Đồng tình</b>';
+  if(r.status==='new')return 'Bước 2 · <b>Cán bộ phường</b>: chọn PA-0461 → <b>Gộp</b> phản ánh trùng → chọn hạn → <b>Giao việc</b>';
+  if(r.status==='assigned')return 'Bước 3 · <b>Đơn vị xử lý</b>: mở PA-0461 → Chụp ảnh sau → <b>Hoàn thành</b>';
+  if(r.status==='done'&&!r.rating)return 'Bước 4 · <b>Người dân</b>: bấm thông báo → kéo Trước/Sau → chấm sao';
+  return `Xong kịch bản! Phường đã xử lý <b>${S.stats.done}/${S.stats.total}</b>. Thử thêm: Đoàn viên xác minh, Chế độ chữ lớn, Mất mạng, ảnh mờ. Bấm “Đặt lại” để demo lại.`;
+}
+
+function render(){
+  const roles=[['citizen','Người dân'],['volunteer','Đoàn viên'],['staff','Cán bộ phường'],['unit','Đơn vị xử lý']];
+  let h=`<div class="ctl"><span class="brand">PHẢN ÁNH TRẤN BIÊN</span>${roles.map(([k,l])=>`<button class="rt ${S.role===k?'on':''}" data-a="role" data-v="${k}">${l}</button>`).join('')}
+  <button class="rt warn ${S.offline?'on':''}" data-a="offline">${S.offline?'Đang mất mạng – bấm để có mạng':'Mô phỏng mất mạng'}</button>
+  <button class="rt" data-a="reset">Đặt lại demo</button></div>
+  <div class="guide">${guide()}</div><div class="stage">`;
+  if(S.role==='staff')h+=staffView();
+  else h+=`<div class="phone ${S.big&&S.role==='citizen'?'big':''}">${S.role==='citizen'?citizen():S.role==='volunteer'?volunteer():unitView()}${S.toast?`<div class="toast" role="status">${S.toast}</div>`:''}</div>`;
+  h+='</div>';
+  document.getElementById('app').innerHTML=h;
+}
+
+/* ---------------- CITIZEN ---------------- */
+function citizen(){
+  switch(S.scr){
+    case 'home':return S.big?elderHome():home();
+    case 'capture':return capture();
+    case 'blur':return blurErr();
+    case 'loc':return loc();
+    case 'pick':return pickPlace();
+    case 'type':return typeScr();
+    case 'queued':return queued();
+    case 'mine':return mine();
+    case 'detail':return detail();
+    case 'rate':return rateScr();
+  }
+}
+function nav(on){const n=S.notifs.length;return `<nav class="nav"><button class="${on==='home'?'on':''}" data-a="go" data-v="home">${ic('pin')}Bản đồ</button><button class="${on==='mine'?'on':''}" data-a="go" data-v="mine">${ic('list')}Của tôi${n?`<span class="dot">${n}</span>`:''}</button><button>${ic('user')}Tài khoản</button></nav>`}
+function notifBar(){return S.notifs.length?`<button class="notif" data-a="notif">${ic('bell','#3FD0FF')}<span>${S.notifs[S.notifs.length-1].text}</span></button>`:''}
+function mapView(h,list,me){
+  return `<div class="map" style="height:${h}px" role="img" aria-label="Bản đồ phản ánh">
+  <div style="position:absolute;left:-40px;top:${h*0.72}px;width:480px;height:40px;background:#CFE0EC;transform:rotate(-8deg)"></div>
+  <div class="road" style="left:0;top:${h*0.22}px;width:390px;height:14px"></div><div class="road" style="left:0;top:${h*0.5}px;width:390px;height:20px"></div>
+  <div class="road" style="left:120px;top:0;width:16px;height:${h}px"></div><div class="road" style="left:270px;top:0;width:12px;height:${h}px"></div>
+  <span style="position:absolute;left:150px;top:${h*0.5-16}px;font-size:11px;font-weight:600;color:var(--muted)">Hưng Đạo Vương</span>
+  <span style="position:absolute;left:8px;top:${h*0.22-16}px;font-size:11px;font-weight:600;color:var(--muted)">Phan Chu Trinh</span>
+  ${me?`<div style="position:absolute;left:${ME.x-60}px;top:${ME.y-60}px;width:120px;height:120px;border-radius:60px;border:2px dashed var(--blue);background:rgba(23,71,214,.08)"></div><div style="position:absolute;left:${ME.x-8}px;top:${ME.y-8}px;width:16px;height:16px;border-radius:8px;background:var(--blue);border:3px solid #fff;box-shadow:0 0 0 6px rgba(23,71,214,.25)"></div>`:''}
+  ${list.map(r=>`<button class="pinb ${S.pin===r.id?'sel':''}" style="left:${r.x}px;top:${r.y}px;background:${pinColor(r)}" data-a="pin" data-v="${r.id}" aria-label="${r.id} ${T[r.type].label} – ${stTxt(r)}">${ic(pinIcon(r),'#fff',16,3)}</button>`).join('')}
+  <div style="position:absolute;left:10px;bottom:10px;background:#fff;border-radius:12px;padding:7px 10px;display:flex;flex-direction:column;gap:3px;font-size:12px;font-weight:500;box-shadow:0 1px 4px rgba(0,0,0,.12)">
+  <span>● <b style="color:#B42318">!</b> Mới tiếp nhận</span><span>● <b style="color:#9A5B00">◷</b> Đang xử lý</span><span>● <b style="color:#1C7445">✓</b> Đã khắc phục</span></div></div>`;
+}
+function home(){
+  const vis=S.reports.filter(r=>r.status!=='merged'&&r.status!=='rejected'&&(S.filter==='all'||r.type===S.filter));
+  const c={new:0,assigned:0,done:0};vis.forEach(r=>c[r.status]++);
+  const sel=S.pin?R(S.pin):vis.filter(open).sort((a,b)=>dist(a,ME)-dist(b,ME))[0];
+  const chips=[['all','Tất cả'],['light','Đèn đường'],['pothole','Ổ gà'],['flood','Ngập'],['trash','Rác']];
+  return `<div class="scr"><header class="hdr"><div style="display:flex;flex-direction:column;gap:6px"><span class="badge">PHƯỜNG TRẤN BIÊN</span><span style="font-size:21px;font-weight:700">Phản ánh quanh tôi</span></div><button class="pill" data-a="big">Aa <span style="font-size:13px">Chữ lớn</span></button></header>
+  <div class="chips">${chips.map(([k,l])=>`<button class="chip ${S.filter===k?'on':''}" data-a="filter" data-v="${k}">${l}</button>`).join('')}</div>
+  ${notifBar()}
+  <div style="flex:1 1 0;min-height:170px;position:relative;overflow:hidden;display:flex;flex-direction:column">${mapView(S.notifs.length?330:390,vis,true)}</div>
+  <section class="sheet"><div class="grab"></div>
+  <div style="font-size:15px;font-weight:600">${S.filter==='all'?'Quanh bạn':T[S.filter].short+' quanh bạn'}: ${vis.length} phản ánh</div>
+  <div class="muted">${c.new} mới · ${c.assigned} đang xử lý · ${c.done} đã khắc phục</div>
+  ${sel?`<div class="row card" style="padding:10px">${ic(sel.type,T[sel.type].c,24)}<div style="flex:1;display:flex;flex-direction:column;gap:2px"><b style="font-size:15px">${T[sel.type].label}</b><span class="muted">${sel.addr} · cách ${dist(sel,ME)}m</span></div><span class="st ${sel.status}">${stTxt(sel).split(' · ')[0]}</span></div>`:`<div class="card muted">Không có sự cố nào đang chờ trong khu vực này.</div>`}
+  <button class="cta" data-a="start">${ic('cam','#fff',22)}Gửi phản ánh</button></section></div>${nav('home')}`;
+}
+function elderHome(){
+  return `<div class="scr" style="background:#fff;padding:22px 20px 24px;gap:16px">
+  <div class="row" style="justify-content:space-between"><span style="font-size:26px;font-weight:800">Báo sự cố</span><button data-a="big" style="height:48px;padding:0 14px;border-radius:24px;border:none;background:#000;color:#FFE14D;font-size:18px;font-weight:800">Aa Chữ lớn: BẬT</button></div>
+  ${S.notifs.length?`<button data-a="notif" style="border:3px solid #000;border-radius:18px;background:#FFF7CC;padding:14px;font-size:19px;font-weight:700;text-align:left">🔔 ${S.notifs[S.notifs.length-1].text}</button>`:''}
+  <p style="margin:0;font-size:20px;line-height:1.45;font-weight:500">Bác bấm nút xanh để chụp ảnh. Không cần gõ chữ.</p>
+  <button class="big1" data-a="start" style="height:132px;background:#0B2A8C;color:#fff;border-color:#0B2A8C"><span class="num" style="background:#fff;color:#0B2A8C">1</span><span style="flex:1">Chụp ảnh sự cố</span>${ic('cam','#fff',40)}</button>
+  <button class="big1" data-a="go" data-v="mine" style="height:96px"><span class="num">2</span><span style="flex:1">Xem phản ánh của tôi</span>${ic('list','#000',34)}</button>
+  <div style="flex:1"></div>
+  <button data-a="helpme" style="height:68px;border-radius:18px;border:3px dashed #000;background:#FFF7CC;color:#000;font-size:20px;font-weight:700">Nhờ đoàn viên gửi giúp</button></div>`;
+}
+function stepHdr(n,title,back){return `<header class="hdr light" style="flex-direction:column;align-items:stretch;gap:12px"><div class="row"><button class="ib" data-a="go" data-v="${back}" aria-label="Quay lại">${ic('back','currentColor',20,2.4)}</button><div style="display:flex;flex-direction:column"><span class="muted">Bước ${n}/3</span><span style="font-size:18px;font-weight:700">${title}</span></div></div><div class="steps">${[1,2,3].map(i=>`<span class="${i<=n?'on':''}"></span>`).join('')}</div></header>`}
+function capture(){
+  const d=S.draft;
+  return `<div class="scr" style="background:#061545;color:#fff">
+  <header class="hdr" style="flex-direction:column;align-items:stretch;gap:12px;background:transparent;box-shadow:none;border-bottom:none"><div class="row"><button class="ib" data-a="go" data-v="home" aria-label="Quay lại">${ic('back','#fff',20,2.4)}</button><div style="display:flex;flex-direction:column"><span style="font-size:13px;color:#A9C3FF">Bước 1/3${d.assisted?' · Đoàn viên gửi hộ':''}</span><span style="font-size:18px;font-weight:700">Chụp ảnh sự cố</span></div></div><div class="steps"><span class="on"></span><span></span><span></span></div></header>
+  <div class="photo" style="position:relative;flex:1;margin:0 12px;border-radius:20px;overflow:hidden;display:flex;align-items:center;justify-content:center">
+  ${!d.photo?`<span style="font-size:14px;color:#C8D6FF;background:rgba(0,0,0,.35);padding:6px 10px;border-radius:8px">[Khung camera]</span>`:`<span style="font-size:14px;color:#D5DDF5;background:rgba(0,0,0,.35);padding:6px 10px;border-radius:8px">[Ảnh: ổ gà đọng nước]</span>`}
+  ${d.photo&&d.ai?`<div style="position:absolute;left:96px;top:170px;width:170px;height:120px;border:3px solid #FFC94D;border-radius:14px"></div><span style="position:absolute;left:96px;top:140px;font-size:12px;font-weight:700;background:#FFC94D;color:#2A1D00;padding:3px 8px;border-radius:6px">Vùng hư hỏng</span>`:''}
+  ${d.photo?`<div style="position:absolute;left:12px;right:12px;bottom:12px;background:#fff;color:var(--navy);border-radius:16px;padding:14px;display:flex;gap:12px;align-items:flex-start">
+    ${d.analyzing?`<div class="spin"></div><div style="display:flex;flex-direction:column;gap:2px"><b>AI đang nhận diện…</b><span class="muted">Thường mất 1–2 giây</span></div>`:`<div style="width:40px;height:40px;border-radius:12px;background:var(--soft);display:flex;align-items:center;justify-content:center;flex:none">${ic('spark','#1747D6')}</div><div style="display:flex;flex-direction:column;gap:4px"><span class="muted">AI gợi ý (bạn xác nhận ở bước 3)</span><b style="font-size:16px">${T[d.ai].label}</b><span class="muted">“${d.desc}”</span></div>`}</div>`:''}
+  </div>
+  <div style="padding:10px 20px 0;font-size:13px;color:#A9C3FF;display:flex;gap:6px;align-items:center">${ic('pin','#A9C3FF',16)}${d.photo?'Đã ghi vị trí lúc chụp · '+d.time.split(' · ')[1]:'Vị trí được ghi đúng lúc bấm chụp'}</div>
+  <div style="padding:12px 20px 24px;display:flex;flex-direction:column;gap:10px">
+  ${!d.photo?`<button class="cta" data-a="shoot">${ic('cam','#fff',22)}Chụp ảnh</button><button class="sec dark" data-a="shootblur" style="height:44px;font-size:14px">Thử: chụp ảnh bị mờ (trạng thái lỗi)</button>`
+   :`<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><button class="sec dark" data-a="retake">Chụp lại</button><button class="cta" data-a="go" data-v="loc" ${d.analyzing?'disabled':''} style="font-size:16px">Dùng ảnh này</button></div>`}
+  </div></div>`;
+}
+function blurErr(){return `<div class="scr"><div class="ph"><div class="ico" style="background:var(--ambbg)">${ic('cam','#9A5B00',44)}</div><h2 style="margin:0;font-size:20px">Ảnh hơi tối, chưa thấy rõ sự cố</h2><p class="muted" style="font-size:15px;margin:0;line-height:1.5">Bác chụp lại gần hơn một chút để phường xử lý nhanh hơn nhé. Hoặc vẫn gửi ảnh này và tự chọn loại.</p></div><div style="padding:0 20px 28px;display:flex;flex-direction:column;gap:10px"><button class="cta" data-a="retake">Chụp lại</button><button class="sec" data-a="manual">Vẫn dùng ảnh này, tự chọn loại</button></div></div>`}
+function nearDup(){const d=S.draft;if(!d.ai)return null;return S.reports.filter(r=>open(r)&&r.type===d.ai&&dist(r,ME)<=50).sort((a,b)=>dist(a,ME)-dist(b,ME))[0]||null}
+function loc(){
+  const d=S.draft,dup=d.locOk?nearDup():null,show=dup&&!d.dupSkip;
+  return `<div class="scr" style="position:relative">${stepHdr(2,'Xác nhận vị trí','capture')}
+  <div style="position:relative">${mapView(330,S.reports.filter(r=>open(r)&&r.status!=='merged'),true)}
+  <div style="position:absolute;left:16px;top:16px;right:16px;background:#fff;border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;box-shadow:0 1px 6px rgba(0,0,0,.15)">
+  <span class="muted">${d.place?'Bạn đã chọn':'Bạn đang ở'}</span><b style="font-size:16px">${d.place||'Gần số 45 Hưng Đạo Vương'}</b>
+  ${d.locOk?`<span class="st ok">✓ Đã xác nhận vị trí</span>`:`<div style="display:flex;gap:8px"><button class="cta" style="height:44px;font-size:15px" data-a="locok">Đúng</button><button class="sec" style="height:44px" data-a="go" data-v="pick">Không phải</button></div>`}</div></div>
+  <div style="padding:16px 20px;display:flex;flex-direction:column;gap:10px;flex:1">
+  ${d.locOk&&!dup?`<div class="card"><b>Chưa có ai báo sự cố này gần đây</b><span class="muted">Bạn là người đầu tiên – cảm ơn bạn!</span></div><button class="cta" data-a="go" data-v="type">Tiếp tục</button>`:''}
+  ${d.locOk&&dup&&d.dupSkip?`<button class="cta" data-a="go" data-v="type">Tiếp tục</button>`:''}
+  ${!d.locOk?`<p class="muted" style="margin:0;line-height:1.5">Vị trí lấy từ GPS lúc chụp. Nếu sai, bấm “Không phải” để chọn tên đường hoặc khu phố.</p>`:''}</div>
+  ${show?`<div style="position:absolute;inset:0;background:rgba(6,21,69,.45)"></div><section style="position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;padding:16px 20px 26px;display:flex;flex-direction:column;gap:12px;box-shadow:0 -6px 24px rgba(0,0,0,.2)">
+  <div class="grab"></div><div class="row"><div style="width:48px;height:48px;border-radius:14px;background:var(--soft);display:flex;align-items:center;justify-content:center;flex:none">${ic('users','#1747D6',24)}</div><h2 style="margin:0;font-size:18px;line-height:1.35">Đã có ${dup.reporters} người báo ${T[dup.type].short.toLowerCase()} cách bạn ${dist(dup,ME)}m</h2></div>
+  <div class="row card" style="padding:10px"><div class="photo" style="width:64px;height:64px;border-radius:10px;flex:none"></div><div style="display:flex;flex-direction:column;gap:4px"><b>${dup.id} · ${T[dup.type].label}</b><span class="muted">${dup.addr}</span><span class="st ${dup.status}">${stTxt(dup)}</span></div></div>
+  <p class="muted" style="margin:0;font-size:14px;line-height:1.5">Bấm +1 để phường biết nhiều người cùng gặp, sự cố được ưu tiên hơn. Ảnh của bạn được thêm vào phản ánh này.</p>
+  <button class="cta" data-a="plus1" data-v="${dup.id}">+1 Đồng tình &amp; thêm ảnh</button><button class="sec" data-a="dupskip">Đây là sự cố khác – gửi mới</button></section>`:''}
+  </div>`;
+}
+function pickPlace(){
+  const opts=['Hưng Đạo Vương – đoạn gần chợ Biên Hòa','Hưng Đạo Vương – đoạn gần trường tiểu học','Phan Chu Trinh – gần ngã tư'];
+  return `<div class="scr">${stepHdr(2,'Chọn nơi xảy ra sự cố','loc')}<div style="padding:16px 20px;display:flex;flex-direction:column;gap:10px">
+  <p class="muted" style="margin:0;font-size:14px">Chưa lấy được vị trí chính xác? Chọn tên đường hoặc khu phố:</p>
+  <label class="f">Tìm tên đường hoặc địa điểm quen<input type="search" value="Hưng Đạo" style="border:2px solid var(--blue);height:48px"></label>
+  ${opts.map(o=>`<button class="sec" style="text-align:left;padding:0 14px;font-weight:500" data-a="place" data-v="${o}">${o}</button>`).join('')}
+  <span class="muted" style="font-weight:700;margin-top:6px">HOẶC CHỌN KHU PHỐ</span>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">${[1,2,3,4,5,6].map(i=>`<button class="sec" data-a="place" data-v="Khu phố ${i}, phường Trấn Biên">KP ${i}</button>`).join('')}</div></div></div>`;
+}
+function typeScr(){
+  const d=S.draft,sel=d.type;
+  return `<div class="scr">${stepHdr(3,'Đây là sự cố gì?','loc')}<div style="padding:16px 20px;display:flex;flex-direction:column;gap:14px;flex:1">
+  ${d.ai&&sel===d.ai?`<div class="row" style="background:var(--soft);border-radius:12px;padding:10px 12px;font-size:14px;color:#0B2A8C">${ic('spark','#1747D6',18)}<span>AI đoán là <b>${T[d.ai].label}</b> – đúng không?</span></div>`:''}
+  ${d.ai&&sel&&sel!==d.ai?`<div role="status" style="background:var(--ambbg);border-radius:12px;padding:10px 12px;font-size:14px;line-height:1.45;color:#5C3600">⚑ Bạn chọn <b>${T[sel].label}</b>, khác gợi ý của AI. Phản ánh vẫn gửi bình thường; phường có thể nhờ đoàn viên kiểm tra thêm.</div>`:''}
+  ${!d.ai?`<div style="background:var(--ambbg);border-radius:12px;padding:10px 12px;font-size:14px;color:#5C3600">Ảnh chưa rõ nên AI chưa gợi ý được. Bạn chọn giúp loại sự cố nhé.</div>`:''}
+  <div role="radiogroup" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">${Object.keys(T).map(k=>`<button role="radio" aria-checked="${sel===k}" class="tile ${sel===k?'on':''}" data-a="type" data-v="${k}">${d.ai===k?'<span class="aitag">AI gợi ý</span>':''}${ic(k,T[k].c,32)}${T[k].label}</button>`).join('')}</div>
+  <label class="f">Mô tả ${d.ai?'(AI viết sẵn, bạn có thể sửa)':'(không bắt buộc)'}<textarea rows="3" data-in="desc">${d.desc||''}</textarea></label>
+  <div class="muted">Danh tính của bạn được ẩn trên bản đồ công khai.</div></div>
+  <div style="padding:12px 20px 26px;background:#fff;border-top:1px solid var(--line)"><button class="cta" data-a="send" ${sel?'':'disabled'}>Gửi phản ánh</button></div></div>`;
+}
+function queued(){const q=S.queue[S.queue.length-1];return `<div class="scr"><div class="ph"><div class="ico" style="background:var(--soft)">${ic('wifi','#1747D6',44)}</div><h2 style="margin:0;font-size:20px">Đã lưu phản ánh của bạn</h2><p class="muted" style="font-size:15px;margin:0;line-height:1.5">Máy đang mất mạng. Phản ánh sẽ tự gửi khi có mạng trở lại, bạn không cần làm lại.</p>${q?`<div class="row card" style="width:100%;text-align:left"><div class="photo" style="width:48px;height:48px;border-radius:10px;flex:none"></div><div><b>${T[q.type].short} · ${q.addr}</b><div style="font-size:13px;color:var(--ambtx)">Đang chờ gửi… (${S.queue.length})</div></div></div>`:''}</div><div style="padding:0 20px 26px"><button class="sec" data-a="go" data-v="home">Về trang chủ</button></div></div>`}
+function mine(){
+  const list=S.reports.filter(r=>r.mine).sort((a,b)=>(b.status!=='done')-(a.status!=='done'));
+  return `<div class="scr"><header class="hdr"><span style="font-size:20px;font-weight:700">Phản ánh của tôi</span></header>${notifBar()}
+  <div style="padding:14px 16px;display:flex;flex-direction:column;gap:12px">${list.map(r=>`<button class="card" style="text-align:left;cursor:pointer" data-a="open" data-v="${r.id}"><div class="row" style="justify-content:space-between;align-items:flex-start"><div><div class="muted">${r.id} · ${T[r.type].label}</div><b style="font-size:16px">${r.addr}</b></div><span class="st ${r.status}">${r.status==='done'?'✓ Hoàn thành':r.status==='rejected'?'Đã đóng':r.status==='assigned'?'Đang xử lý':'Đã tiếp nhận'}</span></div>${r.reporters>1?`<span class="muted">Bạn + ${r.reporters-1} người cùng báo</span>`:''}${r.status==='done'&&!r.rating?`<span class="st info">Mời bạn đánh giá kết quả →</span>`:''}</button>`).join('')}
+  ${S.queue.map(q=>`<div class="card"><b>${T[q.type].short} · ${q.addr}</b><span style="font-size:13px;color:var(--ambtx)">Đang chờ mạng để gửi…</span></div>`).join('')}</div></div>${nav('mine')}`;
+}
+function timeline(r){
+  const s=[{t:'Đã tiếp nhận',d:r.created+(r.assisted?' · đoàn viên gửi hộ':''),ok:true}];
+  if(r.flag)s.push({t:r.status==='rejected'&&!r.verified?'Đoàn viên xác minh: không đúng thực tế':r.verified?'Đoàn viên đã xác minh':'Chờ đoàn viên xác minh',d:r.verified?r.verifiedAt:r.flag,ok:!!r.verified||r.status==='rejected'});
+  if(r.status==='rejected'){s.push({t:'Đã đóng',d:r.reason,ok:true,end:true});return s}
+  s.push({t:r.dept?'Đã giao: '+r.dept:'Chờ giao bộ phận xử lý',d:r.dept?(r.assignedAt+' · Hạn xử lý '+r.hours+' giờ'):'Thường trong 1 ngày làm việc',ok:!!r.dept});
+  s.push({t:'Đang xử lý',d:r.status==='assigned'?(r.dueTxt||('Còn '+r.hours+' giờ đến hạn')):'',ok:r.status==='done'});
+  s.push({t:'Hoàn thành',d:r.status==='done'?r.doneAt:'Bạn sẽ nhận tin qua Zalo/SMS',ok:r.status==='done'});
+  let cur=false;s.forEach(x=>{if(!x.ok&&!cur){x.cur=true;cur=true}});return s;
+}
+function detail(){
+  const r=R(S.sel);const tl=timeline(r);
+  return `<div class="scr"><header class="hdr"><button class="ib" data-a="go" data-v="mine" aria-label="Quay lại">${ic('back','#fff',20,2.4)}</button><div style="display:flex;flex-direction:column"><span style="font-size:13px;color:#BFEFFF">${r.id} · ${T[r.type].label}</span><span style="font-size:18px;font-weight:700">${r.addr}</span></div></header>
+  ${notifBar()}<div style="padding:16px;display:flex;flex-direction:column;gap:12px"><div class="card">${r.reporters>1?`<span class="st info">Bạn + ${r.reporters-1} người cùng báo</span>`:''}
+  <ol class="tl" style="list-style:none;margin:0;padding:0">${tl.map((x,i)=>`<li><div style="display:flex;flex-direction:column;align-items:center"><span class="d" style="${x.ok?'background:#1C7445':x.cur?'background:#9A5B00;box-shadow:0 0 0 5px #FFF1D6':'background:#fff;border:2px solid var(--line2)'}">${x.ok?ic('check','#fff',14,3.5):x.cur?ic('clock','#fff',14,3):''}</span>${i<tl.length-1?`<span class="ln" style="background:${x.ok?'#1C7445':'var(--line)'}"></span>`:''}</div><div style="padding-bottom:12px;display:flex;flex-direction:column;gap:2px"><span style="font-size:15px;font-weight:${x.cur?700:600};color:${x.cur?'var(--ambtx)':x.ok?'var(--navy)':'var(--muted)'}">${x.t}</span><span class="muted">${x.d||''}</span></div></li>`).join('')}</ol></div>
+  ${r.status==='done'?(r.rating?`<div class="card"><b>Bạn đã đánh giá ${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</b><span class="muted">Cảm ơn bạn đã góp ý cho phường.</span></div>`:`<button class="cta" data-a="rate" data-v="${r.id}">Xem ảnh trước/sau &amp; đánh giá</button>`):''}
+  ${!r.flag?`<p class="muted" style="margin:0">Bước “Đoàn viên xác minh” chỉ xuất hiện khi phản ánh cần kiểm tra thêm.</p>`:''}</div></div>`;
+}
+function rateScr(){
+  const r=R(S.sel),q=S.rate,words=['Chạm để chấm sao','Rất không hài lòng','Chưa hài lòng','Tạm được','Hài lòng','Rất hài lòng'];
+  return `<div class="scr"><header class="hdr"><button class="ib" data-a="go" data-v="detail" aria-label="Quay lại">${ic('back','#fff',20,2.4)}</button><div style="display:flex;flex-direction:column"><span style="font-size:13px;color:#BFEFFF">${r.id} · ${r.addr}</span><span style="font-size:18px;font-weight:700">Đã khắc phục xong</span></div></header>
+  <div style="padding:16px 20px;display:flex;flex-direction:column;gap:14px;flex:1">
+  <div style="position:relative;height:240px;border-radius:18px;overflow:hidden;background:repeating-linear-gradient(135deg,#BFD8C7 0 14px,#B3CFBC 14px 28px)">
+   <div id="bf" style="position:absolute;left:0;top:0;bottom:0;width:${q.pos}%;background:repeating-linear-gradient(135deg,#A89A88 0 14px,#9C8E7C 14px 28px)"></div>
+   <span style="position:absolute;left:12px;top:12px;font-size:12px;font-weight:700;background:rgba(6,21,69,.8);color:#fff;padding:4px 8px;border-radius:6px">TRƯỚC · ${r.created.split(' · ')[0]}</span>
+   <span style="position:absolute;right:12px;top:12px;font-size:12px;font-weight:700;background:#1C7445;color:#fff;padding:4px 8px;border-radius:6px">SAU · ${(r.doneAt||'').split(' · ')[0]}</span>
+   <span style="position:absolute;left:16px;bottom:14px;font-size:12px;color:#2A2418">[Ảnh trước]</span><span style="position:absolute;right:16px;bottom:14px;font-size:12px;color:#123A22">[Ảnh sau]</span>
+   <div id="bl" style="position:absolute;left:${q.pos}%;top:0;bottom:0;width:4px;margin-left:-2px;background:#fff"></div>
+   <div id="bh" style="position:absolute;left:${q.pos}%;top:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:22px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center">${ic('arrows','#0A1A44',22,2.4)}</div>
+   <input type="range" min="0" max="100" value="${q.pos}" data-in="pos" aria-label="Kéo để so sánh ảnh trước và sau" style="position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize">
+  </div>
+  <p style="margin:0;font-size:14px;line-height:1.5;color:#34436A;background:#fff;border-radius:12px;padding:12px">“${r.result||'Đã khắc phục xong.'}” – ${r.dept}, ${(r.doneAt||'').split(' · ')[0]}</p>
+  <section class="card" style="align-items:center;gap:10px"><b style="font-size:17px">Bạn hài lòng với kết quả?</b>
+  <div role="radiogroup" style="display:flex">${[1,2,3,4,5].map(n=>`<button class="star" role="radio" aria-checked="${n===q.stars}" aria-label="${n} sao" data-a="star" data-v="${n}"><svg width="40" height="40" viewBox="0 0 24 24" fill="${n<=q.stars?'#F2B300':'none'}" stroke="${n<=q.stars?'#B07F00':'#8A94AE'}" stroke-width="1.3">${P.star}</svg></button>`).join('')}</div>
+  <span style="font-size:14px;font-weight:600;color:#0B2A8C">${words[q.stars]}</span>
+  <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center">${['Xử lý nhanh','Sạch sẽ','Thái độ tốt','Chưa triệt để'].map(t=>`<button class="tag ${q.tags[t]?'on':''}" aria-pressed="${!!q.tags[t]}" data-a="tag" data-v="${t}">${t}</button>`).join('')}</div></section>
+  <button data-a="reopen" style="border:none;background:none;font-size:14px;font-weight:600;color:var(--redtx);text-decoration:underline">Vẫn còn tái diễn? Mở lại phản ánh</button></div>
+  <div style="padding:12px 20px 26px;background:#fff;border-top:1px solid var(--line)"><button class="cta" data-a="sendrate" ${q.stars?'':'disabled'}>Gửi đánh giá</button></div></div>`;
+}
+
+/* ---------------- VOLUNTEER ---------------- */
+function volunteer(){
+  const list=S.reports.filter(r=>r.flag&&!r.verified&&open(r)).sort((a,b)=>dist(a,ME)-dist(b,ME));
+  return `<div class="scr"><header class="hdr" style="flex-direction:column;align-items:flex-start;gap:6px"><span class="badge">ĐỘI THANH NIÊN TÌNH NGUYỆN · KP5</span><span style="font-size:20px;font-weight:700">Cần xác minh gần bạn (${list.length})</span><span style="font-size:13px;color:#BFEFFF">Chỉ hiện phản ánh bị gắn cờ, sắp theo khoảng cách</span></header>
+  <div style="padding:14px 16px;display:flex;flex-direction:column;gap:12px;flex:1">
+  ${list.length?list.map(r=>`<article class="card"><div class="row" style="justify-content:space-between"><b>${r.id} · ${T[r.type].label}</b><span class="muted">${dist(r,ME)}m</span></div><span class="muted">${r.addr}</span><span class="st flag">⚑ ${r.flag}</span>
+   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px"><button class="btn" style="height:44px;border:none;background:#0F5C33;color:#fff" data-a="vok" data-v="${r.id}">Đúng</button><button class="btn" style="height:44px" data-a="vfix" data-v="${r.id}">Chụp lại</button><button class="btn r" style="height:44px" data-a="vno" data-v="${r.id}">Không đúng</button></div></article>`).join('')
+   :`<div class="ph"><div class="ico" style="background:var(--grnbg)">${ic('check','#1C7445',44,2.4)}</div><b style="font-size:19px">Không còn phản ánh cần xác minh</b><span class="muted" style="font-size:15px">Cảm ơn bạn! Khu phố 5 đang ổn.</span></div>`}
+  <div style="flex:1"></div><button class="cta" data-a="assist">${ic('plus','#fff',22)}Gửi hộ người dân</button></div></div>`;
+}
+
+/* ---------------- STAFF ---------------- */
+function staffView(){
+  const st=S.staff;let rows=S.reports.filter(r=>open(r));
+  if(st.filter==='flag')rows=rows.filter(r=>r.flag&&!r.verified);
+  if(st.filter==='due')rows=rows.filter(r=>r.status==='assigned');
+  rows.sort((a,b)=>(a.status==='new'?0:1)-(b.status==='new'?0:1)||b.reporters-a.reporters);
+  const sel=R(st.sel);const pct=(S.stats.done/S.stats.total*100).toFixed(1).replace('.',',');
+  const conf=r=>r.flag&&!r.verified?`<span class="st flag">Cần xác minh</span><div class="muted" style="font-size:12px;margin-top:3px">${r.flag}</div>`:r.verified?`<span class="st ok">Đã xác minh</span>`:`<span class="st ok">Cao</span>`;
+  return `<div class="desk" style="position:relative"><aside class="side"><span style="font-size:13px;color:#A9C3FF;padding:0 12px">UBND phường</span><span style="font-size:18px;font-weight:700;padding:0 12px 14px">Trấn Biên</span><span class="it on">Tiếp nhận &amp; giao việc</span><span class="it">Bản đồ phản ánh</span><span class="it">Đoàn viên xác minh</span><span class="it">Báo cáo tháng</span></aside>
+  <main style="flex:1;min-width:0;padding:24px;overflow:auto;display:flex;flex-direction:column;gap:18px">
+  <div class="row" style="justify-content:space-between;flex-wrap:wrap"><div><div class="muted">Tháng 11/2026</div><h1 style="margin:0;font-size:24px">Tiếp nhận phản ánh</h1></div>
+  <div style="display:flex;gap:8px">${[['all','Tất cả đang mở'],['due','Đang xử lý / hạn'],['flag','⚑ Cần xác minh']].map(([k,l])=>`<button class="btn ${st.filter===k?'on':''}" data-a="sfilter" data-v="${k}">${l}</button>`).join('')}</div></div>
+  <div class="kpis">
+  <div class="kpi"><span class="muted">Tổng phản ánh</span><b style="font-size:28px">${S.stats.total}</b></div>
+  <div class="kpi"><span class="muted">Đã xử lý</span><b style="font-size:28px">${S.stats.done} <span style="font-size:15px;color:#1C7445">${pct}%</span></b></div>
+  <div class="kpi"><span class="muted">Thời gian xử lý TB</span><b style="font-size:28px">3,2 <span style="font-size:15px">ngày</span></b></div>
+  <div class="kpi"><span class="muted">Theo loại (đầu tháng)</span><div style="display:grid;grid-template-columns:70px 1fr 22px;gap:3px 8px;align-items:center;font-size:12px">${[['Rác thải',21],['Đèn đường',18],['Ngập nước',15],['Mặt đường',10]].map(([l,n])=>`<span>${l}</span><span style="height:9px;border-radius:5px;background:var(--blue);width:${n/21*100}%"></span><b>${n}</b>`).join('')}</div></div></div>
+  <div style="display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start">
+  <section style="flex:999 1 520px;min-width:0;background:#fff;border-radius:16px;border:1px solid var(--line);overflow:auto"><table><thead><tr><th>Mã</th><th>Loại · Vị trí</th><th>Người báo</th><th>Độ tin cậy</th><th>Trạng thái</th><th>Hạn</th></tr></thead><tbody>
+  ${rows.length?rows.map(r=>`<tr class="pick ${st.sel===r.id?'sel':''}" data-a="ssel" data-v="${r.id}"><td><b>${r.id}</b></td><td>${T[r.type].label} · ${r.addr}${r.note?`<div class="muted" style="font-size:12px">${r.note}</div>`:''}</td><td><b>${r.reporters}</b></td><td>${conf(r)}</td><td><span class="st ${r.status}">${r.status==='new'?(r.vol?'Chờ đoàn viên':'Mới'):'Đã giao · '+r.dept}</span></td><td>${r.status==='assigned'?`<span class="st" style="background:${r.dueBad?'#B42318':'var(--soft)'};color:${r.dueBad?'#fff':'#0B2A8C'}">${r.dueTxt||'Còn '+r.hours+' giờ'}</span>`:'—'}</td></tr>`).join(''):`<tr><td colspan="6" class="muted" style="padding:24px;text-align:center">Không có phản ánh nào trong bộ lọc này.</td></tr>`}
+  </tbody></table></section>
+  <aside style="flex:1 1 300px;max-width:400px;background:#fff;border-radius:16px;border:2px solid var(--blue);padding:18px;display:flex;flex-direction:column;gap:12px">${sel&&open(sel)?staffPanel(sel):`<b>Chọn một phản ánh để xử lý</b><span class="muted">Bấm vào một dòng trong bảng.</span>`}</aside></div></main>
+  ${S.toast?`<div class="toast" role="status">${S.toast}</div>`:''}</div>`;
+}
+function staffPanel(r){
+  const st=S.staff;const dept=st.dept||T[r.type].dept;
+  const dup=S.reports.find(o=>o.id!==r.id&&open(o)&&o.status==='new'&&o.type===r.type&&dist(o,r)<=50);
+  if(r.status==='assigned')return `<h2 style="margin:0;font-size:17px">${r.id} · ${T[r.type].label}</h2><span class="muted">${r.addr}</span><div class="card" style="background:var(--ambbg);border:none"><b style="color:var(--ambtx)">Đã giao: ${r.dept}</b><span class="muted">${r.dueTxt||'Hạn '+r.hours+' giờ'} · đơn vị nộp kết quả qua link</span></div><button class="btn" data-a="remind" data-v="${r.id}" style="height:44px">Nhắc đơn vị</button>`;
+  return `<h2 style="margin:0;font-size:17px">Giao xử lý ${r.id}</h2><span class="muted">${T[r.type].label} · ${r.addr} · ${r.reporters} người báo</span>
+  ${r.flag&&!r.verified?`<div style="background:var(--ambbg);border-radius:12px;padding:10px;font-size:13px;color:#5C3600">⚑ ${r.flag}<div style="margin-top:8px">${r.vol?'<b>Đã chuyển đoàn viên KP5</b>':`<button class="btn g" data-a="tovol" data-v="${r.id}">Chuyển đoàn viên xác minh</button>`}</div></div>`:''}
+  ${dup?`<div class="row" style="background:var(--soft);border-radius:12px;padding:10px;font-size:13px;color:#0B2A8C">Gợi ý gộp: ${dup.id} cách ${dist(dup,r)}m, cùng loại<button class="btn p" style="margin-left:auto" data-a="merge" data-v="${dup.id}">Gộp</button></div>`:''}
+  <label class="f" style="font-size:13px">Bộ phận xử lý<select data-in="dept" style="height:44px">${DEPTS.map(d=>`<option ${d===dept?'selected':''}>${d}</option>`).join('')}</select></label>
+  <div style="font-size:13px;font-weight:600">Hạn xử lý</div><div style="display:flex;gap:8px">${[24,48,72].map(n=>`<button class="btn ${st.hours===n?'on':''}" data-a="hours" data-v="${n}">${n} giờ</button>`).join('')}</div>
+  <label class="f" style="font-size:13px">Ghi chú cho đơn vị<textarea rows="2">${r.note?'Ưu tiên: '+r.note.toLowerCase()+', '+r.reporters+' người cùng báo.':''}</textarea></label>
+  <button class="cta" style="height:48px;font-size:15px" data-a="assign" data-v="${r.id}">Giao việc</button>
+  <div style="display:flex;gap:8px"><button class="btn" style="flex:1" data-a="needmore" data-v="${r.id}">Yêu cầu bổ sung</button><button class="btn r" style="flex:1" data-a="reject" data-v="${r.id}">Từ chối / chuyển cấp</button></div>`;
+}
+
+/* ---------------- UNIT ---------------- */
+function unitView(){
+  const u=S.unit,list=S.reports.filter(r=>r.status==='assigned');
+  if(!u.sel||!R(u.sel)||R(u.sel).status!=='assigned')return `<div class="scr"><header class="hdr" style="flex-direction:column;align-items:flex-start;gap:6px"><span class="badge">LINK NỘP KẾT QUẢ · KHÔNG CẦN ĐĂNG NHẬP</span><span style="font-size:20px;font-weight:700">Việc được giao (${list.length})</span></header>
+  <div style="padding:14px 16px;display:flex;flex-direction:column;gap:12px">${list.length?list.map(r=>`<button class="card" style="text-align:left;cursor:pointer" data-a="usel" data-v="${r.id}"><div class="row" style="justify-content:space-between"><b>${r.id} · ${T[r.type].label}</b><span class="st" style="background:${r.dueBad?'#B42318':'var(--soft)'};color:${r.dueBad?'#fff':'#0B2A8C'}">${r.dueTxt||'Còn '+r.hours+' giờ'}</span></div><span class="muted">${r.addr} · Giao: ${r.dept}</span></button>`).join(''):`<div class="card muted">Chưa có việc nào được giao.</div>`}</div></div>`;
+  const r=R(u.sel);
+  return `<div class="scr"><header class="hdr"><button class="ib" data-a="uback" aria-label="Quay lại">${ic('back','#fff',20,2.4)}</button><div style="display:flex;flex-direction:column"><span style="font-size:13px;color:#BFEFFF">${r.addr} · Giao: ${r.dept}</span><span style="font-size:18px;font-weight:700">${r.id} · ${T[r.type].label}</span></div></header>
+  <div style="padding:16px 20px;display:flex;flex-direction:column;gap:14px;flex:1">
+  <div style="position:relative;height:300px;border-radius:18px;overflow:hidden;${u.shot?'background:repeating-linear-gradient(135deg,#BFD8C7 0 14px,#B3CFBC 14px 28px)':''}" class="${u.shot?'':'photo'}">
+   ${u.shot?`<span style="position:absolute;left:12px;top:12px;font-size:12px;font-weight:700;background:#1C7445;color:#fff;padding:4px 8px;border-radius:6px">Ảnh sau xử lý ✓</span><span style="position:absolute;left:0;right:0;top:140px;text-align:center;font-size:13px;color:#123A22">[Ảnh hiện trường sau khi khắc phục]</span>`
+   :`<div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,.16) 0 10px,transparent 10px 20px)"></div><span style="position:absolute;left:12px;top:12px;font-size:12px;font-weight:700;background:rgba(6,21,69,.8);color:#fff;padding:4px 8px;border-radius:6px">Ảnh trước (mờ) – căn cho trùng góc</span><div style="position:absolute;left:0;right:0;bottom:16px;display:flex;justify-content:center"><button data-a="ushoot" aria-label="Chụp ảnh sau xử lý" style="width:72px;height:72px;border-radius:36px;border:5px solid #fff;background:rgba(255,255,255,.3)"></button></div>`}
+  </div>
+  <label class="f">Ghi chú kết quả<textarea rows="3" data-in="result">${r.type==='pothole'?'Đã vá ổ gà bằng bê tông nhựa, cắm biển cảnh báo trong 24 giờ.':'Đã khắc phục xong.'}</textarea></label>
+  <p class="muted" style="margin:0;line-height:1.5">Khi bấm Hoàn thành: ghim trên bản đồ chuyển xanh và người gửi nhận tin mời đánh giá.</p></div>
+  <div style="padding:12px 20px 26px;background:#fff;border-top:1px solid var(--line)"><button class="cta" style="background:linear-gradient(135deg,#1C7445,#23955A)" data-a="udone" ${u.shot?'':'disabled'}>Hoàn thành</button></div></div>`;
+}
+
+/* ---------------- ACTIONS ---------------- */
+function createReport(q){const id='PA-0'+(S.next++);const r=Object.assign({id,status:'new',reporters:1,mine:true,created:q.time},q);delete r.time;S.reports.push(r);S.stats.total++;return r}
+const A={
+  role:v=>{S.role=v;if(v==='citizen'&&(S.notifs.length||!['home','mine','detail','rate'].includes(S.scr)))S.scr='home'},
+  reset:()=>{S=seed();toast('Đã đặt lại dữ liệu demo')},
+  offline:()=>{S.offline=!S.offline;if(!S.offline&&S.queue.length){const n=S.queue.length;S.queue.forEach(createReport);S.queue=[];toast(`Có mạng trở lại – đã tự gửi ${n} phản ánh đang chờ`)}},
+  big:()=>{S.big=!S.big},
+  filter:v=>{S.filter=v;S.pin=null},
+  pin:v=>{S.pin=S.pin===v?null:v},
+  go:v=>{S.scr=v},
+  start:()=>{S.draft={photo:false,assisted:S.draft&&S.draft.assisted};S.scr='capture'},
+  shoot:()=>{const d=S.draft;d.photo=true;d.time=now();d.analyzing=true;d.ai='pothole';d.desc='Ổ gà đọng nước giữa làn xe máy, dễ gây té ngã.';setTimeout(()=>{if(S.draft===d){d.analyzing=false;render()}},1300)},
+  shootblur:()=>{S.draft.time=now();S.scr='blur'},
+  retake:()=>{S.draft={photo:false,assisted:S.draft.assisted};S.scr='capture'},
+  manual:()=>{Object.assign(S.draft,{photo:true,ai:null,desc:''});S.scr='loc'},
+  locok:()=>{S.draft.locOk=true},
+  place:v=>{S.draft.place=v;S.draft.locOk=true;S.scr='loc'},
+  dupskip:()=>{S.draft.dupSkip=true;S.scr='type'},
+  plus1:v=>{const r=R(v);r.reporters++;r.mine=true;S.draft=null;S.sel=v;S.scr='detail';toast(`Đã +1 vào ${v}. Phường sẽ ưu tiên xử lý hơn.`)},
+  type:v=>{S.draft.type=v},
+  send:()=>{const d=S.draft;const q={type:d.type,addr:d.place||'45 Hưng Đạo Vương',x:ME.x,y:ME.y,desc:d.desc,time:d.time||now(),assisted:d.assisted};
+    if(!d.ai)q.flag='Ảnh mờ, AI chưa nhận diện được';else if(d.type!==d.ai)q.flag=`Người dân chọn khác AI (AI: ${T[d.ai].label})`;
+    S.draft=null;if(S.offline){S.queue.push(q);S.scr='queued';return}
+    const r=createReport(q);S.sel=r.id;S.scr='detail';toast(`Đã gửi ${r.id}. Bạn sẽ nhận tin khi có cập nhật.`)},
+  open:v=>{S.sel=v;S.notifs=S.notifs.filter(n=>n.rid!==v);S.scr='detail'},
+  notif:()=>{const n=S.notifs.pop();S.sel=n.rid;S.scr='detail'},
+  rate:v=>{S.sel=v;S.rate={pos:52,stars:0,tags:{}};S.scr='rate'},
+  star:v=>{S.rate.stars=+v},
+  tag:v=>{S.rate.tags[v]=!S.rate.tags[v]},
+  sendrate:()=>{const r=R(S.sel);r.rating=S.rate.stars;S.scr='detail';toast('Cảm ơn bạn đã đánh giá!')},
+  reopen:()=>{const r=R(S.sel);r.status='new';r.dept=null;r.reporters=r.reporters;S.stats.done--;S.scr='detail';toast('Đã mở lại phản ánh – phường sẽ xem xét lại.')},
+  helpme:()=>{toast('Đã gửi yêu cầu. Đoàn viên KP5 sẽ gọi lại cho bác trong hôm nay.')},
+  vok:v=>{const r=R(v);r.verified=true;r.verifiedAt=now()+' · đoàn viên KP5';notify(r,`${v} đã được đoàn viên xác minh`);toast(`Đã xác nhận ${v} – chuyển lên danh sách ưu tiên của phường`)},
+  vfix:v=>{const r=R(v);r.verified=true;r.verifiedAt=now()+' · đoàn viên chụp lại ảnh';toast(`Đã cập nhật ảnh mới cho ${v}`)},
+  vno:v=>{const r=R(v);r.status='rejected';r.reason='Đoàn viên xác minh tại chỗ: không đúng thực tế';notify(r,`${v} đã đóng sau khi xác minh`);toast(`${v}: không đúng thực tế – đã báo người gửi kèm lý do`)},
+  assist:()=>{S.role='citizen';S.big=false;S.draft={photo:false,assisted:true};S.scr='capture'},
+  sfilter:v=>{S.staff.filter=v},
+  ssel:v=>{S.staff.sel=v;S.staff.dept=null;S.staff.hours=48},
+  hours:v=>{S.staff.hours=+v},
+  merge:v=>{const d=R(v),r=R(S.staff.sel);r.reporters+=d.reporters;d.status='merged';d.mergedInto=r.id;toast(`Đã gộp ${v} vào ${r.id} – nay ${r.reporters} người cùng báo`)},
+  tovol:v=>{R(v).vol=true;toast(`Đã chuyển ${v} cho đoàn viên KP5 xác minh`)},
+  assign:v=>{const r=R(v),st=S.staff;r.status='assigned';r.dept=st.dept||T[r.type].dept;r.hours=st.hours;r.assignedAt=now();r.dueTxt=null;r.dueBad=false;notify(r,`${v} đã giao cho ${r.dept} – hạn ${r.hours} giờ`);toast(`Đã giao ${v} cho ${r.dept}, hạn ${r.hours} giờ. Người gửi đã nhận thông báo.`)},
+  remind:v=>{toast(`Đã nhắc ${R(v).dept} về ${v}`)},
+  needmore:v=>{notify(R(v),`${v}: phường cần bạn bổ sung ảnh rõ hơn`);toast(`Đã gửi yêu cầu bổ sung cho người báo ${v}`)},
+  reject:v=>{const r=R(v);r.status='rejected';r.reason='Không thuộc thẩm quyền phường – đã chuyển Sở Xây dựng';notify(r,`${v} đã chuyển cấp khác`);toast(`${v}: đã chuyển cấp khác, báo lý do cho người gửi`)},
+  usel:v=>{S.unit={sel:v,shot:false}},
+  uback:()=>{S.unit={sel:null,shot:false}},
+  ushoot:()=>{S.unit.shot=true},
+  udone:()=>{const r=R(S.unit.sel);r.status='done';r.doneAt=now();r.result=S.unit.result||(r.type==='pothole'?'Đã vá ổ gà bằng bê tông nhựa, cắm biển cảnh báo trong 24 giờ.':'Đã khắc phục xong.');S.stats.done++;notify(r,`${r.id} đã khắc phục xong – mời bạn đánh giá`);S.unit={sel:null,shot:false};toast(`Đã hoàn thành ${r.id}. Phường: ${S.stats.done}/${S.stats.total} đã xử lý.`)}
+};
+document.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(!t)return;const f=A[t.dataset.a];if(f){f(t.dataset.v);render()}});
+document.addEventListener('input',e=>{const k=e.target.dataset.in;if(!k)return;const v=e.target.value;
+  if(k==='pos'){S.rate.pos=+v;['bf'].forEach(()=>{document.getElementById('bf').style.width=v+'%';document.getElementById('bl').style.left=v+'%';document.getElementById('bh').style.left=v+'%'})}
+  else if(k==='desc'&&S.draft)S.draft.desc=v;
+  else if(k==='result')S.unit.result=v;
+  else if(k==='dept')S.staff.dept=v;});
+render();
+</script>
+</body>
+</html>

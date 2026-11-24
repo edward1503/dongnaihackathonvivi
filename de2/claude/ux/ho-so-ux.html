@@ -1,0 +1,388 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>
+<title>Hồ sơ UX Phản ánh Trấn Biên</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: navy poster band on top, then a single reading column of diagram panels; one deliberate light look with poster-blue accents */
+:root{
+  --ink:#0A1A44; --muted:#47567A; --paper:#F0F4FF; --panel:#FFFFFF; --line:#DCE4F5;
+  --blue:#1747D6; --navy:#071A6B; --cyan:#3FD0FF; --soft:#E5EDFF;
+  --must:#B42318; --mustbg:#FDE8E6; --should:#7A4800; --shouldbg:#FFF1D6; --could:#14532D; --couldbg:#E3F3E9;
+  --f-display:'Be Vietnam Pro',system-ui,sans-serif; --f-body:'Be Vietnam Pro',system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55}
+.band{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;border-bottom:2px solid var(--cyan);box-shadow:0 2px 16px rgba(63,208,255,.35);margin-top:calc(-1 * env(safe-area-inset-top,0px));padding-top:calc(env(safe-area-inset-top,0px) + 28px);padding-bottom:22px}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.07em;padding:4px 11px;border-radius:13px;border:1.5px solid var(--cyan);color:#BFEFFF;background:rgba(63,208,255,.12)}
+h1{font-family:var(--f-display);font-size:clamp(26px,4.4vw,38px);font-weight:800;margin:12px 0 6px;text-wrap:balance;line-height:1.2}
+.lede{margin:0;max-width:65ch;color:#D6E4FF}
+nav.toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+nav.toc a{font-size:13px;font-weight:600;color:#fff;text-decoration:none;padding:7px 12px;border-radius:16px;border:1px solid rgba(63,208,255,.55);background:rgba(255,255,255,.06)}
+nav.toc a:hover,nav.toc a:focus-visible{background:var(--blue);border-color:var(--cyan);outline:none}
+main.wrap{padding-block:28px 48px;display:flex;flex-direction:column;gap:36px}
+section{display:flex;flex-direction:column;gap:14px;scroll-margin-top:16px}
+h2{font-family:var(--f-display);font-size:22px;font-weight:700;margin:0;text-wrap:balance}
+h3{font-size:16px;margin:0}
+.kicker{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--blue);text-transform:uppercase}
+p{margin:0;max-width:72ch}
+.muted{color:var(--muted)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;min-width:0}
+.dia{overflow-x:auto}
+.dia pre.mermaid{margin:0;background:transparent;text-align:center}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.legend{display:flex;flex-wrap:wrap;gap:8px;font-size:13px}
+.pill{font-size:12px;font-weight:700;padding:3px 9px;border-radius:9px;white-space:nowrap}
+.p-must{background:var(--mustbg);color:var(--must)}.p-should{background:var(--shouldbg);color:var(--should)}.p-could{background:var(--couldbg);color:var(--could)}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
+th{text-align:left;font-size:12px;letter-spacing:.04em;color:var(--muted);font-weight:700;padding:10px 12px;border-bottom:1px solid var(--line);background:#F7F9FF}
+td{padding:11px 12px;border-bottom:1px solid #EEF2FB;vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.id{font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+td.scr{white-space:nowrap;color:var(--blue);font-weight:600}
+.persona{display:flex;flex-direction:column;gap:6px}
+.persona .who{display:flex;align-items:center;gap:10px}
+.av{width:40px;height:40px;border-radius:20px;background:var(--soft);color:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:800;flex:none}
+ul.pts{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.pain{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pain div{background:#F7F9FF;border-radius:12px;padding:10px 12px;font-size:14px}
+.pain b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
+.pain .bad b{color:var(--must)}.pain .good b{color:var(--could)}
+@media (max-width:560px){.pain{grid-template-columns:1fr}}
+footer{font-size:13px;color:var(--muted)}
+.fig{margin:0;display:flex;flex-direction:column;gap:12px}
+.svgbox{overflow-x:auto}
+.svgd{display:block;width:100%;min-width:720px;height:auto;font-family:var(--f-body)}
+figcaption{font-size:14px;color:var(--muted);max-width:80ch}
+.flow3{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto .8fr;gap:10px;align-items:stretch}
+.stepc{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.stepc.end{background:var(--navy);border-color:var(--cyan);color:#fff}
+.sh{display:flex;align-items:center;gap:8px;font-weight:800;font-size:16px}
+.sh .n{width:28px;height:28px;border-radius:14px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;flex:none}
+.stepc.end .sh .n{background:var(--cyan);color:var(--navy)}
+.ok{background:var(--soft);border-radius:10px;padding:9px 11px;font-size:14px}
+.stepc.end .ok{background:rgba(255,255,255,.1);color:#E6F0FF}
+.alt{background:var(--shouldbg);border-radius:10px;padding:9px 11px;font-size:13.5px;color:#5C3600}
+.alt b,.fork b{display:block;font-size:13px}
+.fork{border:2px solid var(--blue);border-radius:10px;padding:8px 10px;font-size:13.5px;color:#0B2A8C;background:#fff}
+.mh{font-size:11px;font-weight:700;color:var(--blue);background:#fff;border:1px solid var(--line);border-radius:6px;padding:1px 5px;white-space:nowrap}
+.stepc.end .mh{background:transparent;color:var(--cyan);border-color:rgba(63,208,255,.5)}
+.arrowc{display:flex;align-items:center;color:var(--blue);font-size:22px;font-weight:800}
+@media (max-width:860px){.flow3{grid-template-columns:1fr}.arrowc{justify-content:center;transform:rotate(90deg);height:18px}}
+.trust{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}
+@media (max-width:720px){.trust{grid-template-columns:1fr}}
+.sig{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.th{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding:12px 14px;border-bottom:1px solid var(--line);background:#F7F9FF}
+.sr{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #EEF2FB;font-size:14.5px}
+.sr:last-child{border-bottom:none}
+.why{font-size:12px;font-weight:700;color:#7A4800;background:var(--shouldbg);padding:4px 9px;border-radius:9px;white-space:nowrap}
+.out{display:flex;flex-direction:column;gap:10px}
+.oc{border-radius:14px;padding:12px 14px;font-size:14px}
+.oc b{display:block;font-size:15px;margin-bottom:2px}
+.oc.flag{background:var(--shouldbg);color:#5C3600;border:1.5px solid #E8C88A}
+.oc.high{background:var(--couldbg);color:var(--could);border:1.5px solid #9FD3B4}
+.oc.plus{background:var(--soft);color:#0B2A8C;border:1.5px dashed var(--blue)}
+.demo{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;counter-reset:d}
+.demo li{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:6px;position:relative;counter-increment:d}
+.demo li::before{content:counter(d);position:absolute;top:12px;right:14px;font-size:28px;font-weight:800;color:var(--soft)}
+.role{align-self:flex-start;font-size:12px;font-weight:700;padding:3px 10px;border-radius:10px}
+.r1{background:var(--blue);color:#fff}.r2{background:var(--navy);color:#fff}.r3{background:var(--couldbg);color:var(--could)}
+.tm{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.counter{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:var(--navy);color:#fff;border:1.5px solid var(--cyan);border-radius:14px;padding:12px 16px;box-shadow:0 0 16px rgba(63,208,255,.25)}
+.counter b{font-size:22px;font-variant-numeric:tabular-nums}
+.counter b.hl{color:var(--cyan)}
+.counter .arr{font-size:20px;color:var(--cyan)}
+.counter .muted{color:#C8D6FF;font-size:13px}
+.jwrap{overflow-x:auto}
+.jr{display:grid;min-width:720px;position:relative}
+.jr .stg{font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#0B2A8C;background:var(--soft);padding:6px 8px;border-radius:8px;margin:0 3px;text-align:center}
+.jr .curve{position:relative;height:150px;margin:6px 0;background:linear-gradient(to bottom,rgba(20,83,45,.06),transparent 40%,transparent 60%,rgba(180,35,24,.07));border-radius:10px}
+.jr .curve svg{position:absolute;inset:0;width:100%;height:100%}
+.jr .dot{position:absolute;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:15px;color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;border:3px solid #fff;box-shadow:0 2px 6px rgba(10,26,68,.25)}
+.jr .yl{position:absolute;left:6px;font-size:10.5px;font-weight:700;color:var(--muted)}
+.jr .st{font-size:13px;line-height:1.35;text-align:center;padding:0 4px}
+</style>
+
+<header class="band">
+  <div class="wrap">
+    <span class="tag">ĐỀ 2 · PHẢN ÁNH HIỆN TRƯỜNG · PHƯỜNG TRẤN BIÊN</span>
+    <h1>Quy trình, hành trình và user stories</h1>
+    <p class="lede">Một phản ánh đi từ ảnh chụp của người dân đến ảnh nghiệm thu của đơn vị xử lý. Tài liệu này mô tả đường đi đó cho 4 vai trò, dùng số liệu mẫu tháng 11/2026: 64 phản ánh, 47 đã xử lý, trung bình 3,2 ngày.</p>
+    <nav class="toc" aria-label="Mục lục">
+      <a href="#tong-the">Quy trình tổng thể</a>
+      <a href="#vong-doi">Vòng đời phản ánh</a>
+      <a href="#gui">Luồng gửi 3 bước</a>
+      <a href="#tin-cay">Gắn cờ tin cậy</a>
+      <a href="#trinh-tu">Trình tự demo</a>
+      <a href="#journey">User journey</a>
+      <a href="#stories">User stories</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section id="tong-the">
+  <span class="kicker">Sơ đồ 1</span>
+  <h2>Một phản ánh đi qua 5 làn</h2>
+  <figure class="panel fig">
+    <div class="svgbox"><svg class="svgd" viewBox="0 0 980 500" role="img" aria-label="Phản ánh đi từ người dân qua hệ thống chấm tin cậy; nếu bị gắn cờ thì qua đoàn viên, sau đó cán bộ giao việc, đơn vị khắc phục và hệ thống báo lại người dân.">
+      <defs>
+        <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#47567A"/></marker>
+        <marker id="aha" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#9A5B00"/></marker>
+      </defs>
+      <rect x="0" y="0" width="980" height="100" fill="#F7F9FF"/><rect x="0" y="100" width="980" height="100" fill="#FFFFFF"/><rect x="0" y="200" width="980" height="100" fill="#F7F9FF"/><rect x="0" y="300" width="980" height="100" fill="#FFFFFF"/><rect x="0" y="400" width="980" height="100" fill="#F7F9FF"/>
+      <line x1="0" y1="100" x2="980" y2="100" stroke="#DCE4F5"/><line x1="0" y1="200" x2="980" y2="200" stroke="#DCE4F5"/><line x1="0" y1="300" x2="980" y2="300" stroke="#DCE4F5"/><line x1="0" y1="400" x2="980" y2="400" stroke="#DCE4F5"/>
+      <rect x="0" y="0" width="112" height="500" fill="#0B2A8C"/>
+      <g font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle">
+        <text x="56" y="54">Người dân</text><text x="56" y="154">Hệ thống</text><text x="56" y="254">Đoàn viên</text><text x="56" y="346">Cán bộ</text><text x="56" y="362">phường</text><text x="56" y="446">Đơn vị</text><text x="56" y="462">xử lý</text>
+      </g>
+      <line x1="112" y1="0" x2="112" y2="500" stroke="#3FD0FF" stroke-width="2"/>
+      <g fill="none" stroke="#47567A" stroke-width="1.6">
+        <path d="M260 50 H330 V125" marker-end="url(#ah)"/>
+        <path d="M390 150 H460 V75" marker-end="url(#ah)"/>
+        <path d="M520 50 H590 V125" marker-end="url(#ah)"/>
+        <path d="M650 150 H720 V325" marker-end="url(#ah)"/>
+        <path d="M590 275 V350 H658" marker-end="url(#ah)"/>
+        <path d="M780 350 H850 V425" marker-end="url(#ah)"/>
+        <path d="M910 450 H950 V150 H912" marker-end="url(#ah)"/>
+        <path d="M850 125 V77" marker-end="url(#ah)"/>
+      </g>
+      <path d="M590 175 V225" fill="none" stroke="#9A5B00" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#aha)"/>
+      <g font-size="11.5" fill="#47567A">
+        <text x="268" y="42">ảnh + GPS</text><text x="398" y="142">gợi ý</text><text x="528" y="42">gửi</text>
+        <text x="726" y="232">tin cậy cao</text><text x="598" y="320">đúng</text><text x="788" y="342">giao + hạn</text>
+        <text x="944" y="300" text-anchor="end">ảnh sau</text><text x="858" y="106">báo</text>
+        <text x="524" y="296" text-anchor="end">không đúng →</text><text x="524" y="311" text-anchor="end">đóng, báo người gửi</text>
+      </g>
+      <text x="598" y="206" font-size="11.5" font-weight="700" fill="#7A4800">bị gắn cờ</text>
+      <g font-size="12.5" fill="#0A1A44" text-anchor="middle">
+        <rect x="140" y="27" width="120" height="46" rx="12" fill="#FFFFFF" stroke="#1747D6" stroke-width="1.5"/><text y="47"><tspan x="200">Chụp ảnh</tspan><tspan x="200" dy="16">sự cố</tspan></text>
+        <rect x="270" y="127" width="120" height="46" rx="12" fill="#E5EDFF" stroke="#1747D6" stroke-width="1.5"/><text y="147"><tspan x="330">AI gợi ý</tspan><tspan x="330" dy="16">loại + mô tả</tspan></text>
+        <rect x="400" y="27" width="120" height="46" rx="12" fill="#FFFFFF" stroke="#1747D6" stroke-width="1.5"/><text y="47"><tspan x="460">Xác nhận vị trí</tspan><tspan x="460" dy="16">+1 nếu trùng</tspan></text>
+        <rect x="530" y="127" width="120" height="46" rx="12" fill="#FFF1D6" stroke="#9A5B00" stroke-width="2"/><text y="147" font-weight="700"><tspan x="590">Chấm mức</tspan><tspan x="590" dy="16">tin cậy</tspan></text>
+        <rect x="530" y="227" width="120" height="46" rx="12" fill="#FFFFFF" stroke="#9A5B00" stroke-width="1.5" stroke-dasharray="5 4"/><text y="247"><tspan x="590">Xác minh</tspan><tspan x="590" dy="16">tại chỗ</tspan></text>
+        <rect x="660" y="327" width="120" height="46" rx="12" fill="#FFFFFF" stroke="#1747D6" stroke-width="1.5"/><text y="347"><tspan x="720">Gộp trùng, giao</tspan><tspan x="720" dy="16">bộ phận, đặt hạn</tspan></text>
+        <rect x="790" y="427" width="120" height="46" rx="12" fill="#FFFFFF" stroke="#1747D6" stroke-width="1.5"/><text y="447"><tspan x="850">Khắc phục,</tspan><tspan x="850" dy="16">chụp ảnh sau</tspan></text>
+        <rect x="790" y="127" width="120" height="46" rx="12" fill="#E5EDFF" stroke="#1747D6" stroke-width="1.5"/><text y="147"><tspan x="850">Thông báo</tspan><tspan x="850" dy="16">Zalo / SMS</tspan></text>
+        <rect x="790" y="27" width="120" height="46" rx="12" fill="#1747D6" stroke="#3FD0FF" stroke-width="2"/><text y="47" fill="#FFFFFF" font-weight="700"><tspan x="850">Xem Trước/Sau</tspan><tspan x="850" dy="16">chấm sao</tspan></text>
+      </g>
+    </svg></div>
+    <figcaption>Ô vàng là điểm rẽ nhánh: chỉ phản ánh bị gắn cờ mới đi qua làn đoàn viên (đường nét đứt). Phần lớn đi thẳng sang cán bộ. Người dân chấm "vẫn tái diễn" thì phản ánh quay lại danh sách cán bộ.</figcaption>
+  </figure>
+</section>
+
+<section id="vong-doi">
+  <span class="kicker">Sơ đồ 2</span>
+  <h2>Vòng đời một phản ánh</h2>
+  <figure class="panel fig">
+    <div class="svgbox"><svg class="svgd" viewBox="0 0 980 380" role="img" aria-label="Đường chính: Mới, Đã giao, Hoàn thành, Đã đánh giá. Nhánh: Cần xác minh, Cần bổ sung, Quá hạn quay lại; Đã đóng, Đã gộp, Chuyển cấp là điểm dừng; Hoàn thành có thể mở lại.">
+      <defs>
+        <marker id="bh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#47567A"/></marker>
+        <marker id="bhb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1747D6"/></marker>
+        <marker id="bhr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#B42318"/></marker>
+      </defs>
+      <rect x="40" y="150" width="930" height="80" rx="40" fill="#F2F6FF"/>
+      <circle cx="26" cy="190" r="8" fill="#0A1A44"/>
+      <g fill="none" stroke="#1747D6" stroke-width="2.2">
+        <path d="M34 190 H58" marker-end="url(#bhb)"/><path d="M200 190 H348" marker-end="url(#bhb)"/><path d="M490 190 H608" marker-end="url(#bhb)"/><path d="M750 190 H818" marker-end="url(#bhb)"/>
+      </g>
+      <g fill="none" stroke="#47567A" stroke-width="1.6">
+        <path d="M115 165 V86" marker-end="url(#bh)"/><path d="M145 86 V165" marker-end="url(#bh)"/>
+        <path d="M200 60 H258" marker-end="url(#bh)"/>
+        <path d="M405 165 V86" marker-end="url(#bh)"/><path d="M435 86 V165" marker-end="url(#bh)"/>
+        <path d="M145 215 V294" marker-end="url(#bh)"/><path d="M115 294 V215" marker-end="url(#bh)"/>
+        <path d="M200 200 H230 V320 H258" marker-end="url(#bh)"/>
+      </g>
+      <path d="M680 214 V360 H180 V217" fill="none" stroke="#B42318" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#bhr)"/>
+      <g font-size="11.5" fill="#47567A">
+        <text x="274" y="180" text-anchor="middle" font-weight="600" fill="#0B2A8C">giao bộ phận + hạn</text><text x="549" y="180" text-anchor="middle" font-weight="600" fill="#0B2A8C">nộp ảnh sau</text><text x="784" y="180" text-anchor="middle" font-weight="600" fill="#0B2A8C">chấm sao</text>
+        <text x="109" y="130" text-anchor="end">gắn cờ</text><text x="151" y="130">đúng</text><text x="229" y="50" text-anchor="middle">không đúng</text>
+        <text x="399" y="130" text-anchor="end">hết hạn</text><text x="441" y="130">nhắc đơn vị</text>
+        <text x="151" y="258">cần thêm ảnh</text><text x="109" y="258" text-anchor="end">bổ sung</text>
+        <text x="236" y="262">trùng hoặc</text><text x="236" y="277">sai thẩm quyền</text>
+        <text x="430" y="352" fill="#B42318" font-weight="600">vẫn tái diễn → mở lại</text>
+      </g>
+      <g font-size="13" font-weight="700" text-anchor="middle">
+        <rect x="60" y="166" width="140" height="48" rx="24" fill="#1747D6"/><text x="130" y="195" fill="#FFFFFF">Mới tiếp nhận</text>
+        <rect x="350" y="166" width="140" height="48" rx="24" fill="#1747D6"/><text x="420" y="195" fill="#FFFFFF">Đã giao</text>
+        <rect x="610" y="166" width="140" height="48" rx="24" fill="#1747D6"/><text x="680" y="195" fill="#FFFFFF">Hoàn thành</text>
+        <rect x="820" y="166" width="140" height="48" rx="24" fill="#0A1A44" stroke="#3FD0FF" stroke-width="2"/><text x="890" y="195" fill="#FFFFFF">Đã đánh giá</text>
+        <rect x="60" y="38" width="140" height="44" rx="22" fill="#FFF1D6" stroke="#9A5B00" stroke-width="1.5"/><text x="130" y="65" fill="#7A4800">Cần xác minh</text>
+        <rect x="350" y="38" width="140" height="44" rx="22" fill="#FDE8E6" stroke="#B42318" stroke-width="1.5"/><text x="420" y="65" fill="#9B1C12">Quá hạn</text>
+        <rect x="60" y="298" width="140" height="44" rx="22" fill="#FFF1D6" stroke="#9A5B00" stroke-width="1.5"/><text x="130" y="325" fill="#7A4800">Cần bổ sung</text>
+        <rect x="260" y="38" width="120" height="44" rx="10" fill="#ECF1FC" stroke="#8A94AE" stroke-width="1.5" stroke-dasharray="5 4"/><text x="320" y="65" fill="#34436A">Đã đóng</text>
+        <rect x="260" y="298" width="140" height="44" rx="10" fill="#ECF1FC" stroke="#8A94AE" stroke-width="1.5" stroke-dasharray="5 4"/><text x="330" y="325" fill="#34436A">Đã gộp / Chuyển cấp</text>
+      </g>
+    </svg></div>
+    <figcaption>Dải xanh là đường đi bình thường, 4 trạng thái. Ô vàng và đỏ là vòng phụ quay về đường chính. Ô xám nét đứt là điểm dừng. Cả sơ đồ là một cột <code>status</code> trong bảng <code>Reports</code>.</figcaption>
+  </figure>
+</section>
+
+<section id="gui">
+  <span class="kicker">Sơ đồ 3</span>
+  <h2>Gửi phản ánh: 3 bước, mỗi lỗi đều có lối ra</h2>
+  <div class="flow3">
+    <div class="stepc">
+      <div class="sh"><span class="n">1</span>Chụp ảnh</div>
+      <div class="ok">Chụp ảnh. GPS ghi đúng lúc bấm chụp. AI gợi ý loại và mô tả.</div>
+      <div class="alt"><b>Ảnh mờ, tối</b>Chụp lại, hoặc dùng ảnh và tự chọn loại. <span class="mh">MH-10a</span></div>
+      <div class="alt"><b>AI không phản hồi</b>Bỏ qua gợi ý, chọn loại bằng tay.</div>
+    </div>
+    <div class="arrowc" aria-hidden="true">→</div>
+    <div class="stepc">
+      <div class="sh"><span class="n">2</span>Vị trí</div>
+      <div class="ok">Hiện địa chỉ bằng chữ: "Gần số 45 Hưng Đạo Vương". Bấm Đúng.</div>
+      <div class="alt"><b>GPS từ chối hoặc sai</b>Chọn tên đường hay khu phố. <span class="mh">MH-10b</span></div>
+      <div class="fork"><b>Đã có người báo trong 50m</b>Bấm +1 Đồng tình là xong, không qua bước 3. <span class="mh">MH-03</span></div>
+    </div>
+    <div class="arrowc" aria-hidden="true">→</div>
+    <div class="stepc">
+      <div class="sh"><span class="n">3</span>Loại và gửi</div>
+      <div class="ok">AI đã chọn sẵn ô loại. Người dân bấm Gửi.</div>
+      <div class="alt"><b>Chọn khác AI</b>Vẫn gửi, phản ánh được gắn cờ xác minh.</div>
+      <div class="alt"><b>Mất mạng</b>Lưu nháp, tự gửi khi có mạng. <span class="mh">MH-10c</span></div>
+    </div>
+    <div class="arrowc" aria-hidden="true">→</div>
+    <div class="stepc end">
+      <div class="sh"><span class="n">✓</span>Đã gửi</div>
+      <div class="ok">Có mã phản ánh. Theo dõi timeline như đơn hàng. <span class="mh">MH-05</span></div>
+    </div>
+  </div>
+  <p class="muted">Ô xanh là đường chính. Ô vàng là lỗi và cách thoát. Ô viền xanh đậm là lối tắt +1.</p>
+</section>
+
+<section id="tin-cay">
+  <span class="kicker">Sơ đồ 4</span>
+  <h2>Khi nào gọi đoàn viên xác minh</h2>
+  <div class="trust">
+    <div class="sig">
+      <div class="th">Tín hiệu hệ thống tự kiểm tra</div>
+      <div class="sr"><span>Không có ảnh chụp tại chỗ</span><span class="why">Thiếu ảnh</span></div>
+      <div class="sr"><span>Người dân chọn loại khác AI</span><span class="why">Chọn khác AI</span></div>
+      <div class="sr"><span>Điểm ghim lệch GPS hơn 200m, hoặc nằm ngoài phường</span><span class="why">Lệch vị trí</span></div>
+      <div class="sr"><span>Tài khoản hay bị từ chối</span><span class="why">Uy tín thấp</span></div>
+    </div>
+    <div class="out">
+      <div class="oc flag"><b>Có ít nhất 1 tín hiệu</b>Nhãn "Cần xác minh" kèm lý do. Vào hàng chờ đoàn viên gần nhất.</div>
+      <div class="oc high"><b>Không có tín hiệu nào</b>Tin cậy cao. Vào thẳng danh sách cán bộ.</div>
+      <div class="oc plus"><b>Mỗi lượt +1</b>Tăng ưu tiên trong danh sách. Không thay cho xác minh.</div>
+    </div>
+  </div>
+  <p class="muted">Không dùng con số % do AI tự báo, vì nó không được hiệu chỉnh. Cán bộ luôn thấy lý do bị gắn cờ.</p>
+</section>
+
+<section id="trinh-tu">
+  <span class="kicker">Sơ đồ 5</span>
+  <h2>Kịch bản demo 3 phút</h2>
+  <ol class="demo">
+    <li><span class="role r1">Người dân</span><span class="tm">0:00–0:50</span><b>Chụp ổ gà, AI nhận diện, bấm +1</b><span class="muted">Hệ thống báo "Đã có 3 người báo, cách 20m". Tổng vẫn 64.</span></li>
+    <li><span class="role r2">Cán bộ phường</span><span class="tm">0:50–1:40</span><b>Gộp PA-0463, giao việc, hạn 48 giờ</b><span class="muted">PA-0461 nằm đầu danh sách vì 5 người báo. Người dân nhận thông báo.</span></li>
+    <li><span class="role r3">Đơn vị xử lý</span><span class="tm">1:40–2:20</span><b>Chụp ảnh sau, bấm Hoàn thành</b><span class="muted">Ảnh trước hiện mờ trên camera để chụp đúng góc.</span></li>
+    <li><span class="role r1">Người dân</span><span class="tm">2:20–3:00</span><b>Kéo Trước/Sau, chấm 5 sao</b><span class="muted">Ghim trên bản đồ chuyển xanh.</span></li>
+  </ol>
+  <div class="counter"><span>Đã xử lý</span><b>47/64</b><span class="arr">→</span><b class="hl">48/64</b><span class="muted">Tổng không đổi vì người dân +1 vào phản ánh có sẵn.</span></div>
+</section>
+
+<section id="journey">
+  <span class="kicker">User journey</span>
+  <h2>Hành trình của 3 người dùng trong đề</h2>
+  <p class="muted">Đường cong là mức cảm xúc ở từng bước khi đã có ứng dụng, từ 1 (bực) đến 5 (hài lòng). Các nhân vật là giả lập để thiết kế.</p>
+
+  <div class="panel persona">
+    <div class="who"><span class="av" aria-hidden="true">L</span><div><h3>Cô Lan, 67 tuổi · Khu phố 5</h3><span class="muted">Dùng điện thoại để gọi và xem Zalo. Mắt kém, ngại gõ chữ.</span></div></div>
+    <div class="jwrap"><div class="jr" data-j="lan"></div></div>
+    <div class="pain"><div class="bad"><b>Nỗi đau trước đây</b>Không biết kênh báo, báo xong không ai trả lời, chữ nhỏ và nhiều ô phải gõ.</div><div class="good"><b>Thiết kế đáp ứng</b>MH-04 chữ lớn 3 nút, AI điền thay, xác nhận địa chỉ bằng chữ, thông báo qua Zalo, nút "Nhờ đoàn viên gửi giúp".</div></div>
+  </div>
+
+  <div class="panel persona">
+    <div class="who"><span class="av" aria-hidden="true">M</span><div><h3>Anh Minh, 34 tuổi · Cán bộ tiếp nhận phường</h3><span class="muted">Mỗi tháng nhận khoảng 64 phản ánh từ nhiều kênh, tổng hợp bằng Excel.</span></div></div>
+    <div class="jwrap"><div class="jr" data-j="minh"></div></div>
+    <div class="pain"><div class="bad"><b>Nỗi đau trước đây</b>Tin trùng, tin sai, không theo dõi được hạn, cuối tháng phải đếm tay.</div><div class="good"><b>Thiết kế đáp ứng</b>MH-08 sắp theo số người báo, gợi ý gộp, nhãn tin cậy kèm lý do, hạn đếm ngược, KPI tự cập nhật.</div></div>
+  </div>
+
+  <div class="panel persona">
+    <div class="who"><span class="av" aria-hidden="true">T</span><div><h3>Thảo, 22 tuổi · Đoàn viên tình nguyện KP5</h3><span class="muted">Đi học, tối và cuối tuần tham gia hoạt động khu phố.</span></div></div>
+    <div class="jwrap"><div class="jr" data-j="thao"></div></div>
+    <div class="pain"><div class="bad"><b>Nỗi đau trước đây</b>Không biết việc nào cần mình, phải gọi điện hỏi cán bộ, công sức không được ghi nhận.</div><div class="good"><b>Thiết kế đáp ứng</b>MH-07 chỉ hiện việc bị gắn cờ gần mình, 3 nút xử lý, nút "Gửi hộ người dân", timeline ghi rõ đoàn viên đã xác minh.</div></div>
+  </div>
+</section>
+
+<section id="stories">
+  <span class="kicker">User stories</span>
+  <h2>User stories và phạm vi MVP 24 giờ</h2>
+  <div class="legend"><span class="pill p-must">Must</span> làm trong 24 giờ vòng chung kết <span class="pill p-should">Should</span> làm nếu còn thời gian <span class="pill p-could">Could</span> ghi là hướng mở rộng</div>
+
+  <h3>Người dân</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Mã</th><th>Là người dân, tôi muốn…</th><th>Tiêu chí chấp nhận</th><th>Màn</th><th>Ưu tiên</th></tr></thead>
+    <tbody>
+      <tr><td class="id">US-01</td><td>gửi phản ánh trong 3 bước bằng ảnh, để không phải gõ nhiều</td><td>Chụp ảnh → xác nhận vị trí → chọn loại. Vị trí lấy lúc bấm chụp. Gửi xong có mã phản ánh.</td><td class="scr">MH-02, 02c</td><td><span class="pill p-must">Must</span></td></tr>
+      <tr><td class="id">US-02</td><td>được AI gợi ý loại sự cố và mô tả, để chỉ cần bấm xác nhận</td><td>AI trả về loại + mô tả dạng JSON. Người dân sửa được. API lỗi thì vẫn chọn tay được.</td><td class="scr">MH-02</td><td><span class="pill p-must">Must</span></td></tr>
+      <tr><td class="id">US-03</td><td>biết nếu đã có người báo cùng sự cố, để bấm +1 thay vì gửi trùng</td><td>Cùng loại, còn mở, trong 50m thì hiện bottom sheet. +1 tăng số người báo và gắn ảnh vào phản ánh cũ.</td><td class="scr">MH-03</td><td><span class="pill p-must">Must</span></td></tr>
+      <tr><td class="id">US-04</td><td>theo dõi phản ánh như theo dõi đơn hàng, để biết ai đang xử lý và hạn khi nào</td><td>Timeline 4 mốc có giờ. Mốc "Đã giao" hiện bộ phận và hạn. Bước xác minh chỉ hiện khi bị gắn cờ.</td><td class="scr">MH-05</td><td><span class="pill p-must">Must</span></td></tr>
+      <tr><td class="id">US-05</td><td>xem bản đồ phản ánh quanh mình, để biết khu phố có sự cố gì</td><td>Ghim 3 trạng thái có màu và ký hiệu. Lọc theo loại. Không có sự cố thì hiện trạng thái trống.</td><td class="scr">MH-01</td><td><span class="pill p-must">Must</span></td></tr>
+      <tr><td class="id">US-06</td><td>xem ảnh trước và sau rồi đánh giá, để biết phường xử lý thật</td><td>Thanh kéo Trước/Sau, 1–5 sao, tag nhanh. Có nút "Vẫn tái diễn" mở lại phản ánh.</td><td class="scr">MH-06</td><td><span class="pill p-must">Must</span></td></tr>
+      <tr><td class="id">US-07</td><td>dùng chế độ chữ lớn, để đọc và bấm dễ khi mắt kém</td><td>Một nút bật/tắt ở trang chủ. Chữ ≥ 20px, nút ≥ 60px, tương phản cao, 3 thao tác chính.</td><td class="scr">MH-04</td><td><span class="pill p-must">Must</span></td></tr>
+      <tr><td class="id">US-08</td><td>vẫn gửi được khi GPS lỗi, ảnh mờ hoặc mất mạng</td><td>Chọn tên đường/khu phố, chụp lại hoặc chọn tay, lưu nháp và tự gửi khi có mạng.</td><td class="scr">MH-10</td><td><span class="pill p-should">Should</span></td></tr>
+      <tr><td class="id">US-09</td><td>nhận thông báo qua Zalo/SMS, để không phải mở app kiểm tra</td><td>Vòng 2 mô phỏng bằng thông báo trong app. Kênh Zalo OA ghi trong lộ trình.</td><td class="scr">MH-05</td><td><span class="pill p-could">Could</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Cán bộ phường</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Mã</th><th>Là cán bộ tiếp nhận, tôi muốn…</th><th>Tiêu chí chấp nhận</th><th>Màn</th><th>Ưu tiên</th></tr></thead>
+    <tbody>
+      <tr><td class="id">US-10</td><td>thấy phản ánh sắp theo mức ưu tiên, để xử lý việc gấp trước</td><td>Mới lên trước, sau đó theo số người báo. Có lọc Cần xác minh và Sắp/Quá hạn.</td><td class="scr">MH-08</td><td><span class="pill p-must">Must</span></td></tr>
+      <tr><td class="id">US-11</td><td>giao việc cho đúng bộ phận kèm hạn, để có người chịu trách nhiệm</td><td>Bộ phận gợi ý theo loại. Hạn 24/48/72 giờ. Giao xong người gửi nhận thông báo.</td><td class="scr">MH-08</td><td><span class="pill p-must">Must</span></td></tr>
+      <tr><td class="id">US-12</td><td>gộp các phản ánh trùng, để không xử lý một sự cố hai lần</td><td>Gợi ý khi cùng loại trong 50m. Gộp xong cộng dồn số người báo. Không tự gộp.</td><td class="scr">MH-08</td><td><span class="pill p-must">Must</span></td></tr>
+      <tr><td class="id">US-13</td><td>thấy vì sao một phản ánh cần xác minh và chuyển cho đoàn viên</td><td>Nhãn "Cần xác minh" kèm lý do. Nút chuyển đoàn viên đổi trạng thái thành chờ xác minh.</td><td class="scr">MH-08</td><td><span class="pill p-must">Must</span></td></tr>
+      <tr><td class="id">US-14</td><td>từ chối hoặc yêu cầu bổ sung có lý do, để người dân hiểu kết quả</td><td>Lý do hiện trên timeline của người gửi.</td><td class="scr">MH-08</td><td><span class="pill p-should">Should</span></td></tr>
+      <tr><td class="id">US-15</td><td>xem số liệu tổng hợp tháng, để báo cáo không phải đếm tay</td><td>Tổng phản ánh, đã xử lý, tỷ lệ, thời gian trung bình, theo loại. Tự cập nhật.</td><td class="scr">MH-08</td><td><span class="pill p-should">Should</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Đoàn viên và đơn vị xử lý</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Mã</th><th>Tôi muốn…</th><th>Tiêu chí chấp nhận</th><th>Màn</th><th>Ưu tiên</th></tr></thead>
+    <tbody>
+      <tr><td class="id">US-16</td><td>(đoàn viên) chỉ thấy phản ánh cần xác minh gần mình</td><td>Danh sách lọc theo cờ, sắp theo khoảng cách, hiện lý do. Có trạng thái trống khi hết việc.</td><td class="scr">MH-07</td><td><span class="pill p-must">Must</span></td></tr>
+      <tr><td class="id">US-17</td><td>(đoàn viên) xác nhận đúng, chụp lại hoặc báo không đúng chỉ với một chạm</td><td>Đúng → về danh sách phường. Không đúng → đóng và báo người gửi kèm lý do.</td><td class="scr">MH-07</td><td><span class="pill p-must">Must</span></td></tr>
+      <tr><td class="id">US-18</td><td>(đoàn viên) gửi hộ người không có smartphone</td><td>Dùng lại luồng 3 bước. Timeline ghi "đoàn viên gửi hộ".</td><td class="scr">MH-07, 02</td><td><span class="pill p-should">Should</span></td></tr>
+      <tr><td class="id">US-19</td><td>(đơn vị) nộp kết quả qua link không cần đăng nhập</td><td>Mở link thấy việc được giao, chụp ảnh sau có ảnh trước mờ để căn góc, ghi chú, bấm Hoàn thành.</td><td class="scr">MH-09</td><td><span class="pill p-must">Must</span></td></tr>
+      <tr><td class="id">US-20</td><td>(đơn vị) báo vướng mắc khi không thể xử lý đúng hạn</td><td>Ghi lý do, cán bộ thấy trên dashboard.</td><td class="scr">MH-09</td><td><span class="pill p-could">Could</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<footer>Dữ liệu mẫu theo đề thi: Phường Trấn Biên, tháng 11/2026, 64 phản ánh (đèn đường 18, ngập nước 15, rác thải 21, mặt đường 10), 47 đã xử lý, trung bình 3,2 ngày. Mã màn hình khớp với bản thiết kế MH-01 đến MH-10.</footer>
+</main>
+<script>
+(function(){
+  var J={
+    lan:[['Phát hiện','Thấy ổ gà đọng nước sau mưa',2],['Phát hiện','Không biết báo ai',1],['Gửi','Quét QR ở nhà văn hóa',3],['Gửi','Bật chữ lớn, bấm nút chụp',4],['Gửi','Thấy địa chỉ chữ to, bấm Đúng',4],['Gửi','Thấy 3 người đã báo, bấm +1',5],['Chờ','Zalo báo đã giao, hạn 48 giờ',4],['Kết quả','Kéo xem Trước/Sau',5],['Kết quả','Chấm 5 sao',5]],
+    minh:[['Tiếp nhận','Mở dashboard, thấy 64 phản ánh',4],['Tiếp nhận','Việc 5 người báo nằm đầu',5],['Phân loại','Gợi ý gộp 2 phản ánh cách 47m',5],['Phân loại','Gặp phản ánh chọn khác AI',3],['Phân loại','Chuyển đoàn viên KP5',4],['Giao việc','Chọn bộ phận, hạn 48 giờ',4],['Giao việc','Lọc việc sắp quá hạn để nhắc',3],['Báo cáo','Số liệu tháng tự tổng hợp',5]],
+    thao:[['Nhận việc','Nhận 3 phản ánh cần xác minh',4],['Nhận việc','Xem lý do và khoảng cách',4],['Hiện trường','Đi 150m, thấy ngập thật',4],['Hiện trường','Bấm Đúng, việc lên danh sách phường',5],['Gửi hộ','Gặp bác không có smartphone',3],['Gửi hộ','Gửi hộ trong 1 phút',5]]
+  };
+  var col=function(v){return v<=2?'#B42318':v===3?'#9A5B00':'#1C7445'};
+  var yPct=function(v){return 12+(5-v)/4*76};
+  document.querySelectorAll('.jr[data-j]').forEach(function(el){
+    var d=J[el.dataset.j]; if(!d) return; var n=d.length;
+    el.style.gridTemplateColumns='repeat('+n+',minmax(0,1fr))';
+    var h='', i=0;
+    while(i<n){var s=d[i][0],k=i;while(k<n&&d[k][0]===s)k++;h+='<div class="stg" style="grid-column:'+(i+1)+' / '+(k+1)+'">'+s+'</div>';i=k;}
+    var pts=d.map(function(x,j){return ((j+.5)*100/n).toFixed(2)+','+yPct(x[2]).toFixed(2)}).join(' ');
+    h+='<div class="curve" style="grid-column:1 / '+(n+1)+'"><span class="yl" style="top:4px">Hài lòng</span><span class="yl" style="bottom:4px">Bực</span>'+
+       '<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polyline points="'+pts+'" fill="none" stroke="#1747D6" stroke-width="2.5" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg>'+
+       d.map(function(x,j){return '<span class="dot" style="left:'+((j+.5)*100/n)+'%;top:'+yPct(x[2])+'%;background:'+col(x[2])+'" title="'+x[1]+': '+x[2]+'/5">'+x[2]+'</span>'}).join('')+'</div>';
+    h+=d.map(function(x){return '<div class="st">'+x[1]+'</div>'}).join('');
+    el.innerHTML=h;
+    el.setAttribute('role','img');
+    el.setAttribute('aria-label',d.map(function(x){return x[1]+' '+x[2]+' trên 5'}).join('; '));
+  });
+})();
+</script>
+
+</body></html>

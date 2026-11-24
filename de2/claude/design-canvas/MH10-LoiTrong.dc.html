@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Trạng thái lỗi và trống</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1747D6}a:hover{color:#0B2A8C}
+.ph{width:390px;height:804px;box-sizing:border-box;background:#fff;border-radius:28px;border:1px solid #D3DCF0;display:flex;flex-direction:column;padding:28px 24px;gap:16px;overflow:hidden}
+.tagl{font-size:12px;font-weight:700;letter-spacing:.04em;color:#47567A}
+.ico{width:96px;height:96px;border-radius:48px;display:flex;align-items:center;justify-content:center;align-self:center;margin-top:40px}
+.h{margin:0;font-size:20px;font-weight:700;text-align:center;line-height:1.35}
+.p{margin:0;font-size:15px;color:#47567A;text-align:center;line-height:1.5}
+.pri{height:56px;border-radius:16px;border:none;background:#1747D6;color:#fff;font:700 16px 'Be Vietnam Pro',sans-serif}
+.sec{height:52px;border-radius:16px;border:1px solid #C5D0EA;background:#fff;color:#0A1A44;font:600 15px 'Be Vietnam Pro',sans-serif}
+.opt{height:52px;border-radius:12px;border:1px solid #D3DCF0;background:#fff;display:flex;align-items:center;padding:0 14px;font:500 15px 'Be Vietnam Pro',sans-serif;color:#0A1A44;text-align:left}
+</style>
+</helmet>
+<div style="width:1720px;height:844px;box-sizing:border-box;padding:20px;background:#E6ECFA;font-family:'Be Vietnam Pro',sans-serif;color:#0A1A44;display:flex;gap:40px">
+  <section class="ph" aria-labelledby="e1">
+    <span class="tagl">10a · ẢNH MỜ / AI KHÔNG CHẮC</span>
+    <div class="ico" style="background:#FFF1D6" aria-hidden="true"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#9A5B00" stroke-width="2" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3v13H4z"/><circle cx="12" cy="13" r="4"/></svg></div>
+    <h2 id="e1" class="h">Ảnh hơi tối, chưa thấy rõ sự cố</h2>
+    <p class="p">Bác chụp lại gần hơn một chút để phường xử lý nhanh hơn nhé. Hoặc vẫn gửi ảnh này và tự chọn loại.</p>
+    <div style="flex:1"></div>
+    <button class="pri">Chụp lại</button>
+    <button class="sec">Vẫn dùng ảnh này, tự chọn loại</button>
+  </section>
+  <section class="ph" aria-labelledby="e2">
+    <span class="tagl">10b · KHÔNG LẤY ĐƯỢC VỊ TRÍ</span>
+    <h2 id="e2" class="h" style="text-align:left;margin-top:8px">Chưa lấy được vị trí của bạn</h2>
+    <p class="p" style="text-align:left">Bạn chưa cho phép định vị hoặc tín hiệu yếu. Hãy chọn nơi xảy ra sự cố:</p>
+    <label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:600">Tìm tên đường hoặc địa điểm quen
+      <input type="search" value="Hưng Đạo" style="height:48px;border-radius:12px;border:2px solid #1747D6;padding:0 12px;font:500 15px 'Be Vietnam Pro',sans-serif">
+    </label>
+    <button class="opt">Hưng Đạo Vương – đoạn gần chợ Biên Hòa</button>
+    <button class="opt">Hưng Đạo Vương – đoạn gần trường tiểu học</button>
+    <span class="tagl" style="margin-top:6px">HOẶC CHỌN KHU PHỐ</span>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+      <button class="opt" style="justify-content:center">KP 1</button><button class="opt" style="justify-content:center">KP 2</button><button class="opt" style="justify-content:center">KP 3</button>
+      <button class="opt" style="justify-content:center">KP 4</button><button class="opt" style="justify-content:center;border:2px solid #1747D6;background:#E5EDFF">KP 5</button><button class="opt" style="justify-content:center">KP 6</button>
+    </div>
+    <div style="flex:1"></div>
+    <button class="sec">Thử bật định vị lại</button>
+  </section>
+  <section class="ph" aria-labelledby="e3">
+    <span class="tagl">10c · MẤT MẠNG</span>
+    <div class="ico" style="background:#E5EDFF" aria-hidden="true"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#1747D6" stroke-width="2" stroke-linecap="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0M12 19.5h.01M3 3l18 18"/></svg></div>
+    <h2 id="e3" class="h">Đã lưu phản ánh của bạn</h2>
+    <p class="p">Máy đang mất mạng. Phản ánh sẽ tự gửi khi có mạng trở lại, bạn không cần làm lại.</p>
+    <div style="display:flex;gap:12px;align-items:center;border:1px solid #DCE4F5;border-radius:14px;padding:12px">
+      <div style="width:48px;height:48px;border-radius:10px;background:repeating-linear-gradient(135deg,#C9D0CA 0 8px,#BFC7C1 8px 16px);flex:none"></div>
+      <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:600">Ổ gà · Hưng Đạo Vương</span><span style="font-size:13px;color:#7A4800">Đang chờ gửi…</span></div>
+    </div>
+    <div style="flex:1"></div>
+    <button class="sec">Về trang chủ</button>
+  </section>
+  <section class="ph" aria-labelledby="e4">
+    <span class="tagl">10d · KHÔNG CÓ SỰ CỐ QUANH BẠN</span>
+    <div class="ico" style="background:#E3F3E9" aria-hidden="true"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#1C7445" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></div>
+    <h2 id="e4" class="h">Khu phố quanh bạn đang ổn</h2>
+    <p class="p">Trong 500m không có sự cố hạ tầng nào chờ xử lý. Tháng này phường đã khắc phục 47 phản ánh.</p>
+    <div style="flex:1"></div>
+    <button class="sec">Xem bản đồ toàn phường</button>
+    <button class="pri">Gửi phản ánh mới</button>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1720,"height":844}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

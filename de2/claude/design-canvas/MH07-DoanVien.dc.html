@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Đoàn viên – Hàng chờ xác minh</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1747D6}a:hover{color:#0B2A8C}
+.flag{font-size:12px;font-weight:600;color:#7A4800;background:#FFF1D6;padding:4px 8px;border-radius:8px;align-self:flex-start}
+.act{height:44px;border-radius:12px;font:600 14px 'Be Vietnam Pro',sans-serif;padding:0 10px}
+</style>
+</helmet>
+<div style="width:390px;height:844px;box-sizing:border-box;background:#F0F4FF;font-family:'Be Vietnam Pro',sans-serif;color:#0A1A44;display:flex;flex-direction:column">
+  <header style="padding:20px;background:linear-gradient(135deg,#071A6B 0%,#1747D6 100%);border-bottom:2px solid #3FD0FF;box-shadow:0 2px 14px rgba(63,208,255,.35);color:#fff;display:flex;flex-direction:column;gap:6px">
+    <span style="font-size:13px;color:#BFEFFF">Đội thanh niên tình nguyện · Khu phố 5</span>
+    <span style="font-size:20px;font-weight:700">Cần xác minh gần bạn ({{ count }})</span>
+    <span style="font-size:13px;color:#BFEFFF">Chỉ hiện phản ánh bị gắn cờ, sắp theo khoảng cách</span>
+  </header>
+  <main style="flex:1;padding:14px 16px;display:flex;flex-direction:column;gap:12px">
+    <article style="background:#fff;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;border:2px solid #0F5C33">
+      <div style="display:flex;justify-content:space-between;gap:8px"><span style="font-size:15px;font-weight:700">PA-0458 · Ngập nước</span><span style="font-size:13px;color:#47567A">150m</span></div>
+      <span style="font-size:13px;color:#47567A">Đường Cách Mạng Tháng Tám, gần chợ</span>
+      <span class="flag">⚑ Người dân chọn khác AI (AI: Rác thải)</span>
+      <sc-if value="{{ pending }}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px">
+        <button class="act" onClick="{{ ok }}" style="border:none;background:#0F5C33;color:#fff">Đúng</button>
+        <button class="act" onClick="{{ fix }}" style="border:1px solid #C5D0EA;background:#fff;color:#0A1A44">Sửa/chụp lại</button>
+        <button class="act" onClick="{{ no }}" style="border:1px solid #E7B4AE;background:#fff;color:#9B1C12">Không đúng</button>
+      </div>
+      </sc-if>
+      <sc-if value="{{ done }}" hint-placeholder-val="{{ false }}">
+      <div role="status" style="display:flex;justify-content:space-between;align-items:center;gap:8px;background:#E5EDFF;border-radius:12px;padding:10px 12px;font-size:14px;font-weight:600;color:#0B2A8C">
+        <span>{{ verdict }}</span>
+        <button onClick="{{ undo }}" style="height:36px;border:none;background:none;font:600 13px 'Be Vietnam Pro',sans-serif;color:#1747D6;text-decoration:underline">Hoàn tác</button>
+      </div>
+      </sc-if>
+    </article>
+    <article style="background:#fff;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;justify-content:space-between;gap:8px"><span style="font-size:15px;font-weight:700">PA-0466 · Đèn đường</span><span style="font-size:13px;color:#47567A">320m</span></div>
+      <span style="font-size:13px;color:#47567A">Hẻm 30 Phan Chu Trinh</span>
+      <span class="flag">⚑ Không có ảnh · người cao tuổi gửi</span>
+    </article>
+    <article style="background:#fff;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;justify-content:space-between;gap:8px"><span style="font-size:15px;font-weight:700">PA-0469 · Ổ gà mặt đường</span><span style="font-size:13px;color:#47567A">540m</span></div>
+      <span style="font-size:13px;color:#47567A">Đường 30 Tháng 4</span>
+      <span class="flag">⚑ Vị trí ghim lệch 300m so với GPS</span>
+    </article>
+    <div style="flex:1"></div>
+    <button style="height:56px;border-radius:16px;border:2px solid #0F5C33;background:#fff;color:#0F5C33;font:700 16px 'Be Vietnam Pro',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Gửi hộ người dân</button>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+state = { v: null };
+renderVals() {
+  const v = (this.state && this.state.v) || null;
+  const text = {
+    ok: '✓ Đã xác nhận đúng – chuyển lên đầu danh sách phường',
+    fix: '✎ Đã sửa loại thành Ngập nước và chụp ảnh mới',
+    no: '✕ Không đúng thực tế – báo lại người gửi kèm lý do'
+  };
+  return {
+    pending: !v, done: !!v, verdict: v ? text[v] : '',
+    count: v ? 2 : 3,
+    ok: () => this.setState({ v: 'ok' }),
+    fix: () => this.setState({ v: 'fix' }),
+    no: () => this.setState({ v: 'no' }),
+    undo: () => this.setState({ v: null })
+  };
+}
+}
+</script>
+</body>
+</html>

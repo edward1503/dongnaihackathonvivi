@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Bước 2 – Vị trí và phản ánh trùng</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1747D6}a:hover{color:#0B2A8C}
+.step{flex:1;height:6px;border-radius:3px;background:#D3DCF0}
+.step-on{background:#1747D6}
+.road{position:absolute;background:#fff}
+</style>
+</helmet>
+<div style="width:390px;height:844px;box-sizing:border-box;background:#F0F4FF;font-family:'Be Vietnam Pro',sans-serif;color:#0A1A44;display:flex;flex-direction:column;position:relative;overflow:hidden">
+  <header style="padding:20px 20px 12px;background:#fff;display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <a href="MH02-ChupAnh.dc.html" aria-label="Quay lại" style="width:44px;height:44px;border-radius:22px;background:#ECF1FC;display:flex;align-items:center;justify-content:center;color:#0A1A44"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></a>
+      <div style="display:flex;flex-direction:column">
+        <span style="font-size:13px;color:#47567A">Bước 2/3</span>
+        <span style="font-size:18px;font-weight:700">Xác nhận vị trí</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px"><span class="step step-on"></span><span class="step step-on"></span><span class="step"></span></div>
+  </header>
+  <div role="img" aria-label="Bản đồ vị trí sự cố và phản ánh cùng loại gần đó" style="position:relative;height:300px;background:#E3EBF8;overflow:hidden">
+    <div class="road" style="left:0;top:130px;width:390px;height:22px"></div>
+    <div class="road" style="left:180px;top:0;width:14px;height:300px"></div>
+    <span style="position:absolute;left:16px;top:112px;font-size:11px;font-weight:600;color:#47567A">Hưng Đạo Vương</span>
+    <div style="position:absolute;left:150px;top:100px;width:80px;height:80px;border-radius:40px;background:rgba(23,71,214,.1);border:2px dashed #1747D6"></div>
+    <div style="position:absolute;left:206px;top:116px;width:30px;height:30px;border-radius:15px;background:#B42318;border:3px solid #fff;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700" aria-hidden="true">3</div>
+    <svg aria-hidden="true" style="position:absolute;left:170px;top:92px" width="40" height="48" viewBox="0 0 24 28" fill="#1747D6" stroke="#fff" stroke-width="1.5"><path d="M12 27s-9-8-9-15a9 9 0 0 1 18 0c0 7-9 15-9 15z"/><circle cx="12" cy="12" r="3.5" fill="#fff"/></svg>
+    <div style="position:absolute;left:16px;top:16px;right:16px;background:#fff;border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;box-shadow:0 1px 4px rgba(0,0,0,.12)">
+      <span style="font-size:13px;color:#47567A">Bạn đang ở</span>
+      <span style="font-size:16px;font-weight:700">Gần số 45 Hưng Đạo Vương</span>
+      <div style="display:flex;gap:8px">
+        <button style="height:44px;flex:1;border-radius:12px;border:none;background:#1747D6;color:#fff;font:700 15px 'Be Vietnam Pro',sans-serif">Đúng</button>
+        <button style="height:44px;flex:1;border-radius:12px;border:1px solid #C5D0EA;background:#fff;color:#0A1A44;font:600 15px 'Be Vietnam Pro',sans-serif">Không phải</button>
+      </div>
+    </div>
+  </div>
+  <div style="flex:1;background:rgba(6,21,69,.45)"></div>
+  <section aria-labelledby="dup-title" style="position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;padding:16px 20px 28px;display:flex;flex-direction:column;gap:14px;box-shadow:0 -6px 24px rgba(0,0,0,.18)">
+    <div style="width:40px;height:4px;border-radius:2px;background:#C5D0EA;align-self:center"></div>
+    <div style="display:flex;gap:12px;align-items:center">
+      <div style="width:48px;height:48px;border-radius:14px;background:#E5EDFF;display:flex;align-items:center;justify-content:center;flex:none" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1747D6" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 4a3 3 0 0 1 0 6M21 20c0-2.6-1.6-4.8-4-5.6"/></svg></div>
+      <h2 id="dup-title" style="margin:0;font-size:18px;font-weight:700;line-height:1.35">Đã có 3 người báo ổ gà cách bạn 20m</h2>
+    </div>
+    <div style="display:flex;gap:12px;padding:12px;border:1px solid #DCE4F5;border-radius:14px">
+      <div style="width:72px;height:72px;border-radius:10px;background:repeating-linear-gradient(135deg,#C9D0CA 0 8px,#BFC7C1 8px 16px);flex:none;display:flex;align-items:center;justify-content:center;font-size:10px;color:#34436A;text-align:center">[Ảnh]</div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <span style="font-size:15px;font-weight:600">PA-0461 · Ổ gà mặt đường</span>
+        <span style="font-size:13px;color:#47567A">43 Hưng Đạo Vương · gửi 2 giờ trước</span>
+        <span style="font-size:12px;font-weight:600;color:#9B1C12;background:#FDE8E6;padding:3px 8px;border-radius:8px;align-self:flex-start">Mới tiếp nhận</span>
+      </div>
+    </div>
+    <p style="margin:0;font-size:14px;color:#47567A;line-height:1.5">Bấm +1 để phường biết nhiều người cùng gặp, sự cố sẽ được ưu tiên hơn. Ảnh của bạn được thêm vào phản ánh này.</p>
+    <a href="MH05-TheoDoi.dc.html" style="height:56px;border-radius:16px;background:#1747D6;color:#fff;font-size:17px;font-weight:700;text-decoration:none;display:flex;align-items:center;justify-content:center">+1 Đồng tình &amp; thêm ảnh</a>
+    <a href="MH02c-ChonLoai.dc.html" style="height:48px;border-radius:16px;border:1px solid #C5D0EA;color:#0A1A44;font-size:15px;font-weight:600;text-decoration:none;display:flex;align-items:center;justify-content:center">Đây là sự cố khác – gửi mới</a>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

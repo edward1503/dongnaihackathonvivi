@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Chế độ người cao tuổi</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0B2E7A}a:hover{color:#000}
+.big{border-radius:20px;border:3px solid #000;background:#fff;display:flex;align-items:center;gap:16px;padding:0 18px;font:800 24px 'Be Vietnam Pro',sans-serif;color:#000;text-align:left}
+.num{width:48px;height:48px;border-radius:24px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;flex:none}
+</style>
+</helmet>
+<div style="width:390px;height:844px;box-sizing:border-box;background:#fff;font-family:'Be Vietnam Pro',sans-serif;color:#000;display:flex;flex-direction:column;padding:24px 20px 28px;gap:16px">
+  <header style="display:flex;justify-content:space-between;align-items:center">
+    <span style="font-size:26px;font-weight:800">Báo sự cố</span>
+    <a href="Main.dc.html" aria-label="Tắt chế độ chữ lớn" style="height:48px;padding:0 14px;border-radius:24px;background:#000;color:#FFE14D;font-size:18px;font-weight:800;text-decoration:none;display:flex;align-items:center">Aa Chữ lớn: BẬT</a>
+  </header>
+  <p style="margin:0;font-size:20px;line-height:1.45;font-weight:500">Bác làm lần lượt 3 bước. Không cần gõ chữ.</p>
+  <a href="MH02-ChupAnh.dc.html" class="big" style="height:128px;background:#0B2A8C;color:#fff;border-color:#0B2A8C;text-decoration:none;box-sizing:border-box"><span class="num" style="background:#fff;color:#0B2A8C">1</span><span style="flex:1">Chụp ảnh sự cố</span><svg aria-hidden="true" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3v13H4z"/><circle cx="12" cy="13" r="4"/></svg></a>
+  <div class="big" style="flex-direction:column;align-items:stretch;padding:16px 18px;gap:12px">
+    <div style="display:flex;align-items:center;gap:16px"><span class="num">2</span><span style="font-size:22px;line-height:1.3">Bác đang ở<br>gần số 45 Hưng Đạo Vương?</span></div>
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+      <button style="height:60px;border-radius:14px;border:none;background:#0F5C33;color:#fff;font:800 22px 'Be Vietnam Pro',sans-serif">Đúng</button>
+      <button style="height:60px;border-radius:14px;border:3px solid #000;background:#fff;color:#000;font:800 22px 'Be Vietnam Pro',sans-serif">Không phải</button>
+    </div>
+  </div>
+  <button class="big" style="height:104px"><span class="num">3</span><span style="flex:1">Gửi cho phường</span><svg aria-hidden="true" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button>
+  <div style="flex:1"></div>
+  <button style="height:64px;border-radius:18px;border:3px dashed #000;background:#FFF7CC;color:#000;font:700 20px 'Be Vietnam Pro',sans-serif;display:flex;align-items:center;justify-content:center;gap:10px"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 4a3 3 0 0 1 0 6M21 20c0-2.6-1.6-4.8-4-5.6"/></svg>Nhờ đoàn viên gửi giúp</button>
+  <button style="height:52px;border-radius:16px;border:none;background:#EDEDED;color:#000;font:600 18px 'Be Vietnam Pro',sans-serif">Nghe hướng dẫn (tùy chọn)</button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

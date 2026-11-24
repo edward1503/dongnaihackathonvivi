@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Trước sau và đánh giá</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1747D6}a:hover{color:#0B2A8C}
+.star{width:52px;height:52px;border:none;background:none;padding:0;display:flex;align-items:center;justify-content:center}
+.tag{height:40px;padding:0 14px;border-radius:20px;border:1px solid #C5D0EA;background:#fff;font:500 14px 'Be Vietnam Pro',sans-serif;color:#0A1A44}
+.tag-on{background:#E5EDFF;border-color:#1747D6;color:#0B2A8C;font-weight:700}
+</style>
+</helmet>
+<div style="width:390px;height:844px;box-sizing:border-box;background:#F0F4FF;font-family:'Be Vietnam Pro',sans-serif;color:#0A1A44;display:flex;flex-direction:column">
+  <header style="padding:20px;background:#fff;display:flex;align-items:center;gap:12px">
+    <a href="MH05-TheoDoi.dc.html" aria-label="Quay lại" style="width:44px;height:44px;border-radius:22px;background:#ECF1FC;display:flex;align-items:center;justify-content:center;color:#0A1A44"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></a>
+    <div style="display:flex;flex-direction:column">
+      <span style="font-size:13px;color:#47567A">PA-0437 · Hẻm 12 Phan Chu Trinh</span>
+      <span style="font-size:18px;font-weight:700">Đã khắc phục xong</span>
+    </div>
+  </header>
+  <main style="flex:1;padding:16px 20px;display:flex;flex-direction:column;gap:16px">
+    <div role="group" aria-label="So sánh ảnh trước và sau xử lý" style="position:relative;height:250px;border-radius:18px;overflow:hidden;background:repeating-linear-gradient(135deg,#BFD8C7 0 14px,#B3CFBC 14px 28px)">
+      <div style="position:absolute;left:0;top:0;bottom:0;width:{{ posPct }};background:repeating-linear-gradient(135deg,#A89A88 0 14px,#9C8E7C 14px 28px)"></div>
+      <span style="position:absolute;left:12px;top:12px;font-size:12px;font-weight:700;background:rgba(6,21,69,.8);color:#fff;padding:4px 8px;border-radius:6px">TRƯỚC · 22/11</span>
+      <span style="position:absolute;right:12px;top:12px;font-size:12px;font-weight:700;background:#1C7445;color:#fff;padding:4px 8px;border-radius:6px">SAU · 24/11</span>
+      <span style="position:absolute;left:20px;bottom:16px;font-size:12px;color:#2A2418">[Ảnh rác tồn đọng]</span>
+      <span style="position:absolute;right:20px;bottom:16px;font-size:12px;color:#123A22">[Ảnh vỉa hè sạch]</span>
+      <div style="position:absolute;left:{{ posPct }};top:0;bottom:0;width:4px;margin-left:-2px;background:#fff"></div>
+      <div style="position:absolute;left:{{ posPct }};top:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:22px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A1A44" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-5 6 5 6M15 6l5 6-5 6"/></svg></div>
+      <input type="range" min="0" max="100" value="{{ pos }}" onChange="{{ onPos }}" aria-label="Kéo để so sánh ảnh trước và sau" style="position:absolute;left:0;top:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize">
+    </div>
+    <p style="margin:0;font-size:14px;line-height:1.5;color:#34436A;background:#fff;border-radius:12px;padding:12px">“Đã thu gom 2 xe rác, đặt biển cấm đổ rác.” – Công ty Môi trường đô thị, 24/11</p>
+    <section aria-labelledby="rate" style="background:#fff;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px;align-items:center">
+      <h2 id="rate" style="margin:0;font-size:17px;font-weight:700">Bạn hài lòng với kết quả?</h2>
+      <div role="radiogroup" aria-label="Mức hài lòng" style="display:flex;gap:2px">
+        <sc-for list="{{ stars }}" as="s" hint-placeholder-count="5"><button class="star" role="radio" aria-checked="{{ s.checked }}" aria-label="{{ s.label }}" onClick="{{ s.pick }}"><svg width="40" height="40" viewBox="0 0 24 24" fill="{{ s.fill }}" stroke="{{ s.stroke }}" stroke-width="1.3"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg></button></sc-for>
+      </div>
+      <span style="font-size:14px;font-weight:600;color:#0B2A8C">{{ rateText }}</span>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center">
+        <sc-for list="{{ tags }}" as="t" hint-placeholder-count="4"><button class="{{ t.cls }}" aria-pressed="{{ t.pressed }}" onClick="{{ t.toggle }}">{{ t.label }}</button></sc-for>
+      </div>
+    </section>
+    <a href="#" style="font-size:14px;font-weight:600;text-align:center;color:#9B1C12">Vẫn còn tái diễn? Mở lại phản ánh</a>
+  </main>
+  <div style="padding:12px 20px 28px;background:#fff;border-top:1px solid #DCE4F5">
+    <a href="Main.dc.html" style="height:56px;border-radius:16px;background:linear-gradient(135deg,#1747D6,#2B7BFF);border:1.5px solid #3FD0FF;box-shadow:0 4px 18px rgba(63,208,255,.4);color:#fff;font-size:17px;font-weight:700;text-decoration:none;display:flex;align-items:center;justify-content:center">Gửi đánh giá</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+state = { pos: 52, rating: 4, tags: { 'Xử lý nhanh': true, 'Sạch sẽ': true } };
+renderVals() {
+  const st = this.state || {};
+  const pos = st.pos == null ? 52 : st.pos;
+  const rating = st.rating || 0;
+  const on = st.tags || {};
+  const words = ['Chạm để chấm sao', 'Rất không hài lòng', 'Chưa hài lòng', 'Tạm được', 'Hài lòng', 'Rất hài lòng'];
+  const stars = [1, 2, 3, 4, 5].map((n) => ({
+    label: n + ' sao',
+    checked: String(n === rating),
+    fill: n <= rating ? '#F2B300' : 'none',
+    stroke: n <= rating ? '#B07F00' : '#8A94AE',
+    pick: () => this.setState({ rating: n })
+  }));
+  const tags = ['Xử lý nhanh', 'Sạch sẽ', 'Thái độ tốt', 'Chưa triệt để'].map((k) => ({
+    label: k,
+    cls: on[k] ? 'tag tag-on' : 'tag',
+    pressed: String(!!on[k]),
+    toggle: () => this.setState({ tags: Object.assign({}, on, { [k]: !on[k] }) })
+  }));
+  return {
+    pos, posPct: pos + '%',
+    onPos: (e) => this.setState({ pos: Number(e.target.value) }),
+    stars, tags, rateText: words[rating]
+  };
+}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Bước 3 – Chọn loại và gửi</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1747D6}a:hover{color:#0B2A8C}
+.step{flex:1;height:6px;border-radius:3px;background:#1747D6}
+.tile{height:104px;border-radius:16px;border:2px solid #D3DCF0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font:600 15px 'Be Vietnam Pro',sans-serif;color:#0A1A44;position:relative}
+.tile-on{border:3px solid #1747D6;background:#E5EDFF}
+</style>
+</helmet>
+<div style="width:390px;height:844px;box-sizing:border-box;background:#F0F4FF;font-family:'Be Vietnam Pro',sans-serif;color:#0A1A44;display:flex;flex-direction:column">
+  <header style="padding:20px 20px 12px;background:#fff;display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <a href="MH03-ViTriTrung.dc.html" aria-label="Quay lại" style="width:44px;height:44px;border-radius:22px;background:#ECF1FC;display:flex;align-items:center;justify-content:center;color:#0A1A44"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></a>
+      <div style="display:flex;flex-direction:column">
+        <span style="font-size:13px;color:#47567A">Bước 3/3</span>
+        <span style="font-size:18px;font-weight:700">Đây là sự cố gì?</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px"><span class="step"></span><span class="step"></span><span class="step"></span></div>
+  </header>
+  <main style="flex:1;padding:16px 20px;display:flex;flex-direction:column;gap:16px">
+    <sc-if value="{{ agree }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;gap:10px;align-items:center;background:#E5EDFF;border-radius:12px;padding:10px 12px;font-size:14px;color:#0B2A8C">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1747D6" stroke-width="2" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>
+      <span>AI đoán là <b>Ổ gà mặt đường</b> – đúng không?</span>
+    </div>
+    </sc-if>
+    <sc-if value="{{ disagree }}" hint-placeholder-val="{{ false }}">
+    <div role="status" style="display:flex;gap:10px;align-items:flex-start;background:#FFF1D6;border-radius:12px;padding:10px 12px;font-size:14px;line-height:1.45;color:#5C3600">
+      <span aria-hidden="true" style="font-weight:700">⚑</span>
+      <span>Bạn chọn <b>{{ selLabel }}</b>, khác gợi ý của AI. Phản ánh vẫn gửi bình thường; phường có thể nhờ đoàn viên kiểm tra thêm.</span>
+    </div>
+    </sc-if>
+    <div role="radiogroup" aria-label="Loại sự cố" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+      <button role="radio" aria-checked="{{ a1 }}" class="{{ c1 }}" onClick="{{ p1 }}"><svg aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9A5B00" stroke-width="2" stroke-linecap="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9V16h7v-2.1A6 6 0 0 0 12 3z"/></svg>Đèn đường</button>
+      <button role="radio" aria-checked="{{ a2 }}" class="{{ c2 }}" onClick="{{ p2 }}"><span style="position:absolute;top:8px;right:8px;font-size:11px;font-weight:700;color:#fff;background:#1747D6;padding:2px 6px;border-radius:6px">AI gợi ý</span><svg aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1747D6" stroke-width="2" stroke-linecap="round"><path d="M4 20 9 4M20 20 15 4M12 6v2M12 11v2M12 16v2"/></svg>Ổ gà mặt đường</button>
+      <button role="radio" aria-checked="{{ a3 }}" class="{{ c3 }}" onClick="{{ p3 }}"><svg aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2B6CB0" stroke-width="2"><path d="M12 2.7s-6 6.6-6 11.3a6 6 0 0 0 12 0c0-4.7-6-11.3-6-11.3z"/></svg>Ngập nước</button>
+      <button role="radio" aria-checked="{{ a4 }}" class="{{ c4 }}" onClick="{{ p4 }}"><svg aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1C7445" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>Rác thải</button>
+    </div>
+    <label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:600">Mô tả (AI viết sẵn, bạn có thể sửa)
+      <textarea rows="3" style="border-radius:12px;border:1px solid #C5D0EA;padding:12px;font:400 15px 'Be Vietnam Pro',sans-serif;color:#0A1A44;resize:none">Ổ gà đọng nước giữa làn xe máy, dễ gây té ngã.</textarea>
+    </label>
+    <div style="display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #DCE4F5;border-radius:14px;padding:10px">
+      <div style="width:56px;height:56px;border-radius:10px;background:repeating-linear-gradient(135deg,#C9D0CA 0 8px,#BFC7C1 8px 16px);flex:none"></div>
+      <div style="display:flex;flex-direction:column;gap:2px;font-size:13px;color:#47567A">
+        <span style="font-size:14px;font-weight:600;color:#0A1A44">1 ảnh · Gần 45 Hưng Đạo Vương</span>
+        Danh tính của bạn được ẩn trên bản đồ công khai
+      </div>
+    </div>
+  </main>
+  <div style="padding:12px 20px 28px;background:#fff;border-top:1px solid #DCE4F5">
+    <a href="MH05-TheoDoi.dc.html" style="height:56px;border-radius:16px;background:#1747D6;color:#fff;font-size:17px;font-weight:700;text-decoration:none;display:flex;align-items:center;justify-content:center">Gửi phản ánh</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+state = { sel: 2 };
+renderVals() {
+  const sel = (this.state && this.state.sel) || 2;
+  const labels = ['', 'Đèn đường', 'Ổ gà mặt đường', 'Ngập nước', 'Rác thải'];
+  const v = { agree: sel === 2, disagree: sel !== 2, selLabel: labels[sel] };
+  for (let i = 1; i <= 4; i++) {
+    v['c' + i] = sel === i ? 'tile tile-on' : 'tile';
+    v['a' + i] = String(sel === i);
+    v['p' + i] = () => this.setState({ sel: i });
+  }
+  return v;
+}
+}
+</script>
+</body>
+</html>

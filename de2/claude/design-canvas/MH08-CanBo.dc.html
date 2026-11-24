@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Cán bộ phường – Tiếp nhận và giao xử lý</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1747D6}a:hover{color:#0B2A8C}
+.kpi{background:#fff;border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:6px;border:1px solid #DCE4F5}
+.nav{height:44px;border-radius:10px;display:flex;align-items:center;padding:0 12px;font-size:14px;font-weight:500;color:#C8D6FF;text-decoration:none}
+th{font-size:12px;font-weight:600;color:#47567A;text-align:left;padding:10px 12px;border-bottom:1px solid #DCE4F5;white-space:nowrap}
+td{font-size:14px;padding:12px;border-bottom:1px solid #ECF1FC;vertical-align:middle;white-space:nowrap}
+.b{font-size:12px;font-weight:600;padding:4px 8px;border-radius:8px}
+.btn{height:36px;border-radius:10px;padding:0 12px;font:600 13px 'Be Vietnam Pro',sans-serif}
+.bar{height:10px;border-radius:5px;background:#1747D6}
+.hon{border:2px solid #1747D6;background:#E5EDFF;color:#0B2A8C}
+.hoff{border:1px solid #C5D0EA;background:#fff;color:#0A1A44}
+</style>
+</helmet>
+<div style="min-height:960px;background:#F0F4FF;font-family:'Be Vietnam Pro',sans-serif;color:#0A1A44;display:flex;flex-wrap:wrap">
+  <aside style="flex:1 1 220px;max-width:260px;background:linear-gradient(180deg,#071A6B 0%,#0B2A8C 100%);border-right:2px solid #3FD0FF;color:#fff;padding:24px 16px;display:flex;flex-direction:column;gap:6px;box-sizing:border-box">
+    <span style="font-size:13px;color:#A9C3FF;padding:0 12px">UBND phường</span>
+    <span style="font-size:18px;font-weight:700;padding:0 12px 16px">Trấn Biên</span>
+    <a class="nav" href="#" style="background:#16307F;color:#fff;font-weight:700">Tiếp nhận &amp; giao việc</a>
+    <a class="nav" href="#">Bản đồ phản ánh</a>
+    <a class="nav" href="#">Đoàn viên xác minh</a>
+    <a class="nav" href="#">Báo cáo tháng</a>
+  </aside>
+  <main style="flex:999 1 560px;min-width:0;padding:28px;box-sizing:border-box;display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px">
+      <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:13px;color:#47567A">Tháng 11/2026</span><h1 style="margin:0;font-size:26px;font-weight:700">Tiếp nhận phản ánh</h1></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" style="border:1px solid #C5D0EA;background:#fff;color:#0A1A44">Tất cả loại ▾</button>
+        <button class="btn" style="border:1px solid #E7B4AE;background:#FDE8E6;color:#9B1C12">Quá hạn / sắp đến hạn</button>
+        <button class="btn" style="border:1px solid #E8C88A;background:#FFF1D6;color:#7A4800">⚑ Cần xác minh</button>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px">
+      <div class="kpi"><span style="font-size:13px;color:#47567A">Tổng phản ánh</span><span style="font-size:30px;font-weight:700">64</span></div>
+      <div class="kpi"><span style="font-size:13px;color:#47567A">Đã xử lý</span><span style="font-size:30px;font-weight:700">47 <span style="font-size:16px;color:#1C7445">73,4%</span></span></div>
+      <div class="kpi"><span style="font-size:13px;color:#47567A">Thời gian xử lý TB</span><span style="font-size:30px;font-weight:700">3,2 <span style="font-size:16px">ngày</span></span></div>
+      <div class="kpi" style="gap:6px"><span style="font-size:13px;color:#47567A">Theo loại</span>
+        <div style="display:grid;grid-template-columns:72px 1fr 24px;gap:4px 8px;align-items:center;font-size:12px">
+          <span>Rác thải</span><span class="bar" style="width:100%"></span><b>21</b>
+          <span>Đèn đường</span><span class="bar" style="width:86%"></span><b>18</b>
+          <span>Ngập nước</span><span class="bar" style="width:71%"></span><b>15</b>
+          <span>Mặt đường</span><span class="bar" style="width:48%"></span><b>10</b>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
+      <section style="flex:999 1 560px;min-width:0;background:#fff;border-radius:16px;border:1px solid #DCE4F5;overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse">
+          <thead><tr><th>Mã</th><th>Loại · Vị trí</th><th>Số người báo</th><th>Độ tin cậy</th><th>Trạng thái</th><th>Hạn</th><th></th></tr></thead>
+          <tbody>
+            <tr style="background:#EEF3FD"><td><b>PA-0461</b></td><td>Ổ gà · 43 Hưng Đạo Vương<br><span style="font-size:12px;color:#47567A">Gần cổng trường tiểu học</span></td><td><b>{{ n1 }}</b></td><td><span class="b" style="background:#E3F3E9;color:#14532D">Cao</span></td><td><sc-if value="{{ notAssigned }}" hint-placeholder-val="{{ true }}"><span class="b" style="background:#FDE8E6;color:#9B1C12">Mới</span></sc-if><sc-if value="{{ assigned }}" hint-placeholder-val="{{ false }}"><span class="b" style="background:#FFF1D6;color:#7A4800">Đã giao · {{ dept }}</span></sc-if></td><td>{{ due1 }}</td><td><sc-if value="{{ notAssigned }}" hint-placeholder-val="{{ true }}"><span style="font-size:12px;color:#47567A">Đang chọn →</span></sc-if></td></tr>
+            <tr><td><b>PA-0458</b></td><td>Ngập nước · CMT8</td><td>3</td><td><span class="b" style="background:#FFF1D6;color:#7A4800">Cần xác minh</span><br><span style="font-size:12px;color:#47567A">Người dân chọn khác AI</span></td><td><sc-if value="{{ notVol }}" hint-placeholder-val="{{ true }}"><span class="b" style="background:#FDE8E6;color:#9B1C12">Mới</span></sc-if><sc-if value="{{ vol }}" hint-placeholder-val="{{ false }}"><span class="b" style="background:#E5EDFF;color:#0B2A8C">Chờ đoàn viên KP5</span></sc-if></td><td>—</td><td><sc-if value="{{ notVol }}" hint-placeholder-val="{{ true }}"><button class="btn" onClick="{{ toVol }}" style="border:1px solid #0F5C33;background:#fff;color:#0F5C33">Chuyển đoàn viên</button></sc-if></td></tr>
+            <tr><td><b>PA-0452</b></td><td>Đèn đường · Phan Chu Trinh</td><td>2</td><td><span class="b" style="background:#E3F3E9;color:#14532D">Cao</span></td><td><span class="b" style="background:#FFF1D6;color:#7A4800">Đang xử lý · Điện lực</span></td><td><span class="b" style="background:#B42318;color:#fff">Còn 6 giờ</span></td><td><button class="btn" style="border:1px solid #C5D0EA;background:#fff;color:#0A1A44">Nhắc</button></td></tr>
+            <tr><td><b>PA-0447</b></td><td>Rác thải · Hẻm 8 Nguyễn Ái Quốc</td><td>1</td><td><span class="b" style="background:#E3F3E9;color:#14532D">Cao</span></td><td><span class="b" style="background:#FFF1D6;color:#7A4800">Đang xử lý · Môi trường</span></td><td><span class="b" style="background:#0A1A44;color:#fff">Quá hạn 1 ngày</span></td><td><button class="btn" style="border:1px solid #C5D0EA;background:#fff;color:#0A1A44">Nhắc</button></td></tr>
+            <tr><td><b>PA-0440</b></td><td>Mặt đường · Quốc lộ 1K</td><td>1</td><td><span class="b" style="background:#E3F3E9;color:#14532D">Cao</span></td><td><span class="b" style="background:#ECF1FC;color:#34436A">Chuyển cấp khác</span><br><span style="font-size:12px;color:#47567A">Tuyến do Sở quản lý</span></td><td>—</td><td></td></tr>
+          </tbody>
+        </table>
+      </section>
+      <aside aria-labelledby="assign" style="flex:1 1 300px;max-width:380px;background:#fff;border-radius:16px;border:2px solid #1747D6;padding:18px;display:flex;flex-direction:column;gap:14px;box-sizing:border-box">
+        <h2 id="assign" style="margin:0;font-size:17px;font-weight:700">Giao xử lý PA-0461</h2>
+        <sc-if value="{{ notMerged }}" hint-placeholder-val="{{ true }}"><div style="display:flex;gap:10px;align-items:center;background:#E5EDFF;border-radius:12px;padding:10px;font-size:13px;color:#0B2A8C">Gợi ý gộp: PA-0463 cách 18m, cùng loại <button class="btn" onClick="{{ merge }}" style="margin-left:auto;border:none;background:#1747D6;color:#fff">Gộp</button></div></sc-if>
+        <sc-if value="{{ merged }}" hint-placeholder-val="{{ false }}"><div role="status" style="background:#E3F3E9;border-radius:12px;padding:10px;font-size:13px;font-weight:600;color:#14532D">✓ Đã gộp PA-0463 – nay 6 người cùng báo</div></sc-if>
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600">Bộ phận xử lý
+          <select value="{{ dept }}" onChange="{{ onDept }}" style="height:44px;border-radius:10px;border:1px solid #C5D0EA;padding:0 10px;font:500 14px 'Be Vietnam Pro',sans-serif"><option>Tổ quản lý đô thị</option><option>Điện lực</option><option>Công ty Môi trường đô thị</option></select>
+        </label>
+        <fieldset style="border:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px"><legend style="font-size:13px;font-weight:600;padding:0;margin-bottom:6px">Hạn xử lý</legend>
+          <div style="display:flex;gap:8px"><sc-for list="{{ hours }}" as="h" hint-placeholder-count="3"><button class="{{ h.cls }}" aria-pressed="{{ h.pressed }}" onClick="{{ h.pick }}" style="height:36px;border-radius:10px;padding:0 12px;font:600 13px 'Be Vietnam Pro',sans-serif">{{ h.label }}</button></sc-for></div>
+        </fieldset>
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600">Ghi chú cho đơn vị
+          <textarea rows="2" style="border-radius:10px;border:1px solid #C5D0EA;padding:10px;font:400 14px 'Be Vietnam Pro',sans-serif;resize:none">Ưu tiên: gần cổng trường, 5 người cùng báo.</textarea>
+        </label>
+        <sc-if value="{{ notAssigned }}" hint-placeholder-val="{{ true }}"><button onClick="{{ assign }}" style="width:100%;height:48px;border-radius:12px;border:1.5px solid #3FD0FF;background:linear-gradient(135deg,#1747D6,#2B7BFF);box-shadow:0 4px 14px rgba(63,208,255,.35);color:#fff;font:700 15px 'Be Vietnam Pro',sans-serif">Giao việc</button></sc-if>
+        <sc-if value="{{ assigned }}" hint-placeholder-val="{{ false }}"><div role="status" style="display:flex;justify-content:space-between;align-items:center;gap:8px;background:#E3F3E9;border-radius:12px;padding:12px;font-size:14px;font-weight:600;color:#14532D"><span>✓ Đã giao {{ dept }} · hạn {{ hoursText }}. Người gửi đã nhận thông báo.</span><button onClick="{{ unassign }}" style="height:36px;border:none;background:none;font:600 13px 'Be Vietnam Pro',sans-serif;color:#1747D6;text-decoration:underline">Hoàn tác</button></div></sc-if>
+        <div style="display:flex;gap:8px"><button class="btn" style="flex:1;border:1px solid #C5D0EA;background:#fff;color:#0A1A44">Yêu cầu bổ sung</button><button class="btn" style="flex:1;border:1px solid #E7B4AE;background:#fff;color:#9B1C12">Từ chối / chuyển cấp</button></div>
+      </aside>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":960}}'>
+class Component extends DCLogic {
+state = { h: 48, dept: 'Tổ quản lý đô thị', assigned: false, merged: false, vol: false };
+renderVals() {
+  const st = this.state || {};
+  const h = st.h || 48;
+  const dept = st.dept || 'Tổ quản lý đô thị';
+  const hours = [24, 48, 72].map((n) => ({
+    label: n + ' giờ',
+    cls: n === h ? 'hon' : 'hoff',
+    pressed: String(n === h),
+    pick: () => this.setState({ h: n })
+  }));
+  return {
+    hours, dept, hoursText: h + ' giờ',
+    onDept: (e) => this.setState({ dept: e.target.value }),
+    assigned: !!st.assigned, notAssigned: !st.assigned,
+    assign: () => this.setState({ assigned: true }),
+    unassign: () => this.setState({ assigned: false }),
+    due1: st.assigned ? 'Còn ' + h + ' giờ' : '—',
+    merged: !!st.merged, notMerged: !st.merged,
+    merge: () => this.setState({ merged: true }),
+    n1: st.merged ? 6 : 5,
+    vol: !!st.vol, notVol: !st.vol,
+    toVol: () => this.setState({ vol: true })
+  };
+}
+}
+</script>
+</body>
+</html>
