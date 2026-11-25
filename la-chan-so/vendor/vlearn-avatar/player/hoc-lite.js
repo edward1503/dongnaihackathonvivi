@@ -207,12 +207,13 @@ export async function mountLiteAvatar(host, id, audioCtx) {
   const pc = Object.assign(document.createElement("canvas"), { width: protImg.width, height: protImg.height }).getContext("2d", { willReadFrequently: true });
   pc.drawImage(protImg, 0, 0);
   const pd = pc.getImageData(0, 0, protImg.width, protImg.height).data, PC = meta.protect.cols, PS = meta.protect.cell, PW = protImg.width;
-  const bw = bx2 - bx1, bh = by2 - by1, fg = new Float32Array(N * N), zone = new Float32Array(N * N);
+  const bw = bx2 - bx1, bh = by2 - by1, fg = new Float32Array(N * N), zone = new Float32Array(N * N), cua = new Float32Array(N * N);
   const [r0, r1, c0, c1] = meta.zone, zx = (c0 + c1) / 2, zy = (r0 + r1) / 2, za = (c1 - c0) * 0.62, zb = (r1 - r0) * 0.62;
   for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
     const d = Math.min(x * bw / N, (N - 1 - x) * bw / N, y * bh / N, (N - 1 - y) * bh / N); // cách mép hộp (px khung gốc)
     fg[y * N + x] = sstep(2, 20, d);
     zone[y * N + x] = 1 - sstep(0.85, 1.15, Math.hypot((x - zx) / za, (y - zy) / zb)); // vùng miệng: luôn dùng ảnh vẽ
+    cua[y * N + x] = 1 - sstep(1.0, 1.3, Math.hypot((x - zx) / za, (y - zy) / zb)); // la-chan-so 25/11: ngoài cửa sổ quanh miệng (viền hàm, cổ áo) không dán, như tools/dung-mieng.py
   }
   const patch = new Uint8Array(N * N * 4), mv = new Float32Array(HN * HN), tmp = new Float32Array(HN * HN);
   function compose(d, k, bgw) {
@@ -233,7 +234,7 @@ export async function mountLiteAvatar(host, id, audioCtx) {
     const px = (k % PC) * PS, py = Math.floor(k / PC) * PS;
     for (let y = 0, i = 0; y < N; y++) for (let x = 0; x < N; x++, i++) {
       const hy = y >> 1, hx = x >> 1, prot = pd[((py + hy) * PW + px + hx) * 4] / 255;
-      const a = fg[i] * (1 - bgw) * Math.max(mv[hy * HN + hx], zone[i]) * (1 - prot);
+      const a = fg[i] * (1 - bgw) * Math.max(mv[hy * HN + hx] * cua[i], zone[i]) * (1 - prot);
       patch[i * 4] = (d[i] * 0.5 + 0.5) * 255; patch[i * 4 + 1] = (d[P + i] * 0.5 + 0.5) * 255; patch[i * 4 + 2] = (d[2 * P + i] * 0.5 + 0.5) * 255; patch[i * 4 + 3] = a * 255;
     }
     const now = performance.now(), first = !mouthOn;

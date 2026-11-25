@@ -62,6 +62,9 @@ yy, xx = np.mgrid[0:N, 0:N].astype(np.float32)
 fg = sstep(2, 20, np.minimum.reduce([xx * bw / N, (N - 1 - xx) * bw / N, yy * bh / N, (N - 1 - yy) * bh / N]))
 r0, r1, c0, c1 = meta["zone"]; zx, zy, za, zb = (c0 + c1) / 2, (r0 + r1) / 2, (c1 - c0) * 0.62, (r1 - r0) * 0.62
 zone = 1 - sstep(0.85, 1.15, np.hypot((xx - zx) / za, (yy - zy) / zb))
+# cửa sổ quanh miệng (25/11/2026): chỗ ảnh vẽ khác dáng khép ở xa miệng (viền hàm, cổ áo) không được dán, vì trên điện thoại
+# video nhân vật và video miệng lệch nhau vài khung là các chỗ đó hiện thành đường sáng nhấp nháy dọc viền hàm (thấy rõ ở avatar 125, 117)
+cua = 1 - sstep(1.0, 1.3, np.hypot((xx - zx) / za, (yy - zy) / zb))
 prot_anh = np.asarray(Image.open(os.path.join(goc, "protect.png")).convert("RGBA"), np.float32)[:, :, 0] / 255
 PC, PS = meta["protect"]["cols"], meta["protect"]["cell"]
 def ghep(m, k, bgw):   # như compose(): trả về khung 384×768, nửa trái là màu, nửa phải là trọng số dán
@@ -70,18 +73,24 @@ def ghep(m, k, bgw):   # như compose(): trả về khung 384×768, nửa trái 
     px, py = (k % PC) * PS, (k // PC) * PS
     prot = prot_anh[py:py + HN, px:px + HN]
     lon = lambda a: np.repeat(np.repeat(a, 2, 0), 2, 1)
-    a = fg * (1 - bgw) * np.maximum(lon(mv), zone) * (1 - lon(prot))
+    a = fg * (1 - bgw) * np.maximum(lon(mv) * cua, zone) * (1 - lon(prot))
     mau = np.clip(m.transpose(1, 2, 0) * 127.5 + 127.5, 0, 255)
     return np.concatenate([mau, np.repeat((a * 255)[:, :, None], 3, 2)], axis=1).astype(np.uint8)
 ra = lip_f.replace(".lip.json", "") + ".mieng.mp4"
-ff = subprocess.Popen(["ffmpeg", "-loglevel", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{2 * N}x{N}", "-r", "30", "-i", "-",
+# LCS_FF_PNG=1: gửi khung dạng PNG (máy chủ scoai-eval chỉ có ffmpeg đi kèm Remotion, bản này không đọc được rawvideo)
+PNG = os.environ.get("LCS_FF_PNG") == "1"
+vao = ["-f", "image2pipe", "-c:v", "png", "-framerate", "30", "-i", "-"] if PNG else ["-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{2 * N}x{N}", "-r", "30", "-i", "-"]
+ff = subprocess.Popen(["ffmpeg", "-loglevel", "error", "-y", *vao,
                        "-c:v", "libx264", "-preset", "slow", "-crf", "15", "-g", "30", "-pix_fmt", "yuv420p", "-color_range", "tv", "-movflags", "+faststart", "-an", ra], stdin=subprocess.PIPE)
+def ghi(khung):
+    if PNG: b = io.BytesIO(); Image.fromarray(khung).save(b, "PNG", compress_level=1); ff.stdin.write(b.getvalue())
+    else: ff.stdin.write(khung.tobytes())
 bg = lip.get("bg") or []
 for i, p in enumerate(lip["params"]):
     khung = (F + round(i / 30 * meta["fps"])) % meta["frames"]
     k = k_cua(khung)
     m = s.run(None, {"ref": tham_chieu(k), "params": np.asarray(p, np.float32)[None]})[0][0]
-    ff.stdin.write(ghep(m, k, bg[i] if i < len(bg) else 0.0).tobytes())
+    ghi(ghep(m, k, bg[i] if i < len(bg) else 0.0))
 ff.stdin.close(); ff.wait()
 lip["mieng"] = {"tep": os.path.basename(ra), "F": F}
 json.dump(lip, open(lip_f, "w"))
