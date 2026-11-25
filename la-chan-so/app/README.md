@@ -1,91 +1,102 @@
 # App Lá chắn số (Mảng 3)
 
-React 19, Vite. Chạy trong WebView của ứng dụng Android, hoặc trên trình duyệt để trình diễn. Dùng thẳng `../ds.css`, `../icons.js` và phông chữ của bản thiết kế, nên app và thiết kế luôn chung một bộ.
+React 19, Vite. Chạy trong WebView của ứng dụng Android, hoặc trên trình duyệt điện thoại để trình diễn.
+
+**Giao diện V3:** gọn, chia theo 3 đối tượng (người lớn tuổi, học sinh, đội tình nguyện). Màu, cỡ chữ và bố cục theo bản `review/mockup/v3.html`. Linh vật Bé Nai lấy từ bộ tranh của Mảng 4.
+
+**Logo:** biểu trưng Đồng Nai đặt ở ô tên app đầu trang chủ và nhỏ ở màn chào (theo bản V3). Biểu tượng app khi cài ra màn hình chính là khiên của đội. Đội cần ban tổ chức đồng ý cho dùng biểu trưng.
 
 ## Chạy
 
 ```bash
-cd la-chan-so/server && uvicorn lcs.main:app --port 8000     # máy chủ, xem server/README.md
-cd la-chan-so/app && npm install && npm run dev              # http://localhost:5173, tự chuyển /api sang cổng 8000
-npm run build                                                # ra dist/; máy chủ phục vụ luôn ở http://<máy>:8000/
+cd la-chan-so/server && python chay-demo.py --build     # build app rồi chạy máy chủ HTTP 8000 + HTTPS 8443 (xem ../HUONG-DAN-CHAY-DEMO.md)
+cd la-chan-so/app && npm install && npm run dev         # http://localhost:5173 khi sửa giao diện, tự chuyển /api sang cổng 8000
 ```
 
-- **Trên máy tính** (cửa sổ rộng hơn 600px): app hiện trong khung điện thoại 360×800, giống thiết kế.
-- **Trên điện thoại:** app chiếm toàn màn hình, ẩn thanh trạng thái vẽ sẵn.
+- **Trên máy tính** (rộng hơn 600px): app hiện trong khung điện thoại 390×844.
+- **Trên điện thoại:** app chiếm toàn màn hình, chừa tai thỏ và thanh cử chỉ. Cài ra màn hình chính được (`public/manifest.webmanifest`).
+- **Tiếng và rung** (`src/lib/sound.js`): một trình phát dùng chung, mở khóa ở lần chạm đầu tiên.
+  - Màn đổ chuông có chuông và rung.
+  - Kết quả Nguy hiểm, màn khẩn cấp, màn "Dừng lại" và lời người thân trả lời đều rung.
 
-Tham số trên địa chỉ trang, dùng khi trình diễn:
+Tham số trên địa chỉ trang:
 
 | Tham số | Tác dụng |
 |---|---|
-| `?mode=simple` · `?mode=full` | Máy bà Hoa (A01a) · máy Vy (A01b) |
+| `?mode=simple` · `?mode=full` · `?mode=volunteer` | Vào thẳng vai người lớn tuổi (bà Hoa) · học sinh (Vy) · đội tình nguyện (Khoa), bỏ qua màn chào |
+| `#/chao` | Mở như người dùng mới: màn chào, chọn vai, quyền riêng tư, chọn phường |
 | `?api=http://192.168.1.10:8000` | Trỏ tới máy chủ khác (lưu lại cho lần sau) |
-| `?nguoithan=0` | Xóa người thân để xem màn E01b |
-| `?demo=1` | Hiện hàng số mẫu ở A06a và bảng mô phỏng bên trái (có cuộc gọi lạ, mở app ngân hàng, đặt lại demo) |
+| `?nguoithan=0` | Xóa người thân để xem màn "Chưa có người thân" |
+| `?demo=1` | Bảng mô phỏng và mã QR, chi tiết ngay dưới bảng |
+
+Bảng mô phỏng (`?demo=1`):
+- **Trên laptop:** bảng bên trái, mã QR bên phải. Công tắc **Máy này / Điện thoại** quyết định nút bấm đổi màn ở đâu. Chọn **Điện thoại** thì laptop gửi lệnh `demo.go` qua máy chủ, điện thoại đang mở app tự đổi màn.
+- **Trên điện thoại:** chạm mấu nhỏ ở mép trái để mở bảng.
 
 ## Màn và đường dẫn
 
-| Đường dẫn | Màn | Tệp |
+Mã màn ghi ở `data-name` của khung, cùng tên với bản V3.
+
+| Nhóm | Đường dẫn → màn | Tệp |
 |---|---|---|
-| `#/` | A01a, A01b | `screens/Home.jsx` |
-| `#/kiem-tra` · `#/kiem-tra/tin-nhan` | A06a · A06b | `screens/Check.jsx` |
-| `#/ket-qua` | A07a–d (theo `level`) | `screens/Result.jsx` |
-| `#/phan-tich` | A05b | `screens/MessageResult.jsx` |
-| `#/hoi-nguoi-than` · `/cho` · `/tra-loi` | A08a · A08b · A08c | `screens/Ask.jsx` |
-| `#/bao-cao` · `/cong-dong` · `/xong` | A09a · A09b · A09c | `screens/Report.jsx` |
-| `#/chua-co-nguoi-than` · `#/mat-mang` · `#/chua-du-thong-tin` | E01b · E01c · E01d | `screens/States.jsx` |
-| `#/cuoc-goi?so=…` | A03a (số bị báo) · A03b (số chưa rõ) | `screens/Call.jsx` |
-| `#/sau-cuoc-goi?so=…&giay=252&ghiam=1` | điều phối khi cúp máy, mở A04a | `screens/Call.jsx` |
-| `#/hoi-nhanh` · `#/phan-tich-cuoc-goi` · `#/khong-ghi-am` | A04a · A04b · A04c | `screens/Call.jsx` |
-| `#/dung-lai?phut=4` | A10a | `screens/Call.jsx` |
+| Chung | `#/chao` 00 · `#/vai` 0 · `#/rieng-tu` 0b · `#/phuong` 0c · `#/ca-nhan` 0d · `#/thiet-lap` A02a, A02b | `v3/screens/Common.jsx` |
+| Trang chủ | `#/` → A1 (lớn tuổi), B1 (học sinh), C1 (tình nguyện); E01a khi Lá chắn đang ngủ | `v3/screens/Home.jsx` |
+| Kiểm tra | `#/kiem-tra?loai=phone\|text\|account` A2, B2 · `#/ket-qua` A3 (4 mức) · `#/phan-tich` B3 · `#/mat-mang` A2b · `#/chua-du-thong-tin` E01d · `#/doc-so` A7 | `v3/screens/Check.jsx`, `Help.jsx` |
+| Người thân | `#/nguoi-than` A4 · `#/nguoi-than/them` A4c · `#/hoi-nguoi-than` · `/cho` A4b · `/tra-loi` · `#/chua-co-nguoi-than` A4a · `#/goi` A8 (mô phỏng) | `v3/screens/People.jsx` |
+| Khi bị lừa | `#/khan-cap` A5 · `#/ke-lai` A6 (cũng là `#/khong-ghi-am`) | `v3/screens/Help.jsx` |
+| Cuộc gọi (Android mở) | `#/cuoc-goi?so=…` A03 · `#/sau-cuoc-goi?so=…&giay=…&ghiam=1` · `#/hoi-nhanh` A04a · `#/phan-tich-cuoc-goi` A04b · `#/dung-lai?phut=4` A10a · `#/dung-lai?danggoi=1&so=…&giay=…` A10b · `#/thong-bao?tin=…` A05a | `v3/screens/Call.jsx` |
+| Học sinh | `#/bao-cao` B4 · `/xong` B4b · `#/bai-hoc` B5 · `#/bai-hoc/:id` B6 · `#/kiem-tra-bai` B7 · `/ket-qua` B8 | `v3/screens/Student.jsx` |
+| Đội tình nguyện | `#/ma-doi` C0 · `#/thong-ke` C2 · `#/kieu-moi` C3 · `#/duyet` C4 · `#/chia-se` C5 | `v3/screens/Volunteer.jsx` |
+
+**Thành phần dùng chung** (`v3/ui.jsx`, `v3/theme.css`):
+- Khung và điều hướng: `Screen`, `Bar`, `Nav` (thanh điều hướng nổi theo đối tượng).
+- Danh sách và nhập liệu: `Group` và `Row`, `Btn`, `Seg`, `Keypad`.
+- Hình ảnh và trạng thái: `Art` (Bé Nai), `StateView`, `Banner`.
 
 **Luồng cuộc gọi:**
-1. Đổ chuông (A03a), bà bấm Nghe.
-2. Cúp máy, Bé Nai hỏi (A04a), phát giọng thu sẵn.
-3. Bà bấm "Có", mở A04b: AI chép lời và phân tích, tự báo Minh (`POST /api/alerts`).
-4. Minh trả lời, trong app hoặc trên trang Zalo, thì máy bà tự chuyển sang A08c.
+1. Đổ chuông có thẻ cảnh báo (A03). Bà bấm **Nghe**.
+2. Cúp máy, Bé Nai hỏi bằng giọng thu sẵn (A04a). Bà bấm **Có**.
+3. AI chép lời, tô dấu hiệu và tự báo Minh (A04b).
+4. Minh trả lời, trong app hoặc trên trang Zalo. Máy bà hiện lời trả lời thật to và đọc thành tiếng.
 
-Trên trình duyệt, A04b gửi bản chép lời mẫu; có khóa Gemini thì AI phân tích thật.
+**Bài học:**
+- Nếu máy chủ có trang của Mảng 4 (`/prototype/hoc.html`, truyện tranh cùng Bé Nai, gọi video nhân vật AI), app mở trang đó, đúng bài theo kiểu lừa đảo vừa gặp.
+- Nếu chưa có, app dùng 4 bài 1 phút và bài kiểm tra 5 câu trong `v3/lessons.js`.
+
+**Đường dây nóng 113, 156:** luôn chỉ mở màn gọi mô phỏng, không bao giờ quay số thật.
 
 ## Cầu nối với Android (cho Hoàng)
 
-App tự tìm `window.LCSNative`. Chưa có thì dùng cách thay thế để vẫn chạy trên trình duyệt (`src/lib/native.js`, `src/lib/links.js`).
+App tự tìm `window.LCSNative`. Chưa có thì dùng cách thay thế để vẫn chạy trên trình duyệt (`src/lib/native.js`).
 
 | Hàm | Trả về | Dùng ở |
 |---|---|---|
-| `speak(text)`, `stopSpeaking()` | | A08c đọc lời Minh, nút loa |
-| `listen()` | chữ nghe được | "Nói với Lá chắn" (A01a), "Nói" (A06a), kể lại (A09a) |
-| `call(phone)` | | "Gọi điện cho Minh", "Gọi 113" |
-| `blockNumber(phone)` | `true` nếu chặn được | A08c "Đã chặn số" |
-| `recentCalls()` | chuỗi JSON `[{phone, at, durationSec}]` | A06a "Từ nhật ký gọi" |
-| `weekStats()` | chuỗi JSON `{calls, messages, layersOn}` | A01a, A01b |
-| `openStory(scamType)` | | Mở đúng truyện (Mảng 4) |
-| `openSettings()` | | Tab "Tôi", thiết lập (A02) |
-| `analyzeRecording(phone)` | chuỗi JSON `AnalysisResult` | A04b: Android đọc tệp ghi âm của máy, gửi `POST /api/analyze/call`, trả kết quả |
-| `dismissStop()` | | A10a "Đóng cảnh báo": tắt lớp phủ |
+| `speak(text)`, `stopSpeaking()` | | Nút loa, lời người thân trả lời, màn khẩn cấp |
+| `listen()` | chữ nghe được | "Đọc số" (A2, A7), Bé Nai hỏi (A04a) |
+| `call(phone)` | | Gọi người thân đã lưu số (đường dây nóng thì không) |
+| `blockNumber(phone)` | `true` nếu chặn được | Thẻ cảnh báo lúc đổ chuông, lời trả lời "Chặn số" |
+| `analyzeRecording(phone)` | chuỗi JSON `AnalysisResult` | A04b: Android đọc tệp ghi âm, gửi `POST /api/analyze/call`, trả kết quả |
+| `endCall()` | | A10b "Cúp máy ngay" |
+| `dismissStop()` | | A10a "Đóng cảnh báo" |
+| `layers()` | chuỗi JSON `{calls, messages, banking, asleep}` | A02, E01a, Cá nhân: trạng thái 3 lớp |
+| `enableLayer(key)` | | A02 "Bật", E01a "Bật lại ngay": mở đúng màn xin quyền (`calls`, `messages`, `banking`) |
+| `setVoiceAsk(on)` | | Cá nhân: "Hỏi bằng giọng nói" |
+| `openStory(scamType)` | | Mở đúng bài học (Mảng 4) |
+| `weekStats()` | chuỗi JSON `{calls, messages, layersOn}` | Thống kê tuần (nếu có) |
 
-Ngoài ra có thể gán `window.LCS_API_BASE` (địa chỉ máy chủ) và `window.LCS_LEARN_URL` trước khi nạp trang. Đóng gói `dist/` vào `assets` của ứng dụng thì app vẫn mở được khi mất mạng (màn E01c).
-
-## Dùng lại cho Zalo và web (cho Đức)
-
-- **CSS:** `import '../../ds.css'`, như `src/main.jsx`.
-- **Thành phần:**
-  - `ui/Icon.jsx`: biểu tượng lấy từ `icons.js`.
-  - `ui/Phone.jsx`: khung màn hình, thanh tiêu đề, thanh điều hướng.
-  - `ui/result.jsx`: các khối của màn kết quả.
-- **Gọi máy chủ:** `lib/api.js`.
-- **Nhận sự kiện:** `lib/relay.js`, hàm `connectRoom(room, who, onEvent)`. Có sẵn đường dự phòng hỏi định kỳ.
+Gán `window.LCS_API_BASE` (địa chỉ máy chủ) trước khi nạp trang. Đóng gói `dist/` vào `assets` thì app vẫn mở được khi mất mạng (màn A2b).
 
 ## Kiểm tra
 
 ```bash
-python tools/chup-man.py chup/      # Selenium + Firefox: bấm qua 24 màn như người dùng (cả bước Minh trả lời trên trang Zalo), chụp để so với ../export/png/
+python tools/chup-man.py chup/                              # Selenium + Firefox: đi hết luồng của 3 đối tượng, chụp từng màn
+python tools/kiem-dien-thoai.py dt/ https://<ip>:8443       # khổ điện thoại qua HTTPS + laptop điều khiển từ xa, kiểm không tràn ngang
 ```
 
-## Khác thiết kế có chủ đích
+`chup-man.py` kiểm cả hành vi, không chỉ chụp màn:
+- Minh trả lời trên trang Zalo thì máy bà hiện lời.
+- Duyệt báo cáo thì máy chủ giảm số chờ duyệt.
+- Gửi cảnh báo thì máy chủ có tin.
+- Trả lời đúng hết thì ra 5/5.
 
-- **A05b:** tin dán vào hiện chip "Tin nhắn dán vào"; tin đến từ thông báo (Android) mới hiện "Ứng dụng nhắn tin · Người lạ".
-- **A05b, A09b:** câu "Báo … cho cộng đồng?" đổi theo đối tượng (số, đường dẫn, tin).
-- **A09a:** ô "Đính kèm bản ghi âm" mặc định chưa chọn, vì bản thuyết minh ghi bản ghi chỉ gửi khi người dùng chọn.
-- **A08c:** "Đã chặn số" chỉ hiện khi Android chặn được thật. Trên trình duyệt thì hiện nút "Chặn số".
-- **A09c:** chip trạng thái theo kết quả kiểm duyệt thật: đã xác nhận, chờ đội duyệt, hoặc chưa đủ căn cứ.
-- **E01d:** dùng lại cho tin có mã OTP. Lá chắn không gửi tin đó đi.
+Thiết kế 53 màn trước đây (`../screens/`, `../export/png/`) vẫn giữ trong kho để đối chiếu.

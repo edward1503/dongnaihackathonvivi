@@ -44,6 +44,12 @@ export const native = {
     return false
   },
 
+  // A10b "Cúp máy ngay": Android ngắt cuộc gọi đang diễn ra (TelecomManager.endCall)
+  endCall() {
+    if (N()?.endCall) return N().endCall()
+    return false
+  },
+
   // [{phone, at, durationSec}] mới nhất trước
   async recentCalls() {
     if (N()?.recentCalls) return parse(await N().recentCalls()) || []

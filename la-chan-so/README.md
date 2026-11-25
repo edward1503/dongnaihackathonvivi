@@ -6,6 +6,7 @@ Bài dự thi Hackathon thành phố Đồng Nai 2026. Lớp bảo vệ chống 
 - Thiết kế trên Figma: https://www.figma.com/design/KqUeRMoL69j6OfeDTwWp2v
 - Chia việc cho bản MVP 24 giờ: [`PHAN-CONG-TINH-NANG.md`](PHAN-CONG-TINH-NANG.md)
 - Bản thuyết minh 3 trang: [`thuyet-minh.md`](thuyet-minh.md)
+- **Chạy demo vòng chung kết (laptop + điện thoại, kịch bản trình diễn, AI dùng vào việc gì):** [`HUONG-DAN-CHAY-DEMO.md`](HUONG-DAN-CHAY-DEMO.md)
 
 ## Chạy bản mẫu tại máy
 
@@ -22,7 +23,7 @@ Phải mở qua `may-chu.py` (không mở thẳng tệp html): máy chủ này t
 | `screens/` | 53 màn thiết kế bằng HTML, dùng chung `ds.css` (design system), `icons.js`, `motion.css`, `motion.js` |
 | `prototype/` | Bản mẫu bấm được: vỏ `index.html`, chỗ bấm `hotspots.js`, dữ liệu giả lập `mock-data.js`, gọi video `video-call.html`, giọng `audio/` |
 | `server/` | Máy chủ và AI (Mảng 2): FastAPI, kiểm tra nhanh, phân tích tin nhắn và cuộc gọi, đồng bộ ba máy, báo cáo. Xem `server/README.md` |
-| `app/` | App React (Mảng 3), 18 màn của bà Hoa và Vy, chạy trong WebView hoặc trình duyệt. Xem `app/README.md` |
+| `app/` | App React (Mảng 3), giao diện V3 cho 3 đối tượng (người lớn tuổi, học sinh, đội tình nguyện) với linh vật Bé Nai, chạy trong WebView hoặc trình duyệt điện thoại. Xem `app/README.md` |
 | `assets/` | Tranh truyện, linh vật Bé Nai, phông chữ |
 | `vendor/vlearn-avatar/` | Bộ avatar khớp miệng (LiteAvatar) cho nhân vật chị Lan. Xem điều khoản của bộ avatar trước khi dùng công khai |
 | `export/` | Bản xuất từng màn: `svg/` (kéo vào Figma), `png/` (bản mẫu dùng làm ảnh dự phòng) |
@@ -40,7 +41,7 @@ AUDIT=1 node tools/export.mjs    # xuất lại toàn bộ màn và rà lỗi b�
 
 ## Quy ước
 
-- **Thiết kế:** tranh không có chữ (lời kể là chữ thật trên giao diện); không quốc huy, không bản đồ, không logo thật, không mặt người thật. Ngoại lệ: avatar chị Lan, có nhãn "AI đóng vai"; không dùng avatar người thật cho vai kẻ gian.
+- **Thiết kế:** tranh không có chữ (lời kể là chữ thật trên giao diện); không quốc huy, không bản đồ, không logo thật, không mặt người thật. Ngoại lệ: avatar chị Lan, có nhãn "AI đóng vai"; không dùng avatar người thật cho vai kẻ gian. Biểu trưng Đồng Nai đặt ở ô tên app đầu trang chủ và ở màn chào của app (cần ban tổ chức cho phép); biểu tượng app vẫn là khiên của đội.
 - **Linh vật:** Bé Nai. Viết "thành phố Đồng Nai".
 - **Người cao tuổi:** ưu tiên giọng nói, hai nút Có và Không, không có khung chat; Lá chắn tự báo người thân.
 - **Khi nào lên tiếng:** mặc định im lặng với số chưa lưu; 5 mức, xem màn D05.

@@ -1,7 +1,9 @@
 """Hợp đồng dữ liệu dùng chung cho app, Android, Zalo và web. Xem KE-HOACH-MANG-2-3.md mục 2."""
 from typing import Any, Literal, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
+
+from .data import LESSONS
 
 Kind = Literal["phone", "link", "account", "message", "call"]
 Level = Literal["danger", "suspicious", "safe", "unknown"]
@@ -41,6 +43,13 @@ class AnalysisResult(BaseModel):
     reports: ReportSummary = Field(default_factory=ReportSummary)
     source: Source
     confidence: float = 0.0
+    lesson: Optional[str] = None  # mã bài học của Mảng 4 (hoc.html?kieu=…); None: kiểu này chưa có bài
+
+    @model_validator(mode="after")
+    def _fill_lesson(self):
+        if self.lesson is None and self.scamType:
+            self.lesson = LESSONS.get(self.scamType)
+        return self
 
 
 # ---- Đầu vào ----
@@ -70,6 +79,7 @@ class AlertIn(BaseModel):
     callSeconds: Optional[int] = None
     timeline: list[dict[str, Any]] = []
     sender: str = Field("ba-hoa", alias="from")
+    eventId: Optional[str] = Field(None, max_length=80)  # mã sự kiện của bên gửi: gửi lại cùng mã thì không báo trùng
 
     model_config = {"populate_by_name": True}
 
@@ -144,3 +154,17 @@ class AppealIn(BaseModel):
 class AppealResolveIn(BaseModel):
     """Người duyệt xử lý khiếu nại: gỡ nhãn (remove) hoặc giữ nhãn (keep)."""
     outcome: Literal["remove", "keep"]
+
+
+class IntentIn(BaseModel):
+    """POST /api/roleplay/intent (app Android, Mảng 4). Lời người học đã được app thay dãy số riêng tư."""
+    scene: str = "lan-2"
+    text: str = Field(..., max_length=2000)
+    lastLine: str = "mo-dau"
+    scored: list[str] = []
+
+
+class SpeakIn(BaseModel):
+    """POST /api/roleplay/speak: đọc một câu bằng giọng của nhân vật (mã trong prototype/nhan-vat.json)."""
+    text: str = Field(..., max_length=1000)
+    character: Optional[str] = "lan"

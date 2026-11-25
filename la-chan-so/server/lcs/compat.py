@@ -133,6 +133,7 @@ class Alerts:
     def reset(self) -> None:
         self.items = [demo_alert()]
         self.broadcasts = []
+        self.by_event: dict[str, str] = {}  # mã sự kiện của bên gửi -> mã cảnh báo, để gửi lại không báo trùng
 
     def add(self, alert: dict) -> dict:
         self.items.insert(0, alert)
