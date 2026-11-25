@@ -17,10 +17,10 @@ export function Emergency() {
   const call = useCall()
   const first = relatives.find((r) => r.paired) || relatives[0]
   const elder = persona === 'elder'
-  // Bé Nai nói với bà Hoa: lễ phép, có "bà ơi", "nha", "ạ"
+  // Bé Nai nói với bà Hoa cùng giọng văn với các màn Android (DungLai, HoiSauCuocGoiActivity)
   const say = elder
-    ? 'Bà ơi, bà bình tĩnh nha, bà đừng chuyển tiền ạ. Bà làm ba bước nha: một là dừng lại, hai là cúp máy, ba là gọi cho người thân ạ.'
-    : 'Bạn bình tĩnh nhé, đừng chuyển tiền. Làm ba bước: một là dừng lại, hai là cúp máy, ba là gọi cho người thân.'
+    ? `Bà bình tĩnh nha. Bà đừng chuyển tiền nhé. Bà cúp máy, rồi gọi ${first?.name || 'con cháu'} hỏi trước cho chắc nha.`
+    : `Bạn bình tĩnh nhé, đừng chuyển tiền. Cúp máy, rồi gọi ${first?.name || 'người thân'} hỏi trước cho chắc.`
   useEffect(() => { buzz([400, 150, 400]); native.speak(say); return () => native.stopSpeaking() }, [])
   return (
     <Screen name="A5-khan-cap" tone="dang" bar={<Bar title="" left="x" onLeft={() => nav('/', { replace: true })} right={<Speak text={say} />} />}

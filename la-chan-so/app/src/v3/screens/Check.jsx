@@ -166,22 +166,22 @@ const LOOK = {
   safe: { tone: 'safe', word: 'AN TOÀN', icon: 'shieldok', c: 'safe', say: '' },
   unknown: { tone: null, word: 'CHƯA RÕ', icon: 'info', c: 'ink2', say: 'Chưa chắc là an toàn.' },
 }
-// Bé Nai đọc kết quả cho bà (câu mở đầu, sau đó đọc lời giải thích của máy chủ)
-const SAY_ELDER = {
-  danger: 'cái này nguy hiểm lắm ạ, bà đừng chuyển tiền nha.',
-  suspicious: 'cái này con thấy đáng ngờ đó bà, bà hỏi người thân trước rồi hẵng làm nha.',
-  safe: 'cái này con chưa thấy dấu hiệu lừa đảo ạ.',
-  unknown: 'cái này con chưa đủ thông tin, chưa chắc là an toàn đâu bà.',
-}
+// Bé Nai đọc kết quả cho bà, cùng giọng văn với màn hỏi sau cuộc gọi của Android (HoiSauCuocGoiActivity)
+const sayElder = (level, headline, ten) => ({
+  danger: `Nguy hiểm. Bà đừng chuyển tiền nhé. ${headline} Bà gọi ${ten} hỏi trước cho chắc nha.`,
+  suspicious: `Bà khoan chuyển tiền nhé. ${headline} Bà gọi ${ten} hỏi trước cho chắc nha.`,
+  safe: `Con chưa thấy dấu hiệu lừa đảo. Nếu họ gọi lại đòi tiền, bà cứ cúp máy nha.`,
+}[level] || `Con chưa đủ thông tin về cái này. Nếu ai giục chuyển tiền, bà gọi ${ten} hỏi trước cho chắc nha.`)
 const SELF = ['Tôi biết người nhận ngoài đời thật', 'Không ai giục tôi chuyển gấp', 'Không ai bảo tôi giữ bí mật']
 
 export function Result() {
   const nav = useNavigate()
-  const { result: r, setReport, persona } = useApp()
+  const { result: r, setReport, persona, relatives } = useApp()
+  const ten = (relatives.find((x) => x.paired) || relatives[0])?.name || 'con cháu'
   const [ticks, setTicks] = useState([])
   const L = LOOK[r?.level] || LOOK.unknown
-  // Câu đọc to viết theo văn nói (không đọc nguyên chữ trên màn hình); với bà thì Bé Nai thưa gửi lễ phép
-  const spoken = r ? (persona === 'elder' ? `Bà ơi, ${SAY_ELDER[r.level] || SAY_ELDER.unknown} ${r.headline}` : `Kết quả là ${L.word.toLowerCase()}. ${r.headline} ${L.say}`) : ''
+  // Câu đọc to viết theo văn nói (không đọc nguyên chữ trên màn hình)
+  const spoken = r ? (persona === 'elder' ? sayElder(r.level, r.headline, ten) : `Kết quả là ${L.word.toLowerCase()}. ${r.headline} ${L.say}`) : ''
   useEffect(() => {
     if (r && persona === 'elder' && localStorage.getItem('lcs.autoSpeak') !== '0') native.speak(spoken)
     return () => native.stopSpeaking()

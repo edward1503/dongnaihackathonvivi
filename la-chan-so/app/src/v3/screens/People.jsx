@@ -178,7 +178,7 @@ export function AskReply() {
   useEffect(() => {
     if (!ask?.reply) return
     buzz([200, 100, 200])
-    native.speak(`Bà ơi, ${ask.to?.name || 'người thân'} trả lời rồi nè: ${ask.reply.text}`)
+    native.speak(`${ask.to?.name || 'Người thân'} trả lời rồi nè bà: ${ask.reply.text}`)
     if (phone && ask.reply.preset === 'dung_chuyen' && native.available()) setBlocked(native.blockNumber(phone))
     return () => native.stopSpeaking()
   }, [ask?.reply, phone])
