@@ -1,0 +1,341 @@
+{
+ "_ghi_chu": "Bộ câu thu sẵn của anh Minh (con trai bà Hoa; xưng con, gọi mẹ) cho cuộc gọi video. Câu có tiền tố b<số bài>- là câu riêng của cảnh đó (xem prototype/canh/); câu không tiền tố dùng chung cho mọi cảnh của nhân vật. Nhóm: mo-dau, dem (tiếng chờ), su-co (im lặng, nghe không rõ), hoi/goi (câu hỏi gợi mở cho một ý, lần một và lần hai), nhan (nhận một ý), sua (người học khuyên sai), ket, chao. Cả bộ thu MỘT lượt duy nhất bằng giọng ghi ở prototype/nhan-vat.json rồi cắt, lọc rẹt, nghe kiểm, dựng hình miệng: tools/dung-bo-loi.sh. Thêm hay đổi một câu thì thu lại cả lượt.",
+ "nhan_vat": "minh",
+ "giong": "Achird",
+ "loi": [
+  {
+   "id": "dem-da",
+   "nhom": "dem",
+   "cam_xuc": "chăm chú",
+   "chu": "Dạ, dạ.",
+   "tep": "audio/minh/dem-da.m4a",
+   "giay": 1.28,
+   "kiem": "khop"
+  },
+  {
+   "id": "dem-coi",
+   "nhom": "dem",
+   "cam_xuc": "trầm ngâm",
+   "chu": "Dạ, để con coi.",
+   "tep": "audio/minh/dem-coi.m4a",
+   "giay": 1.43,
+   "kiem": "khop"
+  },
+  {
+   "id": "dem-um",
+   "nhom": "dem",
+   "cam_xuc": "ngẫm nghĩ",
+   "chu": "Ừm.",
+   "tep": "audio/minh/dem-um.m4a",
+   "giay": 0.88,
+   "kiem": "ngan"
+  },
+  {
+   "id": "dem-vay",
+   "nhom": "dem",
+   "cam_xuc": "lắng nghe",
+   "chu": "À, vậy hả mẹ.",
+   "tep": "audio/minh/dem-vay.m4a",
+   "giay": 1.53,
+   "kiem": "khop"
+  },
+  {
+   "id": "dem-nghe",
+   "nhom": "dem",
+   "cam_xuc": "ân cần",
+   "chu": "Dạ, con nghe nè.",
+   "tep": "audio/minh/dem-nghe.m4a",
+   "giay": 1.13,
+   "kiem": "khop"
+  },
+  {
+   "id": "dem-nghi",
+   "nhom": "dem",
+   "cam_xuc": "trầm ngâm",
+   "chu": "Để con nghĩ chút nha.",
+   "tep": "audio/minh/dem-nghi.m4a",
+   "giay": 1.46,
+   "kiem": "khop"
+  },
+  {
+   "id": "dem-o",
+   "nhom": "dem",
+   "cam_xuc": "ngẫm nghĩ",
+   "chu": "Ờ ha.",
+   "tep": "audio/minh/dem-o.m4a",
+   "giay": 0.94,
+   "kiem": "ngan"
+  },
+  {
+   "id": "dem-cho",
+   "nhom": "dem",
+   "cam_xuc": "nhẹ nhàng",
+   "chu": "Mẹ chờ con xíu nha.",
+   "tep": "audio/minh/dem-cho.m4a",
+   "giay": 1.33,
+   "kiem": "khop"
+  },
+  {
+   "id": "im-mot",
+   "nhom": "su-co",
+   "cam_xuc": "thăm dò",
+   "chu": "A lô, mẹ ơi, mẹ còn nghe con không?",
+   "tep": "audio/minh/im-mot.m4a",
+   "giay": 2.88,
+   "kiem": "khop"
+  },
+  {
+   "id": "im-hai",
+   "nhom": "su-co",
+   "cam_xuc": "kiên nhẫn",
+   "chu": "Con vẫn đang nghe nè. Mẹ nói một câu thôi cũng được nha.",
+   "tep": "audio/minh/im-hai.m4a",
+   "giay": 3.06,
+   "kiem": "khop"
+  },
+  {
+   "id": "im-ba",
+   "nhom": "su-co",
+   "cam_xuc": "dịu dàng",
+   "chu": "Chắc mẹ đang bận tay. Thôi để lát con gọi lại cho mẹ nha.",
+   "tep": "audio/minh/im-ba.m4a",
+   "giay": 3.65,
+   "kiem": "khop"
+  },
+  {
+   "id": "nghe-mot",
+   "nhom": "su-co",
+   "cam_xuc": "băn khoăn",
+   "chu": "Con nghe chưa rõ. Mẹ nói lại giúp con nha.",
+   "tep": "audio/minh/nghe-mot.m4a",
+   "giay": 2.68,
+   "kiem": "khop"
+  },
+  {
+   "id": "nghe-hai",
+   "nhom": "su-co",
+   "cam_xuc": "kiên nhẫn",
+   "chu": "Bên con vẫn nghe câu được câu mất. Mẹ nói chậm chậm, từng ý một nha.",
+   "tep": "audio/minh/nghe-hai.m4a",
+   "giay": 4.08,
+   "kiem": "khop"
+  },
+  {
+   "id": "chao-cup",
+   "nhom": "chao",
+   "cam_xuc": "thân tình",
+   "chu": "Dạ, vậy con cúp máy nha mẹ.",
+   "tep": "audio/minh/chao-cup.m4a",
+   "giay": 1.94,
+   "kiem": "khop"
+  },
+  {
+   "id": "chao-bua",
+   "nhom": "chao",
+   "cam_xuc": "ấm áp",
+   "chu": "Dạ, bữa khác hai mẹ con mình nói tiếp nha.",
+   "tep": "audio/minh/chao-bua.m4a",
+   "giay": 2.27,
+   "kiem": "khop"
+  },
+  {
+   "id": "chua-ro",
+   "nhom": "su-co",
+   "cam_xuc": "băn khoăn",
+   "chu": "Con chưa hiểu ý mẹ lắm.",
+   "tep": "audio/minh/chua-ro.m4a",
+   "giay": 1.7,
+   "kiem": "khop"
+  },
+  {
+   "id": "chua-ro-hai",
+   "nhom": "su-co",
+   "cam_xuc": "kiên nhẫn",
+   "chu": "Dạ, ý con hỏi là vầy nè mẹ.",
+   "tep": "audio/minh/chua-ro-hai.m4a",
+   "giay": 2.03,
+   "kiem": "lech-nhe"
+  },
+  {
+   "id": "lo-so",
+   "nhom": "su-co",
+   "cam_xuc": "vội ngăn, nhẹ nhàng",
+   "chu": "Ấy mẹ, mẹ đừng đọc số ra nha. Số điện thoại hay số thẻ thì mình không đọc cho ai hết.",
+   "tep": "audio/minh/lo-so.m4a",
+   "giay": 4.77,
+   "kiem": "khop"
+  },
+  {
+   "id": "ai-la",
+   "nhom": "su-co",
+   "cam_xuc": "thật thà",
+   "chu": "Dạ, con là trí tuệ nhân tạo đóng vai Minh để mẹ tập thôi ạ.",
+   "tep": "audio/minh/ai-la.m4a",
+   "giay": 4.11,
+   "kiem": "khop"
+  },
+  {
+   "id": "b1-mo-dau",
+   "nhom": "mo-dau",
+   "cam_xuc": "thân mật, hơi lo",
+   "chu": "Mẹ ơi, dạo này người ta hay giả công an gọi điện lắm. Lỡ họ gọi bảo mẹ chuyển tiền thì mẹ làm sao?",
+   "tep": "audio/minh/b1-mo-dau.m4a",
+   "giay": 6.49,
+   "kiem": "khop"
+  },
+  {
+   "id": "b1-nhan-cup",
+   "nhom": "nhan",
+   "cam_xuc": "gật gù",
+   "chu": "Dạ đúng rồi mẹ.",
+   "tep": "audio/minh/b1-nhan-cup.m4a",
+   "giay": 1.32,
+   "kiem": "khop"
+  },
+  {
+   "id": "b1-goi-cup",
+   "nhom": "goi",
+   "cam_xuc": "hỏi lại, nhẹ nhàng",
+   "chu": "Vậy lúc họ giục mẹ chuyển tiền, mẹ tính làm gì hả mẹ?",
+   "tep": "audio/minh/b1-goi-cup.m4a",
+   "giay": 2.96,
+   "kiem": "can-nghe"
+  },
+  {
+   "id": "b1-hoi-goicon",
+   "nhom": "hoi",
+   "cam_xuc": "hỏi thêm",
+   "chu": "Mà lỡ họ dặn mẹ đừng nói với con thì sao?",
+   "tep": "audio/minh/b1-hoi-goicon.m4a",
+   "giay": 3.17,
+   "kiem": "khop"
+  },
+  {
+   "id": "b1-goi-goicon",
+   "nhom": "goi",
+   "cam_xuc": "gợi mở",
+   "chu": "Lúc đó mẹ đang rối, mẹ sẽ hỏi ai cho chắc hả mẹ?",
+   "tep": "audio/minh/b1-goi-goicon.m4a",
+   "giay": 3.2,
+   "kiem": "khop"
+  },
+  {
+   "id": "b1-nhan-goicon",
+   "nhom": "nhan",
+   "cam_xuc": "yên lòng",
+   "chu": "Dạ, mẹ cứ gọi con, giờ nào con cũng nghe máy.",
+   "tep": "audio/minh/b1-nhan-goicon.m4a",
+   "giay": 2.91,
+   "kiem": "khop"
+  },
+  {
+   "id": "b1-sua",
+   "nhom": "sua",
+   "cam_xuc": "lo, nhẹ nhàng",
+   "chu": "Ấy mẹ ơi, vậy là con lo lắm đó. Công an thật đâu có ai đòi tiền qua điện thoại.",
+   "tep": "audio/minh/b1-sua.m4a",
+   "giay": 5.03,
+   "kiem": "khop"
+  },
+  {
+   "id": "b1-ket-du",
+   "nhom": "ket",
+   "cam_xuc": "cười, yên tâm",
+   "chu": "Vậy là con yên tâm rồi. Có gì lạ mẹ cứ gọi con liền nha.",
+   "tep": "audio/minh/b1-ket-du.m4a",
+   "giay": 3.58,
+   "kiem": "khop"
+  },
+  {
+   "id": "b1-ket-thieu",
+   "nhom": "ket",
+   "cam_xuc": "ấm áp",
+   "chu": "Dạ, cuối tuần con về, hai mẹ con mình nói kỹ hơn nha. Có gì lạ mẹ cứ gọi con liền.",
+   "tep": "audio/minh/b1-ket-thieu.m4a",
+   "giay": 4.97,
+   "kiem": "khop"
+  },
+  {
+   "id": "b3-mo-dau",
+   "nhom": "mo-dau",
+   "cam_xuc": "nửa đùa nửa thật",
+   "chu": "Mẹ ơi, lỡ có ai nhắn là con bị tai nạn, cần tiền gấp, thì mẹ làm gì trước?",
+   "tep": "audio/minh/b3-mo-dau.m4a",
+   "giay": 4.41,
+   "kiem": "khop"
+  },
+  {
+   "id": "b3-nhan-goithang",
+   "nhom": "nhan",
+   "cam_xuc": "gật gù",
+   "chu": "Dạ, phải rồi mẹ.",
+   "tep": "audio/minh/b3-nhan-goithang.m4a",
+   "giay": 1.24,
+   "kiem": "can-nghe"
+  },
+  {
+   "id": "b3-goi-goithang",
+   "nhom": "goi",
+   "cam_xuc": "hỏi lại, nhẹ nhàng",
+   "chu": "Lúc nghe tin dữ vậy, việc đầu tiên mẹ làm là gì hả mẹ?",
+   "tep": "audio/minh/b3-goi-goithang.m4a",
+   "giay": 2.9,
+   "kiem": "khop"
+  },
+  {
+   "id": "b3-hoi-soluu",
+   "nhom": "hoi",
+   "cam_xuc": "hỏi thêm",
+   "chu": "Mà mẹ tìm số của con ở đâu vậy mẹ?",
+   "tep": "audio/minh/b3-hoi-soluu.m4a",
+   "giay": 2.13,
+   "kiem": "cho-nghe"
+  },
+  {
+   "id": "b3-goi-soluu",
+   "nhom": "goi",
+   "cam_xuc": "gợi mở",
+   "chu": "Trong tin nhắn họ cũng để sẵn một số điện thoại. Mẹ tìm số của con ở chỗ nào cho chắc hả mẹ?",
+   "tep": "audio/minh/b3-goi-soluu.m4a",
+   "giay": 4.45,
+   "kiem": "cho-nghe"
+  },
+  {
+   "id": "b3-nhan-soluu",
+   "nhom": "nhan",
+   "cam_xuc": "yên lòng",
+   "chu": "Dạ, số mẹ lưu sẵn trong máy mới là số của con.",
+   "tep": "audio/minh/b3-nhan-soluu.m4a",
+   "giay": 3.11,
+   "kiem": "can-nghe"
+  },
+  {
+   "id": "b3-sua",
+   "nhom": "sua",
+   "cam_xuc": "lo, nhẹ nhàng",
+   "chu": "Ấy mẹ, khoan đã mẹ. Tiền chuyển đi rồi khó lấy lại lắm.",
+   "tep": "audio/minh/b3-sua.m4a",
+   "giay": 3.13,
+   "kiem": "can-nghe"
+  },
+  {
+   "id": "b3-ket-du",
+   "nhom": "ket",
+   "cam_xuc": "vui",
+   "chu": "Chuẩn luôn mẹ. Nhà mình hẹn nhau một câu hỏi riêng nữa nha.",
+   "tep": "audio/minh/b3-ket-du.m4a",
+   "giay": 4.31,
+   "kiem": "khop"
+  },
+  {
+   "id": "b3-ket-thieu",
+   "nhom": "ket",
+   "cam_xuc": "ấm áp",
+   "chu": "Dạ, bữa nào con về, hai mẹ con mình tập lại nha. Nghe tin gì lạ mẹ cứ gọi con trước đã.",
+   "tep": "audio/minh/b3-ket-thieu.m4a",
+   "giay": 4.79,
+   "kiem": "khop"
+  }
+ ],
+ "_kiem": "Trường kiem của từng câu = kết quả nghe lại bằng máy ngày 25/11/2026 (hai mô hình độc lập): khop = cả hai chép đúng câu; lech-nhe = chỉ lệch tiếng đệm hoặc chữ gần âm; can-nghe = hai máy chép khác nhau hoặc cùng chép sai một chữ, CẦN NGƯỜI NGHE trước khi dùng; ngan = câu dưới khoảng 1,5 giây, máy không kiểm được. Chưa có người nghe câu nào."
+}

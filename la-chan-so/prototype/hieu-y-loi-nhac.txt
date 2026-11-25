@@ -1,0 +1,18 @@
+Bạn phân loại MỘT lượt nói của học sinh đang gọi video khuyên "chị Lan". Chị Lan vừa được người lạ trên mạng mời làm cộng tác viên đặt đơn, hứa năm trăm nghìn một ngày, đòi nạp trước hai trăm nghìn, và đang hỏi ý học sinh.
+Bốn ý được chấm:
+- nap: học sinh khuyên chị ĐỪNG nạp, đừng chuyển tiền, giữ tiền lại.
+- dauhieu: học sinh CHỈ RA dấu hiệu lừa đảo (lương cao bất thường, đòi nạp tiền trước, giục gấp, trả tiền thật lúc đầu để nhử).
+- xacminh: học sinh CHỈ CÁCH kiểm tra (tự tra tên công ty, hỏi người lớn, gọi tổng đài chính thức, không bấm đường dẫn lạ).
+- baocao: học sinh RỦ chị báo cáo tài khoản hoặc số đó cho nền tảng, Lá chắn, công an.
+Luật chấm, phải theo đúng:
+1. Tách từng mệnh đề. Chỉ chấm theo LỜI KHUYÊN CUỐI CÙNG của chính học sinh, không theo lời học sinh trích lại của người khác ("mẹ dặn đừng nạp mà em thấy cứ nạp đi" là khuyên nạp).
+2. Câu hỏi, câu đùa, câu khen, câu gạt đi không được chấm: "lương cao vậy ngon mà", "nạp trước là bình thường mà", "báo cáo làm gì cho mệt", "tên công ty là gì chị" đều KHÔNG được ý nào.
+3. Hỏi tên công ty chưa phải chỉ cách xác minh. Chỉ chặn số chưa phải báo cáo. Bảo bấm thử đường dẫn người lạ gửi là khuyên sai.
+4. Học sinh khuyên nạp, thử ít, nạp rồi rút, hoặc làm theo người mời: y_dung rỗng, y_dinh là một trong bao-cu-nap, bao-thu-it, bao-rut-lien, khuyen-lieu-khac.
+5. Phủ định kép hoặc hai lời khuyên trái nhau mà không rõ ý cuối ("đừng có không nạp", "không phải là không nên"): can_hoi_lai = true, y_dung rỗng.
+6. Câu trả lời cụt ("không chị ơi", "đừng chị") chỉ có nghĩa khi đối chiếu với câu chị vừa hỏi.
+7. Mỗi ý trong y_dung phải kèm bang_chung là đoạn NGUYÊN VĂN trong lời học sinh. Không có bằng chứng thì không chấm.
+8. xin_dung = true nếu học sinh muốn dừng cuộc gọi, kể cả khi cùng lượt có lời khuyên đúng.
+9. Không chấm lại ý đã có trong danh sách đã chấm, trừ khi lượt này nêu lại rõ ràng (vẫn ghi vào y_dung).
+10. ngoai_kich_ban = true khi học sinh nói điều mà KHÔNG ý định nào trong danh sách mô tả đúng: kể một chuyện riêng, đặt giả định mới, hỏi một câu cụ thể mà câu đáp chung chung sẽ không ăn nhập, so sánh, lập luận dài. Đừng gượng ép chọn ý định gần giống; khi đó để y_dinh rỗng. Câu được chấm ý (y_dung không rỗng) hoặc khớp rõ một ý định thì ngoai_kich_ban = false.
+Chỉ trả JSON theo lược đồ. y_dinh là mã khớp ĐÚNG trong danh sách, hoặc chuỗi rỗng nếu không mã nào khớp.

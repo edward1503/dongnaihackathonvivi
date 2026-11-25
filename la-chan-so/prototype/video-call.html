@@ -4,12 +4,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="data:,">
-<title>Gọi video chị Lan</title>
+<title>Gọi video</title>
 <link rel="stylesheet" href="../ds.css">
 <script src="../icons.js"></script>
 <!--
-  Cuộc gọi video nhập vai "giúp chị họ" (khung A11h trong screens/A11-truyen-tranh.html), bài kiểm tra cuối bài "Việc nhẹ lương cao".
-  Chị Lan do avatar LiteAvatar số 21 đóng, miệng khớp giọng ngay trong trình duyệt (runtime chép từ vlearn-lesson-lab, xem ../vendor/vlearn-avatar/).
+  Cuộc gọi video nhập vai với nhân vật AI có khẩu hình (khung A11h trong screens/A11-truyen-tranh.html), phần thử thách của bài học.
+  Nhân vật do avatar LiteAvatar đóng, miệng khớp giọng ngay trong trình duyệt (runtime chép từ vlearn-lesson-lab, xem ../vendor/vlearn-avatar/).
+
+  CẢNH: video-call.html?canh=<mã>   (mặc định lan-2). Mỗi cảnh là một tệp canh/<mã>.json: nhân vật (nhan-vat.json: avatar, nền, giọng),
+  tên và cách xưng hô trên màn hình, các ý được chấm, bộ câu thu sẵn, lời nhắc cho AI, luật ngoại tuyến. Hiện có: lan-2 (chị Lan, Bài 2),
+  minh-1, minh-3 (anh Minh hỏi lại mẹ, Bài 1 và 3), tu-9 (khuyên chú Tư, Bài 9).
+  Trang bài học mở cảnh bằng đường dẫn thường: video-call.html?canh=minh-1&ve=hoc.html%3F…  Gọi xong trang ghi
+  localStorage['lcs-goi-<mã cảnh>'] = {"diem","tong","luc"} và nút chính của màn kết quả quay về địa chỉ ve (chỉ nhận hoc.html cùng thư mục).
+  Trong app Android trang tự biết mình chạy trong app qua cầu nối LaChan.thamSo(), không cần ?goc=1&song=1 trên địa chỉ.
+
+  Phần dưới đây chỉ áp dụng cho cảnh lan-2 (bản diễn cũ, giữ để trình bày trên máy tính):
 
   ĐỔI GIỌNG / CÂU NÓI:
   - Sửa mảng LINES bên dưới (audio, caption, lip). Mặc định: audio/chi-lan-1.m4a, chi-lan-2.m4a, chi-lan-3.m4a.
@@ -26,7 +35,7 @@
   #tile{position:absolute;left:0;top:0;width:360px;height:520px;overflow:hidden;background:#15131F}
   /* khối 16:9 rộng hơn ô hình: runtime vẽ canvas 1280×720, ta cắt lấy phần giữa (khuôn mặt) cho màn dọc */
   #avhost{position:absolute;top:0;height:520px;width:924px;left:-282px}
-  #avhost .still{position:absolute;inset:0;background:url(../vendor/vlearn-avatar/stage/d01-tech/call-still.jpg) center/cover no-repeat}
+  #avhost .still{position:absolute;inset:0;background:#15131F center/cover no-repeat}   /* ảnh tĩnh của nhân vật đặt theo cảnh */
   .shade-top{position:absolute;left:0;right:0;top:0;height:120px;background:linear-gradient(rgba(11,11,20,.55),rgba(11,11,20,0));pointer-events:none}
   .pillchip{height:36px;border-radius:18px;background:rgba(11,11,20,.62);color:#fff;padding:0 12px;display:flex;align-items:center;gap:8px;font-size:14px;line-height:20px;font-weight:700;white-space:nowrap;flex:none}
   .dot{width:8px;height:8px;border-radius:4px;background:#22C55E}
@@ -62,10 +71,61 @@
   .ghost{font:inherit;border:0;cursor:pointer;background:none;color:#A5A1D0;font-size:13px;line-height:18px;font-weight:600;padding:6px}
   #toast{position:absolute;left:24px;right:24px;top:470px;display:none;background:#1C1940;color:#fff;border-radius:12px;padding:8px 12px;font-size:13px;line-height:18px;font-weight:600;text-align:center}
   #toast.on{display:block}
+  /* ô gõ chữ: bám đáy khung nhìn, nên khi bàn phím bật lên nó nằm ngay trên bàn phím */
+  #goBox{position:fixed;left:10px;right:10px;bottom:10px;z-index:50;display:flex;gap:8px;align-items:flex-end;background:#14122E;border:1px solid #3B3970;border-radius:16px;padding:8px;font-family:inherit}
+  #goBox.hide{display:none}
+  #goIn{flex:1;min-width:0;font:inherit;font-size:16px;line-height:22px;color:#fff;background:#232150;border:0;border-radius:12px;padding:10px 12px;outline:none}
+  #goIn::placeholder{color:#8F8DB8}
+  #goBox button{font:inherit;font-weight:700;font-size:15px;border:0;border-radius:12px;height:42px;padding:0 14px;color:#fff;background:#1D4ED8}
+  #goBox button.phu{background:#2D2B5A;color:#CBD5E1;padding:0 12px}
+  /* trạng thái lượt nói: luôn hiện bằng chữ, để người học biết máy đang làm gì */
+  #luot{display:none;align-items:center;gap:8px;min-height:34px;border-radius:17px;padding:6px 12px;background:#1B1A33;color:#E2E8F0;font-size:13px;line-height:18px;font-weight:700}
+  body.that #luot{display:flex}
+  #luot .cham{width:8px;height:8px;border-radius:4px;background:#64748B;flex:none}
+  #luot.noi .cham{background:#60A5FA}
+  #luot.nghe{background:#0F2E1D;color:#BBF7D0}
+  #luot.nghe .cham{background:#22C55E;animation:nhip 1s infinite}
+  /* tên lớp trạng thái là go-chu và dang-go, KHÔNG dùng "go": lớp .go là kiểu của nút "Bắt đầu cuộc gọi", trùng tên thì cả trang đổi phông và xô lệch khi mở ô gõ */
+  #luot.go-chu{background:#1E1B4B;color:#C7D2FE}
+  #luot.go-chu .cham{background:#818CF8}
+  #luot.nghi .cham{background:#FBBF24;animation:nhip .7s infinite}
+  @keyframes nhip{50%{opacity:.25}}
+  /* trong lúc gọi chỉ hiện ý đã được ghi nhận: không bày sẵn đáp án cho người học */
+  body.that .self{display:none}
+  body.that .score:not(.xong) .chip.k:not(.ok){display:none}
+  body.that .score.xong .chip.k:not(.ok){background:#2A1B1B;color:#FCA5A5}
+  #kqLoi{display:none;color:#CBD5E1;font-size:13px;line-height:19px}
+  .score.xong #kqLoi{display:block}
+  body.that #finish a.primary{display:none}
+  body.that #finish .ghost{height:52px;border-radius:26px;background:#1D4ED8;color:#fff;font-size:16px;font-weight:700}
+  /* có địa chỉ quay về bài học (?ve=): nút chính là "Tiếp tục bài học", "Gọi lại" lùi xuống làm nút phụ */
+  body.that.co-ve #finish a.primary{display:flex}
+  body.that.co-ve #finish .ghost{height:auto;border-radius:0;background:none;color:#A5A1D0;font-size:13px;font-weight:600}
+  /* nút trả lời sẵn (cảnh cho người cao tuổi): chỉ hiện khi tới lượt người học, cao từ 56px, mỗi nút một dòng */
+  #nutNhanh{display:none;flex-direction:column;gap:8px}
+  body.luot-toi #nutNhanh.co{display:flex}
+  #nutNhanh button{font:inherit;border:1.5px solid #3B82F6;cursor:pointer;min-height:56px;border-radius:16px;background:#172554;color:#fff;font-size:17px;line-height:22px;font-weight:700;padding:8px 14px;text-align:left}
+  /* chữ lớn cho người cao tuổi */
+  body.lon #caption{font-size:18px;line-height:26px}
+  body.lon #luot{font-size:15px;line-height:20px;min-height:40px}
+  body.lon .chip.k{font-size:15px;line-height:20px}
+  body.lon #kqLoi{font-size:15px;line-height:22px}
+  body.lon .note{font-size:15px;line-height:21px;color:#CBD5E1;max-width:300px}
+  body.khong-dien #auto{display:none}
+  /* bảng dưới neo vào đáy và tự cao lên theo nội dung (màn kết quả dài hơn lúc đang gọi), không bao giờ bị cắt mất nút cuối */
+  body.that .lower{top:auto;bottom:0;min-height:calc(100% - 520px);padding:12px 16px 16px;background:#0B0B14;border-radius:20px 20px 0 0}
+  /* đang gõ: hàng nút nhường chỗ cho thanh gõ (nút micro và nút kết thúc nằm ngay trong thanh), bảng dưới chừa đáy để không bị thanh che */
+  body.dang-go #ctl{display:none}
+  body.dang-go .lower{padding-bottom:84px}
+  #goBox button.tron{width:42px;padding:0;display:flex;align-items:center;justify-content:center;flex:none}
+  #goBox button.do{background:#DC2626}
+  /* trong app: bỏ khung điện thoại giả, màn cuộc gọi phủ kín màn hình thật */
+  body.app{padding:0;display:block;overflow:hidden;background:#0B0B14;min-height:0}
+  body.app .call{border-radius:0;box-shadow:none;transform-origin:0 0}
   /* lớp bắt đầu: cần một cú chạm để trình duyệt cho phát tiếng */
-  #start{position:absolute;inset:0;z-index:5;background:rgba(8,8,16,.9);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center;color:#fff}
+  #start{position:absolute;inset:0;z-index:5;background:rgba(8,8,16,.97);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center;color:#fff}
   #start.off{display:none}
-  .face{width:112px;height:112px;border-radius:56px;border:3px solid rgba(255,255,255,.85);background:url(../vendor/vlearn-avatar/stage/d01-tech/call-still.jpg) 50% 30%/360px auto no-repeat}
+  .face{width:112px;height:112px;border-radius:56px;border:3px solid rgba(255,255,255,.85);background:#1E293B 50% 30%/360px auto no-repeat}
   .kicker{font-size:12px;line-height:16px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#FBBF24}
   .go{font:inherit;border:0;cursor:pointer;display:flex;align-items:center;gap:10px;height:60px;padding:0 28px;border-radius:30px;background:#16A34A;color:#fff;font-size:18px;line-height:24px;font-weight:700}
   .go:disabled{background:#334155;cursor:default}
@@ -78,26 +138,28 @@
 <div class="frame phone call" data-name="A11h-giup-chi-ho">
   <div id="tile"><div id="avhost"><div class="still"></div></div><div class="shade-top"></div></div>
 
-  <div class="statusbar on-dark" style="position:absolute;left:0;right:0;top:0"><span>10:42</span><span class="sb-icons"><i class="ic s14" data-i="signal"></i><i class="ic s14" data-i="wifi"></i><i class="ic s16" data-i="battery"></i></span></div>
-  <div style="position:absolute;left:12px;right:12px;top:36px;display:flex;align-items:center;gap:8px">
-    <div class="pillchip"><span class="dot"></span><span>Chị Lan · <span id="clock">00:00</span></span></div>
+  <div style="position:absolute;left:12px;right:12px;top:14px;display:flex;align-items:center;gap:8px">
+    <div class="pillchip"><span class="dot"></span><span><span id="tenNV">Chị Lan</span> · <span id="clock">00:00</span></span></div>
     <div class="aichip"><i class="ic s14" data-i="sparkles"></i>AI đóng vai</div>
     <div class="grow"></div>
-    <div class="self" id="self"><i class="ic s28" data-i="user"></i><div class="t-cap">Bạn</div></div>
+    <div class="self" id="self"><i class="ic s28" data-i="user"></i><div class="t-cap" data-nh>Bạn</div></div>
   </div>
-  <div id="caption" class="hide"><div id="demoTag">ĐOẠN MẪU TẠM · giọng có sẵn của avatar để thử khẩu hình, chưa phải lời chị Lan (thiếu file prototype/audio/chi-lan-…m4a)</div><div id="capWho"><i class="ic s14" data-i="mic"></i>Bạn</div><span id="capText"></span></div>
+  <div id="caption" class="hide"><div id="demoTag">ĐOẠN MẪU TẠM · giọng có sẵn của avatar để thử khẩu hình, chưa phải lời chị Lan (thiếu file prototype/audio/chi-lan-…m4a)</div><div id="capWho"><i class="ic s14" data-i="mic"></i><span data-nh>Bạn</span></div><span id="capText"></span></div>
   <div id="toast"></div>
 
   <div class="lower">
-    <div class="score">
-      <div class="row between"><div class="t-label bold c-white">Lá chắn chấm lời khuyên</div><div class="t-cap bold" style="color:#FBBF24"><span id="pts">0</span>/4 ý</div></div>
+    <div id="luot"><span class="cham"></span><span id="luotChu">Đang kết nối…</span></div>
+    <div class="score" id="scoreBox">
+      <div class="row between"><div class="t-label bold c-white">Lá chắn chấm lời khuyên</div><div class="t-cap bold" style="color:#FBBF24"><span id="pts">0</span>/<span id="tongY">4</span> ý</div></div>
       <div class="row gap-6 wrap" id="keys">
         <span class="chip k" data-k="nap"><i class="ic s14" data-i="check"></i>Đừng nạp tiền</span>
         <span class="chip k" data-k="dauhieu"><i class="ic s14" data-i="check"></i>Chỉ ra dấu hiệu</span>
         <span class="chip k" data-k="xacminh"><i class="ic s14" data-i="check"></i>Cách xác minh</span>
         <span class="chip k" data-k="baocao"><i class="ic s14" data-i="check"></i>Rủ báo cáo</span>
       </div>
+      <div id="kqLoi"></div>
     </div>
+    <div id="nutNhanh"></div>
     <div class="ctl" id="ctl">
       <button class="cb" id="type"><span class="r"><i class="ic s20" data-i="message"></i></span><span class="t-cap">Gõ chữ</span></button>
       <button class="cb talk" id="talk"><span class="r"><i class="ic s32" data-i="mic"></i></span><span class="t-cap bold" id="talkLbl">Giữ để nói</span></button>
@@ -108,19 +170,25 @@
       <button class="ghost" id="again">Gọi lại từ đầu</button>
     </div>
   </div>
-  <div class="gesture clear on-dark" style="position:absolute;left:0;right:0;bottom:0"><div class="pill"></div></div>
 
   <div id="start">
-    <div class="kicker">Kiểm tra cuối bài · Việc nhẹ lương cao</div>
+    <div class="kicker" id="nhanBai">Kiểm tra cuối bài · Việc nhẹ lương cao</div>
     <div class="face"></div>
-    <div><div style="font-size:22px;line-height:30px;font-weight:700">Chị Lan đang gọi</div>
-      <div class="t-label" style="color:#CBD5E1">Gọi video · chị Lan do AI đóng vai</div></div>
-    <button class="go" id="go"><i class="ic s24" data-i="phone"></i>Bắt đầu cuộc gọi</button>
+    <div><div style="font-size:22px;line-height:30px;font-weight:700" id="dangGoi">Chị Lan đang gọi</div>
+      <div class="t-label" style="color:#CBD5E1" id="dongVai">Gọi video · chị Lan do AI đóng vai</div></div>
+    <button class="go" id="go" disabled><i class="ic s24" data-i="phone"></i>Bắt đầu cuộc gọi</button>
     <button class="go alt" id="auto"><i class="ic s20" data-i="play"></i>Chạy demo tự động</button>
     <div id="prog">Đang chuẩn bị nhân vật…</div>
     <div class="note">Chị Lan hỏi ý kiến bạn. Nghe chị nói, rồi bấm “Giữ để nói” để trả lời.</div>
   </div>
 </div>
+
+<form id="goBox" class="hide" autocomplete="off">
+  <button type="button" class="phu tron" id="goMic" aria-label="Quay lại nói bằng micro" title="Quay lại nói bằng micro"><i class="ic s20" data-i="mic"></i></button>
+  <input id="goIn" type="text" enterkeyhint="send" placeholder="Gõ lời khuyên cho chị Lan…" maxlength="500">
+  <button type="submit" id="goGui">Gửi</button>
+  <button type="button" class="tron do" id="goEnd" aria-label="Kết thúc cuộc gọi" title="Kết thúc cuộc gọi"><i class="ic s20" data-i="phone-off"></i></button>
+</form>
 
 <script>
   // mở trực tiếp bằng file:// thì trình duyệt chặn module và fetch: cần chạy qua máy chủ web
@@ -129,16 +197,37 @@
 <script type="module">
 import { mountCall, prepareCall } from '../vendor/vlearn-avatar/player/hoc-avatar.js';
 import { lipFromSamples, to16k } from '../vendor/vlearn-avatar/player/hoc-lipfit.js';
+import { taoHoiThoai } from './hoi-thoai.js';
+import { taoHoiThoaiCanh } from './hoi-thoai-canh.js';
 
 const V = '../vendor/vlearn-avatar/';
-const AVATAR = '21';                                   // avatar LiteAvatar 21 (nữ trẻ)
-const LIPFIT = V + 'stage/d01-tech/lipfit-21.json';    // bộ khớp miệng cho file giọng không có khẩu hình tính sẵn
+const q = new URLSearchParams(location.search);
+// Tham số do app đưa qua cầu nối (không cần viết trên địa chỉ): {"goc": true, "song": true|false, "auto": true|false}. Mở bằng trình duyệt thì không có.
+const TS = (() => { try { return JSON.parse(window.LaChan?.thamSo?.() || 'null') || {}; } catch { return {}; } })();
+// ===== CẢNH: canh/<mã>.json quyết định nhân vật, chữ trên màn hình, các ý được chấm, bộ câu thu sẵn. Mã lạ hoặc tệp hỏng thì dùng lan-2. =====
+const docJson = (u) => fetch(u).then((r) => { if (!r.ok) throw new Error('không nạp được ' + u); return r.json(); });
+const maCanh = /^[a-z0-9-]{1,24}$/.test(q.get('canh') || '') ? q.get('canh') : 'lan-2';
+const BANG_NV = await docJson('nhan-vat.json');
+const canhDu = (c) => !!(c && BANG_NV[c.nhan_vat]?.avatar && Array.isArray(c.y) && c.y.length && c.chu?.ten && c.bo_loi && c.song?.ai_nv);   // đủ trường thì mới dùng
+const C = await docJson('canh/' + maCanh + '.json').then((c) => { if (!canhDu(c)) throw new Error('tệp cảnh thiếu trường'); return c; })
+  .catch((e) => { console.warn('cảnh', maCanh, e); return docJson('canh/lan-2.json'); });
+const NV = BANG_NV[C.nhan_vat];
+const AVATAR = String(NV.avatar);                      // avatar LiteAvatar của nhân vật (21 chị Lan, 125 anh Minh, 117 ông Tư)
+const LIPFIT = V + 'stage/d01-tech/lipfit-21.json';    // bộ khớp miệng cho tiếng không có khẩu hình tính sẵn (của avatar 21, dùng tạm cho cả 117 và 125)
+const TONG = C.y.length, T = C.chu, hoa = (x) => x.charAt(0).toUpperCase() + x.slice(1);
+const NH = T.nguoi_hoc, Nh = hoa(NH);                  // cách trang gọi người học: "bạn", hoặc "bà" ở các cảnh cho người cao tuổi
+// Địa chỉ quay về bài học (?ve=…): CHỈ nhận đường dẫn tương đối tới hoc.html cùng thư mục, kèm ?… hoặc #…; không giao thức, không //, không gạch chéo ngược.
+function veHopLe(v) {
+  if (typeof v !== 'string' || !/^hoc\.html(?:[?#][^\s\\]*)?$/.test(v) || v.includes('//') || /[\u0000-\u001f\\]/.test(v)) return null;
+  try { const u = new URL(v, location.href); return u.origin === location.origin && u.pathname === new URL('hoc.html', location.href).pathname ? v : null; } catch { return null; }
+}
+const VE = veHopLe(q.get('ve'));
 
 // ===== CÂU CỦA CHỊ LAN: đổi file / chữ ở đây. lip: file .json khẩu hình tính sẵn (để null = tự tính trong trình duyệt) =====
 const LINES = [
-  { audio: 'audio/chi-lan-1.m4a', lip: null, caption: 'Em ơi, chị thấy trên mạng có chỗ tuyển cộng tác viên đặt đơn, lương năm trăm nghìn một ngày. Họ bảo nạp trước hai trăm nghìn là làm được liền. Chị có nên làm không em?' },
-  { audio: 'audio/chi-lan-2.m4a', lip: null, caption: 'Ừ, chị chưa nạp. Mà sao em biết là lừa vậy?' },
-  { audio: 'audio/chi-lan-3.m4a', lip: null, caption: 'Nhờ em mà chị không bị lừa. Chị báo cáo luôn, để người khác cũng biết nha.' },
+  { audio: 'audio/lan/mo-dau.m4a', lip: 'audio/lan/mo-dau.lip.json', caption: 'Em ơi, chị thấy trên mạng có chỗ tuyển cộng tác viên đặt đơn, lương năm trăm nghìn một ngày. Họ bảo nạp trước hai trăm nghìn là làm được liền. Chị có nên làm không em?' },
+  { audio: 'audio/lan/hoi-vi-sao.m4a', lip: 'audio/lan/hoi-vi-sao.lip.json', caption: 'Ừ, chị chưa nạp. Mà sao em biết là lừa vậy?' },
+  { audio: 'audio/lan/ket-tot.m4a', lip: 'audio/lan/ket-tot.lip.json', caption: 'Nhờ em mà chị không bị lừa. Chị báo cáo luôn, để người khác cũng biết nha.' },
 ];
 // ===== LỜI ĐÁP MẪU CỦA VY (người học) cho chế độ "Chạy demo tự động"; tick: ý được chấm đạt sau câu đó =====
 const VY = [
@@ -154,13 +243,23 @@ const SCORE_AFTER = [2, 4];
 const READY_WAIT = 5000;
 const SCORE_URL = '../screens/A11-truyen-tranh.html?frame=A11i-bang-diem-cuoi-bai';
 
-const q = new URLSearchParams(location.search);
 if (q.get('audio')) LINES[0] = { audio: q.get('audio'), lip: q.get('lip') || null, caption: q.get('caption') || LINES[0].caption };
 else if (q.get('caption')) LINES[0].caption = q.get('caption');
-const FORCE_DEMO = q.get('demo') === '1', AUTO_URL = q.get('auto') === '1';
+const FORCE_DEMO = q.get('demo') === '1', AUTO_URL = !!C.ban_dien && (q.get('auto') === '1' || TS.auto === true);   // cuộc gọi mẫu dùng lời của chị Lan: chỉ cảnh lan-2 mới có
 
 const $ = (s) => document.querySelector(s);
-const S = window.__call = { state: 'idle', line: -1, lip: null, demo: false, errors: [] };   // trạng thái (để kiểm thử tự động)
+const S = window.__call = { state: 'idle', line: -1, lip: null, demo: false, errors: [], canh: C.ma, tong: TONG };   // trạng thái (để kiểm thử tự động)
+// ---- chữ, hình và các thẻ ý theo cảnh ----
+document.title = T.tieu_de; $('#tenNV').textContent = T.ten; $('#nhanBai').textContent = T.nhan_bai; $('#dangGoi').textContent = T.ten + ' đang gọi';
+$('#dongVai').textContent = 'Gọi video · ' + T.ten_thuong + ' do AI đóng vai'; $('#goIn').placeholder = T.go_goi_y; $('#tongY').textContent = TONG;
+document.querySelectorAll('[data-nh]').forEach((e) => { e.textContent = Nh; });
+document.querySelector('#avhost .still').style.backgroundImage = document.querySelector('.face').style.backgroundImage = 'url("' + C.anh + '")';
+$('#keys').replaceChildren(...C.y.map((y) => { const e = document.createElement('span'); e.className = 'chip k'; e.dataset.k = y.id; e.innerHTML = '<i class="ic s14" data-i="check"></i>'; e.append(y.nhan); return e; }));
+window.paintIcons?.($('#keys'));   // icons.js đã vẽ icon lúc trang nạp xong, trước khi các thẻ này được dựng lại
+if (C.chu_lon) document.body.classList.add('lon');
+if (!C.ban_dien) document.body.classList.add('khong-dien');
+$('#nutNhanh').replaceChildren(...(C.nut || []).map((chu) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = chu; b.addEventListener('click', () => { if (!window.__go) return; try { window.LaChan?.dungNghe(); } catch { /* không có micro */ } window.__go(chu); }); return b; }));   // bấm nút = trả lời bằng câu đó; micro đang nghe thì tắt
+$('#nutNhanh').classList.toggle('co', !!(C.nut || []).length);
 let call = null, model = null, timer = 0, t0 = 0, idx = -1, busy = false, ended = false, fallbackAudio = null, gen = 0, auto = false, vyCtx = null, vySrc = null;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -259,6 +358,240 @@ async function playVy(k) {
   return !ended && g === gen;
 }
 
+// Tiếng đệm lúc chờ ("Ừm.", "Để chị nghĩ coi."…): chị Lan ậm ừ trong lúc Lá chắn chấm hoặc AI đang nghĩ câu trả lời, thay cho khoảng im lặng.
+// Rút kiểu "túi thăm": phát hết cả túi mới xáo lại, và câu đầu của túi mới không trùng câu vừa phát, nên không bao giờ nghe lặp liền nhau.
+const DEM = { tui: [], vua: null, ds: null };
+// Bộ lời của chị Lan (prototype/loi-chi-lan.json): y_dinh = các kiểu lượt nói của người học, loi = mọi câu chị Lan đã thu sẵn, luat = ý định → câu đáp.
+// Bộ lời của nhân vật khác (loi-minh.json, loi-tu.json) dùng chung cho nhiều cảnh: câu riêng của cảnh mang tiền tố (C.tien_to, ví dụ "b1-"),
+// ở đây được đăng ký thêm dưới mã không tiền tố, nên phần còn lại của trang chỉ gọi 'mo-dau', 'im-mot'… như với chị Lan.
+let BO = null;
+const bo = () => (BO ||= docJson(C.bo_loi).then((d) => {
+  const loi = Object.fromEntries(d.loi.map((x) => [x.id, x]));
+  if (C.tien_to) for (const x of d.loi) if (x.id.startsWith(C.tien_to)) loi[x.id.slice(C.tien_to.length)] = x;
+  return { ds: d.loi, loi, yDinh: d.y_dinh || [], luat: Object.fromEntries((d.luat || []).map((x) => [x.y_dinh, x])) };
+}));
+// Máy chọn câu thu sẵn: chị Lan có máy riêng (hoi-thoai.js, 43 kiểu lượt nói); các cảnh khác dùng máy chung chạy theo luật trong tệp cảnh.
+const taoMay = (b) => (C.bo_may === 'chi-lan' ? taoHoiThoai(b) : taoHoiThoaiCanh(C, (id) => !!b.loi[id]));
+const demDs = () => (DEM.ds ||= bo().then((b) => b.ds.filter((x) => x.nhom === 'dem')).catch(() => []));
+demDs();
+async function dem(g = gen) {
+  const ds = await demDs(); if (!ds.length || !call || ended || g !== gen) return false;
+  if (!DEM.tui.length) { DEM.tui = ds.map((x) => x.id).sort(() => Math.random() - 0.5); if (DEM.tui.length > 1 && DEM.tui[DEM.tui.length - 1] === DEM.vua) DEM.tui.unshift(DEM.tui.pop()); }
+  const id = DEM.vua = DEM.tui.pop(), x = ds.find((y) => y.id === id); S.dem = id;
+  try { await call.speakFile(x.tep, x.tep.replace('.m4a', '.lip.json'), null, () => {}, { nhanh: true }); } catch (e) { console.warn('tiếng đệm', e); return false; }
+  return true;
+}
+
+// ====== Hội thoại thật (trong app Android): nghe người học, rồi chọn câu của chị Lan theo ý người học vừa nói ======
+// Không nói gì thì cuộc gọi KHÔNG tự chạy tiếp: chị Lan hỏi lại ("A lô, em còn đó không em?"). Micro do app mở (cầu nối window.LaChan);
+// trang mở bằng trình duyệt thì không có cầu nối, vẫn dùng nút "Giữ để nói" của bản diễn.
+const APP = q.get('goc') === '1' || TS.goc === true;                // đang chạy trong app Android (app báo qua cầu nối, hoặc ?goc=1)
+const coMicro = () => { try { return !!(window.LaChan && window.LaChan.coMicro()); } catch { return false; } };   // hỏi lại mỗi lượt: quyền micro có thể vừa được cấp
+const HOI_THAT = APP || q.get('go') === '1' || !C.ban_dien || !!VE;           // hội thoại thật (nghe hoặc gõ), không phải bản diễn giữ rồi thả (chỉ cảnh lan-2 có bản diễn)
+if (HOI_THAT) document.body.classList.add('that');
+if (APP) {   // phủ kín màn hình thật: phóng khung 360 điểm cho vừa bề ngang, chiều cao lấy theo màn hình lúc mở (bàn phím bật lên không làm co hình)
+  document.body.classList.add('app');
+  const f = document.querySelector('.call'), k = innerWidth / 360;
+  f.style.transform = 'scale(' + k + ')'; f.style.height = Math.round(innerHeight / k) + 'px';
+}
+// Chữ ở dòng trạng thái khi tới lượt người học. Cảnh có nút trả lời sẵn thì nhắc tới các nút, vì với người cao tuổi đó là cách trả lời chính.
+const CO_NUT = !!(C.nut || []).length;
+const CHU_NGHE = CO_NUT ? 'Tới lượt ' + NH + ' · ' + NH + ' nói, hoặc bấm một câu bên dưới' : 'Tới lượt ' + NH + ' · micro đang nghe';
+const CHU_GO = CO_NUT ? 'Tới lượt ' + NH + ' · bấm một câu bên dưới, hoặc gõ chữ' : 'Tới lượt ' + NH + ' · đang gõ, micro đã tắt';
+function luot(kieu, chu) { const e = $('#luot'); e.className = kieu; $('#luotChu').textContent = chu; S.luot = kieu; }
+if (HOI_THAT) {
+  $('#auto').innerHTML = $('#auto').innerHTML.replace('Chạy demo tự động', 'Xem cuộc gọi mẫu');
+  document.querySelector('#start .note').textContent = T.huong_dan;
+  document.querySelector('.score .t-label').textContent = 'Lá chắn đã ghi nhận';
+}
+const bank = () => bo().then((b) => b.loi);
+async function noi(id) {   // chị Lan nói một câu trong ngân hàng; trả về false nếu cuộc gọi đã kết thúc hoặc bị ngắt
+  const g = gen, x = (await bank())[id]; if (!x) return !ended;
+  if (!call) {   // máy không dựng được nhân vật (không có WebGL…): vẫn gọi được, ảnh tĩnh và tiếng thu sẵn
+    S.state = 'speaking'; S.line = id; luot('noi', T.ten + ' đang nói'); subtitles(x.chu, x.giay || 0, null, g);
+    await new Promise((ok) => { fallbackAudio = new Audio(x.tep); fallbackAudio.onended = fallbackAudio.onerror = ok; fallbackAudio.play().catch(ok); });
+    return !ended && g === gen;
+  }
+  busy = true; S.state = 'loading'; S.line = id; $('#self').classList.remove('talking'); luot('noi', T.ten + ' đang nói');
+  try { await call.speakFile(x.tep, x.tep.replace('.m4a', '.lip.json'), null, (dur, mode, lip) => { subtitles(x.chu, dur, lip, g); S.lip = mode; S.state = 'speaking'; }); }
+  catch (e) { console.warn('không phát được', id, e); S.errors.push(String(e)); subtitles(x.chu, 0, null, g); await sleep(1800); }
+  busy = false; return !ended && g === gen;
+}
+// Chế độ gõ chữ: người học gõ thay vì nói (đang ở chỗ không tiện nói). Lời gõ được xử lý y như lời nói.
+// Khi ô gõ đang mở thì micro tắt và chị Lan không hỏi lại vì im lặng: người học đang gõ.
+let goChu = false, luotNghe = 0;
+function batGo(bat) {
+  goChu = bat; $('#goBox').classList.toggle('hide', !bat); document.body.classList.toggle('dang-go', bat); S.goChu = bat; datPhuDe();
+  if (bat) { try { window.LaChan?.dungNghe(); } catch { /* không có micro */ } window.__sangGo?.(); $('#goIn').focus(); }
+  else { $('#goIn').blur(); window.__sangNoi?.(); }
+}
+// Chỉ xóa ô gõ khi lời đã được nhận: gửi lúc chị Lan còn đang nói thì giữ nguyên bản nháp.
+$('#goBox').addEventListener('submit', (e) => { e.preventDefault(); const v = $('#goIn').value.trim(); if (!v) return; if (window.__go) { $('#goIn').value = ''; window.__go(v); } else toast('Chờ ' + T.ten_thuong + ' nói xong rồi gửi nha, chữ ' + NH + ' gõ vẫn còn đó'); });
+$('#goEnd').addEventListener('click', () => $('#end').click());
+// Phụ đề luôn nằm ngay trên phần đang che đáy khung: bảng dưới, hoặc thanh gõ khi bàn phím đang mở.
+function datPhuDe() {
+  if (!HOI_THAT) return;
+  const f = document.querySelector('.call'), k = f.getBoundingClientRect().width / 360 || 1, cao = f.offsetHeight;
+  const vv = window.visualViewport, banPhim = vv && goChu && vv.height < window.__caoDau * 0.8;
+  const che = banPhim ? cao - (vv.height - $('#goBox').offsetHeight - 20) / k : document.querySelector('.lower').offsetHeight;
+  $('#caption').style.bottom = Math.max(8, Math.round(che) + 8) + 'px'; $('#toast').style.top = 'auto'; $('#toast').style.bottom = Math.max(8, Math.round(che) + 70) + 'px';
+}
+window.__caoDau = innerHeight;
+if (HOI_THAT) { new ResizeObserver(datPhuDe).observe(document.querySelector('.lower')); window.visualViewport?.addEventListener('resize', datPhuDe); }
+$('#goMic').addEventListener('click', () => { if (coMicro()) batGo(false); else toast('Máy này chưa mở được micro, ' + NH + ' gõ giúp nha'); });
+function nghe() {   // một lượt của người học, nói hoặc gõ: { loai: 'loi-noi' | 'im-lang' | 'loi', chu }
+  return new Promise((ok) => {
+    let xong = false, h = 0; const ma = ++luotNghe;   // mã lượt: kết quả micro của lượt cũ tới muộn thì bỏ
+    const het = (loai, chu = '') => { if (xong) return; xong = true; window.__nghe = window.__go = window.__sangGo = window.__sangNoi = null; clearTimeout(h); document.body.classList.remove('luot-toi'); ok({ loai, chu }); };
+    const moMicro = () => {
+      clearTimeout(h); h = setTimeout(() => { try { LaChan.dungNghe(); } catch { /* app đã dừng */ } het('im-lang'); }, 25000);
+      luot('nghe', CHU_NGHE);
+      try { LaChan.nghe(); } catch (e) { het('loi'); }
+    };
+    window.__nghe = (loai, chu) => {
+      if (goChu || ma !== luotNghe || ended) return;   // đã chuyển sang gõ, hoặc đây là kết quả của lượt nghe trước
+      if (loai === 'tam') { if (chu) { $('#caption').classList.remove('hide'); $('#caption').classList.add('me'); $('#capText').textContent = chu; } }
+      else if (loai === 'ket-qua') het(chu.trim() ? 'loi-noi' : 'im-lang', chu.trim());
+      else het(loai === 'im-lang' ? 'im-lang' : 'loi');
+    };
+    window.__go = (chu) => het('loi-noi', chu);
+    window.__sangGo = () => { clearTimeout(h); luot('go-chu', CHU_GO); };
+    window.__sangNoi = moMicro;
+    S.state = 'listening'; document.body.classList.add('luot-toi');   // tới lượt người học: hiện các nút trả lời sẵn (nếu cảnh có)
+    if (goChu || !coMicro()) { if (!goChu) batGo(true); luot('go-chu', CHU_GO); }
+    else moMicro();
+  });
+}
+// Rời màn (bấm Home, khóa máy) thì app tắt micro. Quay lại mà đang tới lượt người học thì mở lại, không tính là im lặng.
+document.addEventListener('visibilitychange', () => { if (!document.hidden && S.state === 'listening' && !goChu && !ended) window.__sangNoi?.(); });
+
+// Hiểu ý bằng AI ở máy chủ của đội (qua cầu nối của app, khóa không nằm trong app). Không có máy chủ, mất mạng hoặc quá 6 giây thì dùng luật trên máy.
+// Lời có dãy số riêng tư không bao giờ được gửi đi.
+const PHIEN = Math.random().toString(36).slice(2, 10) + '-';   // mỗi lần nạp trang một mã phiên: kết quả AI đến muộn của trang trước không khớp mã nào ở trang này
+let yMa = 0; const yCho = new Map();
+window.__y = (ma, kq) => { const f = yCho.get(ma); yCho.delete(ma); f?.(kq); };
+function hieuAI(ht, chu) {
+  const tai = ht.hieu(chu);
+  if (C.bo_may !== 'chi-lan') return Promise.resolve({ ...tai, nguon: 'luat' });   // các cảnh khác: luật trên máy (đường AI là chế độ nói chuyện trực tiếp)
+  if (tai.yDinh === 'lo-thong-tin' || !window.LaChan?.hieuY) return Promise.resolve({ ...tai, nguon: 'luat' });
+  if (!tai.yDinh && tai.y.length === 1 && tai.y[0] === 'nap' && chu.trim().split(/\s+/).length <= 4) return Promise.resolve({ ...tai, nguon: 'luat' });   // câu trả lời cụt đã rõ nghĩa theo câu chị vừa hỏi
+  return new Promise((ok) => {
+    const ma = PHIEN + ++yMa, h = setTimeout(() => { yCho.delete(ma); ok({ ...tai, nguon: 'luat' }); }, 6000);
+    yCho.set(ma, (kq) => {
+      clearTimeout(h);
+      if (!kq || !Array.isArray(kq.y)) return ok({ ...tai, nguon: 'luat' });
+      if (!kq.yDinh && !kq.y.length && !tai.y.length) kq.yDinh = tai.yDinh;   // AI chỉ nói "không được ý nào": lấy ý định của luật để chị đáp cho ăn nhập
+      ok({ ...kq, nguon: 'ai' });
+    });
+    try { LaChan.hieuY(ma, JSON.stringify({ canh: C.ma, loi: chu, cau_hoi: ht.cauHoi, da_cham: [...ht.co] })); } catch { clearTimeout(h); yCho.delete(ma); ok({ ...tai, nguon: 'luat' }); }
+  });
+}
+
+// Ca ngoài kịch bản: không câu thu sẵn nào hợp. Nếu máy có đủ khóa AI và khóa giọng đọc, AI viết một lượt đáp ngắn và đọc bằng đúng giọng
+// đã thu; khẩu hình tính tại chỗ (chậm hơn câu dựng sẵn, khoảng 7 đến 13 hình miệng mỗi giây). Không được thì dùng câu hỏi lại thu sẵn.
+let tlMa = 0; const tlCho = new Map();
+window.__tl = (ma, kq) => { const f = tlCho.get(ma); tlCho.delete(ma); f?.(kq); };
+function traLoiSong(ht, chu, cauHoi) {
+  return new Promise((ok) => {
+    let co = false; try { co = !!window.LaChan?.coTraLoi?.(); } catch { /* không có cầu nối */ }
+    if (!co || !call) return ok(null);
+    const ma = PHIEN + ++tlMa, h = setTimeout(() => { tlCho.delete(ma); ok(null); }, 22000);
+    tlCho.set(ma, (kq) => { clearTimeout(h); ok(kq && kq.pcm ? kq : null); });
+    try { LaChan.traLoi(ma, JSON.stringify({ canh: C.ma, loi: chu, cau_hoi: cauHoi || ht.cauHoi, da_cham: [...ht.co] })); } catch { clearTimeout(h); tlCho.delete(ma); ok(null); }
+  });
+}
+async function noiSong(tl, laTiengCho = false) {
+  const g = gen; busy = true;
+  if (!laTiengCho) { S.line = '(AI trả lời trực tiếp)'; S.song = (S.song || 0) + 1; luot('noi', T.ten + ' đang nói'); subtitles(tl.chu, tl.giay, null, g); S.state = 'speaking'; }
+  try { S.lip = 'truc-tiep'; await call.speakLive([tl.pcm], tl.tanSo, await lipModel()); }
+  catch (e) { console.warn('trả lời trực tiếp', e); S.errors.push(String(e)); }
+  busy = false; return !ended && g === gen;
+}
+
+// ====== Chế độ "AI nói chuyện trực tiếp" (?song=1): mỗi lượt AI vừa chấm vừa đáp, đọc bằng giọng Gemini, khẩu hình tính tại chỗ ======
+// Không dùng bộ câu thu sẵn. Mỗi lượt chờ khoảng 5 giây; trong lúc chờ chị ậm ừ ĐÚNG MỘT tiếng (cùng giọng, tạo sẵn lúc bắt đầu gọi).
+let cauMa = 0; const cauCho = new Map();
+window.__ls = window.__doc = (ma, kq) => { const f = cauCho.get(ma); cauCho.delete(ma); f?.(kq); };
+const cau = (ten, ...thamSo) => new Promise((ok) => {
+  const ma = PHIEN + ++cauMa, h = setTimeout(() => { cauCho.delete(ma); ok(null); }, 25000);
+  cauCho.set(ma, (kq) => { clearTimeout(h); ok(kq && kq.pcm ? kq : null); });
+  try { window.LaChan[ten](ma, ...thamSo); } catch { clearTimeout(h); cauCho.delete(ma); ok(null); }
+});
+async function hoiThoaiSong() {
+  // KẾT HỢP: câu cố định (mở đầu, tiếng chờ, hỏi lại khi im lặng hoặc nghe không rõ, hẹn bữa khác) lấy từ bộ THU SẴN, phát ngay và miệng đã
+  // dựng sẵn; phần đối đáp theo điều người học vừa nói thì AI viết, Gemini đọc TRỰC TIẾP. Cùng một giọng (Aoede) nên nghe liền mạch.
+  const b = await bo(), kiem = taoMay(b), co = new Set(), lichSu = [], SG = C.song;
+  let coAI = false; try { coAI = !!window.LaChan?.coTraLoi?.(); } catch { /* không có cầu nối */ }
+  if (!coAI || !call) { toast('Chưa gọi được AI trực tiếp, dùng câu thu sẵn', 3500); return hoiThoai(); }
+  const noiSan = async (id) => { if (!b.loi[id]) return !ended; lichSu.push({ ai: SG.ai_nv, chu: b.loi[id].chu }); return noi(id); };
+  let im = 0, lo = 0, luotSo = 0, hong = 0;
+  S.cheDo = 'ket-hop';
+  if (!(await noiSan('mo-dau'))) return;
+  while (!ended) {
+    const r = await nghe(); if (ended) return;
+    if (r.loai !== 'loi-noi') {   // không nói gì, hoặc máy không nghe ra: hỏi lại bằng câu thu sẵn, không cần gọi AI
+      if (r.loai === 'loi') { lo++; im = 0; if (!(await noiSan(lo % 2 ? 'nghe-mot' : 'nghe-hai'))) return; if (lo >= 2 && !goChu) { batGo(true); toast('Máy nghe chưa rõ. ' + Nh + ' gõ cho ' + T.ten_thuong + ' một câu cũng được nha', 3500); } continue; }
+      im++; lo = 0; S.imLang = im;
+      if (!(await noiSan(['im-mot', 'im-hai', 'im-ba'][Math.min(2, im - 1)]))) return;
+      if (im >= 3) return finish();
+      continue;
+    }
+    im = 0; lo = 0; S.nguoiHoc = r.chu; subtitles(r.chu, 0, null, gen, true);
+    let chu = r.chu;
+    if (kiem.hieu(r.chu).yDinh === 'lo-thong-tin') chu = SG.che_so;   // lời có số riêng tư không rời máy
+    lichSu.push({ ai: SG.ai_nh, chu }); S.state = 'scoring'; luot('nghi', T.ten + ' đang nghĩ…');
+    const doi = cau('luotSong', JSON.stringify({ canh: C.ma, lich_su: lichSu.slice(-14), da_cham: [...co] }));
+    await dem();   // đúng một tiếng chờ, lấy từ bộ thu sẵn
+    const k = await doi; if (ended) return;
+    if (!k && C.lui_khi_hong) {
+      // AI không đáp được (hết lượt API, mất mạng, quá giờ): lượt này dùng luật trên máy và câu thu sẵn, cuộc gọi không đứng lại.
+      // Máy luật được báo các ý AI đã chấm trước đó, và ý nó chấm thêm cũng tính vào điểm chung.
+      S.hong = ++hong; if (hong === 1) toast('AI chưa đáp được, ' + T.ten_thuong + ' dùng câu thu sẵn', 3500);
+      co.forEach((x) => kiem.co.add(x));
+      const kk = kiem.nhan(r); S.yDinh = kk.yDinh; S.yMoi = kk.tick;
+      kk.tick.forEach((x) => { if (!co.has(x)) { co.add(x); tick(x); } });
+      for (const id of kk.noi) if (!(await noiSan(id))) return;
+      luotSo++; if (kk.het || co.size === TONG) return finish();   // giới hạn số lượt ở nhánh này do máy luật tự giữ (nó chào rồi mới kết thúc)
+      continue;
+    }
+    if (!k) { lichSu.pop(); toast('Mạng chậm, ' + T.ten_thuong + ' chưa đáp được. ' + Nh + ' nói hoặc gõ lại giúp nha', 3500); continue; }
+    (k.y || []).forEach((x) => { if (!co.has(x)) { co.add(x); tick(x); } }); S.yMoi = k.y; S.sai = k.sai;
+    lichSu.push({ ai: SG.ai_nv, chu: k.chu });
+    kiem.aiVuaHoi?.(co);   // máy luật của các cảnh mới: nhớ các ý AI đã chấm và câu AI nhiều khả năng vừa hỏi, phòng khi lượt sau AI hỏng
+    if (!(await noiSong(k))) return;
+    if (k.het || co.size === TONG || ++luotSo >= 4 + 2 * TONG) return finish();
+  }
+}
+
+// Phần hiểu ý người học và chọn câu của chị Lan nằm ở hoi-thoai.js (thuần logic, chạy thử được bằng tools/thu-hoi-thoai.mjs).
+async function hoiThoai() {
+  const ht = taoMay(await bo());
+  for (const id of ht.moDau()) if (!(await noi(id))) return;
+  while (!ended) {
+    const r = await nghe(); if (ended) return;
+    let hieuNgoai = null;
+    if (r.loai === 'loi-noi') {
+      S.nguoiHoc = r.chu; subtitles(r.chu, 0, null, gen, true); S.state = 'scoring'; luot('nghi', T.ten + ' đang nghĩ…');
+      const tai = ht.hieu(r.chu), canDem = !['lo-thong-tin', 'bao-cu-nap', 'loi-trai-nhau'].includes(tai.yDinh) && !tai.xinDung;
+      [hieuNgoai] = await Promise.all([hieuAI(ht, r.chu), canDem ? dem() : sleep(300)]);   // chị ậm ừ một tiếng trong lúc AI hiểu ý
+      if (ended) return;
+      S.nguon = hieuNgoai.nguon;
+    } else S.imLang = (S.imLang || 0) + 1;
+    const hoiTruoc = ht.cauHoi;   // câu chị vừa hỏi, lấy trước khi bộ chọn câu đổi trạng thái
+    const k = ht.nhan(r, hieuNgoai); S.yDinh = k.yDinh; S.yMoi = k.tick; S.co = [...ht.co];
+    k.tick.forEach(tick);
+    let daNoi = false;
+    if (k.ngoai && !k.het) {   // chị ậm ừ thêm trong lúc AI viết và đọc câu trả lời (thường 5 đến 10 giây)
+      luot('nghi', T.ten + ' đang nghĩ…');
+      const tl = await traLoiSong(ht, r.chu, hoiTruoc); if (ended) return;   // tiếng chờ đã phát một lần ở trên, không phát lặp trong lúc đợi
+      if (tl) { if (!(await noiSong(tl))) return; daNoi = true; }
+    }
+    if (!daNoi) for (const id of k.noi) if (!(await noi(id))) return;
+    if (k.nenGo && !goChu) { batGo(true); toast('Máy nghe chưa rõ. ' + Nh + ' gõ cho ' + T.ten_thuong + ' một câu cũng được nha', 3500); }
+    if (k.het) return finish();
+  }
+}
+
 // "Chạy demo tự động": chị Lan 1 → Vy 1 → chị Lan 2 → Vy 2 → chị Lan 3 → Vy 3 → bảng điểm
 async function autoRun() {
   auto = S.auto = true; $('#ctl').classList.add('auto');
@@ -266,16 +599,38 @@ async function autoRun() {
     if (!(await speakLan(i))) return;
     await sleep(500); if (ended) return;
     if (!(await playVy(i))) return;
-    S.state = 'scoring'; toast('Lá chắn đang chấm lời khuyên…', 900); await sleep(900); if (ended) return;
-    tick(VY[i].tick); await sleep(600); if (ended) return;
+    S.state = 'scoring'; toast('Lá chắn đang chấm lời khuyên…', 900);
+    if (i < LINES.length - 1) await Promise.all([dem(), sleep(900)]); else await sleep(900);   // chị Lan ậm ừ trong lúc chờ chấm
+    if (ended) return;
+    tick(VY[i].tick); await sleep(300); if (ended) return;
   }
   finish();
 }
 
-function finish() {
-  S.state = 'done'; clearInterval(timer);
+// Mọi đường kết thúc đều qua đây: tắt micro, đóng ô gõ và bàn phím, hủy lượt nghe đang chờ, hiện kết quả thật của cuộc gọi vừa xong.
+function donDep() {
+  luotNghe++; window.__nghe = window.__go = window.__sangGo = window.__sangNoi = null; document.body.classList.remove('luot-toi');
+  try { window.LaChan?.dungNghe(); } catch { /* không có micro */ }
+  goChu = false; $('#goBox').classList.add('hide'); document.body.classList.remove('dang-go'); $('#goIn').blur(); clearInterval(timer);
   $('#ctl').style.display = 'none'; $('#finish').classList.add('on');
+  if (HOI_THAT) {
+    const dat = [...document.querySelectorAll('#keys .k.ok')].length, thieu = [...document.querySelectorAll('#keys .k:not(.ok)')].map((e) => e.textContent.trim().toLowerCase());
+    $('#scoreBox').classList.add('xong'); luot('', 'Cuộc gọi đã kết thúc · ' + $('#clock').textContent);
+    const dien = (x) => x.replace('{dat}', dat).replace('{tong}', TONG).replace('{thieu}', thieu.join(', '));
+    document.querySelector('.score .t-label').textContent = dien(dat === TONG ? T.kq_du : T.kq_thieu);
+    $('#kqLoi').textContent = dien(dat === TONG ? T.kq_loi_du : T.kq_loi_thieu);
+    $('#again').textContent = 'Gọi lại';
+    // Hợp đồng với trang bài học (hoc.html): kết quả cuộc gọi vừa xong, theo mã cảnh. Trang bài học đọc khóa này khi được mở lại.
+    // Cuộc gọi mẫu (máy tự trả lời) không phải kết quả của người học: không ghi, để khỏi đè lên điểm thật.
+    if (!auto) { try { localStorage.setItem('lcs-goi-' + C.ma, JSON.stringify({ diem: dat, tong: TONG, luc: Date.now() })); S.daGhi = true; } catch (e) { console.warn('không ghi được kết quả', e); } }
+    if (VE) {   // có địa chỉ quay về: nút chính đưa người học về đúng chỗ đó trong bài (thay trang, để nút Quay lại không rơi vào cuộc gọi cũ)
+      document.body.classList.add('co-ve'); const a = $('#finish a');
+      a.href = VE; a.innerHTML = '<i class="ic s20" data-i="arrow-right"></i>'; a.append(T.nut_ve); window.paintIcons?.(a);
+      a.onclick = (e) => { e.preventDefault(); location.replace(VE); };
+    }
+  }
 }
+function finish() { S.state = 'done'; donDep(); }
 
 async function start(autoMode) {
   if(parent!==window) parent.postMessage({lcs:'call-start'},location.origin);
@@ -286,7 +641,13 @@ async function start(autoMode) {
   off?.();
   $('#start').classList.add('off');
   t0 = Date.now(); timer = setInterval(() => { $('#clock').textContent = fmt(Math.floor((Date.now() - t0) / 1000)); }, 500);
-  if (autoMode) autoRun(); else playLine(0);
+  if (autoMode) autoRun();
+  else if (HOI_THAT) {   // hội thoại thật: có micro thì nghe, không thì gõ; avatar không dựng được vẫn gọi được bằng ảnh tĩnh và tiếng
+    S.that = true; $('#talk').disabled = false; $('#type').disabled = false; $('#talkLbl').textContent = 'Micro';
+    const hong = (e) => { console.warn('cuộc gọi dừng vì lỗi', e); S.errors.push('cuộc gọi: ' + e); if (!ended && S.state !== 'done') { toast('Cuộc gọi gặp trục trặc, ' + NH + ' thử gọi lại nha', 4000); finish(); } };
+    if ((q.get('song') === '1' || TS.song === true) && window.LaChan?.luotSong) hoiThoaiSong().catch(hong); else hoiThoai().catch(hong);
+  }
+  else playLine(0);
 }
 
 // "Giữ để nói": bản thử không nghe thật, giữ rồi thả = một lượt trả lời; Lá chắn chấm rồi chị Lan nói câu kế
@@ -296,24 +657,30 @@ function answer() {
   call?.stop(); fallbackAudio?.pause();
   $('#talk').disabled = true; $('#type').disabled = true;
   S.state = 'scoring'; toast('Lá chắn đang chấm lời khuyên…', 900);
-  const n = SCORE_AFTER[idx] ?? 4, next = idx + 1;
-  setTimeout(() => { setScore(n); playLine(next); }, 900);
+  const n = SCORE_AFTER[idx] ?? TONG, next = idx + 1, g = gen;
+  Promise.all([dem(g), sleep(900)]).then(() => { if (g !== gen || ended) return; setScore(n); playLine(next); });
 }
 const talk = $('#talk');
 talk.addEventListener('pointerdown', (e) => { if (talk.disabled) return; talk.setPointerCapture?.(e.pointerId); talk.classList.add('hold'); $('#talkLbl').textContent = 'Đang nghe…'; });
 const release = () => { if (!talk.classList.contains('hold')) return; talk.classList.remove('hold'); $('#talkLbl').textContent = 'Giữ để nói'; answer(); };
 talk.addEventListener('pointerup', release); talk.addEventListener('pointercancel', release);
 talk.addEventListener('keydown', (e) => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); answer(); } });
-$('#type').addEventListener('click', () => toast('Bản thử: bấm và giữ nút “Giữ để nói” để trả lời chị Lan.'));
+// Trong hội thoại thật, nút micro ở giữa là công tắc: đang gõ thì bấm để quay lại nói.
+for (const sk of ['pointerdown', 'pointerup', 'pointercancel']) $('#talk').addEventListener(sk, (e) => {
+  if (!S.that) return; e.stopImmediatePropagation();
+  if (sk !== 'pointerdown') return;
+  if (!coMicro()) toast('Máy này chưa mở được micro, ' + NH + ' gõ giúp nha'); else if (goChu) batGo(false); else toast(S.state === 'listening' ? 'Micro đang nghe, ' + NH + ' cứ nói' : 'Chờ ' + T.ten_thuong + ' nói xong nha');
+}, true);
+$('#type').addEventListener('click', () => { if (S.that) batGo(!goChu); else toast('Bản thử: bấm và giữ nút “Giữ để nói” để trả lời ' + T.ten_thuong + '.'); });
 $('#end').addEventListener('click', () => {
   ended = true; subT.forEach(clearTimeout); call?.stop(); fallbackAudio?.pause(); try { vySrc?.stop(); } catch { /* đã dừng */ }
   $('#self').classList.remove('talking'); $('#caption').classList.remove('me'); clearInterval(timer); S.state = 'ended';
   $('#capText').textContent = 'Cuộc gọi đã kết thúc.'; $('#caption').classList.remove('hide'); $('#demoTag').classList.remove('on');
-  $('#ctl').style.display = 'none'; $('#finish').classList.add('on');
+  donDep();
 });
 $('#again').addEventListener('click', () => location.reload());
 $('#go').addEventListener('click', () => start(AUTO_URL));
-$('#auto').addEventListener('click', () => start(true));
+$('#auto').addEventListener('click', () => { if (C.ban_dien) start(true); });
 $('#finish a').href = SCORE_URL;
 if(parent!==window) addEventListener('keydown', e => {
   if(e.key==='ArrowLeft'||e.key==='ArrowRight'){
@@ -321,6 +688,7 @@ if(parent!==window) addEventListener('keydown', e => {
   }
 });
 talk.disabled = true; $('#type').disabled = true;
+$('#go').disabled = false;   // nút gọi chỉ bật khi cảnh đã nạp và mọi sự kiện đã gắn xong: cú chạm đầu không bị mất
 </script>
 </body>
 </html>

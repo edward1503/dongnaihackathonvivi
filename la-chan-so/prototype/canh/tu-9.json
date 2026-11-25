@@ -1,0 +1,73 @@
+{
+  "_ghi_chu": "Bài 9 phần C, gọi video khuyên chú Tư: người học là Vy. Chú Tư là người được giúp nên không tự nói ra đáp án. Luật ngoại tuyến (y[].luat, ngoai_tuyen) là biểu thức chính quy chạy trên lời đã bỏ dấu, viết thường, có dấu cách hai đầu (hàm boDau); luat_dau chạy trên lời còn dấu, cho những chữ bỏ dấu thì lẫn nghĩa. Máy chạy luật: prototype/hoi-thoai-canh.js. Bộ ca kiểm: tools/ca-hoi-thoai-canh.json. lui_khi_hong = true: ở chế độ AI nói chuyện trực tiếp, lượt nào AI không đáp được (hết lượt API, mất mạng) thì dùng luật ngoại tuyến và câu thu sẵn cho lượt đó.",
+  "ma": "tu-9",
+  "nhan_vat": "tu",
+  "ma_kho": "tu-9",
+  "bo_may": "canh",
+  "bo_loi": "loi-tu.json",
+  "tien_to": "b9-",
+  "lui_khi_hong": true,
+  "anh": "canh/tu.jpg",
+  "chu": {
+    "tieu_de": "Gọi video chú Tư",
+    "ten": "Chú Tư",
+    "ten_thuong": "chú Tư",
+    "nguoi_hoc": "bạn",
+    "nhan_bai": "Thử thách · Đầu tư lãi cao, nhóm kín",
+    "huong_dan": "Chú Tư hỏi ý kiến bạn. Nghe chú nói xong thì trả lời bằng giọng nói, hoặc bấm “Gõ chữ”.",
+    "go_goi_y": "Gõ lời khuyên cho chú Tư…",
+    "kq_du": "Bạn giúp chú Tư trọn vẹn",
+    "kq_thieu": "Bạn giúp chú Tư được {dat}/{tong} ý",
+    "kq_loi_du": "Chú Tư không nạp thêm, hiểu vì sao lần đầu rút được, nhận ra dấu hiệu và đã báo cáo.",
+    "kq_loi_thieu": "Lần sau bạn thử nói thêm: {thieu}.",
+    "nut_ve": "Tiếp tục bài học"
+  },
+  "y": [
+    {
+      "id": "nap",
+      "nhan": "Đừng nạp thêm",
+      "luat": " (dung|khong|ko|hong|chang|cho|khoan|thoi dung) (co )?(nen )?(voi )?(nap|chuyen|dong|dua|bo|gui|tin|tham gia|choi|dau tu|dung toi|rut so)| lua dao (do|ro|roi|chac|a|chu|day)| (bi|dang bi|sap bi) lua | giu (lai |tien |so |cuon so )| dung lai | ngung (nap|lai|choi)| (roi|thoat|ra khoi) (cai )?nhom "
+    },
+    {
+      "id": "moinhu",
+      "nhan": "Lần đầu cho rút là mồi",
+      "luat": " (lay|tao|gay|xay) (dung )?(long )?tin | (de|cho|lam|khien) (cho )?(chu |minh |nguoi ta )(tin|ham|me|mac bay|nap them|bo them)| tha con san sat | cho an truoc | cho ngot truoc | tha moi | moi nhu | moi cau | dua vao bay | gai bay ",
+      "luat_dau": " mồi | nhử | dụ (chú|mình|người|để)| bẫy "
+    },
+    {
+      "id": "dauhieu",
+      "nhan": "Nêu thêm dấu hiệu",
+      "luat": " lai (suat )?(gi ma )?(cao|gap doi|khung|qua troi|ngat nguong)| (chac|cam ket|bao dam|dam bao|hua) (chan )?(an|lai|loi|thang|khong lo)| khong (bao gio )?(lo|rui ro)| lam gi co (chuyen |ai |khoan )| (dong|nop|doi|bat|thu) (them )?(phi|thue)| phi (moi|rut|truoc)| giuc | hoi thuc | gap gap | nhom kin | dau hieu | bat thuong | khong ai cho khong | khong (co )?giay phep | (dung|khong cho|cam) (ke|noi|hoi) (voi |cho )?(con chau|ai|nguoi nha)"
+    },
+    {
+      "id": "baocao",
+      "nhan": "Rủ báo cáo",
+      "luat": " bao cao | bao cong an | to cao | to giac | trinh bao | bao (cai )?(nhom|so|tai khoan|nick|acc|ong thay)| bao (cho|voi|len) (la chan|cong an|moi nguoi|nen tang|ngan hang|phuong)| report | phan anh | canh bao (cho )?(moi nguoi|nguoi khac|ba con|hang xom)"
+    }
+  ],
+  "ngoai_tuyen": {
+    "sai": " (cu|nen|thu|danh) (nap|chuyen|dau tu|choi|lam|vo|tham gia)| nap (di|them di|het di|dai|thu|it|mot it|lien|luon)| (nap|choi|lam|chuyen) di | duoc do | ngon ma | ngon vay | ngon lanh | tot ma | loi vay | rut duoc (ma|roi ma|roi con gi)| co sao dau | so gi | lo gi | tin duoc | uy tin (ma|do)| binh thuong ma | thu it | rut lien | khong phai lua | khong lua (dau|ma)| chac khong lua | (dau|co) phai lua ",
+    "theo_cau": [
+      {
+        "cau": "(mo-dau|nap)$",
+        "y": "nap",
+        "luat": "^ (da |a |u |o |thoi |chu oi )*(khong|dung|thoi|khong nen|hong nen|dung co)( chu| a| nha| nghen| dau| oi| co| nen| nap| ma)* $"
+      }
+    ]
+  },
+  "song": {
+    "loi_nhac": "canh/tu-9.song.txt",
+    "truong_loi": "loi_nhan_vat",
+    "ai_nv": "nv",
+    "ai_nh": "nh",
+    "ten_nv": "CHÚ TƯ",
+    "ten_nh": "VY",
+    "che_so": "(con vừa đọc ra một dãy số riêng tư, app đã không gửi đi)"
+  },
+  "tra_loi": {
+    "loi_nhac": "canh/tu-9.tra-loi.txt",
+    "cau_nv": "Câu chú Tư vừa nói",
+    "cau_da": "Những ý con đã khuyên được",
+    "cau_nh": "Con vừa nói"
+  }
+}

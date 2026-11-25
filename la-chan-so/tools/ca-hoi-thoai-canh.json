@@ -1,0 +1,835 @@
+{
+ "_ghi_chu": "Ca kiểm luật ngoại tuyến của các cảnh mới (prototype/hoi-thoai-canh.js). luot: [lời người học, các ý phải được chấm | \"mã ý định\", mã câu nhân vật vừa hỏi (bỏ trống = mo-dau)]. cuoc: một cuộc gọi trọn vẹn, \"(im)\" = im lặng, \"(loi)\" = máy không nghe ra; diem = số ý cuối cùng, het = cuộc gọi đã kết thúc, cuoi = mã câu cuối nhân vật nói. Kỳ vọng viết theo NGHĨA của câu; luật sai thì sửa luật, không sửa kỳ vọng.",
+ "minh-1": {
+  "luot": [
+   [
+    "Mẹ cúp máy rồi gọi con",
+    [
+     "cup",
+     "goicon"
+    ]
+   ],
+   [
+    "Mẹ làm theo họ cho xong",
+    "sai"
+   ],
+   [
+    "thì mẹ cúp máy chứ sao",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "mẹ tắt điện thoại luôn",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "mẹ không chuyển đồng nào hết",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "mẹ đâu có tin",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "không, mẹ cúp máy liền",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "họ giục chuyển liền thì mẹ cúp máy",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "họ bảo mẹ chuyển tiền thì mẹ không chuyển",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "mẹ gọi cho thằng Minh",
+    [
+     "goicon"
+    ]
+   ],
+   [
+    "mẹ hỏi con cháu trước đã",
+    [
+     "goicon"
+    ]
+   ],
+   [
+    "mẹ báo cho người nhà",
+    [
+     "goicon"
+    ]
+   ],
+   [
+    "mẹ vẫn nói với con",
+    [
+     "goicon"
+    ],
+    "hoi-goicon"
+   ],
+   [
+    "thì mẹ cứ gọi",
+    [
+     "goicon"
+    ],
+    "hoi-goicon"
+   ],
+   [
+    "kệ họ, mẹ kể hết",
+    [
+     "cup",
+     "goicon"
+    ],
+    "hoi-goicon"
+   ],
+   [
+    "mẹ không cúp máy",
+    []
+   ],
+   [
+    "mẹ không gọi con đâu",
+    []
+   ],
+   [
+    "mẹ đâu có dám gọi con",
+    []
+   ],
+   [
+    "mẹ có nên gọi con không",
+    "hoi-lai"
+   ],
+   [
+    "mẹ sợ quá thì chuyển cho họ",
+    "sai"
+   ],
+   [
+    "thôi chuyển cho yên",
+    "sai"
+   ],
+   [
+    "mẹ giấu con cho xong chuyện",
+    "sai"
+   ],
+   [
+    "mẹ nghe theo công an thôi",
+    "sai"
+   ],
+   [
+    "mẹ cúp máy rồi chuyển tiền cho xong",
+    "sai"
+   ],
+   [
+    "họ dặn mẹ đừng nói với con",
+    []
+   ],
+   [
+    "công an gọi thiệt hả con",
+    []
+   ],
+   [
+    "hôm nay trời nóng quá",
+    []
+   ],
+   [
+    "không chín một hai ba bốn năm sáu bảy tám",
+    "lo-thong-tin"
+   ],
+   [
+    "con là người thật hay máy vậy",
+    "ai-la"
+   ],
+   [
+    "thôi để bữa khác nói nha con",
+    "xin-dung"
+   ],
+   [
+    "gọi con làm gì cho mệt",
+    "sai"
+   ],
+   [
+    "cúp máy chi cho mệt, mẹ cứ nghe họ nói",
+    "sai"
+   ],
+   [
+    "mẹ khỏi cần hỏi ai",
+    []
+   ],
+   [
+    "Mẹ vẫn gọi cho họ",
+    [],
+    "hoi-goicon"
+   ],
+   [
+    "Họ bảo mẹ cúp máy rồi gọi con",
+    []
+   ],
+   [
+    "Mẹ cúp máy rồi gọi con hả?",
+    "hoi-lai"
+   ],
+   [
+    "mẹ cúp máy rồi gọi con hả",
+    "hoi-lai"
+   ],
+   [
+    "Mẹ chưa định cúp máy hay gọi con",
+    []
+   ],
+   [
+    "Mẹ khỏi cần chuyển tiền, mẹ cúp máy rồi gọi con",
+    [
+     "cup",
+     "goicon"
+    ]
+   ],
+   [
+    "mẹ chuyển tiền xong rồi gọi con",
+    "sai"
+   ],
+   [
+    "con dặn mẹ gọi con mà",
+    [
+     "goicon"
+    ]
+   ],
+   [
+    "không mẹ cúp máy liền",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "mẹ không chuyển tiền mà cúp máy rồi gọi con",
+    [
+     "cup",
+     "goicon"
+    ]
+   ],
+   [
+    "Đúng rồi, mẹ cúp máy",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "Mã PIN của mẹ là 4321",
+    []
+   ]
+  ],
+  "cuoc": [
+   {
+    "luot": [
+     "Mẹ cúp máy rồi gọi con"
+    ],
+    "diem": 2,
+    "het": true,
+    "cuoi": "ket-du"
+   },
+   {
+    "luot": [
+     "mẹ cúp máy",
+     "mẹ vẫn gọi cho con"
+    ],
+    "diem": 2,
+    "het": true,
+    "cuoi": "ket-du"
+   },
+   {
+    "luot": [
+     "Mẹ làm theo họ cho xong",
+     "vậy mẹ không chuyển tiền",
+     "mẹ hỏi thằng Minh"
+    ],
+    "diem": 2,
+    "het": true,
+    "cuoi": "ket-du"
+   },
+   {
+    "luot": [
+     "(im)",
+     "(im)",
+     "(im)"
+    ],
+    "diem": 0,
+    "het": true,
+    "cuoi": "im-ba"
+   },
+   {
+    "luot": [
+     "(loi)",
+     "(loi)",
+     "mẹ cúp máy"
+    ],
+    "diem": 1,
+    "het": false
+   },
+   {
+    "luot": [
+     "trời nóng quá",
+     "ăn cơm chưa con",
+     "mai mẹ đi chợ"
+    ],
+    "diem": 0,
+    "het": true,
+    "cuoi": "ket-thieu"
+   },
+   {
+    "luot": [
+     "mẹ cúp máy",
+     "thôi để bữa khác nói nha con"
+    ],
+    "diem": 1,
+    "het": true,
+    "cuoi": "chao-cup"
+   },
+   {
+    "luot": [
+     "Mẹ cúp máy, tạm biệt con"
+    ],
+    "diem": 1,
+    "het": true,
+    "cuoi": "chao-cup"
+   },
+   {
+    "luot": [
+     "(loi)",
+     "(im)",
+     "(loi)",
+     "(im)",
+     "(loi)"
+    ],
+    "diem": 0,
+    "het": false
+   }
+  ]
+ },
+ "minh-3": {
+  "luot": [
+   [
+    "Mẹ gọi con bằng số mẹ đã lưu",
+    [
+     "goithang",
+     "soluu"
+    ]
+   ],
+   [
+    "Mẹ chuyển tiền trước cho kịp",
+    "sai"
+   ],
+   [
+    "mẹ gọi thẳng cho con",
+    [
+     "goithang"
+    ]
+   ],
+   [
+    "mẹ điện cho thằng Minh trước",
+    [
+     "goithang"
+    ]
+   ],
+   [
+    "mẹ gọi con liền",
+    [
+     "goithang"
+    ]
+   ],
+   [
+    "số mẹ lưu trong máy",
+    [
+     "soluu"
+    ],
+    "hoi-soluu"
+   ],
+   [
+    "số trong danh bạ",
+    [
+     "soluu"
+    ],
+    "hoi-soluu"
+   ],
+   [
+    "số cũ của con",
+    [
+     "soluu"
+    ],
+    "hoi-soluu"
+   ],
+   [
+    "mẹ không gọi số trong tin nhắn",
+    [
+     "soluu"
+    ],
+    "hoi-soluu"
+   ],
+   [
+    "mẹ gọi lại số vừa nhắn hỏi cho rõ",
+    "sai"
+   ],
+   [
+    "mẹ bấm vào số trong tin",
+    "sai"
+   ],
+   [
+    "mẹ gửi tiền liền cho con",
+    "sai"
+   ],
+   [
+    "mẹ không chuyển tiền",
+    []
+   ],
+   [
+    "mẹ không gọi con",
+    []
+   ],
+   [
+    "tin nhắn nói con bị tai nạn hả",
+    []
+   ],
+   [
+    "mẹ lo quá",
+    []
+   ],
+   [
+    "họ giục chuyển gấp thì mẹ gọi con",
+    [
+     "goithang"
+    ]
+   ],
+   [
+    "mẹ có nên gọi con không",
+    "hoi-lai"
+   ],
+   [
+    "gọi con chi cho mệt, chuyển luôn",
+    "sai"
+   ],
+   [
+    "số nào cũng được",
+    []
+   ],
+   [
+    "Mẹ chuyển tiền xong rồi gọi con bằng số đã lưu",
+    "sai"
+   ],
+   [
+    "Gọi điện thoại cho con bằng số điện thoại đã lưu",
+    [
+     "goithang",
+     "soluu"
+    ]
+   ],
+   [
+    "Mẹ dùng danh bạ",
+    [
+     "soluu"
+    ],
+    "hoi-soluu"
+   ],
+   [
+    "mẹ không dùng số trong tin nhắn",
+    [
+     "soluu"
+    ],
+    "hoi-soluu"
+   ],
+   [
+    "Họ bảo mẹ gọi con bằng số đã lưu",
+    []
+   ]
+  ],
+  "cuoc": [
+   {
+    "luot": [
+     "Mẹ gọi con bằng số mẹ đã lưu"
+    ],
+    "diem": 2,
+    "het": true,
+    "cuoi": "ket-du"
+   },
+   {
+    "luot": [
+     "mẹ gọi cho con",
+     "số mẹ lưu sẵn"
+    ],
+    "diem": 2,
+    "het": true,
+    "cuoi": "ket-du"
+   },
+   {
+    "luot": [
+     "Mẹ chuyển tiền trước cho kịp",
+     "mẹ gọi con trước",
+     "gọi lại số vừa nhắn",
+     "số trong danh bạ"
+    ],
+    "diem": 2,
+    "het": true,
+    "cuoi": "ket-du"
+   },
+   {
+    "luot": [
+     "(im)",
+     "mẹ gọi con",
+     "(im)",
+     "(im)",
+     "(im)"
+    ],
+    "diem": 1,
+    "het": true,
+    "cuoi": "im-ba"
+   }
+  ]
+ },
+ "tu-9": {
+  "luot": [
+   [
+    "không chú ơi",
+    [
+     "nap"
+    ]
+   ],
+   [
+    "đừng chú",
+    [
+     "nap"
+    ]
+   ],
+   [
+    "chú đừng nạp thêm nha",
+    [
+     "nap"
+    ]
+   ],
+   [
+    "chú khoan nạp đã",
+    [
+     "nap"
+    ]
+   ],
+   [
+    "lừa đảo đó chú",
+    [
+     "nap"
+    ]
+   ],
+   [
+    "chú giữ cuốn sổ lại đi",
+    [
+     "nap"
+    ]
+   ],
+   [
+    "lần đầu họ cho rút là mồi nhử đó chú",
+    [
+     "moinhu"
+    ]
+   ],
+   [
+    "họ cho rút ít trước để chú tin",
+    [
+     "moinhu"
+    ]
+   ],
+   [
+    "họ thả con săn sắt bắt con cá rô đó",
+    [
+     "moinhu"
+    ]
+   ],
+   [
+    "đó là để tạo lòng tin thôi",
+    [
+     "moinhu"
+    ]
+   ],
+   [
+    "họ dụ chú nạp nhiều hơn",
+    [
+     "moinhu"
+    ]
+   ],
+   [
+    "lãi gấp đôi là bất thường",
+    [
+     "dauhieu"
+    ]
+   ],
+   [
+    "làm gì có chuyện không bao giờ lỗ",
+    [
+     "dauhieu"
+    ]
+   ],
+   [
+    "họ cam kết lãi chắc chắn là có vấn đề",
+    [
+     "dauhieu"
+    ]
+   ],
+   [
+    "tới lúc rút họ sẽ đòi phí",
+    [
+     "dauhieu"
+    ]
+   ],
+   [
+    "họ giục gấp vậy là đáng ngờ",
+    [
+     "dauhieu"
+    ]
+   ],
+   [
+    "chú báo cáo nhóm đó đi",
+    [
+     "baocao"
+    ]
+   ],
+   [
+    "mình báo công an nha chú",
+    [
+     "baocao"
+    ]
+   ],
+   [
+    "chú cảnh báo cho mọi người trong nhóm",
+    [
+     "baocao"
+    ]
+   ],
+   [
+    "chú đừng nạp, lần đầu cho rút là mồi nhử, lãi chắc chắn là bất thường, chú báo cáo đi",
+    [
+     "nap",
+     "moinhu",
+     "dauhieu",
+     "baocao"
+    ]
+   ],
+   [
+    "chú cứ nạp đi",
+    "sai"
+   ],
+   [
+    "lần trước rút được mà chú",
+    "sai"
+   ],
+   [
+    "lãi cao vậy ngon mà chú",
+    "sai"
+   ],
+   [
+    "chú nạp thử ít thôi",
+    "sai"
+   ],
+   [
+    "chú đừng nạp, à mà thôi chú cứ nạp đi",
+    "sai"
+   ],
+   [
+    "con nghĩ không phải lừa đâu",
+    "sai"
+   ],
+   [
+    "chắc không lừa đâu chú",
+    "sai"
+   ],
+   [
+    "đừng có không nạp",
+    []
+   ],
+   [
+    "chú có nên nạp không",
+    "hoi-lai"
+   ],
+   [
+    "báo cáo làm gì cho mệt",
+    "sai"
+   ],
+   [
+    "nhóm đó tên gì vậy chú",
+    []
+   ],
+   [
+    "chú mới nạp hôm qua hả",
+    []
+   ],
+   [
+    "như chú nói thì cũng được",
+    []
+   ],
+   [
+    "nhóm rủ chú nạp đi là để lấy lòng tin",
+    [
+     "moinhu"
+    ]
+   ],
+   [
+    "không",
+    [
+     "nap"
+    ],
+    "goi-nap"
+   ],
+   [
+    "không",
+    [],
+    "hoi-baocao"
+   ],
+   [
+    "không ba tám bảy sáu năm bốn ba hai một",
+    "lo-thong-tin"
+   ],
+   [
+    "khỏi cần báo cáo đâu chú",
+    []
+   ],
+   [
+    "chặn nhóm đó là đủ rồi",
+    "sai"
+   ],
+   [
+    "nạp thêm có sao đâu",
+    "sai"
+   ],
+   [
+    "họ đâu có giục gì",
+    []
+   ],
+   [
+    "lãi đâu có cao",
+    []
+   ],
+   [
+    "Đúng",
+    []
+   ],
+   [
+    "Đúng rồi chú nạp đi",
+    "sai"
+   ],
+   [
+    "Báo cáo làm gì",
+    "sai"
+   ],
+   [
+    "Chú không nên báo cáo",
+    []
+   ],
+   [
+    "chú không nên nạp đâu",
+    [
+     "nap"
+    ]
+   ],
+   [
+    "Đừng nạp thêm vì lần trước chú rút được rồi là họ nhử chú",
+    [
+     "nap",
+     "moinhu"
+    ]
+   ],
+   [
+    "Là mồi nhử",
+    [
+     "moinhu"
+    ]
+   ],
+   [
+    "Nhóm kín lãi cao",
+    [
+     "dauhieu"
+    ]
+   ],
+   [
+    "Nhóm rủ chú báo cáo đi",
+    []
+   ],
+   [
+    "chú đừng nạp chú báo cáo nhóm đó đi",
+    [
+     "nap",
+     "baocao"
+    ]
+   ],
+   [
+    "lãi cao vậy là lừa đảo đó chú hả",
+    "hoi-lai"
+   ]
+  ],
+  "cuoc": [
+   {
+    "luot": [
+     "chú đừng nạp, lần đầu cho rút là mồi nhử, lãi chắc chắn là bất thường, chú báo cáo đi"
+    ],
+    "diem": 4,
+    "het": true,
+    "cuoi": "ket-du"
+   },
+   {
+    "luot": [
+     "không chú ơi",
+     "họ cho rút trước để chú tin",
+     "lãi gấp đôi là bất thường",
+     "chú báo cáo nhóm đó đi"
+    ],
+    "diem": 4,
+    "het": true,
+    "cuoi": "ket-du"
+   },
+   {
+    "luot": [
+     "chú cứ nạp đi",
+     "chú cứ nạp đi",
+     "chú cứ nạp đi",
+     "chú cứ nạp đi",
+     "chú cứ nạp đi",
+     "chú cứ nạp đi",
+     "chú cứ nạp đi",
+     "chú cứ nạp đi",
+     "chú cứ nạp đi",
+     "chú cứ nạp đi",
+     "chú cứ nạp đi",
+     "chú cứ nạp đi"
+    ],
+    "diem": 0,
+    "het": true,
+    "cuoi": "ket-thieu"
+   },
+   {
+    "luot": [
+     "đừng chú",
+     "(im)",
+     "(loi)",
+     "chú báo công an đi"
+    ],
+    "diem": 2,
+    "het": false
+   },
+   {
+    "luot": [
+     "Đúng",
+     "Là mồi nhử",
+     "Nhóm kín lãi cao",
+     "Báo cáo làm gì"
+    ],
+    "diem": 2,
+    "het": false
+   }
+  ]
+ },
+ "_astra": "Các ca thêm sau lần review độc lập của Astra (25/11/2026) nằm cuối mỗi danh sách luot."
+}

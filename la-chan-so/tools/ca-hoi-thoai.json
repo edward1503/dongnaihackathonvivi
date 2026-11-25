@@ -1,0 +1,12 @@
+[
+ ["Lương cao vậy ngon mà chị", []], ["Tên công ty là gì chị", []], ["Báo cáo làm gì cho mệt", []], ["Cứ nạp đi chị sợ gì bị lừa", []],
+ ["nạp trước là bình thường mà", []], ["đừng có không nạp", []], ["Mẹ dặn đừng nạp mà em thấy cứ nạp đi chị", []],
+ ["Gửi em đường dẫn đi chị để em bấm vô thử coi", []], ["Chị chặn số đó là đủ rồi", []], ["Tiết sau kiểm tra toán kìa", []],
+ ["Nhóm đó kêu nạp 200000 đồng trước nghe kỳ quá", ["dauhieu"]], ["không chín một hai ba bốn năm sáu bảy tám", "lo-thong-tin"],
+ ["Cất hai xị đó mua đồ ăn đi chị", ["nap"]], ["Kiếm số tổng đài trên web của hãng rồi gọi đối chiếu nha", ["xacminh"]],
+ ["Report cái acc đó với Zalo giùm em", ["baocao"]], ["Không phải là không nên", []], ["Em nghĩ là không lừa đâu", []],
+ ["không chị ơi", ["nap"]], ["chị đừng nạp nha", ["nap"]], ["tại lương cao bất thường mà còn bắt nạp trước", ["dauhieu"]],
+ ["chị tra tên công ty rồi hỏi người lớn đi", ["xacminh"]], ["báo cáo cái tài khoản đó đi chị", ["baocao"]],
+ ["chị đừng nạp, lương cao bất thường, chị tra tên công ty đi rồi báo cáo tài khoản đó", ["nap", "dauhieu", "xacminh", "baocao"]],
+ ["em gặp vụ này rồi", []], ["chị hỏi mẹ chị coi", ["xacminh"]], ["họ giục gấp vậy là có vấn đề", ["dauhieu"]], ["hổng nên đưa tiền đâu chị", ["nap"]]
+]

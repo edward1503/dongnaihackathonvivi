@@ -1,0 +1,61 @@
+{
+  "_ghi_chu": "Bài 3 phần C, Minh gọi hỏi lại: người học đóng vai bà Hoa (mẹ của Minh). Luật ngoại tuyến (y[].luat, ngoai_tuyen) là biểu thức chính quy chạy trên lời đã bỏ dấu, viết thường, có dấu cách hai đầu (hàm boDau); luat_dau chạy trên lời còn dấu, cho những chữ bỏ dấu thì lẫn nghĩa. Máy chạy luật: prototype/hoi-thoai-canh.js. Bộ ca kiểm: tools/ca-hoi-thoai-canh.json. lui_khi_hong = true: ở chế độ AI nói chuyện trực tiếp, lượt nào AI không đáp được (hết lượt API, mất mạng) thì dùng luật ngoại tuyến và câu thu sẵn cho lượt đó.",
+  "ma": "minh-3",
+  "nhan_vat": "minh",
+  "ma_kho": "minh-3",
+  "bo_may": "canh",
+  "bo_loi": "loi-minh.json",
+  "tien_to": "b3-",
+  "lui_khi_hong": true,
+  "anh": "canh/minh.jpg",
+  "chu_lon": true,
+  "chu": {
+    "tieu_de": "Anh Minh gọi video",
+    "ten": "Anh Minh",
+    "ten_thuong": "anh Minh",
+    "nguoi_hoc": "bà",
+    "nhan_bai": "Thử thách · Người thân gặp nạn, cần tiền gấp",
+    "huong_dan": "Anh Minh hỏi bà vài câu về bài vừa học. Bà nghe xong thì trả lời bằng giọng nói, hoặc bấm một trong hai nút.",
+    "go_goi_y": "Gõ câu trả lời cho anh Minh…",
+    "kq_du": "Bà trả lời trọn vẹn",
+    "kq_thieu": "Bà trả lời được {dat}/{tong} ý",
+    "kq_loi_du": "Nghe tin dữ, bà gọi thẳng cho con bằng số bà đã lưu rồi mới tính.",
+    "kq_loi_thieu": "Lần sau bà nhớ nói thêm: {thieu}.",
+    "nut_ve": "Tiếp tục bài học"
+  },
+  "nut": [
+    "Mẹ gọi con bằng số mẹ đã lưu",
+    "Mẹ chuyển tiền trước cho kịp"
+  ],
+  "y": [
+    {
+      "id": "goithang",
+      "nhan": "Gọi thẳng cho con",
+      "luat": " (goi|dien|a lo|alo|hoi) (dien thoai |dien |thang |lai |ngay |lien |thu |truc tiep |truoc )*(cho |hoi )?(con|thang minh|minh|anh minh|chau|con trai|may)( |$)"
+    },
+    {
+      "id": "soluu",
+      "nhan": "Dùng số đã lưu",
+      "luat": " so (dien thoai |may )?(ma )?(me |ba |toi |minh |con )?(da |co |hay |van )?(luu|ghi)| danh ba | so (dien thoai )?(cu|quen|that|cua con|cua minh|con hay goi|hang ngay|thuong ngay|moi khi|xua nay|hoi gio|co san|san trong may|trong may|trong dien thoai)| (khong|dung|chang|ko|hong) (co )?(goi|bam|nghe|dung|dux) (lai |vao |cho |cai )*so (la|do|trong tin|vua nhan|ay|kia|cua ho)"
+    }
+  ],
+  "ngoai_tuyen": {
+    "sai": " (thi |se |cu |danh |phai |lien |voi |lo )(chuyen|gui|dua) | (chuyen|gui|dua|nap) (tien |khoan )?(truoc|lien|ngay|gap|cho kip|cho ho|cho no|luon|dai|het) | cho kip | (lam theo|nghe theo|tin) (ho|nguoi ta|no|tin nhan) | (goi|bam|nhan) (lai |vao |cho )*(cai )?so (do|vua nhan|trong tin|la do|ay|cua ho) | (chuyen|gui|dua|nop) (tien |khoan )?(xong|roi) ",
+    "theo_cau": []
+  },
+  "song": {
+    "loi_nhac": "canh/minh-3.song.txt",
+    "truong_loi": "loi_nhan_vat",
+    "ai_nv": "nv",
+    "ai_nh": "nh",
+    "ten_nv": "MINH",
+    "ten_nh": "MẸ",
+    "che_so": "(mẹ vừa đọc ra một dãy số riêng tư, app đã không gửi đi)"
+  },
+  "tra_loi": {
+    "loi_nhac": "canh/minh-3.tra-loi.txt",
+    "cau_nv": "Câu Minh vừa nói",
+    "cau_da": "Những ý mẹ đã trả lời được",
+    "cau_nh": "Mẹ vừa nói"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "_ghi_chu": "Bảng nhân vật có avatar khẩu hình. giong = tên giọng Gemini TTS; loi_dan = lời dặn giọng (phần DIRECTOR'S NOTES) dùng cho MỌI lượt thu và mọi câu đọc trực tiếp của nhân vật đó. chot = true: đã chốt, không đổi nữa (thoại trong truyện và lời avatar phải cùng một giọng). Mẫu nghe thử đã lọc rẹt: bai-hoc/nghe-thu/minh-Achird.wav, bai-hoc/nghe-thu/tu-Algenib.wav.",
+  "lan": {
+    "ten": "Chị Lan",
+    "avatar": 21,
+    "nen": "khu-lam-viec-chung",
+    "giong": "Aoede",
+    "loi_dan": "Giọng nữ trẻ miền Nam, nhẹ nhàng, tự nhiên như đang gọi video hỏi ý kiến em họ, hơi lo lắng nhưng thân thiện, tốc độ vừa phải.",
+    "chot": true
+  },
+  "minh": {
+    "ten": "Anh Minh",
+    "avatar": 125,
+    "nen": "van-phong",
+    "giong": "Achird",
+    "loi_dan": "Minh, người đàn ông Việt khoảng ba mươi tuổi, giọng nam trẻ miền Nam, ấm, thân mật, nói tự nhiên như đang gọi video cho mẹ, hơi lo cho mẹ, tốc độ vừa phải, hơi chậm để mẹ lớn tuổi nghe kịp.",
+    "chot": true
+  },
+  "tu": {
+    "ten": "Ông Tư",
+    "avatar": 117,
+    "nen": "tuong-phong-hop",
+    "giong": "Algenib",
+    "loi_dan": "Ông Tư, người đàn ông Việt ngoài sáu mươi tuổi, giọng nam trầm miền Nam, chậm rãi, chân chất, nói tự nhiên như đang gọi video cho đứa cháu, hào hứng pha chút lưỡng lự.",
+    "chot": true
+  }
+}

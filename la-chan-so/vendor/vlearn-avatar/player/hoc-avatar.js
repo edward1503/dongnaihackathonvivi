@@ -46,20 +46,32 @@ export async function mountCall(host, id, onProgress = () => {}, readyWait = 150
     },
     // a live reply (voiced at run time): the mouth comes from the sound itself (hoc-lipfit.js), no lip file exists for it
     async speakLive(parts, rate, M) {
-      const pcm = pcmFrom(parts), buf = ctx.createBuffer(1, Math.max(1, pcm.length), rate); buf.getChannelData(0).set(pcm);
+      const pcm = pcmFrom(parts);
+      // la-chan-so (25/11/2026): KHÔNG đặt thẳng mẫu 24 kHz vào AudioBuffer rồi phát ở đầu phát 48 kHz. Khi tần số bộ đệm khác tần số đầu phát,
+      // AudioBufferSourceNode chỉ nội suy tuyến tính, sinh méo ở dải cao nghe "rẹt rẹt" (đo trên máy thử: không hụt tiếng lần nào, tiếng đã lọc
+      // bằng ffmpeg mà vẫn rẹt; câu thu sẵn đi qua decodeAudioData thì sạch). Gói thành WAV rồi để decodeAudioData đổi tần số bằng bộ lọc tốt.
+      const n = Math.max(1, pcm.length), wav = new ArrayBuffer(44 + n * 2), dv = new DataView(wav), chu = (o, t) => { for (let i = 0; i < t.length; i++) dv.setUint8(o + i, t.charCodeAt(i)); };
+      chu(0, 'RIFF'); dv.setUint32(4, 36 + n * 2, true); chu(8, 'WAVEfmt '); dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true);
+      dv.setUint32(24, rate, true); dv.setUint32(28, rate * 2, true); dv.setUint16(32, 2, true); dv.setUint16(34, 16, true); chu(36, 'data'); dv.setUint32(40, n * 2, true);
+      for (let i = 0; i < pcm.length; i++) dv.setInt16(44 + i * 2, Math.max(-1, Math.min(1, pcm[i])) * 32767, true);
+      let buf;
+      try { buf = await ctx.decodeAudioData(wav); }
+      catch { buf = ctx.createBuffer(1, n, rate); buf.getChannelData(0).set(pcm); }   // máy không giải mã được WAV: đành phát thẳng
       const lip = lipFromSamples(await to16k(buf), M);
       await av.say({ buf, params: lip.params, bg: lip.bg }, () => false);
     },
     // la-chan-so vendor addition (24/11/2026): play an audio FILE; lip params from lipUrl when given and found,
     // otherwise computed in the browser from the sound (same lipfit path as speakLive). Resolves { lip: 'file' | 'lipfit' } when done.
-    async speakFile(audioUrl, lipUrl, M, onStart) {
+    async speakFile(audioUrl, lipUrl, M, onStart, opt) {
       const [buf, lipF] = await Promise.all([
         fetch(audioUrl).then(r => { if (!r.ok) throw new Error('no voice ' + audioUrl); return r.arrayBuffer(); }).then(b => ctx.decodeAudioData(b)),
         lipUrl ? fetch(lipUrl).then(r => (r.ok ? r.json() : null)).catch(() => null) : null]);
       const lip = lipF || lipFromSamples(await to16k(buf), M);
-      onStart?.(buf.duration, lipF ? 'file' : 'lipfit', lip);
-      await av.say({ buf, params: lip.params, bg: lip.bg || [] }, () => false);
-      return { lip: lipF ? 'file' : 'lipfit', duration: buf.duration };
+      // la-chan-so (25/11/2026): tệp khẩu hình có trường "mieng" = hình miệng đã dựng sẵn thành video (tools/dung-mieng.py); opt.nhanh = tiếng đệm
+      const mieng = lipF?.mieng ? { url: new URL(lipF.mieng.tep, new URL(lipUrl, location.href)).href, F: lipF.mieng.F } : null;
+      onStart?.(buf.duration, mieng ? 'dung-san' : lipF ? 'file' : 'lipfit', lip);
+      await av.say({ buf, params: lip.params, bg: lip.bg || [], mieng, nhanh: !!opt?.nhanh }, () => false);
+      return { lip: mieng ? 'dung-san' : lipF ? 'file' : 'lipfit', duration: buf.duration };
     },
     stop() { try { av.stop(); } catch {} },
     ctx,
