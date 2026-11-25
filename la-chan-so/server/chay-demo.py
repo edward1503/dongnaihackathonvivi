@@ -83,7 +83,7 @@ def banner(http_url: str, https_url: str | None) -> None:
 
     base = https_url or http_url
     print("\n Lá chắn số · demo đang chạy (Ctrl+C để tắt)\n")
-    print(f"  Laptop (bảng mô phỏng):  http://localhost:{http_url.rsplit(':', 1)[1]}/?demo=1")
+    print(f"  Laptop (bảng mô phỏng):  http://localhost:{http_url.rsplit(':', 1)[1]}/?mode=simple&demo=1")
     for _key, label, path in demo.LINKS:
         print(f"  {label:<34} {base}{path}")
     print(f"  App Android (ô 'Máy chủ của đội'): {http_url}")

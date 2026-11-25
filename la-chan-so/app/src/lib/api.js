@@ -60,6 +60,10 @@ export const api = {
   // Buổi trình diễn: laptop điều khiển điện thoại (sự kiện demo.go), lấy địa chỉ LAN và mã QR
   demoGo: (data) => req('/api/events', { method: 'POST', body: { type: 'demo.go', room: 'gia-dinh-hoa', from: 'dieu-khien', data } }),
   demoLinks: () => req('/api/demo/links', { timeout: 5000 }),
+  // Đội tình nguyện (dùng chung với web của Mảng 6)
+  reportsQueue: (limit = 10) => req(`/api/reports?status=needs_review&limit=${limit}`),
+  reviewReport: (id, status) => req(`/api/reports/${encodeURIComponent(id)}`, { method: 'PATCH', body: { status } }),
+  broadcast: (body) => req('/api/broadcasts', { method: 'POST', body }),
 }
 
 export const qrUrl = (path) => `${API_BASE}/api/demo/qr.svg?path=${encodeURIComponent(path)}`

@@ -28,9 +28,11 @@ Cửa sổ dòng lệnh in ra mọi địa chỉ và một mã QR:
 
 | Ai dùng | Mở địa chỉ |
 |---|---|
-| Laptop người trình bày (bảng mô phỏng, mã QR) | `http://localhost:8000/?demo=1` |
-| Điện thoại "bà Hoa" | `https://<ip-laptop>:8443/?mode=simple` (hoặc quét mã QR) |
+| Laptop người trình bày (bảng mô phỏng, mã QR) | `http://localhost:8000/?mode=simple&demo=1` |
+| Điện thoại "bà Hoa" (người lớn tuổi) | `https://<ip-laptop>:8443/?mode=simple` (hoặc quét mã QR) |
 | Điện thoại "Vy" (học sinh) | `https://<ip-laptop>:8443/?mode=full` |
+| Điện thoại "Khoa" (đội tình nguyện, mã đội thử 246 810) | `https://<ip-laptop>:8443/?mode=volunteer` |
+| Mở như người dùng mới (màn chào, chọn vai) | `https://<ip-laptop>:8443/#/chao` |
 | Máy Minh trên Zalo (Mảng 5) | `https://<ip-laptop>:8443/zalo` |
 | Web đội tình nguyện (Mảng 6) | `https://<ip-laptop>:8443/web` |
 | Gọi video khuyên chị Lan (Mảng 4) | `https://<ip-laptop>:8443/prototype/video-call.html` |
@@ -46,22 +48,36 @@ Trước mỗi lượt diễn, bấm **Đặt lại demo** ở bảng mô phỏn
 
 Mỗi điện thoại cần được chạm vào màn hình một lần sau khi mở trang, để trình duyệt cho phát tiếng và rung.
 
-**a. Cuộc gọi lừa đảo (phần chính):**
-1. Laptop bấm **Có cuộc gọi lạ**. Điện thoại bà Hoa đổ chuông và rung, thẻ đỏ "Nghi lừa đảo" (A03a).
-2. Bấm **Nghe**. Bé Nai hỏi: "Người gọi có đòi chuyển tiền không?" (A04a). Bấm **Có**.
-3. AI chép lời và tô đỏ 3 dấu hiệu, rồi tự báo Minh (A04b).
-4. Trên máy Minh (`/zalo`), cảnh báo hiện ra. Bấm **Mẹ đừng chuyển**. Điện thoại bà Hoa hiện lời Minh thật to và đọc thành tiếng (A08c).
-5. Laptop bấm **Mở app ngân hàng sau cuộc gọi**. Màn đỏ "DỪNG LẠI" hiện lên (A10a).
+Mở đầu nên cho xem màn chào và màn **Bạn là ai?**: một app, 3 đối tượng (người lớn tuổi, học sinh, đội tình nguyện).
 
-**b. Đang nghe máy mà mở app ngân hàng:** laptop bấm **Đang gọi số lạ, mở app ngân hàng** (A10b). Bấm **Cúp máy ngay** thì Bé Nai hỏi tiếp như bước a.2.
+**a. Cuộc gọi lừa đảo (phần chính, người lớn tuổi):**
+1. Laptop bấm **Có cuộc gọi lạ**. Điện thoại bà Hoa đổ chuông và rung, thẻ đỏ "Nghi lừa đảo" (A03).
+2. Bấm **Nghe**. Bé Nai hỏi: "Người vừa gọi có bảo bà chuyển tiền không ạ?" (A04a). Bấm **Có**.
+3. AI chép lời, tô đỏ dấu hiệu, rồi tự báo Minh (A04b).
+4. Trên máy Minh (`/zalo`), cảnh báo hiện ra. Bấm **Mẹ đừng chuyển**. Điện thoại bà Hoa hiện lời Minh thật to và đọc thành tiếng.
+5. Laptop bấm **Mở app ngân hàng sau cuộc gọi**. Màn đỏ "DỪNG LẠI" có Bé Nai hiện lên (A10a).
 
-**c. Tin nhắn lừa đảo (Vy):** laptop bấm **Có tin nhắn lạ**. Thông báo nổi hiện ra (A05a). Bấm **Xem phân tích** để thấy tin được tô đỏ từng dấu hiệu (A05b), rồi bấm **Báo cho cộng đồng**. Báo cáo hiện ngay ở `/web` để đội tình nguyện duyệt.
+**b. Đang bị gọi đòi tiền:** trên trang chủ bấm **Xử lý ngay** (A5). Màn hiện "Bình tĩnh. Đừng chuyển tiền." kèm 3 bước. Bấm **Kể lại cuộc gọi**, trả lời 4 câu Có/Không (A6), xem kết quả.
 
-**d. Thiết lập và Lá chắn đang ngủ:**
+**c. Đang nghe máy mà mở app ngân hàng:** laptop bấm **Đang gọi số lạ, mở app ngân hàng** (A10b). Bấm **Cúp máy ngay** thì Bé Nai hỏi tiếp như bước a.2.
+
+**d. Kiểm tra số:**
+- Ô "Số lạ, đường dẫn", bấm số trên bàn phím lớn, bấm **Kiểm tra**.
+- Thử 4 số: `0912 345 678` cho Nguy hiểm, `1900 5555 88` cho An toàn, `0987 654 321` cho Chưa rõ, và đường dẫn `qua-tri-an-khach-hang.top` cho Nghi ngờ.
+- Ở kết quả, bấm **Hỏi người thân** để gửi cho Minh.
+
+**e. Tin nhắn lừa đảo (học sinh):** laptop bấm **Có tin nhắn lạ**. Thông báo nổi hiện ra (A05a). Bấm **Xem phân tích** để thấy tin được tô đỏ từng dấu hiệu (B3), rồi bấm **Báo cáo**. Báo cáo hiện ngay ở `/web` và ở mục Duyệt của đội tình nguyện. Mục **Bài học** có bài 1 phút và bài kiểm tra 5 câu.
+
+**f. Đội tình nguyện:** đổi vai sang **Đội tình nguyện**, nhập mã đội `246 810`. Có các mục:
+- Thống kê, điểm nóng theo khu phố, kiểu lừa đảo mới.
+- **Duyệt:** bấm Xác nhận thì số đó bị cảnh báo 90 ngày.
+- **Gửi cảnh báo:** người thân đã ghép nhận trên Zalo.
+
+**g. Thiết lập và Lá chắn đang ngủ:**
 - **Thiết lập lần đầu:** bật từng lớp bảo vệ (A02a), đủ 3 lớp thì sang màn "Lá chắn đã sẵn sàng" (A02b).
-- **Máy tắt Lá chắn:** trang chủ chuyển sang thẻ đỏ "Lá chắn đang ngủ" (E01a). Bấm **Bật lại ngay**.
+- **Máy tắt Lá chắn:** trang chủ hiện thẻ đỏ "Lá chắn đang ngủ" (E01a). Bấm **Bật lại ngay**.
 
-**e. Gọi video khuyên chị Lan:** mở `/prototype/video-call.html` trên điện thoại. Nhân vật có nhãn "AI đóng vai".
+**h. Gọi video khuyên chị Lan:** mở từ mục Bài học, hoặc mở thẳng `/prototype/video-call.html`. Nhân vật có nhãn "AI đóng vai".
 
 ## 4. Khi có sự cố
 
@@ -77,7 +93,7 @@ Mỗi điện thoại cần được chạm vào màn hình một lần sau khi 
 
 ```bash
 cd la-chan-so/server && python -m pytest -q                            # 73 bài kiểm thử máy chủ
-python ../app/tools/chup-man.py /tmp/chup                              # bấm qua 29 màn, chụp để so với export/png/
+python ../app/tools/chup-man.py /tmp/chup                              # đi hết luồng của 3 đối tượng, chụp từng màn
 python ../app/tools/kiem-dien-thoai.py /tmp/dt https://<ip>:8443       # khổ điện thoại và điều khiển từ xa
 ```
 
@@ -99,7 +115,7 @@ Luật chung:
 
 **Khi làm sản phẩm ở vòng chung kết:**
 - **Claude (Claude Code):** viết mã máy chủ (Mảng 2) và app React (Mảng 3) theo kế hoạch của đội, cùng các bài kiểm thử. Commit có dòng `Co-Authored-By: Claude`.
-- **Giao diện:** dựng theo đúng 53 khung thiết kế của đội trên Figma, không sao chép giao diện sản phẩm có sẵn.
+- **Giao diện:** dựng theo thiết kế V3 của đội (`review/mockup/v3.html`, gọn, 3 đối tượng) và linh vật Bé Nai của đội. Không sao chép giao diện sản phẩm có sẵn, không dùng logo thật hay biểu trưng cơ quan nhà nước.
 - **Các mảng khác:** công cụ AI dùng ở Mảng 1, 4, 5, 6 xem README của từng mảng (ví dụ `android/README.md`).
 
 Đội rà soát và quyết định cuối cùng mọi nội dung.

@@ -9,9 +9,11 @@ import socket
 from . import config
 
 LINKS = [
-    ("hoa", "Máy bà Hoa (chế độ đơn giản)", "/?mode=simple"),
-    ("vy", "Máy Vy (chế độ đầy đủ)", "/?mode=full"),
-    ("dieu-khien", "Bảng điều khiển trên điện thoại", "/?mode=simple&demo=1"),
+    ("hoa", "Máy bà Hoa (người lớn tuổi)", "/?mode=simple"),
+    ("vy", "Máy Vy (học sinh)", "/?mode=full"),
+    ("khoa", "Máy Khoa (đội tình nguyện)", "/?mode=volunteer"),
+    ("dieu-khien", "Bảng mô phỏng trên điện thoại", "/?mode=simple&demo=1"),
+    ("moi", "Mở như người dùng mới (màn chào)", "/#/chao"),
     ("zalo", "Máy Minh trên Zalo (Mảng 5)", "/zalo"),
     ("web", "Web đội tình nguyện (Mảng 6)", "/web"),
     ("goi-video", "Gọi video khuyên chị Lan", "/prototype/video-call.html"),

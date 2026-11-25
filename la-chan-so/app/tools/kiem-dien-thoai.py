@@ -66,7 +66,7 @@ pw = WebDriverWait(phone, 10)
 
 def screen(name):
     try:
-        pw.until(EC.presence_of_element_located((By.CSS_SELECTOR, f'[data-name="{name}"]')))
+        pw.until(EC.presence_of_element_located((By.CSS_SELECTOR, f'.phone[data-name^="{name}"]')))
         time.sleep(0.6)
     except Exception:
         errors.append(f"điện thoại không tới màn {name} (đang ở {phone.current_url})")
@@ -92,8 +92,8 @@ try:
     phone.get(PHONE_BASE + "/?mode=simple")
     phone.execute_script("localStorage.clear()")
     phone.get(PHONE_BASE + "/?mode=simple")
-    screen("A01a-trang-chu-don-gian")
-    secure = phone.execute_script("return [window.isSecureContext, getComputedStyle(document.querySelector('.frame')).width]")
+    screen("A1-trang-chu-lon-tuoi")
+    secure = phone.execute_script("return [window.isSecureContext, getComputedStyle(document.querySelector('.phone')).width]")
     print("điện thoại: isSecureContext =", secure[0], "· khung rộng", secure[1])
     if not secure[0] and PHONE_BASE.startswith("https"):
         errors.append("trang HTTPS mà không phải secure context")
@@ -101,21 +101,21 @@ try:
 
     # 2. Laptop: bảng mô phỏng, chọn "Điện thoại", bấm "Có cuộc gọi lạ"
     laptop.get(LAPTOP_BASE + "/?demo=1")
-    WebDriverWait(laptop, 8).until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".demo-panel")))
+    WebDriverWait(laptop, 8).until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".dp")))
     time.sleep(1.0)
-    click_text(laptop, "Điện thoại", ".demo-seg button")
+    click_text(laptop, "Điện thoại", ".dp .seg2 button")
     laptop.save_screenshot(str(OUT / "laptop-bang-mo-phong.png"))
-    qr_ok = laptop.execute_script("const i=document.querySelector('.demo-qr img');return !!i && i.complete && i.naturalWidth>0")
+    qr_ok = laptop.execute_script("const i=document.querySelector('.dq img');return !!i && i.complete && i.naturalWidth>0")
     if not qr_ok:
         errors.append("laptop: mã QR không hiện")
-    click_text(laptop, "Có cuộc gọi lạ", ".demo-panel button")
+    click_text(laptop, "Có cuộc gọi lạ", ".dp button")
     if "/cuoc-goi" in laptop.current_url:
         errors.append("laptop tự chuyển màn dù đang ở chế độ Điện thoại")
 
     # 3. Điện thoại tự đổ chuông (A03a), rồi đi hết luồng cuộc gọi
     screen("A03a-do-chuong-nguy-hiem")
-    click_text(phone, "Nghe", ".call-act")
-    screen("A04a-hoi-nhanh")
+    click_text(phone, "Nghe", ".call-btn")
+    screen("A04a-be-nai-hoi")
     click_text(phone, "Có")
     screen("A04b-phan-tich-ghi-am")
     time.sleep(1.5)
@@ -126,28 +126,32 @@ try:
         errors.append("A04b không báo Minh")
     else:
         api(f"/api/asks/{ours[0]['id']}/reply", {"preset": "dung_chuyen"})
-        screen("A08c-hoi-nguoi-than-tra-loi")
+        screen("A4r-nguoi-than-tra-loi")
 
     # 4. Laptop gửi "Mở app ngân hàng sau cuộc gọi": điện thoại hiện A10a
-    click_text(laptop, "Mở app ngân hàng", ".demo-panel button")
+    click_text(laptop, "Mở app ngân hàng", ".dp button")
     screen("A10a-phanh-sau-cuoc-goi")
 
     # 5. Các màn chính trên khổ điện thoại: không tràn ngang
-    for path, name in [("/kiem-tra", "A06a-kiem-tra-so"), ("/kiem-tra/tin-nhan", "A06b-kiem-tra-tin-nhan"),
-                       ("/bao-cao", "A09a-bao-cao-form"), ("/thiet-lap", "A02b-thiet-lap-hoan-tat"),
+    for path, name in [("/kiem-tra", "A2-kiem-tra-so"), ("/kiem-tra?loai=text", "B2-kiem-tra-tin-nhan"),
+                       ("/bao-cao", "B4-bao-cao"), ("/khan-cap", "A5-khan-cap"), ("/nguoi-than", "A4-nguoi-than"), ("/ke-lai", "A6-ke-lai-cuoc-goi"), ("/thiet-lap", "A02b-thiet-lap-hoan-tat"),
                        ("/dung-lai?danggoi=1&giay=401", "A10b-phanh-dang-goi"), ("/thong-bao", "A05a-thong-bao-noi")]:
         phone.get(PHONE_BASE + "/?mode=simple#" + path)
         screen(name)
     phone.get(PHONE_BASE + "/?mode=full")
-    screen("A01b-trang-chu-day-du")
+    screen("B1-trang-chu-hoc-sinh")
+    phone.get(PHONE_BASE + "/?mode=volunteer")
+    screen("C1-trang-chu-tinh-nguyen")
+    phone.get(PHONE_BASE + "/?mode=volunteer#/thong-ke")
+    screen("C2-thong-ke")
 
     # 6. Mấu "demo" trên điện thoại mở bảng mô phỏng ngay trên máy
     phone.get(PHONE_BASE + "/?mode=simple&demo=1")
-    screen("A01a-trang-chu-don-gian")
-    phone.find_element(By.CSS_SELECTOR, ".demo-fab").click()
+    screen("A1-trang-chu-lon-tuoi")
+    phone.find_element(By.CSS_SELECTOR, ".dfab").click()
     time.sleep(0.4)
     phone.save_screenshot(str(OUT / "dien-thoai-bang-mo-phong.png"))
-    click_text(phone, "Số chưa ai báo", ".demo-panel button")
+    click_text(phone, "Số chưa ai báo", ".dp button")
     screen("A03b-do-chuong-chua-ro")
 finally:
     phone.quit()

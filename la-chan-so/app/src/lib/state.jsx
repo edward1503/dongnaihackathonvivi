@@ -43,13 +43,18 @@ function save(key, value) {
   try { localStorage.setItem(key, JSON.stringify(value)) } catch { /* bộ nhớ đầy: bỏ qua */ }
 }
 
+// mode: simple = người lớn tuổi (bà Hoa), full = học sinh (Vy), volunteer = đội tình nguyện (Khoa)
+export const PERSONA = { simple: 'elder', full: 'student', volunteer: 'volunteer' }
+const MODE_PARAM = new URLSearchParams(location.search).get('mode')
+
 function initialMode() {
-  const p = new URLSearchParams(location.search).get('mode')
-  if (p === 'simple' || p === 'full') {
-    save('lcs.mode', p)
-    return p
+  if (PERSONA[MODE_PARAM]) {
+    save('lcs.mode', MODE_PARAM)
+    save('lcs.onboarded', true)   // mở từ mã QR hoặc bảng mô phỏng: vào thẳng trang chủ
+    return MODE_PARAM
   }
-  return load('lcs.mode', 'simple')
+  const m = load('lcs.mode', 'simple')
+  return PERSONA[m] ? m : 'simple'
 }
 
 function initialRelatives() {
@@ -75,16 +80,21 @@ export function AppProvider({ children }) {
   const [report, setReport] = useState(null) // {draft, response}
   const [call, setCall] = useState(null) // cuộc gọi vừa rồi: {phone, display, seconds, hasRecording, answeredYes, story}
   const [pointsBy, setPointsBy] = useState(() => load('lcs.points', { vy: 120, 'ba-hoa': 120 }))
+  const [ward, setWardState] = useState(() => load('lcs.ward', 'Trấn Biên'))
+  const [onboarded, setOnboardedState] = useState(() => load('lcs.onboarded', false))
   const [toastMsg, setToastMsg] = useState(null)
   const [online, setOnline] = useState(navigator.onLine)
   const toastTimer = useRef(null)
   const askRef = useRef(null)
   askRef.current = ask
 
-  const setMode = useCallback((m) => { setModeState(m); save('lcs.mode', m) }, [])
+  const setMode = useCallback((m) => { if (PERSONA[m]) { setModeState(m); save('lcs.mode', m) } }, [])
+  const setWard = useCallback((w) => { setWardState(w); save('lcs.ward', w) }, [])
+  const setOnboarded = useCallback((v) => { setOnboardedState(v); save('lcs.onboarded', v) }, [])
+  const persona = PERSONA[mode] || 'elder'
   const setRelatives = useCallback((list) => { setRelativesState(list); save('lcs.relatives', list) }, [])
   const addDefaultRelatives = useCallback(() => setRelatives(DEFAULT_RELATIVES), [setRelatives])
-  const reporter = mode === 'full' ? 'vy' : 'ba-hoa'
+  const reporter = mode === 'full' ? 'vy' : mode === 'volunteer' ? 'tnv' : 'ba-hoa'
   const points = pointsBy[reporter] ?? 0
   const setPoints = useCallback((n) => {
     if (typeof n !== 'number') return
@@ -100,7 +110,7 @@ export function AppProvider({ children }) {
   const addRecent = useCallback((r, value) => {
     if (!r || r.kind === 'message' || r.kind === 'call') return
     setRecent((list) => {
-      const item = { value, display: r.display, kind: r.kind, level: r.level, at: new Date().toISOString() }
+      const item = { value, display: r.display, kind: r.kind, level: r.level, label: r.level === 'unknown' ? null : r.scamLabel, at: new Date().toISOString() }
       const next = [item, ...list.filter((x) => x.display !== r.display)].slice(0, 10)
       save('lcs.recent', next)
       return next
@@ -132,7 +142,7 @@ export function AppProvider({ children }) {
       // Laptop bấm ở bảng mô phỏng (chế độ "Điện thoại"): máy này chuyển màn như khi Android mở WebView
       const d = ev.data || {}
       if (d.client === CLIENT_ID || typeof d.path !== 'string' || !d.path.startsWith('/')) return
-      if (d.mode === 'simple' || d.mode === 'full') setMode(d.mode)
+      if (PERSONA[d.mode]) setMode(d.mode)
       if (d.layers && typeof d.layers === 'object') setLayersForDemo(d.layers)
       window.location.hash = '#' + d.path
       return
@@ -144,9 +154,9 @@ export function AppProvider({ children }) {
   }), [toast, setMode])
 
   const value = useMemo(() => ({
-    mode, setMode, result, setResult, recent, addRecent, relatives, setRelatives, addDefaultRelatives,
+    mode, setMode, persona, ward, setWard, onboarded, setOnboarded, result, setResult, recent, addRecent, relatives, setRelatives, addDefaultRelatives,
     ask, setAsk, report, setReport, toast, online, points, setPoints, reporter, call, setCall,
-  }), [mode, setMode, result, recent, addRecent, relatives, setRelatives, addDefaultRelatives, ask, report, toast, online, points, setPoints, reporter, call])
+  }), [mode, setMode, persona, ward, setWard, onboarded, setOnboarded, result, recent, addRecent, relatives, setRelatives, addDefaultRelatives, ask, report, toast, online, points, setPoints, reporter, call])
 
   return (
     <Ctx.Provider value={value}>
