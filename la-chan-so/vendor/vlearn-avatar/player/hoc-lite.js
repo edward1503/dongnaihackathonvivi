@@ -36,6 +36,7 @@ const VS = "attribute vec2 p; void main(){ gl_Position = vec4(p, 0., 1.); }";
 const FS = `precision highp float;
 uniform sampler2D uVid, uMouth, uPrev; uniform float uFade, uPack;
 uniform vec2 uSrc; uniform vec3 uView; uniform vec4 uBox, uFace, uPiv; uniform vec3 uPose; uniform vec2 uShift; uniform float uMouthOn;
+uniform sampler2D uBlink; uniform float uBlinkA; uniform vec4 uEye; // la-chan-so 25/11: chớp mắt khi đang nói (khung chớp hoà vào dải mắt)
 // uPack: miếng miệng dựng sẵn (tools/dung-mieng.py) nằm trong một khung video, nửa trái là màu, nửa phải là trọng số dán
 vec4 M(vec2 m){
   if (uPack > 0.5) { float x = clamp(m.x, 0.003, 0.997) * 0.5; return vec4(texture2D(uMouth, vec2(x, m.y)).rgb, texture2D(uMouth, vec2(0.5 + x, m.y)).g); }
@@ -53,6 +54,9 @@ void main(){
   vec2 uv = q / uSrc; float hx = clamp(uv.x * 0.5, 0.0005, 0.4995);
   vec3 col = texture2D(uVid, vec2(hx, uv.y)).rgb;
   float a = texture2D(uVid, vec2(0.5 + hx, uv.y)).g;
+  if (uBlinkA > 0.0) { float fe = 0.25 * (uEye.w - uEye.y);
+    float em = smoothstep(uEye.x, uEye.x + fe, q.x) * (1.0 - smoothstep(uEye.z - fe, uEye.z, q.x)) * smoothstep(uEye.y, uEye.y + fe, q.y) * (1.0 - smoothstep(uEye.w - fe, uEye.w, q.y));
+    col = mix(col, texture2D(uBlink, vec2(hx, uv.y)).rgb, uBlinkA * em); }
   vec2 m = (q - uBox.xy) / (uBox.zw - uBox.xy);
   if (uMouthOn > 0.5 && m.x > 0.0 && m.y > 0.0 && m.x < 1.0 && m.y < 1.0) {
     vec4 t = M(m); float d = 1.0 / ${N}.0;
@@ -194,14 +198,19 @@ export async function mountLiteAvatar(host, id, audioCtx) {
     for (const [k, v] of [[gl.TEXTURE_MIN_FILTER, gl.LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR], [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]]) gl.texParameteri(gl.TEXTURE_2D, k, v);
     return t; };
   // hai miếng miệng luân phiên: bộ vẽ chậm hơn 30 khung/giây (WASM ~50–100 ms/khung) nên hoà dần giữa hai miếng liên tiếp cho mượt
-  const tVid = tex(0), tM = [tex(1), tex(2)], tPk = tex(3);
+  const tVid = tex(0), tM = [tex(1), tex(2)], tPk = tex(3), tBlink = tex(4);
   for (const u of [1, 2]) { gl.activeTexture(gl.TEXTURE0 + u); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, N, N, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(N * N * 4)); }
   let cur = 0, tPatch = 0, gap = 60;
   const uM = U("uMouth"), uP = U("uPrev"), uFade = U("uFade"), uPk = U("uPack");
   gl.uniform1i(U("uVid"), 0);
   gl.uniform2f(U("uSrc"), W, H); gl.uniform3f(U("uView"), s, ox, y0); gl.uniform4f(U("uBox"), bx1, by1, bx2, by2);
   gl.uniform4f(U("uFace"), g.cx, g.cy, g.fw, g.fh); gl.uniform4f(U("uPiv"), g.piv[0], g.piv[1], g.chin_y, g.depth);
-  const uPose = U("uPose"), uShift = U("uShift"), uOn = U("uMouthOn");
+  const uPose = U("uPose"), uShift = U("uShift"), uOn = U("uMouthOn"), uBlinkA = U("uBlinkA");
+  // la-chan-so 25/11 (người dùng: đứng im thì hơi giả, mắt cũng phải cử động): lấy sẵn khung chớp mắt (meta.khung_chop, tools/khung-chuan.py)
+  // vào một texture; khi đang nói và video nhân vật đứng yên ở dáng chuẩn thì vài giây hoà khung này vào dải mắt một lần
+  gl.uniform1i(U("uBlink"), 4); gl.uniform1f(uBlinkA, 0);
+  let chopSan = false, chopLuc = 0, chopTiep = 0;
+  if (meta.khung_chop != null && meta.mat) gl.uniform4f(U("uEye"), ...meta.mat);
 
   // ----- dữ liệu cho miếng miệng (không gian 384×384 của bộ vẽ) -----
   const pc = Object.assign(document.createElement("canvas"), { width: protImg.width, height: protImg.height }).getContext("2d", { willReadFrequently: true });
@@ -277,7 +286,15 @@ export async function mountLiteAvatar(host, id, audioCtx) {
     }
     newFrame = false;
     if (analyser && clip) { analyser.getFloatTimeDomainData(lv); let q = 0; for (let i = 0; i < lv.length; i++) q += lv[i] * lv[i]; env += (Math.min(1, Math.sqrt(q / lv.length) * 6) - env) * 0.25; } else env *= 0.9;
-    lac += ((clip ? 0.4 : 1) - lac) * 0.04;   // la-chan-so 25/11: đang nói thì lắc lư nhẹ hơn (còn 40%), nói xong cử động lại bình thường
+    lac += ((clip ? 0.7 : 1) - lac) * 0.04;   // la-chan-so 25/11: đang nói thì lắc lư nhẹ hơn (còn 70%, đứng im hẳn thì giả), nói xong cử động lại bình thường
+    { const bay = performance.now(); let b = 0;
+      if (chopSan && clip?.dung) {
+        if (!chopTiep) chopTiep = bay + 1200 + Math.random() * 1800;
+        if (bay >= chopTiep) { chopLuc = bay; chopTiep = bay + 2500 + Math.random() * 3000; }
+        const d = bay - chopLuc;   // một lần chớp khoảng 0,2 giây: nhắm dần, giữ, mở dần
+        b = d < 70 ? d / 70 : d < 120 ? 1 : d < 210 ? 1 - (d - 120) / 90 : 0;
+      } else chopTiep = 0;
+      gl.uniform1f(uBlinkA, b); }
     const t = performance.now() / 1000; // lắc lư chậm + gật nhẹ theo giọng (cùng đường cong tools/lipcal/idle_motion.py)
     gl.uniform3f(uPose, lac * rad * (2.2 * w(t, 2) + 1.0 * w(t, 5, 1.0) + 0.4 * w(t, 9, 2.1)), lac * rad * (1.3 * w(t, 3, 0.5) + 0.7 * w(t, 8, 1.7) + 1.4 * env), lac * rad * (1.1 * w(t, 1, 0.8) + 0.5 * w(t, 4, 2.6)));
     gl.uniform2f(uShift, lac * (0.012 * w(t, 2, 0.4) + 0.006 * w(t, 7, 1.2)), lac * 0.006 * w(t, 5, 2.0));
@@ -286,7 +303,22 @@ export async function mountLiteAvatar(host, id, audioCtx) {
     gl.uniform1f(uFade, Math.min(1, (performance.now() - tPatch) / Math.max(20, gap)));
     gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
-  await vid.play().catch(() => {}); bgv.play().catch(() => {});
+  await vid.play().catch(() => {});
+  // lấy khung chớp mắt từ chính video nhân vật trước khi vẽ (video ẩn thứ hai không nạp được trong WebView Android khi chưa phát)
+  if (meta.khung_chop != null && meta.mat) {
+    try {
+      vid.pause();
+      await new Promise((ok) => { let xong = false; const het = () => { if (!xong) { xong = true; vid.removeEventListener("seeked", het); ok(); } };
+        vid.addEventListener("seeked", het); vid.currentTime = (meta.khung_chop % meta.frames) / meta.fps; setTimeout(het, 1500); });
+      if (vid.readyState >= 2) {
+        gl.activeTexture(gl.TEXTURE4); gl.bindTexture(gl.TEXTURE_2D, tBlink); gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, vid); chopSan = true;
+      }
+      console.info("chớp mắt:", chopSan ? "sẵn sàng, khung " + meta.khung_chop : "không lấy được khung");
+    } catch (e) { console.warn("chớp mắt:", e); }
+    vid.currentTime = 0; await vid.play().catch(() => {});
+  }
+  bgv.play().catch(() => {});
   tick();
 
   PR.hold = () => !!clip;   // the shared rest-pose loop (prepareLite) waits while this tile speaks
