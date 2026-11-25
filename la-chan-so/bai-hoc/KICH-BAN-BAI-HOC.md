@@ -16,7 +16,7 @@ Mười kiểu dưới đây do mảng 4 tự chọn theo các kiểu đã có t
 - **Đề chỉ bắt buộc phần A** ("bài học 1 phút"). Phần B và C là phần "học như chơi game".
 - **Hai chế độ.** Bài cho bà Hoa (chữ lớn): Bé Nai xưng "con", gọi "bà", mỗi màn một việc, nút cao từ 56px, không kéo thả. Bài cho Vy: Bé Nai xưng "mình", gọi "bạn".
 - **Điểm chỉ tính ở phần C và D.** Phần B là luyện tập; đã xem đáp án rồi mới bấm thì không tính là đạt. Ở phần C mỗi ý được chấm là mười điểm; trang bài học chỉ nhận điểm của đúng cuộc gọi vừa bấm "Nghe máy", một lần, và không vượt quá số ý của bài.
-- **Sao của bài (tối đa ba).** Mỗi phần đạt được một sao: A xem hết truyện; B làm xong cả hai bài luyện mà không xem đáp án; C được từ nửa số ý trở lên. Sao và phần đã xong lưu trên máy.
+- **Sao của bài (tối đa ba).** Mỗi phần đạt được một sao: A xem hết truyện; B làm xong cả hai bài luyện mà không xem đáp án và không bấm bừa (sai vẫn được giải thích và làm tiếp, nhưng sai quá mức thì bài xong mà chưa tính là đạt, có nút "Làm lại để đạt": B1 chạm nhầm tối đa một chỗ; B2 và B4 chọn sai tối đa một lần; B5 chọn việc đầu tiên phải đúng ngay lần đầu, B5 xếp thứ tự được kiểm sai tối đa một lần; B6 dừng lúc nào cũng là xong); C được từ nửa số ý trở lên. Sao và phần đã xong lưu trên máy.
 - **Bốn bài dựng trước** (trang `prototype/hoc.html`, mỗi bài một tệp `prototype/hoc/bai-NN.json`): Bài 1, 2, 3, 9 của bảng 10 bài; người học thấy chúng là Bài 1 đến Bài 4 (xem ghi chú ở mục 4). Sáu bài còn lại mới có kịch bản.
 - **Mã kiểu** (cột `ma_kieu`) dùng để mở đúng bài sau khi app vừa cảnh báo một cuộc gọi hay tin nhắn cùng kiểu. Hợp đồng dữ liệu của mảng 1 đang trả `kieu` là chữ hiển thị; đề xuất thêm trường `ma_kieu` nhận đúng 10 giá trị ở mục 4.
 
@@ -26,6 +26,7 @@ Mười kiểu dưới đây do mảng 4 tự chọn theo các kiểu đã có t
 - **Nhân vật tự nói bằng giọng của mình.** Mỗi khung có ít nhất một câu thoại của nhân vật, có cảm xúc rõ: bà Hoa hoảng rồi thở phào, Vy mừng rồi ngờ ngợ, chú Tư hớn hở rồi chưng hửng. Người học nghe là biết nhân vật đang thấy gì.
 - **Kẻ gian nói ngọt, không gằn giọng dọa nạt quá mức.** Ngoài đời chúng lễ phép và vội vàng, người học cần quen đúng cái giọng đó. Mỗi lượt tối đa hai câu.
 - **Mỗi khung ba bốn câu ngắn, khoảng 12 đến 15 giây.** Bốn khung vừa một phút.
+- **Kể xong một khung thì tự sang khung kế**, bài cho học sinh lẫn bài cho ông bà (người già ít phải bấm): bài học sinh chờ 0,7 giây, bài ông bà chờ 2 giây cho kịp nhìn tranh. Nút "Tiếp" (sang câu kế, hết câu thì sang khung kế) và "Nghe lại" vẫn có. Không tự sang ở khung ngõ cụt (chờ bấm "Quay lại điểm rẽ"), khi trang đang ẩn, và tới điểm rẽ thì dừng chờ người học chọn.
 - **Chỉ dẫn cảm xúc** ghi trong ngoặc nghiêng trước mỗi câu, đưa vào lời dặn thu giọng. Mỗi nhân vật thu một lượt dài riêng cho mỗi bài rồi cắt.
 - **Lời nói ra không có dấu hai chấm, số viết bằng chữ, không đọc đường dẫn hay số điện thoại.** Bé Nai nhại lại tin nhắn thì nói thẳng vào câu, không "tin nhắn viết hai chấm".
 - **Khen và sửa cũng có cảm xúc.** Đúng thì reo lên, sai thì nhẹ nhàng, không trách: "Câu này hiền khô à, bạn thử câu khác nha."
@@ -237,21 +238,21 @@ Cho Vy. Tranh `comic2-1` đến `comic2-4` và lời kể của Bé Nai đã có
 
 *B1 · Chạm bắt bài.* Tin nhắn viết lại từ tin mẫu trong `mock-data.js`; đường dẫn dùng đuôi `.example` (đuôi dành riêng, không ai đăng ký được, nên chắc chắn hư cấu; không dùng tên dịch vụ rút gọn có thật), chỉ hiện chữ, không bấm được, Bé Nai không đọc. **Bé Nai** *(thách vui)*: Tin nhắn này có mấy chỗ đáng ngờ lắm. Mình làm mẫu hai chỗ, câu chào thì hiền khô, còn lương cao mà nhàn thì bắt bài. Giờ bạn chạm vào bốn chỗ còn lại nha.
 
-> Chào em, bên chị đang tuyển người làm thêm. Việc nhẹ lương cao 500k/ngày, không cần kinh nghiệm. Chỉ cần nạp trước 200k để kích hoạt, hoàn tiền kèm hoa hồng 20%. Làm tại nhà, giờ giấc tự do. Đăng ký ngay, năm phút nữa là hết suất, tại viec-nhe-xyz.example
+> Chào em, bên chị đang tuyển người làm thêm. Việc nhẹ lương cao 500k/ngày, chỉ cần nạp trước 200k để kích hoạt, không cần kinh nghiệm. Hoàn tiền kèm hoa hồng 20%. Đăng ký ngay, năm phút nữa là hết suất. Làm tại nhà, giờ giấc tự do. Chi tiết tại viec-nhe-xyz.example
 
 | Cụm chữ (theo thứ tự trong tin) | Loại | Bé Nai nói khi chạm |
 |---|---|---|
 | Chào em, (mẫu, tô sẵn) | bình thường | (hiện chữ) Mẫu: câu chào thì hiền khô à. |
 | bên chị đang tuyển người làm thêm. | gây nhiễu | *(dễ thương)* Tuyển người thì chưa lạ. Lạ là ở chỗ họ hứa và họ đòi kìa. |
 | Việc nhẹ lương cao 500k/ngày, (mẫu, tô sẵn) | hứa thu nhập cao | (hiện chữ) Mẫu: hứa trả nhiều tiền cho việc rất nhẹ, là để dụ mình đăng ký. |
+| chỉ cần nạp trước 200k để kích hoạt, | đòi tiền trước | *(reo)* Bắt bài! Việc thật thì ai lại bắt mình nạp tiền trước. |
 | không cần kinh nghiệm. | gây nhiễu | *(dễ thương)* Việc không cần kinh nghiệm thì cũng có thiệt. Câu này hiền khô à, bạn thử chỗ khác nha. |
-| Chỉ cần nạp trước 200k để kích hoạt, | đòi tiền trước | *(reo)* Bắt bài! Việc thật thì ai lại bắt mình nạp tiền trước. |
-| hoàn tiền kèm hoa hồng 20%. | hứa hoàn tiền kèm lời | *(khoái)* Chuẩn luôn! Hứa hoàn tiền kèm hoa hồng là để mình yên tâm mà nạp đó. |
+| Hoàn tiền kèm hoa hồng 20%. | hứa hoàn tiền kèm lời | *(khoái)* Chuẩn luôn! Hứa hoàn tiền kèm hoa hồng là để mình yên tâm mà nạp đó. |
+| Đăng ký ngay, năm phút nữa là hết suất. | giục gấp | *(nhanh nhảu)* Đúng rồi! Giục gấp vậy là để bạn không kịp hỏi ai. |
 | Làm tại nhà, giờ giấc tự do. | gây nhiễu | *(dễ thương)* Làm tại nhà thì cũng có việc thiệt. Chỗ này chưa lạ đâu, bạn tìm tiếp nha. |
-| Đăng ký ngay, năm phút nữa là hết suất, | giục gấp | *(nhanh nhảu)* Đúng rồi! Giục gấp vậy là để bạn không kịp hỏi ai. |
-| tại viec-nhe-xyz.example | đường dẫn lạ | *(tinh nghịch)* Tinh mắt ghê! Đường dẫn lạ hoắc, đừng bấm vô nha. |
+| Chi tiết tại viec-nhe-xyz.example | đường dẫn lạ | *(tinh nghịch)* Tinh mắt ghê! Đường dẫn lạ hoắc, đừng bấm vô nha. |
 
-- Ba cụm gây nhiễu nằm xen giữa các cụm đáng ngờ, để vị trí không làm lộ đáp án. Chạm nhầm thì được giải thích, làm tiếp được; nhưng chạm nhầm từ hai chỗ trở lên thì bài xong mà chưa tính là đạt (để chạm bừa hết mọi chỗ không được tính), làm lại được.
+- Ba cụm gây nhiễu nằm xen giữa các cụm đáng ngờ, để vị trí không làm lộ đáp án: chạm lần lượt từ đầu hay từ cuối tin đều vấp hai cụm gây nhiễu trước khi đủ bốn chỗ. Chạm nhầm thì được giải thích, làm tiếp được; nhưng chạm nhầm từ hai chỗ khác nhau trở lên thì bài xong mà chưa tính là đạt (để chạm bừa hết mọi chỗ không được tính), làm lại được.
 - Bốn chỗ phải tự tìm: đòi tiền trước, hứa hoàn tiền kèm lời, giục gấp, đường dẫn lạ.
 - Tìm đủ, **Bé Nai** *(hào hứng)*: Bạn bắt đủ bốn chỗ rồi đó. Gặp tin kiểu này, bạn đừng trả lời, đừng chuyển tiền. Giữ tin lại rồi báo cáo, chặn số nha.
 - Gợi ý (hiện chữ): 1. Nhớ cảnh ba hông, họ bắt Vy làm gì mới cho nhận đơn lớn? 2. Bạn tìm chỗ nào họ hứa, chỗ nào họ đòi, chỗ nào họ giục. 3. Bạn thử coi người gửi muốn mình làm gì trước khi kịp kiểm tra nha.
@@ -546,7 +547,7 @@ Người học là Vy, nhân vật là ông Tư (chú của Vy; Bé Nai và Vy g
 
 | Lời trong nhóm | Chiêu | Bé Nai giải thích |
 |---|---|---|
-| Tuần này thầy cam kết lãi ba mươi phần trăm, không lỗ. (mẫu) | Hứa lãi chắc chắn | (hiện chữ) Đầu tư thật thì có lời có lỗ. Ai cam kết không lỗ là nói xạo. |
+| Tuần này thầy cam kết lãi ba mươi phần trăm, không lỗ. (mẫu) | Hứa lãi chắc chắn | (hiện chữ) Đầu tư thật thì có lời có lỗ. Hứa lãi cao mà chắc chắn không lỗ là dấu hiệu phải dừng lại. |
 | Còn ba suất gói kim cương, hết đêm nay. (mẫu) | Giục gấp | (hiện chữ) Giục gấp vậy là để chú không kịp hỏi ai. |
 | Anh coi ảnh tiền về nè, hôm qua em mới rút. | Khoe ảnh lấy lòng tin | *(giảng giải)* Người khoe trong nhóm thường là người của họ. Tấm ảnh đâu chứng minh được chú cũng sẽ rút được tiền. |
 | Muốn rút thì đóng thuế trước mười phần trăm. | Đòi phí để rút | *(giảng giải)* Tiền của mình mà muốn rút phải đóng thêm. Đóng rồi họ lại đòi nữa. |
@@ -579,13 +580,13 @@ Người học là Vy, nhân vật là ông Tư (chú của Vy; Bé Nai và Vy g
 
 **Bé Nai** *(hào hứng)* mở đầu: Tới thử thách cuối bài rồi. Chú Tư đang gọi hỏi ý bạn đó. Bạn khuyên chú sao cho chú hiểu nha.
 
-1. **Chú Tư** *(hào hứng pha chút lưỡng lự)* Vy hả con. Mấy người trong nhóm rủ chú nạp thêm, nói lãi gấp đôi. Lần trước chú rút được thiệt mà. Chú có nên nạp không con?
+1. **Chú Tư** *(hào hứng pha chút lưỡng lự)* A lô, Vy đó hả con? Mấy người trong nhóm rủ chú nạp thêm, nói lãi gấp đôi. Lần trước chú rút được thiệt mà. Chú có nên nạp không con?
 2. **Chú Tư** *(chưng hửng)* Ủa, vậy sao lần đầu họ cho chú rút được vậy con?
 3. **Chú Tư** *(thở ra, cười)* May mà chú hỏi con. Để chú lưu tin nhắn, báo cáo rồi rời nhóm nha con.
 
 - Bốn ý được chấm: khuyên chú đừng nạp thêm; giải thích lần đầu cho rút là mồi nhử; nêu ít nhất một dấu hiệu khác (lãi chắc chắn, đòi phí, giục gấp); rủ chú báo cáo.
 - Lời 3 chỉ dùng khi người học đã khuyên chú dừng. Người học khuyên nạp thì chú hỏi lại *(phân vân)*: Vậy nếu họ đòi chú nạp thêm mới cho rút thì sao con?
-- Gợi ý của Bé Nai: 1. Bạn nhớ khung hai hông, mấy đồng lời đầu tiên là để làm gì? 2. Có khoản đầu tư thật nào dám hứa không bao giờ lỗ không ta? 3. Sau cùng, làm gì để mấy người khác trong nhóm không mất tiền?
+- Gợi ý của Bé Nai: 1. Bạn nhớ khung hai hông, mấy đồng lời đầu tiên là để làm gì? 2. Ngoài chuyện cho rút trước, trong nhóm còn hứa hẹn điều gì nghe khó tin không ta? (không nêu thẳng dấu hiệu, vì "nêu thêm một dấu hiệu khác" là một ý được chấm) 3. Sau cùng, làm gì để mấy người khác trong nhóm không mất tiền?
 - Về lại bài, Bé Nai nói theo kết quả. Đủ ý *(mừng)*: Bạn khuyên chú Tư thuyết phục ghê. Cuốn sổ tiết kiệm của chú an toàn rồi. Thiếu ý *(nhẹ nhàng)*: Bạn khuyên được một phần rồi. Bạn coi lại ý còn thiếu, rồi thử gọi chú Tư lần nữa nha. Bỏ dở *(hiền)*: Cuộc gọi chưa xong nè. Lúc nào tiện, bạn gọi lại cho chú Tư nha. Không được ý nào *(nhẹ nhàng)*: Lần này chưa được ý nào. Không sao, bạn gọi lại cho chú Tư thử lần nữa nha.
 
 ### Bài 10 · Cài ứng dụng giả mạo

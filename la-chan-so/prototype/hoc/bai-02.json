@@ -167,17 +167,7 @@
       }
      },
      {
-      "chu": "không cần kinh nghiệm.",
-      "loai": "nhieu",
-      "giai_thich": {
-       "ai": "be-nai",
-       "cam_xuc": "dễ thương",
-       "chu": "Việc không cần kinh nghiệm thì cũng có thiệt. Câu này hiền khô à, bạn thử chỗ khác nha.",
-       "giong": "hoc/giong/b02/bn-04.m4a"
-      }
-     },
-     {
-      "chu": "Chỉ cần nạp trước 200k để kích hoạt,",
+      "chu": "chỉ cần nạp trước 200k để kích hoạt,",
       "loai": "dau-hieu",
       "ten": "Đòi tiền trước",
       "giai_thich": {
@@ -188,7 +178,17 @@
       }
      },
      {
-      "chu": "hoàn tiền kèm hoa hồng 20%.",
+      "chu": "không cần kinh nghiệm.",
+      "loai": "nhieu",
+      "giai_thich": {
+       "ai": "be-nai",
+       "cam_xuc": "dễ thương",
+       "chu": "Việc không cần kinh nghiệm thì cũng có thiệt. Câu này hiền khô à, bạn thử chỗ khác nha.",
+       "giong": "hoc/giong/b02/bn-04.m4a"
+      }
+     },
+     {
+      "chu": "Hoàn tiền kèm hoa hồng 20%.",
       "loai": "dau-hieu",
       "ten": "Hứa hoàn tiền kèm lời",
       "giai_thich": {
@@ -196,6 +196,17 @@
        "cam_xuc": "khoái",
        "chu": "Chuẩn luôn! Hứa hoàn tiền kèm hoa hồng là để mình yên tâm mà nạp đó.",
        "giong": "hoc/giong/b02/bn-06.m4a"
+      }
+     },
+     {
+      "chu": "Đăng ký ngay, năm phút nữa là hết suất.",
+      "loai": "dau-hieu",
+      "ten": "Giục gấp",
+      "giai_thich": {
+       "ai": "be-nai",
+       "cam_xuc": "nhanh nhảu",
+       "chu": "Đúng rồi! Giục gấp vậy là để bạn không kịp hỏi ai.",
+       "giong": "hoc/giong/b02/bn-08.m4a"
       }
      },
      {
@@ -209,18 +220,7 @@
       }
      },
      {
-      "chu": "Đăng ký ngay, năm phút nữa là hết suất,",
-      "loai": "dau-hieu",
-      "ten": "Giục gấp",
-      "giai_thich": {
-       "ai": "be-nai",
-       "cam_xuc": "nhanh nhảu",
-       "chu": "Đúng rồi! Giục gấp vậy là để bạn không kịp hỏi ai.",
-       "giong": "hoc/giong/b02/bn-08.m4a"
-      }
-     },
-     {
-      "chu": "tại viec-nhe-xyz.example",
+      "chu": "Chi tiết tại viec-nhe-xyz.example",
       "loai": "dau-hieu",
       "ten": "Đường dẫn lạ",
       "giai_thich": {

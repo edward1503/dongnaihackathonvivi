@@ -166,7 +166,10 @@ const GIAI = {
     ghi(s.xacNhan === true && s.ketQua.sao === 3 && s.ketQua.dat === true, 'dừng ngay sau dấu hiệu đầu: 3 sao, đạt', J(s.ketQua));
     ghi(await ev(`document.querySelectorAll('.ds-chieu div').length`) === co.length, 'màn kết liệt kê đủ các chiêu của cuộc gọi'); await kiem('b6-ket-3', true);
     if (bt.cau[co[0]].dau_hieu.luc > 0.2) {      // bấm trước mốc dấu hiệu của chính câu đó → vẫn coi là dừng sớm
-      await bam('Nghe lượt nữa'); await cho(dangCau(co[0]), 60000, 'cuộc gọi tới câu ' + (co[0] + 1)); await bam('DỪNG'); await sleep(80); s = await tt();
+      await bam('Nghe lượt nữa'); await cho(`['chuan-bi','luot'].includes(window.__hoc.pha)`, 5000, 'bắt đầu nghe lại');
+      await bam('Gợi ý'); await cho(`window.__hoc.pha==='tam'`, 3000, 'mở gợi ý thì cuộc gọi tạm dừng'); await bam('Đóng'); await sleep(80);
+      ghi(await coNut('Nghe lại từ đầu') && (await coNut('Bài luyện tiếp') || await coNut('Tới thử thách')), 'đóng gợi ý giữa lượt nghe lại: có nút nghe tiếp và nút đi tiếp, không kẹt ở DỪNG'); await kiem('b6-tam', true);
+      await bam('Nghe lại từ đầu'); await cho(dangCau(co[0]), 60000, 'cuộc gọi tới câu ' + (co[0] + 1)); await bam('DỪNG'); await sleep(80); s = await tt();
       ghi(s.pha === 'som', 'bấm trước khi dấu hiệu kịp vang lên: coi là dừng sớm', J(s.dungO) + ' pha ' + s.pha);
       const luu = JSON.parse(await ev(`localStorage.getItem('lcs-hoc-v1')`)).bai[String(await ev('window.__hoc.bai'))].b[0];
       ghi(luu.sao === 3 && luu.dat === true, 'kết quả tốt nhất của bài luyện được giữ lại', J(luu));
@@ -178,6 +181,7 @@ const GIAI = {
     ghi(D.filter(d => d.mau).length === 2, 'B1 có hai chỗ mẫu tô sẵn'); await kiem('b1-dau', true);
     ghi(await ev(`document.querySelectorAll('.doan.bat,.doan.hien').length`) === 2, 'chỉ hai chỗ mẫu được tô lúc đầu');
     await bam(nhieu[0].chu); await choPha('nham:1'); await cho(`window.__hoc.noi===${J(nhieu[0].giai_thich.chu)}`, 4000, 'chạm nhầm thì Bé Nai giải thích'); await kiem('b1-nham', true);
+    await bam(nhieu[0].chu); await sleep(80); ghi((await tt()).pha === 'nham:1', 'chạm lại đúng chỗ nhầm cũ không bị đếm thêm', (await tt()).pha);
     await thuGoiY(bt, !!o.xem);
     if (o.xem) { const s = await tt(); ghi(s.pha === 'xong' && s.ketQua.dat === false, 'xem đáp án rồi thì bài không tính là đạt', J(s.ketQua)); ghi(await coNut('Làm lại để đạt'), 'có nút làm lại'); await kiem('b1-da-xem', true); await bam('Làm lại để đạt'); await choPha('lam'); }
     for (let k = 0; k < can.length; k++) { await bam(can[k].chu); if (k < can.length - 1) { await choPha('bat:' + (k + 1)); await cho(`window.__hoc.noi===${J(can[k].giai_thich.chu)}`, 4000, 'chạm đúng thì Bé Nai giải thích'); if (k === 1) await kiem('b1-giua', true); } }
@@ -198,13 +202,16 @@ const GIAI = {
   async 'viec-nao-truoc'(bt, lg, o) {
     await choPha('mau'); ghi(bt.mau.viec.length === 2, 'B5 có lượt mẫu hai việc'); await kiem('b5-mau', true);
     await bam('Tới lượt ' + (lg ? 'bà' : 'bạn')); await choPha('lam'); await kiem('b5-lam', true);
-    const V = bt.viec, chiChon = lg || V.some(v => v.dung);
+    const V = bt.viec, chiChon = V.some(v => v.dung) || !V.some(v => v.toi_da || v.toi_thieu), toiLuot = 'Tới lượt ' + (lg ? 'bà' : 'bạn');
+    const lamLai = async () => { ghi((await tt()).ketQua.dat === false && await coNut('Làm lại để đạt'), 'sai quá mức cho phép: xong nhưng chưa đạt, có nút làm lại', J((await tt()).ketQua)); await kiem('b5-chua-dat', true);
+      await bam('Làm lại để đạt'); await choPha('mau'); await bam(toiLuot); await choPha('lam'); };
     if (chiChon) {
       const dung = V.find(v => v.dung) || V.find(v => v.toi_da), sai = V.find(v => v !== dung && !(v.toi_da && !V.some(x => x.dung)));
       await bam(sai.chu); await choPha('sai'); const gt = (sai.giai_thich || sai.sai || bt.sai || {}).chu;
       if (gt) await cho(`window.__hoc.noi===${J(gt)}`, 4000, 'chọn sai thì Bé Nai giải thích'); await kiem('b5-sai', true);
       await thuGoiY(bt, false);
       await bam(dung.chu); await choPha('xong');
+      await lamLai(); await bam(dung.chu); await choPha('xong');           // chọn đúng ngay lần đầu thì mới đạt
     } else {
       const cuoi = V.find(v => v.toi_thieu), dau = V.find(v => v.toi_da), con = V.filter(v => v !== cuoi && v !== dau);
       ghi(!(await ev(`[...document.querySelectorAll('#app .chan button')].find(e=>e.textContent.trim()==='Kiểm tra').disabled`)) === false, 'chưa xếp đủ thì chưa kiểm tra được');
@@ -214,6 +221,8 @@ const GIAI = {
       await bam('Xếp lại'); for (const v of [...con, dau, cuoi]) await bam(v.chu);
       await bam('Kiểm tra'); await choPha('sai'); await cho(`window.__hoc.noi===${J(dau.sai.chu)}`, 4000, 'việc gấp bị để sau thì Bé Nai nhắc');
       await bam('Xếp lại'); for (const v of [con[0], dau, ...con.slice(1), cuoi]) await bam(v.chu);       // một thứ tự hợp lệ khác với thứ tự gợi ý
+      await bam('Kiểm tra'); await choPha('xong');
+      await lamLai(); for (const v of [con[0], dau, ...con.slice(1), cuoi]) await bam(v.chu);   // kiểm sai hai lần ở lượt trước nên phải làm lại
       await bam('Kiểm tra'); await choPha('xong');
       ghi(await ev(`document.querySelectorAll('.viec.dung .vi').length`) === V.filter(v => v.vi_sao).length, 'sau khi đạt hiện thứ tự gợi ý kèm lý do');
     }
@@ -239,8 +248,10 @@ async function choiBai(B, w, h, o) {
       await bam(sai.chu); await choMan('truyen:ngo-cut'); await kiem('ngo-cut', true); await cho(`window.__hoc.pha==='het-loi'`, 60000, 'kể xong ngõ cụt'); await bam('Quay lại điểm rẽ');
       await choMan('truyen:' + k); await choPha('re'); await bam(dung.chu); await choMan('truyen:an-toan'); await kiem('an-toan', true); await quaKhung('truyen:an-toan');
     } else {
-      if (!lg && k === 0) { await choMan('truyen:1', 90000); continue; }      // chế độ đầy đủ: kể xong tự sang khung kế
-      if (lg && k === 0) await cho(`window.__hoc.pha==='het-loi' && document.querySelector('.loi .chu').textContent===${J(cuoi)}`, 90000, 'kể hết lời khung 1');
+      if (k === 0) {        // kể xong tự sang khung kế, cả hai chế độ (chữ lớn chờ lâu hơn); trước khi sang phải hiện đủ lời của khung
+        await cho(`window.__hoc.pha==='het-loi' && document.querySelector('.loi .chu').textContent===${J(cuoi)}`, 90000, 'kể hết lời khung 1');
+        ghi(await choMan('truyen:1', 8000), 'kể xong khung 1 thì tự sang khung 2, không cần bấm Tiếp'); continue;
+      }
       await kiem('truyen-' + (k + 1), k === 2);
       if (k === 1) { await bam('Tiếp'); await sleep(90); const s1 = await tt(); ghi(s1.man === 'truyen:1' && s1.cau === 1, 'bấm Tiếp giữa chừng chỉ sang câu kế, không bỏ qua lời của khung', J([s1.man, s1.cau])); }
       await quaKhung('truyen:' + k);
@@ -277,7 +288,10 @@ async function choiBai(B, w, h, o) {
   ghi(await veTuGoi(`JSON.stringify({diem:1,tong:${n},luc:Date.now()})`) === 'thieu', 'cuộc gọi thiếu ý');
   ghi((await ev(`document.querySelector('.diem-to').textContent`)).startsWith(`1/${n} ý`), 'màn kết quả hiện điểm cuộc gọi (thiếu ý)'); await kiem('ket-qua-thieu', true);
   await mo(ve + `&toc=${TOC}`, w, h); await choMan('ket-qua'); ghi((await tt()).pha === 'bo', 'mở lại địa chỉ quay về lần nữa: điểm không được nhận lại');
-  ghi(await veTuGoi(`JSON.stringify({diem:40,tong:50,luc:Date.now()})`) === 'du', 'cuộc gọi đủ ý');
+  ghi(await veTuGoi(`JSON.stringify({diem:40,tong:50,luc:Date.now()})`) === 'bo', 'bản ghi vượt tổng (sai hợp đồng) không được nhận');
+  ghi(await veTuGoi(`JSON.stringify({diem:0.5,tong:${J(String(n))},luc:Date.now()})`) === 'bo', 'bản ghi sai kiểu (điểm lẻ, tổng là chữ) không được nhận');
+  ghi(await veTuGoi(`JSON.stringify({diem:${n},tong:${n}})`) === 'bo', 'bản ghi thiếu mốc luc không được nhận');
+  ghi(await veTuGoi(`JSON.stringify({diem:${n},tong:${n},luc:Date.now()})`) === 'du', 'cuộc gọi đủ ý');
   ghi((await ev(`document.querySelector('.diem-to').textContent`)).startsWith(`${n}/${n} ý · +${n * 10} điểm`), 'điểm không vượt quá số ý của bài, mỗi ý mười điểm', await ev(`document.querySelector('.diem-to').textContent`)); await kiem('ket-qua-du', true);
   ghi(await veTuGoi(`JSON.stringify({diem:0,tong:${n},luc:Date.now()})`) === 'thieu', 'gọi lại được điểm thấp hơn');
   const kho = JSON.parse(await ev(`localStorage.getItem('lcs-hoc-v1')`)).bai[B.so];
@@ -326,9 +340,18 @@ try {
       await choPha('dung:2', 4000); ghi((await tt()).pha === 'dung:2', 'B2 bản đầy đủ: vuốt thẻ đúng hướng thì được tính');
       if (td.dap_an === 'lua') { /* đã vuốt trái */ }
     }
-    if (chon.includes(9)) {         // B5 bản chữ lớn trên dữ liệu xếp thứ tự: chỉ chọn việc đầu
-      await mo('hoc.html?bai=9&phan=b2&che_do=don-gian&im=1', w, h); await choPha('mau'); await bam('Tới lượt bạn'); await choPha('lam'); await kiem('b5-chu-lon', true);
-      const bt = BAI.find(b => b.so === 9).luyen.find(x => x.dang === 'viec-nao-truoc'); await bam(bt.viec.find(v => v.toi_da).chu); await choPha('xong');
+    if (chon.includes(9)) {         // B5 bản chữ lớn trên dữ liệu xếp thứ tự: vẫn xếp đủ bốn việc (cùng yêu cầu để đạt), xưng "bạn" theo bài
+      await mo('hoc.html?bai=9&phan=b2&che_do=don-gian&im=1', w, h); await choPha('mau'); await bam('Tới lượt bạn'); await choPha('lam');
+      ghi(await coNut('Kiểm tra'), 'B5 chữ lớn trên dữ liệu xếp thứ tự vẫn phải xếp, có nút Kiểm tra'); await kiem('b5-chu-lon', true);
+      const bt = BAI.find(b => b.so === 9).luyen.find(x => x.dang === 'viec-nao-truoc'), V = bt.viec, cuoi = V.find(v => v.toi_thieu), dau = V.find(v => v.toi_da);
+      for (const v of [dau, ...V.filter(v => v !== dau && v !== cuoi), cuoi]) await bam(v.chu);
+      await bam('Kiểm tra'); await choPha('xong'); ghi((await tt()).ketQua.dat === true, 'B5 chữ lớn: xếp đúng thì đạt');
+    }
+    if (chon.includes(1)) {         // tiến độ cũ có điểm vượt trần: thư viện không cộng điểm đó
+      await mo('hoc.html?im=1', w, h); await ev(`localStorage.setItem('lcs-hoc-v1', JSON.stringify({bai:{1:{c_tot:{diem:40,tong:50},c:{diem:40,tong:50},b:[{xong:false,dat:true},{xong:false,dat:true}]}}}))`);
+      await mo('hoc.html?im=1', w, h); await choMan('thu-vien');
+      ghi((await ev(`document.querySelector('#app .card.solid-navy').textContent`)).includes('0/' + ML.bai.length * 3 + ' sao · 0 điểm'), 'tiến độ hỏng (điểm vượt trần, đạt mà chưa xong) không được tính', await ev(`document.querySelector('#app .card.solid-navy').textContent`));
+      await ev(`localStorage.clear()`);
     }
     if (chon.includes(2)) {         // B1 bản chữ lớn
       await mo('hoc.html?bai=2&phan=b1&che_do=don-gian&im=1', w, h); await choPha('lam'); await kiem('b1-chu-lon', true);

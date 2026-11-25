@@ -8,6 +8,7 @@
     python3 tools/thu-bai-hoc.py <số bài> <giọng> --tach=bn-24 lượt quá dài (máy trả lỗi hoặc quá 3 phút) thì tách thành nhiều lượt, mỗi mã ghi ở đây mở đầu một lượt mới
     … --phan=2     chỉ làm lượt thứ hai (sau khi tách)        … --khoa=3   chỉ dùng khóa thứ ba (thử một lượt dài mà không tốn lượt của các khóa khác)
     … --cat-lai --moc=5.5,8.4,…  cắt theo giây bắt đầu của câu 2…n (đọc từ bản chép cả lượt), bám quãng lặng gần nhất; dùng khi tự cắt bị lệch
+    … --cat-lai --bo-dau=61.2    lượt thu đọc lẫn lời dặn ở đầu: bỏ ngần ấy giây đầu (tới ngay trước câu 1) rồi mới cắt; nghe lại để chắc phần còn lại sạch
 Mỗi giọng trong một bài = MỘT lượt thu dài (tools/gemini_take.py), cắt bằng tools/cat-theo-lang.py, lọc rẹt bằng tools/loc-giong.py,
 rồi nghe lại bằng tools/nghe-lai.py. Chỉ dẫn cảm xúc ("cam_xuc") chỉ đưa vào lời dặn, không nằm trong lời đọc. Đổi một chữ thì thu lại cả lượt.
 Lượt thu gốc và nhật ký nghe lại nằm ở audio-goc/hoc/bNN/ (không đưa lên kho). Giọng: tools/giong-bai-hoc.json; Minh, ông Tư: prototype/nhan-vat.json."""
@@ -104,7 +105,8 @@ def hoi_moc(wav, cau):
            f'tính từ đầu tệp (số thập phân). Trả về đúng một mảng JSON gồm {len(cau)} số tăng dần, không thêm chữ nào.\n' + '\n'.join(f'{i + 1}. {x["chu"]}' for i, x in enumerate(cau)))
     import time
     for vong in range(3):               # hạn mức theo phút hay bị đầy: thử lại sau một lúc
-        for m in ['gemini-3.5-flash', 'gemini-3.5-flash-lite', 'gemini-2.5-flash']:
+        # mỗi mô hình có hạn mức ngày riêng (gói miễn phí): 3.5-flash hết thì dùng các bản flash khác còn lượt, bản lite (kém tin) để sau cùng
+        for m in [x for x in os.environ.get('NGHE_LAI_MO_HINH', '').split(',') if x] or ['gemini-3.5-flash', 'gemini-3.8-flash', 'gemini-3.7-flash', 'gemini-3-flash-preview', 'gemini-3.5-flash-lite']:
             for k in keys:
                 try:
                     r = json.loads(urllib.request.urlopen(urllib.request.Request(f'{base}/models/{m}:generateContent',
@@ -235,6 +237,9 @@ for ai, cau, ma, ghi_luot in viec:
     if _giay < 0.17 * _tieng:          # máy đôi khi trả về lượt bị đứt giữa chừng: ngắn hơn hẳn mức đọc nhanh nhất thì bỏ, thu lại
         print(f'!! lượt thu chỉ dài {_giay:.0f} giây cho {_tieng} tiếng: bị đứt giữa chừng, bỏ'); take.rename(take.with_suffix('.dut.wav')); loi += 1; continue
     print('  ' + cat_nhieu_duoi(take, sach) + f'; xóa {khu_dao(sach)} tiếng click giữa các câu')
+    if thamso.get('--bo-dau'):         # lượt thu đọc lẫn lời dặn ở ĐẦU lượt (đã nghe và chép ra): bỏ đoạn đó, giữ phần lời phía sau (vẫn là một lượt)
+        _r, _a = doc_wav(sach); _t = float(thamso['--bo-dau']); ghi_wav(sach, _r, _a[int(_t * _r):])
+        print(f'  bỏ {_t:.2f} giây đầu lượt (lời dặn bị đọc lẫn); mốc --moc tính trên lượt đã bỏ đầu')
     chon, ghi_chu = cat(sach, cau, tho, [float(t) for t in thamso['--moc'].split(',')] if thamso.get('--moc') else None)
     print('  cắt:', ghi_chu, flush=True)
     if chon: print('  đầu các câu 2…n (giây, trên lượt đã lọc):', ' '.join(f'{g[1]:.2f}' for g in chon), flush=True)

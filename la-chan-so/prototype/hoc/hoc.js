@@ -44,13 +44,15 @@
   /* ---------------- Lưu tiến độ ---------------- */
   let khoTam = null;            // bản trong bộ nhớ: máy cấm lưu thì tiến độ vẫn còn trong lượt học này
   const laVat = o => !!o && typeof o === 'object' && !Array.isArray(o);
-  const diemHopLe = c => laVat(c) && Number.isFinite(c.diem) && Number.isFinite(c.tong) && c.tong > 0 && c.diem >= 0 && c.diem <= c.tong;
+  // điểm là số ý nguyên; không bài nào chấm quá mười ý (mỗi ý mười điểm), nên bản ghi tổng lớn hơn là bản hỏng hoặc bị sửa tay
+  const diemHopLe = c => laVat(c) && Number.isInteger(c.diem) && Number.isInteger(c.tong) && c.tong > 0 && c.tong <= 10 && c.diem >= 0 && c.diem <= c.tong;
+  const hoa = s => s.charAt(0).toUpperCase() + s.slice(1);
   function chuanKho(d) {        // dữ liệu cũ hoặc hỏng: giữ phần đúng kiểu, bỏ phần sai
     const ra = { bai: {} }; if (!laVat(d) || !laVat(d.bai)) return ra;
     Object.keys(d.bai).forEach(k => {
       const b = d.bai[k]; if (!laVat(b)) return; const m = ra.bai[k] = {};
       if (b.a === true) m.a = true;
-      if (Array.isArray(b.b)) m.b = b.b.map(x => (laVat(x) ? { xong: x.xong === true, dat: x.dat === true, sao: Math.max(0, Math.min(3, Math.round(+x.sao) || 0)) } : null));
+      if (Array.isArray(b.b)) m.b = b.b.map(x => (laVat(x) ? { xong: x.xong === true, dat: x.xong === true && x.dat === true, sao: Math.max(0, Math.min(3, Math.round(+x.sao) || 0)) } : null));
       if (diemHopLe(b.c)) m.c = { diem: b.c.diem, tong: b.c.tong, luc: +b.c.luc || 0 };
       if (diemHopLe(b.c_tot)) m.c_tot = { diem: b.c_tot.diem, tong: b.c_tot.tong, luc: +b.c_tot.luc || 0 };
       if (Number.isFinite(b.goi_tu)) m.goi_tu = b.goi_tu;
@@ -74,11 +76,15 @@
   function phat(src) {
     const so = ++phatSo; if (huyPhat) huyPhat();
     return new Promise(xongP => {
-      let da = false;
-      const ket = k => { if (da) return; da = true; loa.onended = loa.onerror = null; if (huyPhat === huy) huyPhat = null; xongP(so === phatSo || k === 'huy' ? k : 'huy'); };
+      let da = false, canh = 0;
+      const ket = k => { if (da) return; da = true; clearTimeout(canh); loa.onended = loa.onerror = loa.onplaying = null; if (huyPhat === huy) huyPhat = null; xongP(so === phatSo || k === 'huy' ? k : 'huy'); };
       const huy = () => ket('huy'); huyPhat = huy;
       tDauPhat = performance.now(); coTieng = false;
       if (!src || S.im) { ket('khong'); return; }
+      // Canh treo: tệp không phát mà cũng không báo lỗi (tải đứng giữa chừng) thì coi như không có tiếng, để lượt đi tiếp bằng thời gian đọc chữ.
+      const treo = () => { if (da) return; try { loa.pause(); } catch (e) { } ket('loi'); };
+      canh = setTimeout(treo, 8000);
+      loa.onplaying = () => { coTieng = true; clearTimeout(canh); const d = loa.duration; canh = setTimeout(treo, ((Number.isFinite(d) && d > 0 ? d : 30) / TOC + 4) * 1000); };
       loa.onended = () => ket('het');
       loa.onerror = () => { if (S.thieu.indexOf(src) < 0) S.thieu.push(src); ket('loi'); };
       try {
@@ -162,7 +168,7 @@
   /* ============================================================ BÌA BÀI */
   function bia() {
     const B = BAI, t = tienDo(B.so), n = B.luyen.length; man('bia');
-    thanh(LG ? 'Dành cho ông bà · chữ lớn' : 'Dành cho học sinh', 'Bài ' + STT, () => { location.href = 'hoc.html'; }, h('<span class="none">' + saoHtml(soSao(t, n)) + '</span>'));
+    thanh((B.che_do === 'don-gian' ? 'Dành cho ông bà' : 'Dành cho học sinh') + (LG ? ' · chữ lớn' : ''), 'Bài ' + STT, () => { location.href = 'hoc.html'; }, h('<span class="none">' + saoHtml(soSao(t, n)) + '</span>'));
     const v = vung();
     v.than.append(h('<div class="bia-anh"><img src="../assets/' + esc(B.bia) + '" alt=""></div>'));
     v.than.append(h('<div class="t-h1">' + esc(B.ten) + '</div>'));
@@ -228,7 +234,9 @@
       }
       iCau = canh.loi.length - 1; S.pha = 'het-loi';
       if (canh.re) return hienRe();
-      if (!LG && vt !== 'ngo-cut') { await cho(700); if (tk === luot && S.pha === 'het-loi') quaKhung(); }
+      // Kể xong thì tự sang khung kế, cả bài học sinh lẫn bài ông bà (người già ít phải bấm); chữ lớn chờ lâu hơn (2 giây) cho kịp nhìn tranh.
+      // Không tự sang ở khung ngõ cụt (chờ bấm "Quay lại điểm rẽ") và khi trang đang ẩn (nằm nền thì không tính là đã xem truyện; người học bấm Tiếp khi quay lại).
+      if (vt !== 'ngo-cut') { await cho(LG ? 2000 : 700); if (tk === luot && S.pha === 'het-loi' && !document.hidden) quaKhung(); }
     }
     if (chiRe && canh.re) { hienRe(); return; }
     datNut(v.chan, [
@@ -282,12 +290,14 @@
           than.append(h('<div class="col gap-12 acenter jcenter vao" style="flex:1;min-height:0"><img src="' + MAT.cheer + '" style="width:120px;height:120px;border-radius:60px" alt=""><div class="t-h1 center">Xong bài luyện ' + (i + 1) + '/' + n + '</div>' + (dat ? '<span class="chip solid-safe" style="height:32px">' + ic('check', 's14') + 'Đạt</span>' : '') + '</div>'));
         }
         if (!dat) than.querySelectorAll('.dong-tt').forEach(x => x.remove());
-        if (!dat) than.append(h('<div class="card warn row gap-8 top bao-xem" style="padding:10px 12px;flex:none">' + ic('info', 's18 c-warn') + '<div class="t-label c-warn-ink">' + esc(o.ghiChu || ('Đã xem đáp án nên bài này chưa tính là đạt. ' + (LG ? 'Bà' : 'Bạn') + ' làm lại lúc nào cũng được.')) + '</div></div>'));
+        if (!dat) than.append(h('<div class="card warn row gap-8 top bao-xem" style="padding:10px 12px;flex:none">' + ic('info', 's18 c-warn') + '<div class="t-label c-warn-ink">' + esc((!c.daXem && o.ghiChu) || ('Đã xem đáp án nên bài này chưa tính là đạt. ' + hoa(BAN) + ' làm lại lúc nào cũng được.')) + '</div></div>'));
         ve();
         for (const cau of (o.truoc || [])) { if (cau && !(await c.noi(cau, { mat: 'cheer' }))) return; }
         if (bt.xong && dat) await c.noi(bt.xong, { mat: 'cheer' });
       },
-      moGoiY() { moGoiY(c); }
+      moGoiY() { moGoiY(c); },
+      // bấm bừa không được tính: sai quá mức cho phép thì bài xong nhưng chưa đạt (luật sao ở mục 1 của kịch bản)
+      chuaDat(viec) { return { dat: false, ghiChu: viec + ' nên chưa tính là đạt.' }; }
     };
     nutGoiY.onclick = () => moGoiY(c);
     (DANG[bt.dang] || (() => { than.append(h('<div class="card warn">Dạng bài "' + esc(bt.dang) + '" chưa dựng.</div>')); c.nut([{ chu: 'Tiếp', chinh: true, bam: c.tiep }]); }))(c);
@@ -299,8 +309,15 @@
     const ds = c.bt.goi_y || []; if (!ds.length) return;
     if (c.khiMoGoiY) c.khiMoGoiY();
     if (c.buocGoiY === 0) c.buocGoiY = 1;
-    const phu = h('<div class="man-phu"><div class="to-goi-y"></div></div>'), to = phu.firstElementChild; app.append(phu); S.goiY = c.buocGoiY;
-    const dong = () => { dungTieng(); phu.remove(); S.goiY = 0; if (c.khiDongGoiY && !c.daKet) c.khiDongGoiY(); };
+    // Ô gợi ý là hộp thoại: phần trang phía sau không bấm, không Tab tới được (inert) cho tới khi đóng; tiêu điểm vào nút Đóng rồi trả về nút Gợi ý.
+    const nen = [...app.children], truocDo = document.activeElement;
+    const phu = h('<div class="man-phu" role="dialog" aria-modal="true" aria-label="Gợi ý của Bé Nai"><div class="to-goi-y"></div></div>'), to = phu.firstElementChild; app.append(phu); S.goiY = c.buocGoiY;
+    nen.forEach(x => { x.inert = true; });
+    const dong = () => {
+      dungTieng(); nen.forEach(x => { x.inert = false; }); phu.remove(); S.goiY = 0;
+      if (c.khiDongGoiY) c.khiDongGoiY();          // B6 tự lo trường hợp lượt đã kết thúc (c.daKet) khi dựng lại nút
+      if (truocDo && truocDo.isConnected && truocDo.focus) try { truocDo.focus({ preventScroll: true }); } catch (e) { }
+    };
     phu.onclick = e => { if (e.target === phu) dong(); };
     function veTo(doc) {
       to.innerHTML = '<div class="row between"><div class="ai-tag">' + ic('sparkles', 's14') + 'Gợi ý của Bé Nai · ' + Math.min(c.buocGoiY, ds.length) + '/' + ds.length + '</div></div>' +
@@ -312,6 +329,7 @@
       else if (!c.daXem && (c.dapAn || c.bt.dap_an)) them('Xem đáp án', 'nhat', () => {      // xem đáp án là kết thúc lượt này: xong nhưng chưa đạt, muốn đạt thì làm lại
         c.daXem = true; S.daXem = true; if (c.khiXem) c.khiXem(); if (c.ket && !c.daKet) c.ket({ giu: true, dat: false }); veTo(false); });
       ve();
+      const nutDong = hang.querySelector('button'); if (nutDong) try { nutDong.focus({ preventScroll: true, focusVisible: false }); } catch (e) { }      // không vẽ viền tiêu điểm khi người học chạm (người cao tuổi dễ tưởng là nút đang được chọn)
       if (doc) { const g = ds[c.buocGoiY - 1]; if (g && g.giong) phatCau(g); }
     }
     veTo(true);
@@ -328,7 +346,7 @@
     const NHAN = c.lg ? { 'lua': 'Khoan đã', 'can-kiem-tra': 'Khoan đã', 'binh-thuong': 'Được' } : { 'lua': 'Lừa', 'can-kiem-tra': 'Cần kiểm tra', 'binh-thuong': 'Bình thường' };
     const yen = d => d === 'binh-thuong' || d === 'duoc';
     const khung = h('<div class="the-khung"><div class="the-dem"></div><div class="the"><div class="chu"></div></div>' + (c.lg ? '' : '<div class="vuot"><span>← Lừa</span><span>Bình thường →</span></div>') + '</div>');
-    c.than.append(khung); const the = khung.querySelector('.the'); let i = 0, mo = false;
+    c.than.append(khung); const the = khung.querySelector('.the'); let i = 0, mo = false, saiLan = 0;
     const dongDau = t => {
       if (the.querySelector('.dau')) return; the.classList.add(yen(t.dap_an) ? 'duoc' : 'khoan');
       the.append(h('<div class="dau">' + ic(yen(t.dap_an) ? 'check' : 'hand', 's18') + esc(NHAN[t.dap_an]) + '</div>')); ve();
@@ -348,23 +366,25 @@
       const t = ds[i]; if (mo || c.daKet) return;
       if (!c.lg && k !== t.dap_an && !yen(k) && !yen(t.dap_an)) {       // ba nút: nhầm giữa "Lừa" và "Cần kiểm tra" là gần đúng, cho chọn lại
         S.pha = 'gan:' + i; the.classList.remove('lac', 'vao'); void the.offsetWidth; the.classList.add('lac');
-        c.noi({ chu: 'Gần đúng rồi. Bạn coi lại, chuyện này đã chắc là lừa chưa, hay còn phải kiểm tra thêm?' }, { mat: 'think' }); return;
+        c.noi({ chu: 'Gần đúng rồi. ' + hoa(BAN) + ' coi lại, chuyện này đã chắc là lừa chưa, hay còn phải kiểm tra thêm?' }, { mat: 'think' }); return;
       }
       if (c.lg ? yen(k) === yen(t.dap_an) : k === t.dap_an) {
         mo = true; S.pha = 'dung:' + i; dongDau(t); c.nut([{ chu: 'Tiếp', icon: 'arrow-right', chinh: true, bam: sau }]);
         if (await c.noi(bt.dung, { mat: 'cheer' })) await c.noi(t.giai_thich, { mat: 'cheer' });
       } else {
-        S.pha = 'sai:' + i; the.classList.remove('lac', 'vao'); void the.offsetWidth; the.classList.add('lac'); the.style.transform = '';
+        S.pha = 'sai:' + i; saiLan++; the.classList.remove('lac', 'vao'); void the.offsetWidth; the.classList.add('lac'); the.style.transform = '';
         const canThan = yen(t.dap_an);          // người học cẩn thận quá với một chuyện bình thường
         if (await c.noi(canThan ? bt.can_than : bt.sai, { mat: canThan ? 'think' : 'stop' })) await c.noi(t.giai_thich, { mat: 'think' });
       }
     }
-    function sau() { i++; if (i >= ds.length) { i = ds.length - 1; c.ket({}); } else moThe(); }
+    // bấm thử hết các nút thì không tính: chọn sai từ hai lần trở lên (không kể "gần đúng") là xong nhưng chưa đạt
+    function sau() { i++; if (i >= ds.length) { i = ds.length - 1; c.ket(saiLan > 1 ? c.chuaDat('Xong rồi, nhưng chọn sai ' + saiLan + ' lần') : {}); } else moThe(); }
     if (!c.lg) {          // vuốt thẻ
       let x0 = null;
       the.onpointerdown = e => { if (mo || ds[i].mau) return; x0 = e.clientX; the.setPointerCapture(e.pointerId); };
       the.onpointermove = e => { if (x0 == null) return; const dx = e.clientX - x0; the.style.transform = 'translateX(' + dx + 'px) rotate(' + dx / 30 + 'deg)'; };
-      the.onpointerup = the.onpointercancel = e => { if (x0 == null) return; const dx = e.clientX - x0; x0 = null; the.style.transform = ''; if (Math.abs(dx) > 70) chon(dx < 0 ? 'lua' : 'binh-thuong'); };
+      the.onpointerup = e => { if (x0 == null) return; const dx = e.clientX - x0; x0 = null; the.style.transform = ''; if (Math.abs(dx) > 70) chon(dx < 0 ? 'lua' : 'binh-thuong'); };
+      the.onpointercancel = () => { x0 = null; the.style.transform = ''; };      // hệ thống lấy cử chỉ (cuộn…): chỉ đặt thẻ về chỗ, không chấm
     }
     moThe();
   }
@@ -389,8 +409,14 @@
     const dapAnChu = bt.dap_an; c.dapAn = () => dapAnChu;
     let phaTruoc = '';
     c.khiMoGoiY = () => { if (pha === 'luot' || pha === 'mau' || pha === 'chuan-bi') { phaTruoc = pha; luotGoi++; dungTieng(); datPha('tam'); tt('Tạm dừng'); } };
-    c.khiDongGoiY = () => { if (pha === 'tam') c.nut([phaTruoc === 'mau' ? { chu: 'Nghe lại lượt mẫu', icon: 'play', chinh: true, bam: chayMau } : { chu: 'Nghe lại từ đầu', icon: 'play', chinh: true, bam: chayLuot }]); };
     const nutNgheNua = chu => (c.daXem ? { chu: 'Làm lại để đạt', icon: 'refresh', bam: c.lamLai } : { chu, icon: 'refresh', bam: chayLuot });
+    // Đóng gợi ý khi cuộc gọi đang tạm dừng: cho nghe lại; nếu bài đã xong từ lượt trước (nghe lại sau khi đã dừng, hoặc vừa xem đáp án) thì thêm nút đi tiếp.
+    c.khiDongGoiY = () => {
+      if (pha !== 'tam') return;
+      const ds = [phaTruoc === 'mau' ? { chu: 'Nghe lại lượt mẫu', icon: 'play', chinh: true, bam: chayMau } : Object.assign(nutNgheNua('Nghe lại từ đầu'), { chinh: true })];
+      if (c.daKet) { thuGon(true); ds.push({ chu: c.i + 1 < BAI.luyen.length ? 'Bài luyện tiếp' : 'Tới thử thách', icon: 'arrow-right', bam: c.tiep }); }
+      c.nut(ds);
+    };
 
     function moDau() {
       datPha('mo'); tt('Chưa gọi'); hienCau(null);
@@ -402,10 +428,16 @@
       if (!(await c.noi(M.loi)) || id !== luotGoi) return;
       for (let j = 0; j < M.cau.length; j++) {
         const m = M.cau[j]; hienCau(m, j, M.cau.length); tt('Đang nói…', true);
-        const ok = await c.phatCau(m); if (!ok || id !== luotGoi || !c.song()) return;
+        let ok;
+        if (m.dau_hieu && Number.isFinite(m.dau_hieu.luc)) {     // Bé Nai cúp ngay khi dấu hiệu vang lên (mốc "luc"), đúng như cách chấm lượt thật
+          let het = false; const p = c.phatCau(m).then(x => { het = true; return x; });
+          while (!het && c.thoiDiem() < m.dau_hieu.luc + 0.5) { await c.cho(100); if (id !== luotGoi || !c.song()) return; }
+          if (het) ok = await p; else { c.dungTieng(); await p; ok = true; }
+        } else ok = await c.phatCau(m);
+        if (!ok || id !== luotGoi || !c.song()) return;
         if (m.nhan) { oPhu.innerHTML = '<span class="nhan-cau">' + ic('check', 's14') + esc(m.nhan) + '</span>'; ve(); await c.cho(1100); if (id !== luotGoi || !c.song()) return; }
         if (m.dau_hieu) {
-          nut.classList.add('nhay'); await c.cho(900); if (id !== luotGoi || !c.song()) return;
+          nut.classList.add('nhay'); await c.cho(500); if (id !== luotGoi || !c.song()) return;
           tt('Bé Nai đã bấm Dừng'); oPhu.innerHTML = '<span class="nhan-cau do">' + ic('alert', 's14') + esc(m.dau_hieu.ten) + '</span>'; ve(); break;
         }
       }
@@ -421,8 +453,10 @@
       datPha('luot');
       for (k = 0; k < cau.length; k++) {
         hienCau(cau[k], k, cau.length); tt('Đang nói…', true); trong = true;
-        const ok = await c.phatCau(cau[k]); trong = false;
-        if (!ok || id !== luotGoi || !c.song() || pha !== 'luot') return;
+        const ok = await c.phatCau(cau[k]);
+        if (id !== luotGoi) return;       // lời hứa của lượt cũ về muộn: không được đụng tới cờ "đang nói" của lượt mới
+        trong = false;
+        if (!ok || !c.song() || pha !== 'luot') return;
         await c.cho(600); if (id !== luotGoi || !c.song() || pha !== 'luot') return;
       }
       datPha('het'); lanHet++; tt('Người gọi đã nói hết');
@@ -459,7 +493,7 @@
 
   /* ============================================================ B1 · CHẠM BẮT BÀI */
   function b1(c) {
-    const bt = c.bt, D = bt.tin.doan, can = D.filter(d => d.loai === 'dau-hieu' && !d.mau), bat = new Set(); let nham = 0, het = false;
+    const bt = c.bt, D = bt.tin.doan, can = D.filter(d => d.loai === 'dau-hieu' && !d.mau), bat = new Set(), nhamDa = new Set(); let nham = 0, het = false;   // nham = số chỗ nhầm KHÁC NHAU
     const el = h('<div class="tin"><div class="tu"><span class="avatar gray" style="width:36px;height:36px">' + ic('user', 's20') + '</span><span>' + esc(bt.tin.tu || 'Số lạ') + '</span><span class="chip ai" style="margin-left:auto">' + ic('sparkles', 's14') + 'Tin mô phỏng</span></div><div class="bong-tin"></div></div>');
     const oTt = h('<div class="dong-tt"></div>'); c.than.append(el, oTt); const bong = el.querySelector('.bong-tin'), nut = new Map();
     const capTt = () => { oTt.innerHTML = ic('flag', 's18 c-danger') + '<span>Đã bắt ' + bat.size + '/' + can.length + ' chỗ đáng ngờ' + (nham ? ' · chạm nhầm ' + nham : '') + '</span>'; ve(); };
@@ -470,9 +504,8 @@
     c.dapAn = () => 'Các chỗ đáng ngờ đã được tô vàng trong tin nhắn.';
     c.khiXem = () => { can.forEach(d => { if (!bat.has(d)) nut.get(d).classList.add('lo'); }); het = true; };
     function cham(d, s) {
-      if (d.mau || bat.has(d)) { c.noi(d.giai_thich); return; }
+      if (d.mau || bat.has(d) || het || c.daKet) { if (d.giai_thich) c.noi(d.giai_thich); return; }      // bài đã xong hoặc đã xem đáp án: chạm chỉ để nghe giải thích
       if (d.loai === 'dau-hieu') {
-        if (het) { c.noi(d.giai_thich); return; }
         bat.add(d); s.classList.remove('lo'); s.classList.add('bat'); capTt(); S.pha = 'bat:' + bat.size;
         if (bat.size === can.length) {      // chạm bừa hết mọi chỗ thì không tính: nhầm từ hai chỗ trở lên là xong nhưng chưa đạt
           het = true; const gon = nham <= (bt.nham_toi_da == null ? 1 : bt.nham_toi_da);
@@ -480,7 +513,7 @@
         }
         else c.noi(d.giai_thich, { mat: 'cheer' });
       } else if (d.giai_thich) {
-        nham++; s.classList.remove('lac'); void s.offsetWidth; s.classList.add('lac'); capTt(); S.pha = 'nham:' + nham; c.noi(d.giai_thich, { mat: 'think' });
+        nhamDa.add(d); nham = nhamDa.size; s.classList.remove('lac'); void s.offsetWidth; s.classList.add('lac'); capTt(); S.pha = 'nham:' + nham; c.noi(d.giai_thich, { mat: 'think' });
       }
     }
     capTt(); c.nut([]); S.pha = 'lam'; c.noi(bt.mo_dau);
@@ -496,7 +529,11 @@
     c.dapAn = () => lam.map(x => '“' + x.chu + '” là ' + x.chieu).join('; ') + '.';
     function buocMau() {
       S.pha = 'mau'; const ds = h('<div class="cap-ds"><div class="t-cap bold muted">' + esc(bt.nguoi || 'Lời kẻ gian (mô phỏng)') + '</div></div>');
-      mau.forEach(x => { const o = h('<div class="cau-noi xong' + kieu + '">' + theCau(x, '<span class="gan">' + ic('check', 's14') + esc(x.chieu) + '</span><span class="vi">' + esc(x.giai_thich ? x.giai_thich.chu : '') + '</span>') + '</div>'); const ng = o.querySelector('.nghe'); if (ng) ng.onclick = () => c.phatCau(x); ds.append(o); });
+      mau.forEach(x => {
+        const o = h('<div class="cau-noi xong' + kieu + '">' + theCau(x, '<span class="gan">' + ic('check', 's14') + esc(x.chieu) + '</span><span class="vi">' + esc(x.giai_thich ? x.giai_thich.chu : '') + '</span>') + '</div>'); const ng = o.querySelector('.nghe');
+        if (ng) { ng.tabIndex = 0; ng.onclick = () => c.phatCau(x); ng.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); c.phatCau(x); } }; }
+        ds.append(o);
+      });
       c.than.append(ds); c.nut([{ chu: 'Tới lượt ' + BAN, icon: 'play', chinh: true, bam: () => { ds.remove(); buocLam(); } }]);
       (async () => { if (await c.noi(bt.mo_dau)) await c.noi(bt.loi_mau); })();
     }
@@ -504,7 +541,8 @@
       S.pha = 'lam'; c.dungTieng();
       const ds = h('<div class="cap-ds"><div class="t-cap bold muted">' + esc(bt.nguoi || 'Lời kẻ gian (mô phỏng)') + '</div></div>'), oTt = h('<div class="dong-tt"></div>'), luoi = h('<div class="chieu-ds"></div>');
       const oCau = new Map();
-      const chonCau = (x, nghe) => { if (xong.has(x)) return; chon = x; oCau.forEach((o, y) => o.classList.toggle('chon', y === x)); if (nghe && x.giong) c.phatCau(x); };
+      // câu đã nối đúng: chạm chỉ để nghe lại
+      const chonCau = (x, nghe) => { if (xong.has(x)) { if (nghe && x.giong) c.phatCau(x); return; } chon = x; oCau.forEach((o, y) => o.classList.toggle('chon', y === x)); if (nghe && x.giong) c.phatCau(x); };
       lam.forEach(x => {
         const o = h('<button class="cau-noi' + kieu + '">' + theCau(x, '<span class="gan cho">Chưa gắn chiêu</span>') + '</button>');
         o.onclick = () => chonCau(x, true); ds.append(o); oCau.set(x, o);
@@ -512,7 +550,7 @@
       chieu.forEach(t => {
         const b = h('<button class="chieu">' + esc(t.ten) + '</button>');
         b.onclick = () => {
-          if (c.daKet && !lam.some(y => !xong.has(y))) return;
+          if (c.daKet) return;            // đã xong hoặc đã xem đáp án: lượt này khóa, muốn làm thì bấm "Làm lại để đạt"
           if (!chon || xong.has(chon)) chonCau(lam.find(y => !xong.has(y)));
           if (!chon || xong.has(chon)) return;
           const x = chon, o = oCau.get(x);
@@ -521,7 +559,7 @@
             o.querySelector('.gan').outerHTML = '<span class="gan">' + ic('check', 's14') + esc(t.ten) + '</span>';
             oTt.innerHTML = ic('check-circle', 's18 c-safe') + '<span class="c-safe-ink">' + esc(t.ten) + ': đúng rồi</span>'; ve(); S.pha = 'dung:' + xong.size;
             const con = lam.find(y => !xong.has(y));
-            if (!con) { luoi.remove(); c.ket({ giu: true, truoc: [bt.dung, x.giai_thich] }); }
+            if (!con) { luoi.remove(); c.ket(Object.assign({ giu: true, truoc: [bt.dung, x.giai_thich] }, sai > 1 ? c.chuaDat('Nối đủ rồi, nhưng nối nhầm ' + sai + ' lần') : {})); }
             else { chonCau(con); (async () => { if (await c.noi(bt.dung, { mat: 'cheer' })) await c.noi(x.giai_thich, { mat: 'cheer' }); })(); }
           } else {
             sai++; b.classList.remove('lac'); void b.offsetWidth; b.classList.add('lac'); S.pha = 'sai:' + sai;
@@ -542,7 +580,8 @@
      Đầy đủ: chạm lần lượt các việc theo thứ tự nên làm; chỉ chấm ràng buộc ghi trong tệp ("toi_da": phải nằm trong mấy việc đầu,
      "toi_thieu": không được sớm hơn vị trí đó). Chữ lớn (hoặc tệp chỉ đánh dấu "dung"): chỉ chọn việc đầu tiên. */
   function b5(c) {
-    const bt = c.bt, V = bt.viec, xep = !c.lg && V.some(v => v.toi_da || v.toi_thieu) && !V.some(v => v.dung);
+    // Dữ liệu xếp thứ tự thì luôn xếp, kể cả khi ép chữ lớn: cùng một bài thì cùng một yêu cầu để đạt.
+    const bt = c.bt, V = bt.viec, xep = V.some(v => v.toi_da || v.toi_thieu) && !V.some(v => v.dung);
     const dungDau = v => (V.some(x => x.dung) ? !!v.dung : !(v.toi_thieu > 1));      // dữ liệu xếp thứ tự: việc nào được phép đứng đầu thì chọn đầu là đúng
     c.dapAn = () => bt.dap_an || ('Việc đầu tiên: ' + V.filter(dungDau).map(v => v.chu).join(' hoặc '));
     function buocMau() {
@@ -553,17 +592,19 @@
       c.noi(M.loi);
     }
     function buocChon() {               // chỉ chọn việc đầu tiên
-      S.pha = 'lam'; const ds = xao(V), khung = h('<div class="viec-ds"></div>'); let xong = false;
+      S.pha = 'lam'; const ds = xao(V), khung = h('<div class="viec-ds"></div>'); let xong = false, saiChon = 0;
       c.than.append(h('<div class="tinh-huong">' + ic('message-alert', 's20') + '<span>' + esc(bt.tinh_huong) + '</span></div>'), khung);
       const o = new Map(); ds.forEach(v => { const b = h('<button class="viec"><span class="so">' + ic('chev-right', 's18') + '</span><span class="nd">' + esc(v.chu) + '</span></button>'); b.onclick = () => chon(v); khung.append(b); o.set(v, b); });
       c.nut([]); ve();
+      c.khiXem = () => { o.forEach((b, y) => { if (dungDau(y)) { b.classList.remove('sai'); b.classList.add('dung'); } else b.remove(); }); xong = true; };
       async function chon(v) {
-        if (xong) return; o.forEach(b => b.classList.remove('doc'));
+        if (xong || c.daKet) return; o.forEach(b => b.classList.remove('doc'));
         if (dungDau(v)) {
-          xong = true; S.pha = 'dung'; o.forEach((b, y) => { if (y === v) { b.classList.add('dung'); b.querySelector('.so').innerHTML = '1'; } else b.style.opacity = '.5'; });
-          c.ket({ giu: true, truoc: [v.giai_thich || (v.vi_sao ? { chu: v.vi_sao } : bt.dung)] });
+          xong = true; S.pha = 'dung'; o.forEach((b, y) => { if (y === v) { b.classList.add('dung'); b.querySelector('.so').innerHTML = '1'; } else if (saiChon) b.remove(); else b.style.opacity = '.5'; });
+          // chỉ một câu hỏi: phải chọn đúng ngay lần đầu mới đạt (bấm lần lượt từng việc thì không tính)
+          c.ket(Object.assign({ giu: true, truoc: [v.giai_thich || (v.vi_sao ? { chu: v.vi_sao } : bt.dung)] }, saiChon ? c.chuaDat('Chọn đúng rồi, nhưng lần đầu chọn chưa đúng') : {}));
         } else {
-          S.pha = 'sai'; const b = o.get(v); b.classList.add('sai', 'lac'); b.disabled = true; b.querySelector('.so').innerHTML = ic('x', 's18'); ve();
+          S.pha = 'sai'; saiChon++; const b = o.get(v); b.classList.add('sai', 'lac'); b.disabled = true; b.querySelector('.so').innerHTML = ic('x', 's18'); ve();
           c.noi(v.giai_thich || v.sai || bt.sai, { mat: 'stop' });
         }
       }
@@ -573,25 +614,27 @@
       })();
     }
     function buocXep() {                 // chạm lần lượt theo thứ tự
-      S.pha = 'lam'; const ds = xao(V), khung = h('<div class="viec-ds"></div>'), thu = []; let khoa = false;
+      S.pha = 'lam'; const ds = xao(V), khung = h('<div class="viec-ds xep"></div>'), thu = []; let khoa = false, saiXep = 0;
       c.than.append(h('<div class="tinh-huong">' + ic('message-alert', 's20') + '<span>' + esc(bt.tinh_huong) + '</span></div>'), khung);
       const o = new Map(); ds.forEach(v => { const b = h('<button class="viec"><span class="so"></span><span class="nd">' + esc(v.chu) + '</span></button>'); b.onclick = () => cham(v); khung.append(b); o.set(v, b); });
       const veLai = () => {
         o.forEach((b, v) => { const p = thu.indexOf(v); b.classList.toggle('co', p >= 0); b.classList.remove('sai'); b.querySelector('.so').textContent = p >= 0 ? p + 1 : ''; });
         nutK.el.disabled = thu.length < V.length; nutX.el.disabled = !thu.length;
       };
-      const xepLai = () => { thu.length = 0; khoa = false; veLai(); S.pha = 'lam'; };
+      const xepLai = () => { if (khoa === 'xong' || c.daKet) return; thu.length = 0; khoa = false; veLai(); S.pha = 'lam'; };
       function cham(v) {
-        if (khoa === 'xong') return; if (khoa) xepLai();
+        if (khoa === 'xong' || c.daKet) return; if (khoa) xepLai();
         const p = thu.indexOf(v); if (p < 0) thu.push(v); else if (p === thu.length - 1) thu.pop(); else return;
         veLai();
       }
       function kiem() {
+        if (khoa === 'xong' || c.daKet) return;
         let loi = thu.find((v, p) => v.toi_da && p + 1 > v.toi_da); if (!loi) loi = thu.find((v, p) => v.toi_thieu && p + 1 < v.toi_thieu);
-        if (loi) { khoa = true; S.pha = 'sai'; const b = o.get(loi); b.classList.remove('co'); b.classList.add('sai', 'lac'); nutK.el.disabled = true; c.noi(loi.sai || bt.sai, { mat: 'think' }); return; }
-        khoa = 'xong'; S.pha = 'dung'; khung.innerHTML = '<div class="t-cap bold muted">Thứ tự Bé Nai gợi ý</div>';
-        V.forEach((v, j) => khung.append(h('<div class="viec dung"><span class="so">' + (j + 1) + '</span><span class="nd">' + esc(v.chu) + (v.vi_sao ? '<span class="vi">' + esc(v.vi_sao) + '</span>' : '') + '</span></div>')));
-        c.ket({ giu: true, truoc: [bt.dung] });
+        if (loi) { khoa = true; S.pha = 'sai'; saiXep++; const b = o.get(loi); b.classList.remove('co'); b.classList.add('sai', 'lac'); nutK.el.disabled = true; c.noi(loi.sai || bt.sai, { mat: 'think' }); return; }
+        khoa = 'xong'; S.pha = 'dung'; khung.innerHTML = '<div class="t-cap bold muted">Thứ tự Bé Nai gợi ý</div>'; const dat = saiXep <= 1;
+        V.forEach((v, j) => khung.append(h('<div class="viec dung"><span class="so">' + (j + 1) + '</span><span class="nd">' + esc(v.chu) + (v.vi_sao && dat ? '<span class="vi">' + esc(v.vi_sao) + '</span>' : '') + '</span></div>')));
+        if (!dat) { const th = c.than.querySelector('.tinh-huong'); if (th) th.remove(); }      // chưa đạt: nhường chỗ tình huống cho dòng báo
+        c.ket(Object.assign({ giu: true, truoc: [bt.dung] }, !dat ? c.chuaDat('Xếp đúng rồi, nhưng đã kiểm sai ' + saiXep + ' lần') : {}));
       }
       const nut = c.nut([{ chu: 'Xếp lại', icon: 'refresh', ngan: true, bam: xepLai }, { chu: 'Kiểm tra', icon: 'check', chinh: true, ngan: true, bam: kiem }]), nutX = nut[0], nutK = nut[1];
       veLai(); c.noi(bt.hoi, { mat: 'think' });
@@ -609,6 +652,9 @@
     const than = h('<div class="than"></div>'), chan = h('<div class="chan"></div>'); app.append(than, chan);
     const nai = taoNai(than);
     than.append(h('<div class="col gap-12 acenter jcenter" style="flex:1;min-height:0"><img class="nguoi" src="' + esc(T.anh) + '" alt=""><div class="t-h1 center">' + esc(T.nguoi) + ' đang gọi</div><div class="t-body center muted">' + esc(T.mo_ta || '') + '</div><div class="row gap-8 wrap jcenter"><span class="chip ai">' + ic('sparkles', 's14') + 'AI đóng vai</span><span class="chip warn">' + ic('award', 's14') + 'Chấm ' + T.y.length + ' ý · mỗi ý 10 điểm</span></div></div>'));
+    // Máy cấm lưu (localStorage) thì trang gọi không ghi được kết quả và trang này không nhớ lượt đang gọi: nói trước là cuộc gọi chỉ để tập.
+    const luuDuoc = (() => { try { const k = 'lcs-thu-luu'; localStorage.setItem(k, '1'); const ok = localStorage.getItem(k) === '1'; localStorage.removeItem(k); return ok; } catch (e) { return false; } })();
+    if (!luuDuoc) than.append(h('<div class="card warn row gap-8 top" style="padding:10px 12px;flex:none">' + ic('info', 's18 c-warn') + '<div class="t-label c-warn-ink">Máy này đang chặn lưu dữ liệu, nên cuộc gọi vẫn tập được nhưng chưa tính điểm.</div></div>'));
     if (nutGoiY) { const c = { bt: { goi_y: T.goi_y }, buocGoiY: 0, daXem: false }; nutGoiY.onclick = () => moGoiY(c); }
     datNut(chan, [{ chu: 'Nghe máy', icon: 'phone', lop: 'safe', to: true, bam: () => {
       capNhat(B.so, b => { b.goi_tu = Date.now(); });
@@ -625,7 +671,9 @@
     if (Number.isFinite(t.goi_tu)) {
       try {
         const r = JSON.parse(localStorage.getItem('lcs-goi-' + T.canh));
-        if (r && Number.isFinite(r.diem) && (r.luc == null || (Number.isFinite(r.luc) && r.luc >= t.goi_tu - 2000))) kq = { diem: Math.max(0, Math.min(tong, Math.round(r.diem))), tong, luc: Date.now() };
+        // Đúng hợp đồng mới nhận: diem là số ý nguyên trong 0..số ý của bài, tong đúng bằng số ý của bài, luc ghi sau lúc bấm gọi.
+        // Bản ghi sai kiểu, vượt tổng, thiếu luc hay cũ hơn lúc bấm thì coi như chưa có kết quả (không làm tròn, không kẹp cho vừa).
+        if (laVat(r) && Number.isInteger(r.diem) && r.diem >= 0 && r.diem <= tong && r.tong === tong && Number.isFinite(r.luc) && r.luc >= t.goi_tu && r.luc <= Date.now() + 60000) kq = { diem: r.diem, tong, luc: Date.now() };
       } catch (e) { kq = null; }
       try { localStorage.removeItem('lcs-goi-' + T.canh); } catch (e) { }
     }
@@ -639,14 +687,14 @@
 
   function ketQua(kq, vuaGoi) {
     const B = BAI, T = B.thu_thach, t = tienDo(B.so), n = B.luyen.length; const tk = man('ket-qua');
-    if (!kq && !vuaGoi) kq = t.c_tot || t.c || null;
+    if (!kq && !vuaGoi) kq = t.c || t.c_tot || null;       // tải lại màn kết quả: hiện lượt gọi gần nhất (c); bìa và thư viện mới dùng lượt tốt nhất (c_tot)
     thanh('Bài ' + STT + ' · Thử thách', 'Kết quả', bia);
     const than = h('<div class="than"></div>'), chan = h('<div class="chan"></div>'); app.append(than, chan);
     const nai = taoNai(than), sao = soSao(t, n), du = kq && kq.diem >= kq.tong;
     than.append(h('<div class="card solid-navy r20 row gap-12" style="padding:12px 16px;flex:none"><div class="col grow gap-4"><div class="t-cap" style="color:#CBD5E1">' + esc(T.ten) + '</div><div class="diem-to">' + (kq ? kq.diem + '/' + kq.tong + ' ý · +' + kq.diem * 10 + ' điểm' : 'Chưa có điểm') + '</div></div>' + saoHtml(sao, 'vua') + '</div>'));
     than.append(h('<div class="ba-phan">' + [['Truyện', !!t.a], ['Luyện', datB(t, n)], ['Thử thách', datC(t)]].map(x => '<span class="' + (x[1] ? 'co' : '') + '">' + ic(x[1] ? 'check-circle' : 'help', 's18') + x[0] + '</span>').join('') + '</div>'));
     const nho = B.nho_mot_cau;
-    if (kq && !du) than.append(h('<div class="card col gap-6" style="padding:10px 14px;flex:none"><div class="t-label bold">Các ý được chấm trong cuộc gọi</div><div class="y-ds">' + T.y.map(x => '<div>' + ic('flag', 's18 c-brand') + '<span>' + esc(x) + '</span></div>').join('') + '</div></div>'));
+    if (kq && !du) than.append(h('<div class="card col gap-6" style="padding:10px 14px;flex:none"><div class="t-label bold">Coi lại các ý được chấm</div><div class="y-ds">' + T.y.map(x => '<div>' + ic('flag', 's18 c-brand') + '<span>' + esc(x) + '</span></div>').join('') + '</div></div>'));
     else than.append(h('<div class="card safe col gap-4" style="padding:12px 14px;flex:none"><div class="row gap-6">' + ic('check-circle', 's16 c-safe') + '<div class="t-over c-safe-ink">Nhớ một câu</div></div><div class="t-body bold c-safe-ink">' + esc(nho.hien || nho.chu) + '</div></div>'));
     if (B.viec_o_nha) than.append(h('<div class="card brand row gap-8 top" style="padding:10px 12px;flex:none">' + ic('home', 's18 c-brand') + '<div class="t-label c-brand-ink"><b>Việc làm ở nhà:</b> ' + esc(B.viec_o_nha) + '</div></div>'));
     datNut(chan, [{ chu: 'Gọi lại', icon: 'phone', ngan: true, bam: thuThach }, { chu: 'Về thư viện', icon: 'book', chinh: true, ngan: true, bam: () => { location.href = 'hoc.html'; } }]);

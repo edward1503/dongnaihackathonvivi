@@ -15,8 +15,8 @@ for f in sys.argv[1:]:
     tam = tempfile.mktemp(suffix='.mp3')
     subprocess.run(['ffmpeg', '-loglevel', 'error', '-y', '-i', f, '-ac', '1', '-b:a', '96k', tam], check=True)
     b = base64.b64encode(open(tam, 'rb').read()).decode(); os.unlink(tam); kq = None
-    # NGHE_LAI_MO_HINH=<mô hình, …>: chọn mô hình nghe (ví dụ khi gemini-3.5-flash hết lượt trong ngày thì dùng gemini-3.5-flash-lite, kém tin hơn)
-    for m in [x for x in os.environ.get('NGHE_LAI_MO_HINH', '').split(',') if x] or ['gemini-3.5-flash', 'gemini-2.5-flash', 'gemini-3.5-flash-lite']:
+    # NGHE_LAI_MO_HINH=<mô hình, …>: chọn mô hình nghe. Mỗi mô hình có hạn mức NGÀY riêng (gói miễn phí, theo project); bản lite nghe kém, chép sai, kết luận bừa: để sau cùng
+    for m in [x for x in os.environ.get('NGHE_LAI_MO_HINH', '').split(',') if x] or ['gemini-3.5-flash', 'gemini-3.8-flash', 'gemini-3.7-flash', 'gemini-3-flash-preview', 'gemini-3.5-flash-lite']:
         for k in keys:
             try:
                 r = json.loads(urllib.request.urlopen(urllib.request.Request(f'{base}/models/{m}:generateContent',

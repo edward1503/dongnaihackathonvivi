@@ -165,3 +165,97 @@ Không còn tiến trình nền nào của phiên này (đã kiểm `ps`). JSON 
 4. Chạy lại `node tools/kiem-bai-hoc.mjs --anh <thư mục>`, xem hết các tờ ghép; chạy `node $S/khu-hoi.mjs 8818`.
 5. Astra lượt cuối trên `hoc.js` + 4 JSON (xưng hô, lộ đáp án, chấm điểm lách được, ngõ cụt, lời khuyên sai), sửa phần thật.
 6. Báo cáo cuối: nêu rõ Bài 2 đã về đúng quy trình một lượt; các bài khác thì tùy kết quả thu.
+
+---
+
+## Phiên Opus 2 (25/11/2026, khoảng 15:20–17:00, nhánh `android-and-lessons`)
+
+Không còn tiến trình nền nào của phiên này. Chưa commit gì (phiên chính tự commit các điểm dừng). Trong mục này `$S` vẫn là `ban-giao/tam-hoc`.
+
+### Đã làm
+1. **Thu Bé Nai Bài 9, 3, 1, mỗi bài MỘT lượt** bằng `gemini-3.8-flash-tts` (`$S/thu-bn.sh 9 3 1`, lần thử đầu đều được: 219,5 / 228,4 / 343,0 giây). Cả 4 bài Bé Nai giờ đúng quy trình một lượt mỗi bài.
+   - **Lỗi lớn đã gặp và đã sửa:** lượt b01 và b09 **đọc lẫn toàn bộ lời dặn giọng** (phần chỉ đạo, danh sách cảm xúc từng đoạn, câu "Mỗi đoạn dưới đây là một câu riêng…") ở ĐẦU lượt, rồi mới đọc lời. Máy cắt vẫn chia đủ số câu nên các tệp bị lệch hết và có câu chứa lời dặn (bản này đã lỡ được commit ở điểm dừng đầu, đã báo phiên chính). Cách sửa, không thu lại: tùy chọn mới `--bo-dau=<giây>` của `tools/thu-bai-hoc.py` bỏ đoạn đầu lượt rồi mới cắt (b01 bỏ 129,6 giây, b09 bỏ 67,0 giây; điểm bỏ tìm bằng cách chép từng đoạn ngắn quanh các quãng lặng). b09 phải dời thêm 3 ranh giới bằng `--moc` (bn-14, 15, 16). Lệnh tái tạo đúng bản hiện tại:
+     `$S/chay.sh python3 tools/thu-bai-hoc.py 1 be-nai --cat-lai --khong-nghe --bo-dau=129.6 --moc=5.21,12.65,15.53,19.09,21.62,25.19,32.32,33.98,40.65,43.94,47.32,49.49,51.99,60.17,63.25,68.43,76.26,82.52,88.53,95.89,100.37,104.15,107.21,115.24,119.38,126.19,129.22,134.26,137.80,141.69,144.80,149.37,153.20,159.20,161.05,164.61,169.54,173.52,177.81,183.38,187.39,193.76,198.08,203.54,208.08`
+     `$S/chay.sh python3 tools/thu-bai-hoc.py 9 be-nai --cat-lai --khong-nghe --bo-dau=67.0 --moc=6.98,11.16,16.93,19.70,23.04,28.37,36.04,40.72,46.76,55.69,62.37,67.35,70.75,72.63,77.25,91.02,98.41,105.26,111.89,121.00,126.09,131.88,137.31,143.15,148.46`
+   - b02: sửa ranh giới bn-05/bn-06 ("Chuẩn luôn!" của bn-06 bị dính vào đuôi bn-05) bằng `--moc` (mốc thứ năm 30.27 thay 31.25, các mốc khác như cũ).
+   - **Bài học cho lần sau:** sau MỖI lượt thu dài phải chép nguyên văn cả lượt (`$S/chep-tron.py` với `gemini-3.5-transcribe`) và so số tiếng với lời gốc TRƯỚC khi cắt; lượt dài hơn hẳn mức đọc (b01: 343 giây cho 730 tiếng) là dấu hiệu đọc lẫn lời dặn. Chưa đưa bước này vào `thu-bai-hoc.py`.
+2. `tools/thu-bai-hoc.py`: `lam_sach()` bỏ mốc giờ dạng `00:23`, `0m3s`, `4.2s` và số đứng riêng (lời thu không có chữ số), hết báo nhầm "dài hơn lời gốc"; `hoi_moc()` thử thêm `gemini-3.8-flash`, `gemini-3.7-flash`, `gemini-3-flash-preview` khi `gemini-3.5-flash` hết lượt (nhận `NGHE_LAI_MO_HINH`); thêm `--bo-dau`. `tools/nghe-lai.py`: thứ tự mô hình mặc định đưa các bản flash mạnh lên trước bản lite.
+3. **Cắt lại + nghe lại các giọng khác** (cùng lượt thu cũ, không thu lại giọng nào ngoài Bé Nai): b01 bà Hoa, b03 bà Hoa (lượt cắt cũ dính đầu câu sau, nay đúng), b09 ông Tư, b09 Vy, b02 Vy, b02 người gọi nữ. Không giọng nào hỏng tới mức phải thu lại; các câu còn ngờ ghi ở tờ nghe.
+4. **Tờ nghe cho người:** `bai-hoc/nghe-thu/CAN-NGHE-BAI-HOC.md` (27 hàng: 13 câu nghi sai chữ, 4 chỗ cắt sửa tay, 5 clip ngắn, 5 giọng chưa ai duyệt).
+5. **Kiểm tự động + ảnh:** xem mục "Kết quả kiểm".
+6. **Astra lượt cuối** (`$S/astra/p3.txt` → `$S/astra/out3.md`, 23 nhận xét), đã đối chiếu từng mục với mã; bảng ở dưới.
+7. Việc phiên chính giao thêm giữa chừng: sửa câu mở của chú Tư trong `KICH-BAN-BAI-HOC.md` theo bản đã thu ("A lô, Vy đó hả con? …", không thu lại; `bai-09.json` không chép câu này); **bài ông bà cũng tự sang khung tranh kế** (chờ 2 giây, bài học sinh 0,7 giây; không tự sang ở khung ngõ cụt, khi trang ẩn, điểm rẽ vẫn chờ chọn) theo duyệt của người dùng sau khi thử trên máy thật.
+
+### Bảng trạng thái giọng (17:00)
+| Bài · giọng | Lượt | Trạng thái |
+|---|---|---|
+| b01 Bé Nai (46 câu) | 3.8, một lượt, bỏ 129,6 giây đầu (lời dặn) | Chép nguyên văn cả lượt 731/730 tiếng, không còn lời dặn; chép từng câu 46/46 đúng chỗ; `nghe-lai.py` cả lượt (gemini-3-flash-preview): KHÔNG CÓ LỜI DẶN. Câu ngờ: bn-07, bn-28 (tờ nghe) |
+| b02 Bé Nai (22 câu) | 3.8, một lượt | `nghe-lai.py` cả lượt (gemini-3.5-flash) 384/385, không lời dặn; chép cả lượt khớp. Câu ngờ: **bn-22 có thể đọc "bà" thay "bạn"** (4 lần nghe riêng), bn-17, bn-05/06 (cắt sửa tay), bn-16 (0,87 s) |
+| b03 Bé Nai (42 câu) | 3.8, một lượt, không dính lời dặn | Chép cả lượt 683/683; `nghe-lai.py` cả lượt KHÔNG CÓ LỜI DẶN (685/683); chép từng câu 42/42 đúng chỗ. Câu ngờ: bn-27, bn-28 (nghe riêng lệch, cả lượt đúng) |
+| b09 Bé Nai (26 câu) | 3.8, một lượt, bỏ 67,0 giây đầu (lời dặn) | Chép cả lượt 490/492; `nghe-lai.py` cả lượt (gemini-3.8-flash) KHÔNG CÓ LỜI DẶN; chép từng câu 26/26 sau khi sửa 3 ranh giới. Câu ngờ: bn-15, bn-16, bn-14 (0,95 s) |
+| b01 bà Hoa (3) | lượt cũ, cắt lại | bh-03 "hết hồn" đã gỡ nghi (5 máy); bh-02 chữ "tôi" còn ngờ |
+| b03 bà Hoa (4) | lượt cũ, cắt lại | Cắt đúng; chép cả lượt khớp. Giọng chưa ai duyệt |
+| b01 người gọi nam (7) | không đụng | Như trước; mốc `luc` B6 còn đúng |
+| b01/b03 Minh (1+1) | không đụng | Khớp |
+| b09 ông Tư (5) | lượt cũ, cắt lại | Mọi máy nghe "Vy" thành "Dì/gì" (có thể chỉ do giọng Nam), ot-05 "Ờ ha … May" lệch: CẦN NGƯỜI NGHE |
+| b09 Vy (1), b02 Vy (5) | lượt cũ, cắt lại | b02 vy-04 còn ngờ; còn lại khớp ở máy mạnh |
+| b02 người gọi nữ (5) | lượt cũ, cắt lại | Chép từng câu và cả lượt khớp (trừ dấu thanh "chị/chỉ", "Nạp/Lạp") |
+
+Về máy nghe: hạn mức NGÀY (gói miễn phí, theo project, theo mô hình) của `gemini-3.5-flash` và `gemini-2.5-flash` hết lúc khoảng 15:45; `gemini-3.7-flash`, `gemini-3.8-flash`, `gemini-3.5-transcribe` cũng hết vào cuối phiên. `gemini-3-flash-preview` với lời hỏi của `nghe-lai.py` hay **bịa lại chính các câu ví dụ trong lời hỏi** ("hơi lo lắng nhưng thân thiện", "tốc độ vừa phải") rồi kết luận CÓ LỜI DẶN, kể cả với clip chưa tới 1 giây: kết luận CÓ LỜI DẶN của nó không đáng tin (các câu nó gắn cờ đều được `gemini-3.5-transcribe` chép sạch). Lượt kiểm lại các câu đó bằng 3.7/3.8-flash không chạy được vì hết hạn mức (ghi ở `$S/nghe/g3p-co-loi-dan-kiem-lai.log`).
+
+### Kết quả kiểm
+- `node tools/kiem-bai-hoc.mjs --anh $S/anh5` (lượt cuối, sau mọi sửa, `$S/kiem-10.log`): **đạt 1358, lỗi 0**, 214 lượt soát bố cục, 178 ảnh, hai cỡ 393×873 và 360×740, 176 tệp giọng có và giải mã được. Lượt trước đó (`$S/anh4`, `kiem-9.log`, 1362/0, trước sửa tự sang khung) tôi đã ghép thành 16 tờ (`$S/to4/`) và **xem hết bằng mắt**; của lượt cuối chỉ xem thêm tờ các màn truyện chữ lớn (`$S/to4/anh5-truyen-chu-lon.png`), phần còn lại giống lượt trước: không thấy tràn, đè, cắt chữ; tin nhắn B1 Bài 2 theo thứ tự mới đọc tự nhiên; màn tạm dừng B6 có đủ hai nút; ô Gợi ý phủ mờ nền. Lượt `kiem-8` (trước khi chỉnh bố cục) bắt được 5 lỗi tràn ở 360×740 do chính các sửa theo Astra, đã sửa hết (rút gọn lời báo chưa đạt, thu gọn ô cuộc gọi khi tạm dừng, chỉ giữ việc đúng ở B5 khi chưa đạt, lý do từng việc chỉ hiện khi đạt như kịch bản, B5 xếp chữ lớn thu khoảng cách, tiêu đề màn kết quả ngắn lại).
+- Kiểm mới thêm vào `kiem-bai-hoc.mjs`: chạm lại cùng chỗ nhầm ở B1 không đếm thêm; mở rồi đóng Gợi ý khi đang nghe lại B6 không kẹt ở nút DỪNG; B5 sai trước rồi mới đúng thì chưa đạt và làm lại được; bản ghi cuộc gọi sai hợp đồng (vượt tổng, điểm lẻ, tổng là chữ, thiếu `luc`) không được nhận; tiến độ hỏng (điểm vượt trần, "đạt" mà chưa xong) không được tính trên thư viện; B5 chữ lớn trên dữ liệu xếp thứ tự vẫn phải xếp; kể xong khung 1 thì tự sang khung 2 ở cả hai chế độ.
+- `node $S/khu-hoi.mjs 8818` (đi thật từ bài học sang `video-call.html` rồi quay về; đã sửa bộ chờ: bấm Kết thúc thì trang gọi chuyển sang trạng thái `ended`, không phải `done`; thêm `node $S/khu-hoi.mjs 8818 sai` để chỉ chạy hai lượt trả lời chưa an toàn): lượt cuối `$S/khu-hoi-3.log` **ĐẠT HẾT** cả 6 lượt (4 bài trả lời đúng: nhận đúng điểm 2/2, 4/4, 2/2, 4/4; Bài 1 và Bài 4 trả lời chưa an toàn rồi cúp: nhận 0 điểm, lời Bé Nai đúng nhánh), khóa `lcs-goi-*` bị xóa sau khi nhận, mở lại `?sau=goi` không nhận lần hai, không lỗi trang, không tệp 404. Ảnh ở `$S/anh-khu-hoi/`.
+- CHƯA thử trên WebView Android thật (phiên chính đã cài APK 16:30 lên điện thoại cho người dùng thử; bản đó chưa có sửa tự sang khung và bỏ viền tiêu điểm ở `hoc.js`).
+
+### Astra lượt cuối (`$S/astra/out3.md`): đã sửa
+| # | Nhận xét | Sửa |
+|---|---|---|
+| 1 | Bản ghi cuộc gọi sai hợp đồng vẫn được điểm (làm tròn 0,5, bỏ qua `tong`, thiếu `luc`) | `sauGoi()` chỉ nhận `diem` nguyên trong 0..số ý, `tong` đúng số ý của bài, `luc` sau lúc bấm gọi; sai thì coi như chưa có kết quả |
+| 2 | Tiến độ cũ điểm vượt trần lên thư viện; "đạt" mà chưa "xong" vẫn được sao | `chuanKho()`: điểm nguyên, tổng ≤ 10 ý; `dat` chỉ khi `xong` |
+| 3 | Mở Gợi ý khi đang nghe lại B6 (bài đã xong) thì kẹt ở nút DỪNG | Đóng gợi ý luôn gọi `khiDongGoiY`; B6 dựng nút nghe tiếp + nút đi tiếp khi bài đã xong, thu gọn ô cuộc gọi |
+| 5 | Tải lại màn kết quả hiện điểm tốt nhất thay vì lượt vừa gọi | `ketQua()` đọc `c` trước `c_tot` |
+| 6 | Máy cấm lưu thì gọi xong vẫn không có điểm mà không báo | Màn thử thách báo trước "cuộc gọi vẫn tập được nhưng chưa tính điểm" |
+| 7 | Lời hứa của lượt B6 cũ đặt `trong=false` cho lượt mới, cho 3 sao trước mốc | Chỉ đổi cờ khi đúng lượt |
+| 8 | Ép `?che_do=don-gian` làm B5 Bài 4 dễ hơn | Dữ liệu xếp thứ tự thì luôn xếp, kể cả chữ lớn |
+| 9 | B1 quét từ cuối tin nhắn là đạt; chạm đúp một chỗ nhầm tính hai | Đếm chỗ nhầm khác nhau; đổi thứ tự các cụm trong tin nhắn Bài 2 (chỉ chữ hiện, không đổi lời thu) để quét từ đầu hay từ cuối đều vấp hai cụm nhiễu trước khi đủ bốn chỗ |
+| 10 | Bấm hết các nút vẫn được sao B | Ngưỡng sai (luật mới ở mục 1 kịch bản): B2, B4 sai tối đa 1 lần; B5 chọn việc đầu phải đúng ngay; B5 xếp kiểm sai tối đa 1 lần; quá thì xong nhưng chưa đạt, có "Làm lại để đạt" |
+| 11 | Trang nằm nền vẫn tự kể hết truyện và được sao A | Không tự sang khung khi `document.hidden` |
+| 12 | Xem đáp án xong vẫn làm tiếp trên lượt đã kết thúc | Khóa thao tác ở B1, B4, B5 khi lượt đã kết thúc; B5 xem đáp án thì hiện việc đúng |
+| 13 | Tệp tiếng treo (không lỗi, không phát) làm kẹt lượt mẫu | `phat()` có canh giờ: 8 giây không phát, hoặc quá độ dài tệp + 4 giây, thì đi tiếp bằng thời gian đọc chữ |
+| 15 (một phần) | Đổi chế độ thì lời báo gọi sai người | Lời báo "đã xem đáp án", "Gần đúng rồi" lấy xưng hô theo bài; nhãn bìa "Dành cho ông bà/học sinh" theo bài, "chữ lớn" theo cỡ chữ |
+| 16 (Bài 4) | Gợi ý 2 phần C nêu thẳng một ý được chấm | "Ngoài chuyện cho rút trước, trong nhóm còn hứa hẹn điều gì nghe khó tin không ta?" (chữ hiện, không thu) |
+| 18 | Lời giải mẫu B4 Bài 4 rộng quá sự thật ("Ai cam kết không lỗ là nói xạo") | "Hứa lãi cao mà chắc chắn không lỗ là dấu hiệu phải dừng lại" (chữ hiện) |
+| 19 | Ô Gợi ý không phải hộp thoại, Tab tới được nút phía sau | `role=dialog`, nền `inert`, tiêu điểm vào nút Đóng (không vẽ viền), đóng thì trả tiêu điểm |
+| 20 | Lượt mẫu B6 bấm Dừng muộn hơn cách chấm | Mẫu cúp tại mốc `luc` + 0,5 giây |
+| 21 | Loa của câu đã nối đúng không phát; loa ở lượt mẫu không dùng phím được | Chạm câu đã nối thì nghe lại; loa mẫu có `tabIndex` và phím Enter/Space |
+| 22 | `pointercancel` được chấm như vuốt | Tách riêng: chỉ đặt thẻ về chỗ |
+| 23 | Lời "coi lại ý còn thiếu" mà màn liệt kê đủ bốn ý | Tiêu đề thẻ đổi thành "Coi lại các ý được chấm" (lời thu giữ nguyên) |
+
+### Astra lượt cuối: không sửa, và lý do
+- **4** (hai tab cùng bài nhận nhầm điểm): app chạy trong một WebView, một trang; trình duyệt máy tính chỉ để thử.
+- **14** (Back đóng cả bài khi đang mở Gợi ý; mỗi màn chưa có mục lịch sử riêng): đổi lớn, phải thử trên WebView thật cùng nút Back của app; Back hiện về thư viện, không phải ngõ cụt.
+- **15** phần lời thu: chỉ xảy ra khi ép `?che_do=` (tham số thử); sửa phải thu lại cả lượt.
+- **16** phần Bài 1 (gợi ý 2 của B6 nêu "vụ án"): lời đã thu (`b01/bn-22`), là gợi ý của phần luyện không tính điểm và đứng sau gợi ý 1; sửa phải thu lại cả lượt Bé Nai Bài 1.
+- **17** (thẻ "dặn bà đừng kể cho con cháu" gắn nhãn lừa): Bài 1 dùng hai nút nên "Lừa" và "Cần kiểm tra" đều là "Khoan đã"; kịch bản coi "dặn giấu con cháu" là dấu hiệu lừa.
+
+### Lệch cần người dùng quyết
+- **Tranh ông Tư trong Bài 4** (`assets/comic9-*`, `ong-tu-bang-nhan-vat.png`) vẽ ông lão hoạt hình ngoài sáu mươi, còn **avatar 117 trong cuộc gọi** là người đàn ông ngoài bốn mươi mặc vest. Chưa vẽ lại (theo lời dặn); người dùng quyết sửa bên nào.
+- Điểm rẽ và khung ngõ cụt cho Bài 1, Bài 3: người dùng đã duyệt rồi TẠM DỪNG (có thể sửa cốt truyện hai bài trước vì bị lặp). Phiên này chưa làm gì cho phần đó.
+
+### Tệp đã sửa trong phiên này
+- `prototype/hoc/hoc.js`, `prototype/hoc/hoc.css`, `prototype/hoc/bai-02.json` (thứ tự cụm tin nhắn B1), `prototype/hoc/bai-09.json` (gợi ý 2 phần C, lời giải mẫu B4).
+- `prototype/hoc/giong/b01|b03|b09/bn-*.m4a` (thu lại), `b02/bn-05, bn-06` (cắt lại), `b01/bh-*`, `b03/bh-*`, `b09/ot-*`, `b09/vy-01`, `b02/vy-*`, `b02/gu-*` (cắt lại từ lượt cũ).
+- `tools/thu-bai-hoc.py`, `tools/nghe-lai.py`, `tools/kiem-bai-hoc.mjs`.
+- `bai-hoc/KICH-BAN-BAI-HOC.md` (luật sao B có ngưỡng sai; luật tự sang khung; tin nhắn B1 Bài 2; gợi ý 2 và lời giải mẫu Bài 4; câu mở chú Tư), `bai-hoc/nghe-thu/CAN-NGHE-BAI-HOC.md` (mới).
+- Trong `$S` (git bỏ qua): `chep-tron.py` (lượt nghe thứ ba, chỉ chép nguyên văn), `nghe-bn2.sh`, `nghe-khac.sh`, `nghe-b03.sh`, `khu-hoi.mjs` (sửa), `astra/p3.txt`, `astra/out3.md`, `nghe/*.log`, `anh3`, `anh4`, `anh5`, `to4/`, `kiem-8..10.log`, `khu-hoi-1..3.log`, `sao-luu/giong-opus2-dau/` (giọng + JSON lúc đầu phiên). Bản `hoc.js` và `kiem-bai-hoc.mjs` trước khi sửa theo Astra ở thư mục nháp của phiên (có thể đã mất), dùng `git diff` để xem.
+- Không đụng: `android/**`, `prototype/video-call.html`, `prototype/audio/**`, `prototype/loi-*.json`, `prototype/canh/**`, `bai-hoc/nghe-thu/CAN-NGHE.md`, `bai-hoc/nghe-thu/cho-thu-lai/`, `app/`, `server/`, `mvp/`, `de2/`. Các lượt thu cũ đã tách (`audio-goc/hoc/bNN/bn-p*-take*.wav`, `bn-p*-cat/`) vẫn còn, chưa xóa.
+
+### Việc còn lại, theo thứ tự
+1. Người dùng nghe `bai-hoc/nghe-thu/CAN-NGHE-BAI-HOC.md`, trước hết hàng 1 (b02/bn-22 "bà" hay "bạn"): nếu sai thì thu lại lượt Bé Nai Bài 2 (một lần gọi 3.8), rồi chép nguyên văn cả lượt trước khi cắt.
+2. Khi có lại hạn mức nghe (ngày mai): chạy `tools/nghe-lai.py` bằng `gemini-3.5-flash` cho từng câu của b01, b03, b09 Bé Nai (phiên này mới chép từng câu bằng `gemini-3.5-transcribe` và hỏi lời dặn ở mức cả lượt), và kiểm lại các câu `gemini-3-flash-preview` gắn CÓ LỜI DẶN (`b02/gu-01, gu-03, vy-02, vy-03, vy-05, bn-05, bn-12, bn-16`, `b03/bh-01`).
+3. Đưa bước "chép nguyên văn cả lượt, so số tiếng, cảnh báo đọc lẫn lời dặn ở đầu" vào `tools/thu-bai-hoc.py` ngay sau khi thu.
+4. Thử trên WebView thật bản có tự sang khung (APK cần dựng lại với `hoc.js` mới): tự phát tiếng, nút Back, Gợi ý, đi từ bài học sang cuộc gọi và về.
+5. Nếu người dùng chốt cốt truyện mới cho Bài 1, Bài 3: làm điểm rẽ + ngõ cụt (lời, tranh Codex, thu lại cả lượt Bé Nai và bà Hoa của bài đó), sửa `bai-01.json`, `bai-03.json`, mục 1 kịch bản, `kiem-bai-hoc.mjs`.
+6. Người dùng quyết lệch tranh ông Tư và avatar 117.
