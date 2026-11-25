@@ -25,6 +25,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import org.json.JSONObject
 import java.io.ByteArrayInputStream
+import java.io.File
 import java.nio.FloatBuffer
 
 /**
@@ -172,17 +173,20 @@ class GoiVideoActivity : Activity() {
                 runOnUiThread { if (!isFinishing && !isDestroyed) web.evaluateJavascript("window.__doc && window.__doc(${JSONObject.quote(ma)}, ${kq?.toString() ?: "null"})", null) }
             }
         }
-        @JavascriptInterface fun coTraLoi(): Boolean = CaiDat.khoaAI(this@GoiVideoActivity).isNotBlank() && (CaiDat.khoaGiong(this@GoiVideoActivity).isNotBlank() || CaiDat.mayChu(this@GoiVideoActivity).isNotBlank())
+        @JavascriptInterface fun coTraLoi(): Boolean = canPlayLive()
         /**
          * Tham số của app cho trang, dạng JSON: goc = đang chạy trong app (mô hình miệng chạy bằng mã gốc), song = bật chế độ AI nói chuyện trực tiếp
-         * (công tắc ở màn chính và đã có khóa AI), auto = chạy cuộc gọi mẫu. Nhờ vậy trang bài học mở cuộc gọi bằng đường dẫn thường vẫn chạy đúng.
+         * (công tắc ở màn chính và có máy chủ hoặc đủ khóa trên máy), auto = chạy cuộc gọi mẫu.
          */
         @JavascriptInterface fun thamSo(): String = JSONObject().put("goc", true)
-            .put("song", CaiDat.goiSong(this@GoiVideoActivity) && CaiDat.khoaAI(this@GoiVideoActivity).isNotBlank())
+            .put("song", CaiDat.goiSong(this@GoiVideoActivity) && canPlayLive())
             .put("auto", intent.getBooleanExtra("auto", false)).toString()
         @JavascriptInterface fun nghe() { runOnUiThread { this@GoiVideoActivity.batDauNghe() } }
         @JavascriptInterface fun dungNghe() { runOnUiThread { this@GoiVideoActivity.dungNghe() } }
     }
+
+    private fun canPlayLive(): Boolean = CaiDat.mayChu(this).isNotBlank() ||
+        (CaiDat.khoaAI(this).isNotBlank() && CaiDat.khoaGiong(this).isNotBlank())
 
     /**
      * Sổ các ca ngoài kịch bản: người học nói điều mà bộ câu thu sẵn không có câu đáp hợp. Đội đọc sổ này để chọn ca đáng đưa vào
@@ -283,8 +287,12 @@ class GoiVideoActivity : Activity() {
                 val u = r.url
                 if (u.host != HOST) return null
                 return try {
-                    if (u.path == "/__mieng") mieng(u.getQueryParameter("id") ?: "21", u.getQueryParameter("k")!!.toInt(), u.getQueryParameter("p")!!)
-                    else taiSan(u.path.orEmpty())
+                    val path = u.path.orEmpty()
+                    when {
+                        path == "/__mieng" -> mieng(u.getQueryParameter("id") ?: "21", u.getQueryParameter("k")!!.toInt(), u.getQueryParameter("p")!!)
+                        path.startsWith("/__song/") -> serveLiveFile(path)
+                        else -> taiSan(path)
+                    }
                 } catch (e: Throwable) {
                     Log.w("GoiVideo", "không trả được ${u.path}: $e")
                     WebResourceResponse("text/plain", "utf-8", 404, "Not Found", emptyMap(), ByteArrayInputStream(ByteArray(0)))
@@ -294,7 +302,7 @@ class GoiVideoActivity : Activity() {
         val trang = trangHopLe(intent.getStringExtra("trang"))
         if (trang != null) web.loadUrl("https://$HOST/$trang")
         else {   // mặc định: cuộc gọi với chị Lan, địa chỉ như trước khi có nhiều cảnh
-            val them = (if (intent.getBooleanExtra("auto", false)) "&auto=1" else "") + (if (CaiDat.goiSong(this) && CaiDat.khoaAI(this).isNotBlank()) "&song=1" else "")
+            val them = (if (intent.getBooleanExtra("auto", false)) "&auto=1" else "") + (if (CaiDat.goiSong(this) && canPlayLive()) "&song=1" else "")
             web.loadUrl("https://$HOST/prototype/video-call.html?goc=1$them")
         }
     }
@@ -310,6 +318,18 @@ class GoiVideoActivity : Activity() {
         require(ts.size == 32 && id.all { it.isLetterOrDigit() })
         val anh = mayCua(id).chay(k, ts)
         return WebResourceResponse("application/octet-stream", null, 200, "OK", mapOf("Cache-Control" to "no-store"), ByteArrayInputStream(anh))
+    }
+
+    private fun serveLiveFile(path: String): WebResourceResponse {
+        val (id, extension) = requireNotNull(Api.livePath.matchEntire(path)).destructured
+        val mime = when (extension) {
+            "wav" -> "audio/wav"
+            "lip.json" -> "application/json"
+            else -> "video/mp4"
+        }
+        val file = File(cacheDir, "song/$id.$extension")
+        return WebResourceResponse(mime, if (extension == "lip.json") "utf-8" else null, 200, "OK",
+            mapOf("Cache-Control" to "no-store", "Content-Length" to file.length().toString()), file.inputStream())
     }
 
     /** Tệp của trang nằm trong assets/web (Gradle chép từ thư mục prototype lúc build). */

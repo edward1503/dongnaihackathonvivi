@@ -95,3 +95,19 @@ Kết quả phân tích luôn có dạng `AnalysisResult` (mục 2.1 của kế 
   - Tuổi tên miền dùng bảng mẫu trong `data.py`; triển khai thật thì tra WHOIS.
   - Phễu bảo vệ trên W01 là số mẫu; triển khai thật thì Android gửi lên.
   - 120 báo cáo nạp sẵn là dữ liệu giả lập.
+
+## Lượt gọi video trực tiếp
+
+`POST /api/roleplay/live` nhận mã cảnh, tối đa 14 lượt thoại theo thứ tự và danh sách mã ý đã chấm. Lượt cuối phải là của người học. Ví dụ cho cảnh `minh-1`
+
+```json
+{"scene":"minh-1","history":[{"ai":"nv","chu":"Mẹ ơi, con phải làm sao?"},{"ai":"nh","chu":"Con cúp máy đi."}],"scored":[]}
+```
+
+Các cảnh hiện có gồm `minh-1`, `minh-3`, `tu-9` và `lan-2`. Máy chủ che dãy từ bốn chữ số trong hội thoại trước khi gửi OpenAI. Máy chủ dùng `OPENAI_API_KEY`, mô hình `OPENAI_MODEL` (mặc định `gpt-6-luna`) và lời nhắc của cảnh. Chỉ ý mới có bằng chứng trong lượt cuối được tính. Gemini TTS dùng giọng của nhân vật và ưu tiên lời dặn giọng riêng của cảnh. Tiếng được cắt nhiễu đuôi và lọc bằng ffmpeg như ở `/speak`.
+
+Phản hồi có `id` (16 ký tự hex), câu thoại `chu`, ý mới `y`, cờ khuyên sai `sai`, cờ kết thúc `het`, tiếng PCM16 mono dạng base64 `pcm`, tần số `tanSo`, thời lượng `giay` và `timings` (mili giây cho `llm_ms`, `tts_ms`, `mouth_ms`, `total_ms`). Yêu cầu trùng cảnh, lịch sử và các ý đã chấm dùng lại toàn bộ kết quả trong `server/.cache/live/`. Lịch sử đầu vào chỉ tham gia tính mã băm. Cảnh lạ, cảnh thiếu `song` hoặc lịch sử sai trả 422. Thiếu khóa khi tạo lượt mới, lỗi mô hình, câu thoại không hợp lệ hoặc lỗi đọc giọng trả 503.
+
+Đặt `LCS_TOKEN` để yêu cầu header `X-LCS-Token` trên cả ba đường `/api/roleplay/live`, `/api/roleplay/intent` và `/api/roleplay/speak`. Thiếu hoặc sai token trả 401. Khi biến trống, ba đường này mở như mặc định.
+
+Để dựng miệng, cài thêm `onnxruntime numpy Pillow` trong môi trường chạy máy chủ và đặt ffmpeg có bộ mã hóa `libx264` trên PATH. Máy chủ dùng bộ khớp `d01-tech/lipfit-21.json` và mô hình LiteAvatar đi kèm kho mã, giữ hai phiên ONNX cho mỗi avatar sau lần dùng đầu. Trường `mouth.lip` chứa `fps`, `params`, `bg` và `mieng` với khung đứng `F` và tên tệp. `mouth.mp4` chứa video H.264 768×384, 30 hình/giây dạng base64. Khi ffmpeg thiếu bộ đọc rawvideo, máy chủ truyền khung PNG, cũng có thể chọn cách này bằng `LCS_FF_PNG=1`. Khi thiếu thư viện hoặc dựng video lỗi, phản hồi vẫn có tiếng và `mouth` bằng `null`.

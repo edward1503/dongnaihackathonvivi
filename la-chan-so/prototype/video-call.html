@@ -389,8 +389,9 @@ const demDs = () => (DEM.ds ||= bo().then((b) => {
   return rieng.length ? rieng : dem.filter((x) => !/^b\d+-/.test(x.id));
 }).catch(() => []));
 demDs();
-async function dem(g = gen) {
+async function dem(g = gen, avoidRepeat = false) {
   const ds = await demDs(); if (!ds.length || !call || ended || g !== gen) return false;
+  if (avoidRepeat && ds.length === 1 && ds[0].id === DEM.vua) return false;
   if (!DEM.tui.length) { DEM.tui = ds.map((x) => x.id).sort(() => Math.random() - 0.5); if (DEM.tui.length > 1 && DEM.tui[DEM.tui.length - 1] === DEM.vua) DEM.tui.unshift(DEM.tui.pop()); }
   const id = DEM.vua = DEM.tui.pop(), x = ds.find((y) => y.id === id); S.dem = id;
   try { await call.speakFile(x.tep, x.tep.replace('.m4a', '.lip.json'), null, () => {}, { nhanh: true }); } catch (e) { console.warn('tiếng đệm', e); return false; }
@@ -517,18 +518,31 @@ function traLoiSong(ht, chu, cauHoi) {
 }
 async function noiSong(tl, laTiengCho = false) {
   const g = gen; busy = true;
-  if (!laTiengCho) { S.line = '(AI trả lời trực tiếp)'; S.song = (S.song || 0) + 1; luot('noi', T.ten + ' đang nói'); subtitles(tl.chu, tl.giay, null, g); S.state = 'speaking'; }
-  try { S.lip = 'truc-tiep'; await call.speakLive([tl.pcm], tl.tanSo, await lipModel()); }
+  if (!laTiengCho) { S.line = '(AI trả lời trực tiếp)'; S.song = (S.song || 0) + 1; luot('noi', T.ten + ' đang nói'); }
+  const onStart = (dur, mode, lip) => {
+    console.info('[timing] playback start', mode);
+    if (!laTiengCho) { subtitles(tl.chu, dur, lip, g); S.state = 'speaking'; }
+    S.lip = mode;
+  };
+  try {
+    if (tl.song) {
+      const base = '/__song/' + tl.song;
+      await call.speakFile(base + '.wav', base + '.lip.json', null, onStart);
+    } else {
+      const model = await lipModel();
+      onStart(tl.giay, 'truc-tiep', null);
+      await call.speakLive([tl.pcm], tl.tanSo, model);
+    }
+  }
   catch (e) { console.warn('trả lời trực tiếp', e); S.errors.push(String(e)); }
   busy = false; return !ended && g === gen;
 }
 
-// ====== Chế độ "AI nói chuyện trực tiếp" (?song=1): mỗi lượt AI vừa chấm vừa đáp, đọc bằng giọng Gemini, khẩu hình tính tại chỗ ======
-// Không dùng bộ câu thu sẵn. Mỗi lượt chờ khoảng 5 giây; trong lúc chờ chị ậm ừ ĐÚNG MỘT tiếng (cùng giọng, tạo sẵn lúc bắt đầu gọi).
+// ====== Chế độ "AI nói chuyện trực tiếp" (?song=1): mỗi lượt AI vừa chấm vừa đáp, đọc bằng giọng Gemini ======
 let cauMa = 0; const cauCho = new Map();
 window.__ls = window.__doc = (ma, kq) => { const f = cauCho.get(ma); cauCho.delete(ma); f?.(kq); };
 const cau = (ten, ...thamSo) => new Promise((ok) => {
-  const ma = PHIEN + ++cauMa, h = setTimeout(() => { cauCho.delete(ma); ok(null); }, 25000);
+  const ma = PHIEN + ++cauMa, h = setTimeout(() => { cauCho.delete(ma); ok(null); }, 30000);   // quá 30 giây thì lượt này dùng câu thu sẵn, cuộc gọi không đứng lâu
   cauCho.set(ma, (kq) => { clearTimeout(h); ok(kq && kq.pcm ? kq : null); });
   try { window.LaChan[ten](ma, ...thamSo); } catch { clearTimeout(h); cauCho.delete(ma); ok(null); }
 });
@@ -544,6 +558,7 @@ async function hoiThoaiSong() {
   if (!(await noiSan('mo-dau'))) return;
   while (!ended) {
     const r = await nghe(); if (ended) return;
+    console.info('[timing] learner result', r.loai);
     if (r.loai !== 'loi-noi') {   // không nói gì, hoặc máy không nghe ra: hỏi lại bằng câu thu sẵn, không cần gọi AI
       if (r.loai === 'loi') { lo++; im = 0; if (!(await noiSan(lo % 2 ? 'nghe-mot' : 'nghe-hai'))) return; if (lo >= 2 && !goChu) { batGo(true); toast('Máy nghe chưa rõ. ' + Nh + ' gõ cho ' + T.ten_thuong + ' một câu cũng được nha', 3500); } continue; }
       im++; lo = 0; S.imLang = im;
@@ -555,8 +570,19 @@ async function hoiThoaiSong() {
     let chu = r.chu;
     if (kiem.hieu(r.chu).yDinh === 'lo-thong-tin') chu = SG.che_so;   // lời có số riêng tư không rời máy
     lichSu.push({ ai: SG.ai_nh, chu }); S.state = 'scoring'; luot('nghi', T.ten + ' đang nghĩ…');
-    const doi = cau('luotSong', JSON.stringify({ canh: C.ma, lich_su: lichSu.slice(-14), da_cham: [...co] }));
-    await dem();   // đúng một tiếng chờ, lấy từ bộ thu sẵn
+    let replyReceived = false;
+    console.info('[timing] bridge call sent');
+    const doi = cau('luotSong', JSON.stringify({ canh: C.ma, lich_su: lichSu.slice(-14), da_cham: [...co] })).then((reply) => {
+      replyReceived = true;
+      console.info('[timing] reply received', reply ? 'ok' : 'unavailable');
+      return reply;
+    });
+    const g = gen;
+    if (await dem(g)) console.info('[timing] filler done', 1);
+    if (!ended && g === gen && !replyReceived) {
+      await Promise.race([doi, sleep(3000)]);
+      if (!replyReceived && await dem(g, true)) console.info('[timing] filler done', 2);
+    }
     const k = await doi; if (ended) return;
     if (!k && C.lui_khi_hong) {
       // AI không đáp được (hết lượt API, mất mạng, quá giờ): lượt này dùng luật trên máy và câu thu sẵn, cuộc gọi không đứng lại.

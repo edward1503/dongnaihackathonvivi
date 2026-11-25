@@ -4,3 +4,4 @@ httpx>=0.27
 python-multipart>=0.0.9
 pytest>=8
 qrcode>=7.4          # mã QR cho buổi trình diễn (tùy chọn)
+# Optional live-call mouth rendering: pip install onnxruntime numpy Pillow

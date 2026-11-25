@@ -168,3 +168,14 @@ class SpeakIn(BaseModel):
     """POST /api/roleplay/speak: đọc một câu bằng giọng của nhân vật (mã trong prototype/nhan-vat.json)."""
     text: str = Field(..., max_length=1000)
     character: Optional[str] = "lan"
+
+
+class LiveHistoryItem(BaseModel):
+    ai: str
+    chu: str
+
+
+class LiveTurnIn(BaseModel):
+    scene: str = Field(pattern=r"^[a-z0-9-]{1,24}$")
+    history: list[LiveHistoryItem] = Field(min_length=1, max_length=14)
+    scored: list[str] = Field(default_factory=list)

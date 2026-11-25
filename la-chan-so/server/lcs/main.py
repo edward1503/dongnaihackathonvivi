@@ -3,6 +3,7 @@
 Chạy:  uvicorn lcs.main:app --host 0.0.0.0 --port 8000
 Trang của Mảng 5, 6 (mvp/zalo.html, mvp/web.html) chạy thẳng trên máy chủ này qua lớp tương thích (compat.py).
 """
+import hmac
 import json
 import logging
 import os
@@ -11,19 +12,19 @@ import shutil
 import uuid
 from pathlib import Path
 
-from fastapi import (Body, FastAPI, File, Form, HTTPException, Query, Request, UploadFile, WebSocket,
+from fastapi import (Body, Depends, FastAPI, File, Form, Header, HTTPException, Query, Request, UploadFile, WebSocket,
                      WebSocketDisconnect)
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import ValidationError
 
-from . import ai, compat, config, demo, giong, hieu_y, roleplay
+from . import ai, compat, config, demo, giong, hieu_y, live_call, roleplay
 from .audio import prepare as prepare_audio
 from .analyze import NeedInput, analyze_call, analyze_text
 from .checker import check_target
 from .contract import (AlertIn, AnalysisResult, AppealIn, AppealResolveIn, AskIn, AskReplyIn, BroadcastIn, CheckIn, DecisionIn,
-                       EventIn, IntentIn, LegacyReplyIn, MessageIn, ReportIn, ReportPatch, SpeakIn)
+                       EventIn, IntentIn, LiveTurnIn, LegacyReplyIn, MessageIn, ReportIn, ReportPatch, SpeakIn)
 from .data import LESSONS, SCAM_TYPES
 from .masking import has_otp, mask
 from .relay import Relay, RelayError
@@ -507,9 +508,23 @@ async def roleplay_finish(body: dict = Body(...)):
         bad("Không thấy cuộc gọi này", 404)
 
 
-# Hai đường cho app Android (Mảng 4, android/HOP-DONG-DU-LIEU.md): app tự chọn câu thu sẵn, máy chủ chỉ phân loại và đọc giọng.
+def require_roleplay_token(x_lcs_token: str = Header(default="")):
+    expected = config.env("LCS_TOKEN")
+    if expected and not hmac.compare_digest(expected.encode(), x_lcs_token.encode()):
+        bad("Token không hợp lệ", 401)
 
-@app.post("/api/roleplay/intent")
+
+@app.post("/api/roleplay/live", dependencies=[Depends(require_roleplay_token)])
+async def roleplay_live(body: LiveTurnIn):
+    try:
+        return await live_call.live_turn(body)
+    except live_call.InvalidTurn as e:
+        bad(str(e), 422)
+    except (ai.AIUnavailable, giong.CannotSpeak) as e:
+        bad(str(e), 503)
+
+
+@app.post("/api/roleplay/intent", dependencies=[Depends(require_roleplay_token)])
 async def roleplay_intent(body: IntentIn):
     """Hiểu ý một lượt của người học: {ideas[], intent, wantsStop, offScript}. Không lưu lời người học."""
     try:
@@ -522,7 +537,7 @@ async def roleplay_intent(body: IntentIn):
         bad("Chưa có khóa AI hoặc AI không trả lời; app dùng luật trên máy", 503)
 
 
-@app.post("/api/roleplay/speak")
+@app.post("/api/roleplay/speak", dependencies=[Depends(require_roleplay_token)])
 async def roleplay_speak(body: SpeakIn):
     """Đọc một câu bằng giọng Gemini của nhân vật, đã lọc rẹt: {text, audio (PCM16 base64), sampleRate, seconds}."""
     try:

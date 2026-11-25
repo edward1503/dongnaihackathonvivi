@@ -1,9 +1,14 @@
 package vn.doi18.lachanso
 
 import android.content.Context
+import android.os.SystemClock
+import android.util.Log
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.InputStream
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+import java.util.Base64
 
 /** Kết quả phân tích của máy chủ, đã đổi sang kiểu dữ liệu của app. */
 data class KetQuaAI(
@@ -137,7 +142,69 @@ object Api {
     }
 
     // ---------- Cuộc gọi video (mảng 4) ----------
-    // Trang gọi video và HieuY dùng dạng dữ liệu riêng bên trong app; hai hàm dưới đây đổi qua lại với tên trên đường truyền.
+    // Trang gọi video và HieuY dùng dạng dữ liệu riêng bên trong app.
+
+    private val roleplayHeaders
+        get() = if (BuildConfig.LCS_TOKEN.isEmpty()) emptyMap() else mapOf("X-LCS-Token" to BuildConfig.LCS_TOKEN)
+
+    private const val LIVE_ID = "[0-9a-fA-F]{16}"
+    internal val liveId = Regex(LIVE_ID)
+    internal val livePath = Regex("/__song/($LIVE_ID)\\.(wav|lip\\.json|mieng\\.mp4)")
+
+    internal data class LiveReply(
+        val id: String, val line: String, val pcm: String, val sampleRate: Int, val seconds: Double,
+        val ideas: List<String>, val wrong: Boolean, val finished: Boolean, val audio: ByteArray,
+    ) {
+        fun forPage(): JSONObject = JSONObject().put("chu", line).put("pcm", pcm).put("tanSo", sampleRate)
+            .put("giay", seconds).put("y", JSONArray(ideas)).put("sai", wrong).put("het", finished)
+    }
+
+    internal data class LiveMouth(val lip: JSONObject, val video: ByteArray)
+    internal data class LiveTurn(val reply: LiveReply, val mouth: LiveMouth?)
+
+    internal fun parseLiveReply(field: (String) -> Any?): LiveReply? {
+        val id = (field("id") as? String)?.takeIf(liveId::matches) ?: return null
+        val line = (field("chu") as? String)?.takeIf { it.isNotBlank() } ?: return null
+        val pcm = field("pcm") as? String ?: return null
+        val sampleRate = (field("tanSo") as? Number)?.toDouble() ?: return null
+        if (sampleRate !in 1.0..(Int.MAX_VALUE / 2).toDouble() || sampleRate != sampleRate.toInt().toDouble()) return null
+        val seconds = (field("giay") as? Number)?.toDouble()?.takeIf { it.isFinite() && it > 0 } ?: return null
+        val ideas = (field("y") as? List<*>)?.map { it as? String ?: return null } ?: return null
+        val wrong = field("sai") as? Boolean ?: return null
+        val finished = field("het") as? Boolean ?: return null
+        val audio = try { Base64.getDecoder().decode(pcm) } catch (_: IllegalArgumentException) { return null }
+        if (audio.isEmpty() || audio.size % 2 != 0) return null
+        return LiveReply(id, line, pcm, sampleRate.toInt(), seconds, ideas, wrong, finished, audio)
+    }
+
+    internal fun wavHeader(byteCount: Int, sampleRate: Int): ByteArray =
+        ByteBuffer.allocate(44).order(ByteOrder.LITTLE_ENDIAN)
+            .put("RIFF".toByteArray()).putInt(36 + byteCount).put("WAVEfmt ".toByteArray())
+            .putInt(16).putShort(1).putShort(1).putInt(sampleRate).putInt(sampleRate * 2)
+            .putShort(2).putShort(16).put("data".toByteArray()).putInt(byteCount).array()
+
+    /** POST /api/roleplay/live: một lượt chấm, đáp, đọc và dựng khẩu hình. */
+    internal fun roleplayLive(c: Context, scene: String, history: JSONArray, scored: List<String>): LiveTurn? {
+        val request = JSONObject().put("scene", scene).put("history", history).put("scored", JSONArray(scored))
+        val start = SystemClock.elapsedRealtime()
+        var size = 0
+        val response = try {
+            MayChu.gui(c, "/api/roleplay/live", request, 25000, roleplayHeaders) { size = it }
+        } finally {
+            Log.i("LcsTiming", "server live ms=${SystemClock.elapsedRealtime() - start} bytes=$size")
+        } ?: return null
+        val reply = parseLiveReply { name ->
+            val value = response.opt(name)
+            if (value is JSONArray) List(value.length()) { value.opt(it) } else value
+        } ?: return null
+        if (response.isNull("mouth")) return LiveTurn(reply, null)
+        val mouth = response.optJSONObject("mouth") ?: return null
+        val lip = mouth.optJSONObject("lip") ?: return null
+        if (lip.optJSONObject("mieng")?.optString("tep") != "${reply.id}.mieng.mp4" ||
+            lip.optJSONArray("params") == null || lip.optJSONArray("bg") == null) return null
+        val video = try { Base64.getDecoder().decode(chu(mouth, "mp4")) } catch (_: IllegalArgumentException) { return null }
+        return if (video.isEmpty()) null else LiveTurn(reply, LiveMouth(lip, video))
+    }
 
     /**
      * POST /api/roleplay/intent {scene, text, lastLine, scored} → {ideas[], intent, wantsStop, offScript}: phân loại ý một lượt của người học.
@@ -147,7 +214,7 @@ object Api {
     fun roleplayIntent(c: Context, vao: JSONObject): JSONObject? {
         val than = JSONObject().put("scene", vao.optString("canh")).put("text", vao.optString("loi"))
             .put("lastLine", vao.optString("cau_hoi", "mo-dau")).put("scored", vao.optJSONArray("da_cham") ?: JSONArray())
-        val j = MayChu.gui(c, "/api/roleplay/intent", than, 6000) ?: return null
+        val j = MayChu.gui(c, "/api/roleplay/intent", than, 6000, roleplayHeaders) ?: return null
         val y = j.optJSONArray("ideas") ?: return null
         return JSONObject().put("y", y).put("yDinh", if (j.isNull("intent")) JSONObject.NULL else j.optString("intent"))
             .put("xinDung", j.optBoolean("wantsStop")).put("ngoai", j.optBoolean("offScript"))
@@ -158,7 +225,7 @@ object Api {
      * máy chủ đọc một câu bằng giọng Gemini của nhân vật và đã lọc rẹt. Trả về dạng của trang {chu, pcm, tanSo, giay} hoặc null.
      */
     fun roleplaySpeak(c: Context, chu: String, nhanVat: String): JSONObject? {
-        val j = MayChu.gui(c, "/api/roleplay/speak", JSONObject().put("text", chu).put("character", nhanVat), 25000) ?: return null
+        val j = MayChu.gui(c, "/api/roleplay/speak", JSONObject().put("text", chu).put("character", nhanVat), 25000, roleplayHeaders) ?: return null
         val pcm = chu(j, "audio").ifEmpty { return null }
         val tanSo = j.optInt("sampleRate", 24000)
         return JSONObject().put("chu", chu).put("pcm", pcm).put("tanSo", tanSo).put("giay", j.optDouble("seconds", pcm.length * 3 / 4 / 2.0 / tanSo))

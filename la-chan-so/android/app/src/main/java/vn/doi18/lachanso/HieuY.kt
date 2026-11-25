@@ -1,8 +1,11 @@
 package vn.doi18.lachanso
 
 import android.content.Context
+import android.os.SystemClock
+import android.util.Log
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -80,13 +83,8 @@ object HieuY {
             val than = JSONObject().put("model", CaiDat.moHinhAI(c))
                 .put("messages", JSONArray().put(JSONObject().put("role", "system").put("content", loiNhac)).put(JSONObject().put("role", "user").put("content", nguoi)))
                 .put("response_format", JSONObject().put("type", "json_schema").put("json_schema", LUOC_DO))
-            val k = (URL("https://api.openai.com/v1/chat/completions").openConnection() as HttpURLConnection).apply {
-                requestMethod = "POST"; connectTimeout = 3000; readTimeout = choMs; doOutput = true
-                setRequestProperty("Content-Type", "application/json"); setRequestProperty("Authorization", "Bearer $khoa")
-            }
-            k.outputStream.use { it.write(than.toString().toByteArray()) }
-            if (k.responseCode !in 200..299) return null
-            val j = JSONObject(JSONObject(k.inputStream.use { it.readBytes().toString(Charsets.UTF_8) }).getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content"))
+            val response = post("https://api.openai.com/v1/chat/completions", than, mapOf("Authorization" to "Bearer $khoa"), choMs) ?: return null
+            val j = JSONObject(response.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content"))
             val xinDung = j.optBoolean("xin_dung")
             val yDinh = j.optString("y_dinh").takeIf { it in cham.keys && !it.startsWith("im-lan") && !it.startsWith("nghe-lo") }
             val ra = JSONObject().put("xinDung", xinDung)
@@ -106,14 +104,23 @@ object HieuY {
         }
     }
 
-    private fun post(url: String, than: JSONObject, dau: Map<String, String>, choMs: Int): JSONObject? {
+    private fun post(url: String, than: JSONObject, dau: Map<String, String>, choMs: Int, ttsModel: String? = null): JSONObject? {
+        val start = SystemClock.elapsedRealtime()
         val k = (URL(url).openConnection() as HttpURLConnection).apply {
             requestMethod = "POST"; connectTimeout = 3000; readTimeout = choMs; doOutput = true
             setRequestProperty("Content-Type", "application/json"); dau.forEach { (a, b) -> setRequestProperty(a, b) }
         }
-        k.outputStream.use { it.write(than.toString().toByteArray()) }
-        if (k.responseCode !in 200..299) return null
-        return JSONObject(k.inputStream.use { it.readBytes().toString(Charsets.UTF_8) })
+        var status = -1
+        try {
+            k.outputStream.use { it.write(than.toString().toByteArray()) }
+            status = k.responseCode
+            if (status !in 200..299) return null
+            return JSONObject(k.inputStream.use { it.readBytes().toString(Charsets.UTF_8) })
+        } finally {
+            val service = if (ttsModel == null) "OpenAI" else "Gemini TTS model=$ttsModel"
+            Log.i("LcsTiming", "$service code=$status ms=${SystemClock.elapsedRealtime() - start}")
+            k.disconnect()
+        }
     }
 
     /**
@@ -227,7 +234,7 @@ object HieuY {
         val ds = dsKhoaGiong(c); if (ds.isEmpty()) return null
         for (m in listOf("gemini-3.8-flash-tts", "gemini-3.1-flash-tts-preview")) for (i in ds.indices) {
             val k = (khoaTot + i) % ds.size
-            val kq = try { post("https://generativelanguage.googleapis.com/v1beta/models/$m:generateContent", than, mapOf("x-goog-api-key" to ds[k]), 12000) } catch (_: Exception) { return null }
+            val kq = try { post("https://generativelanguage.googleapis.com/v1beta/models/$m:generateContent", than, mapOf("x-goog-api-key" to ds[k]), 12000, ttsModel = m) } catch (_: Exception) { return null }
             if (kq != null) { khoaTot = k; return kq }
         }
         return null
@@ -304,6 +311,10 @@ object HieuY {
      */
     fun luotSong(c: Context, canh: Canh?, lichSu: JSONArray, daCham: List<String>): JSONObject? {
         if (canh == null || lichSu.length() == 0) return null
+        if (CaiDat.mayChu(c).isNotBlank()) {
+            val serverReply = try { serverLive(c, canh, lichSu, daCham) } catch (_: Exception) { null }
+            if (serverReply != null) return serverReply
+        }
         val NHAN_VAT = canh.maKho
         // Đúng đoạn trò chuyện này đã từng chạy: phát lại lượt đã lưu (không tốn lượt API, tiện quay video).
         KhoGiong.layLuot(c, KhoGiong.khoaChat(NHAN_VAT, lichSu, daCham))?.let { luu -> phatLuu(c, canh, luu)?.let { return it } }
@@ -313,8 +324,41 @@ object HieuY {
         return KhoGiong.layLuot(c, KhoGiong.khoaLong(NHAN_VAT, lichSu, daCham))?.let { phatLuu(c, canh, it) }
     }
 
+    private fun serverLive(c: Context, scene: Canh, history: JSONArray, scored: List<String>): JSONObject? {
+        val maskedHistory = JSONArray()
+        for (index in 0 until history.length()) {
+            val turn = history.getJSONObject(index)
+            val speaker = turn.getString("ai")
+            val line = turn.getString("chu")
+            maskedHistory.put(JSONObject().put("ai", speaker)
+                .put("chu", if (speaker == scene.song.getString("ai_nh")) LocTinNhan.che(line) else line))
+        }
+        val (reply, mouth) = Api.roleplayLive(c, scene.ma, maskedHistory, scored) ?: return null
+        val directory = File(c.cacheDir, "song").apply { mkdirs() }
+        fun writeFile(extension: String, write: (java.io.OutputStream) -> Unit) {
+            val temp = File.createTempFile(reply.id, ".tmp", directory)
+            try {
+                temp.outputStream().use(write)
+                check(temp.renameTo(File(directory, "${reply.id}.$extension")))
+            } finally {
+                temp.delete()
+            }
+        }
+        writeFile("wav") { stream ->
+            stream.write(Api.wavHeader(reply.audio.size, reply.sampleRate))
+            stream.write(reply.audio)
+        }
+        if (mouth != null) {
+            writeFile("mieng.mp4") { it.write(mouth.video) }
+            writeFile("lip.json") { it.write(mouth.lip.toString().toByteArray()) }
+        }
+        KhoGiong.luuTieng(c, scene.giong, reply.line, reply.pcm, reply.sampleRate)
+        KhoGiong.luuLuot(c, scene.maKho, history, scored, reply.line, reply.ideas, reply.wrong, reply.finished)
+        return reply.forPage().apply { if (mouth != null) put("song", reply.id) }
+    }
+
     private fun phatLuu(c: Context, canh: Canh, luu: JSONObject): JSONObject? =
-        doc(c, canh, luu.getString("chu"))?.put("y", luu.optJSONArray("y") ?: JSONArray())?.put("sai", luu.optBoolean("sai"))?.put("het", luu.optBoolean("het"))?.put("tuKho", true)
+        docGemini(c, canh, luu.getString("chu"))?.put("y", luu.optJSONArray("y") ?: JSONArray())?.put("sai", luu.optBoolean("sai"))?.put("het", luu.optBoolean("het"))?.put("tuKho", true)
 
     private fun luotMoi(c: Context, canh: Canh, lichSu: JSONArray, daCham: List<String>): JSONObject? {
         val khoa = CaiDat.khoaAI(c); if (khoa.isBlank()) return null
@@ -340,7 +384,7 @@ object HieuY {
         }
         // Mô hình báo kết thúc vì tưởng đã đủ ý, nhưng có ý bị app loại và thực tế chưa đủ: không kết thúc, để người học nói tiếp.
         val het = j.optBoolean("ket_thuc") && !(biLoai && (daCham + y).toSet().size < NHAN.size)
-        val tieng = doc(c, canh, chu) ?: return null
+        val tieng = docGemini(c, canh, chu) ?: return null
         KhoGiong.luuLuot(c, NHAN_VAT, lichSu, daCham, chu, y.toList(), sai, het)
         return tieng.put("y", JSONArray(y.toList())).put("sai", sai).put("het", het)
     }

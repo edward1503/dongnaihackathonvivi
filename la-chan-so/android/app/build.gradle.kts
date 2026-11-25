@@ -14,6 +14,9 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "0.1"
+        val token = providers.gradleProperty("LCS_TOKEN").orElse("").get()
+            .replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r")
+        buildConfigField("String", "LCS_TOKEN", "\"$token\"")
         ndk { abiFilters += listOf("arm64-v8a", "x86_64") }   // điện thoại thật và máy ảo; bớt dung lượng thư viện gốc
     }
     // Trang gọi video và nhân vật lấy thẳng từ bản prototype, không chép thành bản thứ hai trong git.

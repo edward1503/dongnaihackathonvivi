@@ -79,12 +79,12 @@ def user_prompt(text: str, last_line: str, scored: list[str]) -> str:
             f"Danh sách ý định hợp lệ:\n{listing}\n\nLời học sinh: \"{text}\"")
 
 
-async def _ask_openai(system: str, user: str, timeout: float) -> dict:
+async def ask_openai(system: str, user: str, timeout: float, schema: dict = OPENAI_SCHEMA) -> dict:
     key = config.env("OPENAI_API_KEY")
     base = (config.env("OPENAI_BASE_URL") or "https://api.openai.com/v1").rstrip("/")
     body = {"model": config.env("OPENAI_MODEL") or "gpt-6-luna",
             "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
-            "response_format": {"type": "json_schema", "json_schema": OPENAI_SCHEMA}}
+            "response_format": {"type": "json_schema", "json_schema": schema}}
     try:
         async with httpx.AsyncClient() as client:
             r = await client.post(base + "/chat/completions", json=body, timeout=timeout,
@@ -127,7 +127,7 @@ async def classify(scene: str, text: str, last_line: str = "mo-dau", scored: lis
     system = _bundle()["system"]
     user = user_prompt(text, last_line or "mo-dau", scored)
     if config.env("OPENAI_API_KEY"):
-        j = await _ask_openai(system, user, timeout)
+        j = await ask_openai(system, user, timeout)
     else:
         j = await ai.generate_json([{"text": user}], GEMINI_SCHEMA, system, timeout=timeout)
     return interpret(j, text)

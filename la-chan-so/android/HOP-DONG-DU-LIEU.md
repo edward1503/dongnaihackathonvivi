@@ -50,13 +50,18 @@ Ghi chú từng dòng:
 
 ## Cuộc gọi video (mảng 4)
 
-Hai đường dưới đây hiện chỉ có trên `may-chu-gia.py`; máy chủ chung có `/api/roleplay/start|turn|finish` cho bản chạy trên trình duyệt. App không cần chúng khi chủ máy nhập khóa AI và khóa giọng đọc ngay trong app. Muốn máy chủ chung phục vụ luôn app Android thì thêm hai đường này vào `server/` đúng dạng sau.
+Android dùng các lời gọi dưới đây. Hai đường `intent` và `speak` cũng có trong `may-chu-gia.py`. Bản chạy trên trình duyệt dùng `/api/roleplay/start|turn|finish`.
 
 | Việc | Lời gọi | App gửi | App đọc | Chờ tối đa |
 |---|---|---|---|---|
 | Hiểu ý một lượt của người học | `POST /api/roleplay/intent` | `{"scene", "text", "lastLine", "scored"}` | `ideas[]`, `intent`, `wantsStop`, `offScript` | 6 giây |
 | Đọc một câu của nhân vật | `POST /api/roleplay/speak` | `{"text", "character"}` | `audio` (PCM16 một kênh, base64), `sampleRate`, `seconds` | 25 giây |
+| Chấm, đáp và dựng khẩu hình cho một lượt trực tiếp | `POST /api/roleplay/live` | `{"scene", "history", "scored"}` | `id`, `chu`, `y`, `sai`, `het`, `pcm`, `tanSo`, `giay`, `mouth`, `timings` | 25 giây |
 
 - **intent.** `scene` là mã cảnh (`lan-2`, `minh-1`, `minh-3`, `tu-9`); hiện chỉ `lan-2` có bộ ý định, cảnh khác trả 422. `text` đã thay mọi dãy số riêng tư. `lastLine` là mã câu nhân vật vừa nói, `scored` là các ý đã chấm. `ideas` là các ý chấm được trong `nap`, `dauhieu`, `xacminh`, `baocao`; `intent` là một mã trong `prototype/loi-chi-lan.json` hoặc `null`. Máy chủ chỉ phân loại, không viết lời cho nhân vật và không lưu lời người học.
 - **speak.** `character` là mã nhân vật trong `prototype/nhan-vat.json` (`lan`, `minh`, `tu`); mã lạ thì máy chủ không đọc bằng giọng khác mà trả lỗi. Tiếng phải đã cắt cụm nhiễu đuôi và lọc rẹt (`doc_giong.py`). Hỏng hai lần thì app không phát bản lọc nhẹ mà dùng câu thu sẵn.
+- **live.** `history` chứa tối đa 14 mục `{"ai", "chu"}`, mục cuối là lời người học. `scored` là các ý đã chấm. `id` gồm 16 ký tự hex. `pcm` là PCM16 một kênh dạng base64, `tanSo` tính bằng Hz và `giay` là độ dài âm thanh. `mouth` chứa `lip` (JSON khẩu hình 30 fps, với `mieng.tep` trỏ tới `<id>.mieng.mp4`) và `mp4` (H.264 dạng base64), hoặc `null` nếu thiếu bộ dựng. `timings` chứa `llm_ms`, `tts_ms`, `mouth_ms` và `total_ms`. Cảnh không hợp lệ trả 422, lỗi tạo lượt trả 503.
+- **Phát lượt live.** App lưu WAV và, nếu có khẩu hình dựng sẵn, lưu lip JSON và MP4 dưới `cacheDir/song`. Cầu nối chỉ thêm `song: "<id>"` khi đã ghi đủ khẩu hình. WebView phát qua `/__song/<id>.wav`, `/__song/<id>.lip.json` và `/__song/<id>.mieng.mp4`. Kết quả không có `song` vẫn phát PCM và tính khẩu hình trên máy.
+- **Token.** Nếu máy chủ đặt `LCS_TOKEN`, cả ba đường yêu cầu header `X-LCS-Token`. Android lấy giá trị từ thuộc tính Gradle `LCS_TOKEN`, mặc định rỗng.
+- **Nhật ký thời gian.** `GoiVideo` có các mốc `[timing]` cho kết quả người học, gửi yêu cầu qua cầu nối, tiếng đệm kết thúc, kết quả cầu nối (kể cả hết hạn) và bắt đầu đường phát. `LcsTiming` ghi thời gian OpenAI và thời gian, mô hình, mã HTTP của từng lần thử Gemini TTS; lượt máy chủ ghi thời gian và độ lớn phản hồi theo byte.
 - Lỗi trả mã HTTP khác 2xx kèm `{"detail": "…"}` như các đường khác.

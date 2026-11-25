@@ -44,8 +44,14 @@ object MayChu {
         }
     }
 
-    private fun doc(k: HttpURLConnection): JSONObject? = try {
-        if (k.responseCode in 200..299) JSONObject(k.inputStream.bufferedReader().readText()) else null
+    private fun doc(k: HttpURLConnection, onResponse: ((Int) -> Unit)? = null): JSONObject? = try {
+        if (k.responseCode !in 200..299) null
+        else if (onResponse == null) JSONObject(k.inputStream.bufferedReader().readText())
+        else {
+            val body = k.inputStream.use { it.readBytes() }
+            onResponse(body.size)
+            JSONObject(body.toString(Charsets.UTF_8))
+        }
     } finally {
         k.disconnect()
     }
@@ -56,13 +62,17 @@ object MayChu {
         null
     }
 
-    fun gui(c: Context, duong: String, than: JSONObject, choMs: Int = 8000): JSONObject? = try {
+    fun gui(
+        c: Context, duong: String, than: JSONObject, choMs: Int = 8000,
+        headers: Map<String, String> = emptyMap(), onResponse: ((Int) -> Unit)? = null,
+    ): JSONObject? = try {
         mo(c, duong, choMs)?.let { k ->
             k.requestMethod = "POST"
             k.doOutput = true
             k.setRequestProperty("Content-Type", "application/json; charset=utf-8")
+            headers.forEach(k::setRequestProperty)
             k.outputStream.use { it.write(than.toString().toByteArray()) }
-            doc(k)
+            doc(k, onResponse)
         }
     } catch (e: Exception) {
         null

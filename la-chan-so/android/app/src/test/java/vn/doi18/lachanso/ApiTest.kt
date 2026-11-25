@@ -1,6 +1,8 @@
 package vn.doi18.lachanso
 
+import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 /** Phần thuần của lớp nối với máy chủ chung (Api.kt): đổi mức, nhãn, lời khuyên, bản chép lời, đối tượng báo cáo. */
@@ -52,5 +54,43 @@ class ApiTest {
         assertEquals("https://qua-tri-an.top/nhan?x=1", Api.doiTuongBaoCao("", "Vào https://qua-tri-an.top/nhan?x=1, nhận quà"))
         assertEquals("Shop 24h", Api.doiTuongBaoCao(" Shop 24h ", "chuyển khoản gấp nha"))
         assertEquals("tin nhắn", Api.doiTuongBaoCao("", "chuyển khoản gấp nha"))
+    }
+
+    private val liveFields = mapOf(
+        "id" to "0123456789abcdef", "chu" to "Chị hiểu rồi.", "pcm" to "AAABAA==",
+        "tanSo" to 24000, "giay" to 0.000083333, "y" to listOf("cup"), "sai" to false, "het" to true,
+    )
+
+    @Test fun parsesLiveReply() {
+        val reply = checkNotNull(Api.parseLiveReply(liveFields::get))
+        assertEquals("0123456789abcdef", reply.id)
+        assertEquals("Chị hiểu rồi.", reply.line)
+        assertEquals("AAABAA==", reply.pcm)
+        assertEquals(24000, reply.sampleRate)
+        assertEquals(0.000083333, reply.seconds, 0.0)
+        assertEquals(listOf("cup"), reply.ideas)
+        assertEquals(false, reply.wrong)
+        assertEquals(true, reply.finished)
+        assertArrayEquals(byteArrayOf(0, 0, 1, 0), reply.audio)
+    }
+
+    @Test fun rejectsInvalidLiveReply() {
+        for ((field, value) in listOf(
+            "id" to "../0123456789abc", "chu" to "", "pcm" to "A==", "pcm" to "AA==",
+            "tanSo" to 0, "tanSo" to 24000.5, "giay" to Double.NaN, "y" to listOf(1),
+            "sai" to "false", "het" to null,
+        )) {
+            val fields = liveFields + (field to value)
+            assertNull(field, Api.parseLiveReply(fields::get))
+        }
+    }
+
+    @Test fun writesPcm16MonoWavHeader() {
+        val expected = byteArrayOf(
+            82, 73, 70, 70, 40, 0, 0, 0, 87, 65, 86, 69, 102, 109, 116, 32,
+            16, 0, 0, 0, 1, 0, 1, 0, -64, 93, 0, 0, -128, -69, 0, 0,
+            2, 0, 16, 0, 100, 97, 116, 97, 4, 0, 0, 0,
+        )
+        assertArrayEquals(expected, Api.wavHeader(4, 24000))
     }
 }
