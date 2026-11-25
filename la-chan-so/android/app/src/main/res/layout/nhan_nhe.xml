@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A03b: nhãn nhẹ trên màn đổ chuông, không phải cảnh báo -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:paddingStart="20dp" android:paddingEnd="20dp">
+    <TextView android:id="@+id/noiDung" style="@style/Chu.Dam" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:background="@drawable/nhan_toi" android:elevation="6dp" android:paddingStart="18dp" android:paddingTop="10dp" android:paddingEnd="18dp" android:paddingBottom="10dp" android:textColor="#FFFFFF" android:textSize="15sp" />
+</FrameLayout>

@@ -1,0 +1,27 @@
+<resources>
+    <!-- Lấy từ ds.css của bản thiết kế -->
+    <color name="brand">#1D4ED8</color>
+    <color name="brand_ink">#1E3A8A</color>
+    <color name="brand_c">#DBEAFE</color>
+    <color name="danger">#DC2626</color>
+    <color name="danger_ink">#7F1D1D</color>
+    <color name="danger_c">#FEE2E2</color>
+    <color name="warn">#D97706</color>
+    <color name="warn_ink">#78350F</color>
+    <color name="warn_c">#FEF3C7</color>
+    <color name="safe">#16A34A</color>
+    <color name="safe_ink">#14532D</color>
+    <color name="safe_c">#DCFCE7</color>
+    <color name="ai">#7C3AED</color>
+    <color name="ai_c">#EDE9FE</color>
+    <color name="ink">#0F172A</color>
+    <color name="ink_2">#475569</color>
+    <color name="ink_3">#94A3B8</color>
+    <color name="outline">#CBD5E1</color>
+    <color name="outline_2">#E2E8F0</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_2">#F1F5F9</color>
+    <color name="bg">#F4F6FB</color>
+    <color name="navy">#0F172A</color>
+    <color name="kem">#FFF7ED</color>
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A10a, A10b: màn "Dừng lại" toàn màn hình -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/danger" android:fillViewport="true" android:fitsSystemWindows="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_horizontal" android:orientation="vertical" android:padding="22dp">
+        <TextView android:id="@+id/dongTren" style="@style/Chu.Dam" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:background="@drawable/nhan_mo" android:paddingStart="14dp" android:paddingTop="6dp" android:paddingEnd="14dp" android:paddingBottom="6dp" android:text="Đang đọc to" android:textColor="#FFFFFF" android:textSize="14sp" />
+        <ImageView android:layout_width="150dp" android:layout_height="150dp" android:layout_marginTop="14dp" android:background="@drawable/nen_nai" android:clipToOutline="true" android:scaleType="centerCrop" android:src="@drawable/nai_stop" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:fontFamily="@font/bvp_extrabold" android:gravity="center" android:letterSpacing="0.02" android:text="DỪNG LẠI" android:textColor="#FFFFFF" android:textSize="52sp" />
+        <TextView android:id="@+id/lyDo" style="@style/Chu.Dam" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:gravity="center" android:textColor="#FFFFFF" android:textSize="20sp" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:background="@drawable/nut_trang" android:orientation="vertical" android:padding="18dp">
+            <TextView android:id="@+id/loi1" android:layout_width="match_parent" android:layout_height="wrap_content" android:fontFamily="@font/bvp_extrabold" android:gravity="center" android:textColor="@color/danger" android:textSize="28sp" />
+            <TextView android:id="@+id/loi2" style="@style/Chu.Dam" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:gravity="center" android:textSize="20sp" />
+        </LinearLayout>
+        <Button android:id="@+id/nutCup" style="@style/Nut.Trang" android:layout_marginTop="18dp" android:minHeight="68dp" android:text="Cúp máy ngay" android:textSize="21sp" android:visibility="gone" />
+        <Button android:id="@+id/nutHoi" style="@style/Nut.Trang" android:layout_marginTop="12dp" android:minHeight="68dp" android:textSize="21sp" />
+        <Button android:id="@+id/nutDong" style="@style/Nut.VienTrang" android:layout_marginTop="12dp" android:text="Đóng cảnh báo" />
+        <TextView style="@style/Chu" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="18dp" android:gravity="center" android:text="Không cơ quan nào yêu cầu\nchuyển tiền qua điện thoại." android:textColor="#FEE2E2" />
+    </LinearLayout>
+</ScrollView>

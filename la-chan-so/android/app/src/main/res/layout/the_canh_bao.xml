@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A03a: thẻ nổi trên màn đổ chuông -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:paddingStart="14dp" android:paddingEnd="14dp">
+    <LinearLayout
+        android:id="@+id/the"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:background="@drawable/the_canh_bao" android:elevation="12dp"
+        android:orientation="vertical" android:padding="18dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal">
+            <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_khien" />
+            <TextView style="@style/Chu.Muc" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:layout_weight="1" android:text="Lá chắn số cảnh báo" android:textColor="#FFFFFF" />
+            <TextView android:id="@+id/dong" android:layout_width="40dp" android:layout_height="40dp" android:background="@drawable/nhan_mo" android:gravity="center" android:text="✕" android:textColor="#FFFFFF" android:textSize="16sp" />
+        </LinearLayout>
+        <TextView android:id="@+id/tieuDe" style="@style/Chu.Lon" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:text="Nghi lừa đảo" android:textColor="#FFFFFF" android:textSize="30sp" />
+        <TextView android:id="@+id/noiDung" style="@style/Chu.Dam" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:textColor="#FFFFFF" android:textSize="19sp" />
+        <TextView android:id="@+id/phu" style="@style/Chu.Phu" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:textColor="#FFFFFF" android:textSize="15sp" />
+        <Button android:id="@+id/chan" style="@style/Nut.Trang" android:layout_marginTop="12dp" android:minHeight="48dp" android:text="Chặn số này" android:textSize="16sp" />
+    </LinearLayout>
+</LinearLayout>

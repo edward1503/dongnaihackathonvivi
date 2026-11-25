@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A04a hỏi một câu, A04b kết quả, A04c không có ghi âm -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/bg" android:fillViewport="true" android:fitsSystemWindows="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+
+        <!-- Đang hỏi -->
+        <LinearLayout android:id="@+id/khungHoi" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_horizontal" android:orientation="vertical">
+            <TextView style="@style/Chu.Muc" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Bé Nai hỏi thăm" />
+            <ImageView android:id="@+id/nai" android:layout_width="190dp" android:layout_height="190dp" android:layout_marginTop="14dp" android:background="@drawable/nen_nai" android:clipToOutline="true" android:scaleType="centerCrop" android:src="@drawable/nai_think" />
+            <TextView android:id="@+id/trangThai" style="@style/Chu.Phu" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:background="@drawable/nhan_xam" android:paddingStart="14dp" android:paddingTop="6dp" android:paddingEnd="14dp" android:paddingBottom="6dp" android:text="Bé Nai đang hỏi bà…" />
+            <TextView android:id="@+id/cauHoi" style="@style/Chu.Lon" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:gravity="center" android:textSize="28sp" />
+            <TextView android:id="@+id/goiY" style="@style/Chu.Phu" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:gravity="center" android:textSize="16sp" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="22dp" android:orientation="horizontal">
+                <Button android:id="@+id/nutCo" style="@style/Nut.Do" android:layout_width="0dp" android:layout_height="84dp" android:layout_weight="1" android:text="Có" android:textSize="26sp" />
+                <Space android:layout_width="14dp" android:layout_height="1dp" />
+                <Button android:id="@+id/nutKhong" style="@style/Nut.Xanh" android:layout_width="0dp" android:layout_height="84dp" android:layout_weight="1" android:text="Không" android:textSize="26sp" />
+            </LinearLayout>
+            <Button android:id="@+id/nutKe" style="@style/Nut.Vien" android:layout_marginTop="14dp" android:text="Kể lại bằng giọng nói" />
+            <Button android:id="@+id/nutBietSo" style="@style/Nut.Vien" android:layout_marginTop="10dp" android:text="Tôi biết số này" />
+        </LinearLayout>
+
+        <!-- A04c: kể lại bằng giọng nói -->
+        <LinearLayout android:id="@+id/khungKe" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_horizontal" android:orientation="vertical" android:visibility="gone">
+            <TextView android:id="@+id/keTieuDe" style="@style/Chu.TieuDe" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" />
+            <TextView style="@style/Chu.Phu" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Người gọi xưng là ai, bảo làm gì? Lời kể được phân tích xong sẽ xoá." android:textSize="16sp" />
+            <TextView android:id="@+id/keTrangThai" style="@style/Chu.Dam" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:background="@drawable/nhan_xam" android:paddingStart="14dp" android:paddingTop="6dp" android:paddingEnd="14dp" android:paddingBottom="6dp" android:textColor="@color/ai" android:textSize="14sp" />
+            <TextView android:id="@+id/keLoi" style="@style/Chu" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:background="@drawable/the" android:minHeight="140dp" android:padding="16dp" android:textSize="19sp" />
+            <Button android:id="@+id/nutKeXong" style="@style/Nut.Chinh" android:layout_marginTop="16dp" android:minHeight="64dp" android:text="Kể xong" android:textSize="20sp" />
+            <Button android:id="@+id/nutKeThoi" style="@style/Nut.Vien" android:layout_marginTop="10dp" android:text="Quay lại câu hỏi" />
+        </LinearLayout>
+
+        <!-- Đang phân tích bản ghi âm -->
+        <LinearLayout android:id="@+id/khungCho" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_horizontal" android:orientation="vertical" android:visibility="gone">
+            <TextView style="@style/Chu.TieuDe" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Phân tích cuộc gọi" />
+            <TextView android:id="@+id/choPhu" style="@style/Chu.Phu" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" />
+            <ProgressBar android:layout_width="56dp" android:layout_height="56dp" android:layout_marginTop="40dp" android:indeterminateTint="@color/ai" />
+            <TextView style="@style/Chu.Dam" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="AI đang chép lời bản ghi âm…" android:textColor="@color/ai" />
+        </LinearLayout>
+
+        <!-- Kết quả -->
+        <LinearLayout android:id="@+id/khungKetQua" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
+            <TextView android:id="@+id/kqTieuDe" style="@style/Chu.TieuDe" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Cuộc gọi vừa rồi" />
+            <TextView android:id="@+id/kqPhu" style="@style/Chu.Phu" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" />
+            <LinearLayout android:id="@+id/kqThe" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:background="@drawable/the_do" android:orientation="vertical" android:padding="18dp">
+                <TextView style="@style/Chu.Muc" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Kết quả" />
+                <TextView android:id="@+id/kqMuc" style="@style/Chu.Lon" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:textColor="@color/danger" android:textSize="32sp" />
+                <TextView android:id="@+id/kqLoi" style="@style/Chu.Dam" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:textSize="20sp" />
+                <TextView android:id="@+id/kqBangChung" style="@style/Chu" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:textColor="@color/ink_2" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/kqNguoiThan" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:background="@drawable/the" android:orientation="vertical" android:padding="18dp">
+                <TextView android:id="@+id/ntTrangThai" style="@style/Chu.Dam" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="19sp" />
+                <TextView android:id="@+id/ntPhu" style="@style/Chu.Phu" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:textSize="16sp" />
+                <Button android:id="@+id/nutGoi" style="@style/Nut.Chinh" android:layout_marginTop="14dp" android:minHeight="64dp" android:textSize="20sp" />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/kqChepLoiKhung" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:background="@drawable/the_tim" android:orientation="vertical" android:padding="18dp" android:visibility="gone">
+                <TextView style="@style/Chu.Muc" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bản chép lời (AI)" android:textColor="@color/ai" />
+                <TextView android:id="@+id/kqChepLoi" style="@style/Chu" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" />
+            </LinearLayout>
+            <Button android:id="@+id/nutDong" style="@style/Nut.Vien" android:layout_marginTop="16dp" android:text="Đóng" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

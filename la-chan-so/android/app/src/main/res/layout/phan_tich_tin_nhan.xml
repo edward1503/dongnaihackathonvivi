@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A05b: phân tích tin nhắn, tô đỏ từng dấu hiệu -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/bg" android:fillViewport="true" android:fitsSystemWindows="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+        <TextView style="@style/Chu.TieuDe" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Phân tích tin nhắn" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:background="@drawable/the" android:orientation="vertical" android:padding="16dp">
+            <TextView android:id="@+id/nguoiGui" style="@style/Chu.Muc" android:layout_width="match_parent" android:layout_height="wrap_content" />
+            <TextView android:id="@+id/noiDung" style="@style/Chu" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:textSize="17sp" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/theKq" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:background="@drawable/the_do" android:orientation="vertical" android:padding="16dp">
+            <TextView android:id="@+id/muc" style="@style/Chu.Lon" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/danger" />
+            <TextView android:id="@+id/kieu" style="@style/Chu.Dam" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:textSize="18sp" />
+            <TextView android:id="@+id/loiKhuyen" style="@style/Chu" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:background="@drawable/the_tim" android:orientation="vertical" android:padding="16dp">
+            <TextView android:id="@+id/nguon" style="@style/Chu.Muc" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Dấu hiệu nhận ra" android:textColor="@color/ai" />
+            <TextView android:id="@+id/dauHieu" style="@style/Chu" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" />
+        </LinearLayout>
+        <TextView style="@style/Chu.Dam" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:text="Báo tin này cho cộng đồng?" android:textSize="18sp" />
+        <TextView style="@style/Chu.Phu" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="Số điện thoại, số tài khoản trong tin được che trước khi gửi." />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
+            <Button android:id="@+id/nutBao" style="@style/Nut.Chinh" android:layout_width="0dp" android:layout_weight="2" android:text="Báo cho cộng đồng" />
+            <Space android:layout_width="12dp" android:layout_height="1dp" />
+            <Button android:id="@+id/nutKhong" style="@style/Nut.Vien" android:layout_width="0dp" android:layout_weight="1" android:text="Không" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
