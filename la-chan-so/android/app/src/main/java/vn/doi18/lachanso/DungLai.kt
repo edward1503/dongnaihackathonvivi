@@ -73,6 +73,11 @@ class DichVuLaChan : Service() {
         }
     }
 
+    private val familyWatcher by lazy { FamilyAlertWatcher(this) }
+    private val settings by lazy { getSharedPreferences("cai-dat", MODE_PRIVATE) }
+    private val settingsChanged = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        if (key in setOf("app-role", "family-code", "may-chu") && dangChay) configureRole()
+    }
     private val h = Handler(Looper.getMainLooper())
     private var appCuoi: String? = null
     private var docTu = 0L
@@ -87,9 +92,15 @@ class DichVuLaChan : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        settings.registerOnSharedPreferenceChangeListener(settingsChanged)
+        configureRole()
+    }
+
+    private fun configureRole() {
+        val relative = CaiDat.relative(this)
         val tb: Notification = NotificationCompat.Builder(this, ThongBao.KENH_NEN)
             .setSmallIcon(R.drawable.ic_khien)
-            .setContentTitle("Lá chắn đang bảo vệ")
+            .setContentTitle(if (relative) "Lá chắn của gia đình" else "Lá chắn đang bảo vệ")
             .setContentIntent(ThongBao.moManHinh(this, Intent(this, MainActivity::class.java), 0))
             .setOngoing(true)
             .setGroup("nen")
@@ -104,14 +115,19 @@ class DichVuLaChan : Service() {
             return
         }
         dangChay = true
-        RuiRo.napLai(this)
-        NhatKy.ghi(this, "Lá chắn bắt đầu chạy nền")
-        h.post(vong)
+        h.removeCallbacks(vong)
+        familyWatcher.configure()
+        if (!relative) {
+            RuiRo.napLai(this)
+            h.post(vong)
+        } else DungLai.thuLopPhu(applicationContext)
     }
 
     override fun onStartCommand(i: Intent?, flags: Int, startId: Int) = START_STICKY
 
     override fun onDestroy() {
+        settings.unregisterOnSharedPreferenceChangeListener(settingsChanged)
+        familyWatcher.stop()
         h.removeCallbacks(vong)
         DungLai.thuLopPhu(applicationContext)   // dịch vụ dừng thì không còn ai gỡ lớp phủ: gỡ ngay
         if (dangChay) NhatKy.ghi(this, "Lá chắn bị dừng chạy nền")

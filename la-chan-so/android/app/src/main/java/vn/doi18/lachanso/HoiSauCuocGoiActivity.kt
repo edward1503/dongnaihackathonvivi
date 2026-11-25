@@ -558,11 +558,13 @@ class HoiSauCuocGoiActivity : Activity() {
             }
         }
         if (ma != 0L) baoNguoiThan[ma] = DANG_GUI
+        val answer = selfAnswer
+        val recordingLevel = audioRisk?.muc
         Luong.nen {
             // Người thân chỉ nhận mức cảnh báo và tóm tắt, không nhận nội dung cuộc gọi.
             // Tóm tắt có thể chứa dấu hiệu do AI viết ra: che mọi dãy số trước khi gửi.
             // Chỉ khi máy chủ trả về cảnh báo có mã mới được nói là đã báo. Trả lời rỗng hay báo lỗi đều là chưa báo.
-            val daBao = Api.createAlert(this, muc, TraCuu.chuanHoa(so), giay.toInt(), LocTinNhan.che(bangChung.joinToString("; ")), thu)
+            val daBao = Api.createAlert(this, muc, TraCuu.chuanHoa(so), giay.toInt(), LocTinNhan.che(bangChung.joinToString("; ")), thu, answer, recordingLevel)
             Luong.chinh {
                 if (ma != 0L) { if (daBao) baoNguoiThan[ma] = DA_BAO else baoNguoiThan.remove(ma) }
                 if (isFinishing || isDestroyed) return@chinh

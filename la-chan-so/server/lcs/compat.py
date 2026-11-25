@@ -126,12 +126,13 @@ def demo_alert() -> dict:
 
 def set_reply(alert, preset, text, at):
     body = (text or REPLY_TEXT[preset]).strip().removeprefix("Minh:").strip()
+    reply_id = uuid.uuid4().hex
     if alert:
-        alert["reply"] = {"by":"Minh", "text":"Minh: " + body, "choice":PRESET_TO_CHOICE[preset],
+        alert["reply"] = {"id":reply_id, "by":"Minh", "text":"Minh: " + body, "choice":PRESET_TO_CHOICE[preset],
                           "at":at, "delivered":True}
         alert["status"] = "cleared" if preset == "nguoi_quen" else "open"
         alert["timeline"].append(_timeline_item({"text":"Minh trả lời: " + body, "tone":"safe"}))
-    return {"askId":alert["id"] if alert else None, "preset":preset, "text":body}
+    return {"askId":alert["id"] if alert else None, "preset":preset, "text":body, "replyId":reply_id}
 
 
 class Alerts:
@@ -143,6 +144,7 @@ class Alerts:
     def reset(self) -> None:
         self.items = [demo_alert()]
         self.broadcasts = []
+        self.owners: dict[str, str] = {}
         self.by_event: dict[tuple, str] = {}  # mã sự kiện của bên gửi -> mã cảnh báo, để gửi lại không báo trùng
 
     def add(self, alert: dict) -> dict:

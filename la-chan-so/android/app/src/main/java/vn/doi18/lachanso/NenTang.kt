@@ -52,6 +52,24 @@ object CaiDat {
     private fun co(c: Context, k: String, md: Boolean) = p(c).getBoolean(k, md)
     private fun dat(c: Context, k: String, v: Boolean) = p(c).edit().putBoolean(k, v).apply()
 
+    fun pairedElder(c: Context) = chu(c, "app-role") == "elder" && familyCode(c) == Api.ROOM
+    fun relative(c: Context) = chu(c, "app-role", "elder") == "relative"
+    fun familyCode(c: Context) = chu(c, "family-code")
+    fun familySince(c: Context) = p(c).getLong("family-since", 0L)
+    fun setRole(c: Context, role: String, code: String) {
+        if (!isAppRole(role)) return
+        val wasRelative = relative(c)
+        if (role == chu(c, "app-role") && code == familyCode(c)) return
+        val edit = p(c).edit().putString("app-role", role).putString("family-code", code)
+        if (role == "relative" && (!wasRelative || familyCode(c) != code)) {
+            // The server timestamps ordinary alerts to the second.
+            edit.putLong("family-since", System.currentTimeMillis() / 1000 * 1000)
+        }
+        edit.apply()
+        if (wasRelative && role != "relative") FamilyAlertWatcher.clear(c)
+        if (role == "relative") ThongBao.huy(c, ThongBao.ID_NGU)
+    }
+
     fun tenNguoiThan(c: Context) = chu(c, "ten-nguoi-than", "Minh").ifBlank { "người thân" }
     fun datTenNguoiThan(c: Context, v: String) = dat(c, "ten-nguoi-than", v.trim())
     fun soNguoiThan(c: Context) = chu(c, "so-nguoi-than")

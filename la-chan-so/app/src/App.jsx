@@ -1,6 +1,7 @@
 // Đường dẫn của app (HashRouter). Giao diện V3: 3 đối tượng, mỗi màn ghi mã khung trong data-name.
 // APK dùng các màn bảo vệ Android. Các đường mô phỏng cuộc gọi dành cho trình duyệt.
 import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
+import { FamilyDetail, FamilyHome, FamilyInbox, FamilyPair } from './v3/screens/Family.jsx'
 import Home from './v3/screens/Home.jsx'
 import { Privacy, Profile, RolePick, Setup, Splash, WardPick } from './v3/screens/Common.jsx'
 import { CheckRoute, MessageResult, NotEnough, Offline, Result } from './v3/screens/Check.jsx'
@@ -27,21 +28,39 @@ function BrowserDemoRoute() {
 }
 
 export default function App() {
-  const { persona, team } = useApp()
+  const { persona, team, familyCode } = useApp()
   const { pathname } = useLocation()
-  if (persona === 'volunteer' && !team && !['/ma-doi', '/vai', '/chao'].includes(pathname)) return <Navigate to="/ma-doi" replace />
+  if (persona === 'volunteer' && !team && !['/ma-doi', '/vai', '/chao', '/ma-gia-dinh'].includes(pathname)) return <Navigate to="/ma-doi" replace />
+
+  const relative = persona === 'relative'
+  if (relative && !familyCode && !['/ma-gia-dinh', '/vai'].includes(pathname)) return <Navigate to="/ma-gia-dinh" replace />
+  const sharedRoutes = <>
+    <Route path="/chao" element={<Splash />} />
+    <Route path="/vai" element={<RolePick />} />
+    <Route path="/rieng-tu" element={<Privacy />} />
+    <Route path="/ca-nhan" element={<Profile />} />
+    <Route path="/ma-gia-dinh" element={<FamilyPair />} />
+    <Route path="/bai-hoc" element={<Lessons />} />
+    <Route path="/bai-hoc/:id" element={<LessonCards />} />
+    <Route path="/kiem-tra-bai" element={<Quiz />} />
+    <Route path="/kiem-tra-bai/ket-qua" element={<QuizResult />} />
+  </>
+  if (relative && familyCode) return <FamilyInbox code={familyCode}>
+    <Routes>
+      {sharedRoutes}
+      <Route path="/" element={<FamilyHome />} />
+      <Route path="/canh-bao/:id" element={<FamilyDetail key={pathname} />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  </FamilyInbox>
 
   return (
     <>
       {!native.available() && <DemoPanel />}
       <Routes>
-        {/* Chung */}
+        {sharedRoutes}
         <Route path="/" element={<Home />} />                              {/* A1, B1, C1; E01a khi Lá chắn đang ngủ */}
-        <Route path="/chao" element={<Splash />} />                        {/* 00 */}
-        <Route path="/vai" element={<RolePick />} />                       {/* 0 */}
-        <Route path="/rieng-tu" element={<Privacy />} />                   {/* 0b */}
         <Route path="/phuong" element={<WardPick />} />                    {/* 0c */}
-        <Route path="/ca-nhan" element={<Profile />} />                    {/* 0d */}
         <Route path="/thiet-lap" element={<Setup />} />                    {/* A02a, A02b */}
         {/* Kiểm tra */}
         <Route path="/kiem-tra" element={<CheckRoute />} />                     {/* A2, A2t, B2 */}
@@ -74,10 +93,6 @@ export default function App() {
         {/* Học sinh */}
         <Route path="/bao-cao" element={<Report />} />                     {/* B4, B4a */}
         <Route path="/bao-cao/xong" element={<ReportDone />} />            {/* B4b */}
-        <Route path="/bai-hoc" element={<Lessons />} />                    {/* B5 */}
-        <Route path="/bai-hoc/:id" element={<LessonCards />} />            {/* B6 */}
-        <Route path="/kiem-tra-bai" element={<Quiz />} />                  {/* B7 */}
-        <Route path="/kiem-tra-bai/ket-qua" element={<QuizResult />} />    {/* B8 */}
         {/* Đội tình nguyện */}
         <Route path="/ma-doi" element={<TeamCode />} />                    {/* C0 */}
         <Route path="/canh-bao-khu-pho" element={<NewType />} />

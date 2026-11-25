@@ -16,6 +16,9 @@
     pending.delete(id)
   }
   const bridge = {
+    setRole: (role, familyCode) => android.setRole(role, familyCode ?? ''),
+    familyAlerts: () => request('startFamilyAlerts'),
+    familyAction: (alertId, action, body) => request('startFamilyAction', alertId, action, body),
     listen: () => request('startListen'),
     analyzeRecording: phone => request('startAnalyzeRecording', phone),
     recentEvents: () => request('startRecentEvents'),

@@ -101,7 +101,10 @@ export const api = {
   alert: (body) => req('/api/alerts', { method: 'POST', body, device: true }),
   reset: () => req('/api/demo/reset', { method: 'POST' }),
   analyzeMessage: (text) => req('/api/analyze/message', { method: 'POST', body: { text } }),
-  ask: (body) => req('/api/asks', { method: 'POST', body }),
+  ask: (body) => req('/api/asks', { method: 'POST', body, device: true }),
+  askSeen: id => req(`/api/asks/${encodeURIComponent(id)}/seen`, { method: 'POST' }),
+  unreadReplies: () => req('/api/family/unread', { device: true }),
+  replySeen: (id, replyId) => req(`/api/alerts/${encodeURIComponent(id)}/reply/${encodeURIComponent(replyId)}/seen`, { method: 'POST', device: true }),
   stats: (team = false) => req('/api/stats', { team }),
   events: (room, since) => req(`/api/events?room=${encodeURIComponent(room)}&since=${since}`, { timeout: 8000 }),
   // Buổi trình diễn: laptop điều khiển điện thoại (sự kiện demo.go), lấy địa chỉ LAN và mã QR

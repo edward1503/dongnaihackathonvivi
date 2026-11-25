@@ -8,15 +8,17 @@ export function Lessons() {
   const nav = useNavigate()
   const { persona } = useApp()
   const role = persona === 'elder' ? 'elder' : 'student'
+  const comics = persona === 'relative' ? [...COMICS.elder, ...COMICS.student].sort((a, b) => a[1].localeCompare(b[1])) : COMICS[role]
+  const calls = persona === 'relative' ? [...PRACTICE_CALLS.elder, ...PRACTICE_CALLS.student] : PRACTICE_CALLS[role]
   return (
     <Screen name="B5-bai-hoc" nav="/bai-hoc">
       <div className="row g12"><Art name="chao" z={64} /><h1 className="h-l">Truyện tranh cùng Bé Nai</h1></div>
-      <Group>{COMICS[role].map(([slug, label, title]) =>
+      <Group>{comics.map(([slug, label, title]) =>
         <Row key={slug} icon="book" title={title} sub={label} onClick={() => openComic(slug)} />)}
         <Row icon="book" title="Tất cả bài" onClick={() => openComic('')} />
       </Group>
       <h2 className="sec">Gọi video luyện tập</h2>
-      <Group>{PRACTICE_CALLS[role].map(([scene, name, topic]) =>
+      <Group>{calls.map(([scene, name, topic]) =>
         <Row key={scene} icon="phone" title={name} sub={topic} onClick={() => openPracticeCall(scene)} />)}</Group>
       <h2 className="sec">Ôn nhanh</h2>
       <Group>{LESSONS.map((lesson) => <Row key={lesson.id} icon={lesson.icon} title={lesson.title} sub="Bài học 1 phút" onClick={() => nav(`/bai-hoc/${lesson.id}`)} />)}</Group>

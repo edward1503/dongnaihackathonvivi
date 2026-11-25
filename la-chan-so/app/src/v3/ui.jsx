@@ -159,6 +159,7 @@ export function Banner({ bg = 'pri', title, btn, icon, art, onClick }) {
 
 // ---------- Thanh điều hướng theo đối tượng ----------
 const NAVS = {
+  relative: [['bell', 'Cảnh báo', '/'], ['book', 'Bài học', '/bai-hoc'], ['user', 'Cá nhân', '/ca-nhan']],
   elder: [['shieldok', 'Kiểm tra', '/'], ['users', 'Người thân', '/nguoi-than'], ['book', 'Bài học', '/bai-hoc'], ['user', 'Cá nhân', '/ca-nhan']],
   student: [['shieldok', 'Kiểm tra', '/'], ['users', 'Người thân', '/nguoi-than'], ['book', 'Bài học', '/bai-hoc'], ['user', 'Cá nhân', '/ca-nhan']],
   volunteer: [['chart', 'Thống kê', '/'], ['check', 'Duyệt', '/duyet'], ['user', 'Cá nhân', '/ca-nhan']],

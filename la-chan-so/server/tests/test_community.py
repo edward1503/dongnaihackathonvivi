@@ -519,3 +519,27 @@ def test_legacy_ai_status_is_readable_but_never_scores(tmp_path):
     assert "0987654321" not in report["story"]
     assert store.target_level(PHONE, config.now())["level"] == "unknown"
     store.db.close()
+
+
+def test_family_read_receipt_tracks_current_reply_on_originating_device(client, monkeypatch):
+    mother = device(client)
+    other = device(client)
+    body = payload(mother)
+    attach_audio(client, mother, body, monkeypatch)
+    report = submit(client, mother, body, "yes").json()
+    alert_id = link(client, mother, body, report)
+    assert next(a for a in client.get("/api/alerts").json() if a["id"] == alert_id)["selfAnswer"] == "yes"
+    url = f"/api/alerts/{alert_id}/reply"
+    reply = client.post(url, json={"choice": "dung-chuyen"}).json()["reply"]
+    assert not reply.get("seenAt")
+    seen_url = f"{url}/{reply['id']}/seen"
+    assert client.get("/api/family/unread", headers=headers(mother)).json()[0]["askId"] == alert_id
+    assert client.get("/api/family/unread", headers=headers(other)).json() == []
+    assert client.post(seen_url, headers=headers(other)).status_code == 404
+    seen = client.post(seen_url, headers=headers(mother)).json()
+    assert seen["seenAt"] and client.post(seen_url, headers=headers(mother)).json() == seen
+    assert client.get("/api/family/unread", headers=headers(mother)).json() == []
+    assert next(a for a in client.get("/api/alerts").json() if a["id"] == alert_id)["reply"]["seenAt"] == seen["seenAt"]
+    latest = client.post(url, json={"choice": "nguoi-quen"}).json()["reply"]
+    assert latest["id"] != reply["id"] and not latest.get("seenAt")
+    assert client.post(seen_url, headers=headers(mother)).status_code == 409

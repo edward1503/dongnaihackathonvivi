@@ -92,7 +92,7 @@
             android:foregroundServiceType="specialUse">
             <property
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="Canh cuoc goi la va nhac truoc khi chuyen tien" />
+                android:value="Canh cuoc goi la, nhac truoc khi chuyen tien hoac nhan canh bao gia dinh tuy vai tro" />
         </service>
 
         <receiver android:name=".TheoDoiCuocGoi" android:exported="true">

@@ -78,6 +78,7 @@ internal object EventReports {
 
     fun report(c: Context, id: String, story: String = "", answer: String? = null, selectedTarget: String? = null): JSONObject =
         synchronized(lock(id)) {
+            if (CaiDat.relative(c)) return error("Anh mở cảnh báo gia đình để trả lời mẹ nhé.")
             val original = ReceivedEvents.find(c, id) ?: return error("Bé Nai chưa tìm thấy cuộc gọi đến hoặc tin nhắn này trên máy ạ.")
             val device = DeviceRegistration.get(c) ?: return offline()
             var data = meta(c, id)

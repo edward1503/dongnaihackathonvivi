@@ -16,6 +16,7 @@ export default defineConfig({
     fs: { allow: [designRoot] },
     proxy: {
       '/api': api,
+      '^/zalo$': api,
       '^/(prototype/|vendor/|screens/|assets/fonts/|ds\\.css$|icons\\.js$|motion\\.(css|js)$)': api,
       // The comic reader uses the original illustrations by their public names.
       '^/assets/[\\w-]+\\.png$': {

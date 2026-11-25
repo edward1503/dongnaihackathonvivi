@@ -117,6 +117,14 @@ class AdvancedSettingsActivity : Activity() {
         val phu = v<TextView>(R.id.ttPhu)
         val nai = v<ImageView>(R.id.nai)
         when {
+            CaiDat.relative(this) -> {
+                the.setBackgroundResource(R.drawable.the_xanh)
+                td.text = "Cảnh báo của gia đình"
+                td.setTextColor(getColor(R.color.safe_ink))
+                phu.text = if (CaiDat.mayChu(this).isBlank()) "Anh nhập địa chỉ máy chủ để nhận cảnh báo của mẹ."
+                    else "Máy của anh nhận cảnh báo từ gia đình."
+                nai.setImageResource(R.drawable.nai_chao)
+            }
             n == 3 && DichVuLaChan.dangChay -> {
                 the.setBackgroundResource(R.drawable.the_xanh)
                 td.text = "Lá chắn đang bảo vệ"; td.setTextColor(getColor(R.color.safe_ink))

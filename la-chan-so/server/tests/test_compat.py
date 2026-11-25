@@ -84,3 +84,17 @@ def test_mvp_launcher_serves_its_landing_page_and_shared_backend():
         assert 'href="/web"' in portal.get("/").text
         assert portal.get("/api/cases").status_code == 401
         assert portal.get("/api/lookup/phone/02899991234").json()["count"] == 7
+
+
+def test_family_message_alert_and_ordinary_read_receipt(client):
+    device = client.post("/api/devices").json()["deviceId"]
+    headers = {"X-LCS-Device": device}
+    body = {"room": "gia-dinh-hoa", "kind": "message", "eventId": "sms-1",
+            "level": "suspicious", "summary": "Đòi nạp tiền trước"}
+    row = client.post("/api/alerts", json=body, headers=headers).json()
+    assert row["kind"] == "message" and row["level"] == "warn"
+    assert client.post("/api/alerts", json=body, headers=headers).json()["id"] == row["id"]
+    reply = client.post(f"/api/alerts/{row['id']}/reply", json={"choice": "nguoi-quen", "text": "Con gọi mẹ nhé."}).json()["reply"]
+    assert client.get("/api/family/unread", headers=headers).json()[0]["reply"] == reply
+    assert client.post(f"/api/alerts/{row['id']}/reply/{reply['id']}/seen", headers=headers).status_code == 200
+    assert client.get("/api/family/unread", headers=headers).json() == []

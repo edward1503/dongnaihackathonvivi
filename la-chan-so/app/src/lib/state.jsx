@@ -1,5 +1,5 @@
 // Trạng thái chung của app: chế độ hiển thị, kết quả vừa kiểm tra, lịch sử, người thân, câu hỏi đang chờ.
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { connectRoom } from './relay.js'
 import { setLayersForDemo } from './layers.js'
 
@@ -9,7 +9,7 @@ const Ctx = createContext(null)
 export const FAMILY_ROOM = 'gia-dinh-hoa'
 
 const DEFAULT_RELATIVES = [
-  { id: 'minh', name: 'Minh', relation: 'con trai', channel: 'Nhận qua ứng dụng nhắn tin', paired: true },
+  { id: 'minh', name: 'Minh', relation: 'con trai', channel: 'Nhận qua Lá chắn số', paired: true },
   { id: 'lan', name: 'Lan', relation: 'con gái', channel: 'Dự phòng', paired: false },
 ]
 
@@ -46,7 +46,7 @@ function save(key, value) {
 }
 
 // mode: simple = người lớn tuổi (bà Hoa), full = học sinh (Vy), volunteer = đội tình nguyện (Khoa)
-export const PERSONA = { simple: 'elder', full: 'student', volunteer: 'volunteer' }
+export const PERSONA = { simple: 'elder', full: 'student', relative: 'relative', volunteer: 'volunteer' }
 const MODE_PARAM = new URLSearchParams(location.search).get('mode')
 
 function initialMode() {
@@ -75,6 +75,11 @@ export const CLIENT_ID = (() => {
 
 export function AppProvider({ children }) {
   const [mode, setModeState] = useState(initialMode)
+  const [familyCode, setFamilyCodeState] = useState(() => load('lcs.familyCode', ''))
+  const setFamilyCode = useCallback((code) => {
+    save('lcs.familyCode', code)
+    setFamilyCodeState(code)
+  }, [])
   const [team, setTeam] = useState(readTeam)
   useEffect(() => {
     if (!window.LCSNative) getDeviceId().catch(() => { /* Retry when a device-bound action needs it. */ })
@@ -115,6 +120,10 @@ export function AppProvider({ children }) {
   const setWard = useCallback((w) => { setWardState(w); save('lcs.ward', w) }, [])
   const setOnboarded = useCallback((v) => { setOnboardedState(v); save('lcs.onboarded', v) }, [])
   const persona = PERSONA[mode] || 'elder'
+  useLayoutEffect(() => {
+    const role = persona === 'volunteer' ? 'team' : persona
+    window.LCSNative?.setRole?.(role, persona === 'relative' ? familyCode : FAMILY_ROOM)
+  }, [persona, familyCode])
   const setRelatives = useCallback((list) => { setRelativesState(list); save('lcs.relatives', list) }, [])
   const addDefaultRelatives = useCallback(() => setRelatives(DEFAULT_RELATIVES), [setRelatives])
   const setPoints = useCallback((n) => {
@@ -149,7 +158,7 @@ export function AppProvider({ children }) {
   }, [])
 
   // S5: nghe phòng gia đình để nhận "Minh đã xem" và lời trả lời
-  useEffect(() => connectRoom(FAMILY_ROOM, 'ba-hoa', (ev) => {
+  useEffect(() => persona === 'relative' ? undefined : connectRoom(FAMILY_ROOM, 'ba-hoa', (ev) => {
     const cur = askRef.current
     // Sự kiện phát lại lúc vừa mở trang (replay): không làm lại lệnh trình diễn cũ
     if (ev.replay && (ev.type === 'demo.reset' || ev.type === 'demo.go')) return
@@ -176,16 +185,17 @@ export function AppProvider({ children }) {
       window.location.hash = '#' + d.path
       return
     }
+    if (ev.type === 'ask.reply') window.dispatchEvent(new Event('lcs-family-reply'))
     if (!cur || (ev.data?.askId ?? ev.data?.alertId) !== cur.askId) return
     if (ev.type === 'ask.seen') setAsk((a) => ({ ...a, seen: true }))
-    if (ev.type === 'ask.reply') setAsk((a) => ({ ...a, seen: true, reply: { text: ev.data.text, preset: ev.data.preset, at: ev.at } }))
+    if (ev.type === 'ask.reply') setAsk((a) => ({ ...a, seen: true, reply: { id: ev.data.replyId, text: ev.data.text, preset: ev.data.preset, at: ev.at } }))
     if (ev.type === 'alert.call') toast(`${cur.to?.name || 'Người thân'} đang gọi cho bà`)
-  }), [toast, setMode])
+  }), [persona, toast, setMode])
 
   const value = useMemo(() => ({
-    mode, setMode, persona, ward, setWard, onboarded, setOnboarded, result, setResult, recent, addRecent, relatives, setRelatives, addDefaultRelatives,
+    mode, setMode, persona, familyCode, setFamilyCode, ward, setWard, onboarded, setOnboarded, result, setResult, recent, addRecent, relatives, setRelatives, addDefaultRelatives,
     ask, setAsk, report, setReport, toast, online, points, setPoints, team, call, setCall,
-  }), [mode, setMode, persona, ward, setWard, onboarded, setOnboarded, result, recent, addRecent, relatives, setRelatives, addDefaultRelatives, ask, report, toast, online, points, setPoints, team, call])
+  }), [mode, setMode, persona, familyCode, setFamilyCode, ward, setWard, onboarded, setOnboarded, result, recent, addRecent, relatives, setRelatives, addDefaultRelatives, ask, report, toast, online, points, setPoints, team, call])
 
   return (
     <Ctx.Provider value={value}>

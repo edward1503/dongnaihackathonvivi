@@ -2,7 +2,7 @@
 
 React 19, Vite. Chạy trong WebView của ứng dụng Android, hoặc trên trình duyệt điện thoại để trình diễn.
 
-**Giao diện V3** có hai vai cá nhân là Người lớn tuổi và Học sinh. Nút **Đăng nhập đội** mở màn nhập mã do đội cấp. Thành viên xem thống kê và bỏ phiếu theo đợt xét. Trưởng đội còn được giải quyết yêu cầu báo nhầm và gửi cảnh báo khu phố. Tên, vai trò và nút đăng xuất nằm trong **Cá nhân**. Màu, cỡ chữ và bố cục theo bản `review/mockup/v3.html`. Linh vật Bé Nai lấy từ bộ tranh của Mảng 4.
+**Giao diện V3** có ba vai cá nhân là Người lớn tuổi, Học sinh và Người thân (Minh). Nút **Đăng nhập đội** mở màn nhập mã do đội cấp. Thành viên xem thống kê và bỏ phiếu theo đợt xét. Trưởng đội còn được giải quyết yêu cầu báo nhầm và gửi cảnh báo khu phố. Tên, vai trò và nút đăng xuất nằm trong **Cá nhân**. Màu, cỡ chữ và bố cục theo bản `review/mockup/v3.html`. Linh vật Bé Nai lấy từ bộ tranh của Mảng 4.
 
 **Logo:** khiên gạc nai (`src/v3/art/logo.webp`, gốc ở `../tools/logo/logo-c.png`) ở ô tên app đầu trang chủ, màn chào và thẻ cảnh báo; cùng hình với biểu tượng app Android. Biểu trưng Đồng Nai chỉ đặt nhỏ ở chân màn chào để ghi cuộc thi; đội cần ban tổ chức đồng ý cho dùng biểu trưng.
 
@@ -23,7 +23,7 @@ Tham số trên địa chỉ trang:
 
 | Tham số | Tác dụng |
 |---|---|
-| `?mode=simple` · `?mode=full` · `?mode=volunteer` | Mở vai người lớn tuổi (bà Hoa) · học sinh (Vy) · đội. Máy chưa có phiên đội sẽ mở màn đăng nhập C0 |
+| `?mode=simple` · `?mode=full` · `?mode=relative` · `?mode=volunteer` | Mở vai người lớn tuổi (bà Hoa) · học sinh (Vy) · người thân (Minh) · đội. Máy chưa có phiên đội sẽ mở màn đăng nhập C0 |
 | `#/chao` | Mở như người dùng mới: màn chào, chọn vai, quyền riêng tư, chọn phường |
 | `?api=http://192.168.1.10:8000` | Trỏ tới máy chủ khác (lưu lại cho lần sau) |
 | `?nguoithan=0` | Xóa người thân để xem màn "Chưa có người thân" |
@@ -42,10 +42,11 @@ Mã màn ghi ở `data-name` của khung, cùng tên với bản V3.
 | Chung | `#/chao` 00 · `#/vai` 0 · `#/rieng-tu` 0b · `#/phuong` 0c · `#/ca-nhan` 0d · `#/thiet-lap` A02a, A02b | `v3/screens/Common.jsx` |
 | Trang chủ | `#/` → A1 (lớn tuổi), B1 (học sinh), C1 (tình nguyện); E01a khi Lá chắn đang ngủ | `v3/screens/Home.jsx` |
 | Kiểm tra | `#/kiem-tra?loai=phone\|text\|account` A2, B2 · `#/ket-qua` A3 (4 mức) · `#/phan-tich` B3 · `#/mat-mang` A2b · `#/chua-du-thong-tin` E01d · `#/bao-nham` xác minh số bị báo · `#/doc-so` A7 | `v3/screens/Check.jsx`, `Appeal.jsx`, `Help.jsx` |
-| Người thân | `#/nguoi-than` A4 · `#/nguoi-than/them` A4c · `#/hoi-nguoi-than` · `/cho` A4b · `/tra-loi` · `#/chua-co-nguoi-than` A4a · `#/goi` A8 (mô phỏng) | `v3/screens/People.jsx` |
+| Máy Minh | `#/ma-gia-dinh` ghép máy · `#/` cảnh báo gia đình · `#/canh-bao/:id` chi tiết · `?sent=1` lời đã gửi | `v3/screens/Family.jsx` |
+| Hỏi người thân | `#/nguoi-than` A4 · `#/nguoi-than/them` A4c · `#/hoi-nguoi-than` · `/cho` A4b · `/tra-loi` · `#/chua-co-nguoi-than` A4a · `#/goi` A8 (mô phỏng) | `v3/screens/People.jsx` |
 | Khi bị lừa | `#/khan-cap` A5 · `#/ke-lai` A6 (cũng là `#/khong-ghi-am`) | `v3/screens/Help.jsx` |
 | Cuộc gọi (trình duyệt mô phỏng) | `#/cuoc-goi?so=…` A03 · `#/sau-cuoc-goi?so=…&giay=…&ghiam=1` · `#/hoi-nhanh` A04a · `#/phan-tich-cuoc-goi` A04b · `#/dung-lai?phut=4` A10a · `#/dung-lai?danggoi=1&so=…&giay=…` A10b · `#/thong-bao?tin=…` A05a | `v3/screens/Call.jsx` |
-| Báo cáo và bài học (hai vai cá nhân) | `#/bao-cao` B4 · `/xong` B4b · `#/bai-hoc` B5 · `#/bai-hoc/:id` B6 · `#/kiem-tra-bai` B7 · `/ket-qua` B8 | `v3/screens/Report.jsx`, `Student.jsx` |
+| Báo cáo (bà, Vy) và bài học (cả ba vai) | `#/bao-cao` B4 · `/xong` B4b · `#/bai-hoc` B5 · `#/bai-hoc/:id` B6 · `#/kiem-tra-bai` B7 · `/ket-qua` B8 | `v3/screens/Report.jsx`, `Student.jsx` |
 | Đội tình nguyện | `#/ma-doi` C0 · `#/thong-ke` C2 · `#/kieu-moi` C3 · `#/duyet` C4 · `#/chia-se` C5 | `v3/screens/Volunteer.jsx` |
 
 **Thành phần dùng chung** (`v3/ui.jsx`, `v3/theme.css`):
@@ -60,6 +61,21 @@ Mã màn ghi ở `data-name` của khung, cùng tên với bản V3.
 3. AI chép lời, tô dấu hiệu và tự báo Minh (A04b).
 4. Minh trả lời, trong app hoặc trên trang Zalo. Máy bà hiện lời trả lời thật to và đọc thành tiếng.
 
+## Trình diễn vai Người thân
+
+**Hai máy Android**
+
+1. Chạy máy chủ bằng `cd server && python chay-demo.py --build`. Cho hai máy vào cùng Wi-Fi và lưu cùng địa chỉ HTTP của máy chủ ở **Cá nhân → Cài đặt nâng cao**.
+2. Trên máy mẹ, chọn **Người lớn tuổi**, mở **Cá nhân → Mã gia đình**. Trên máy Minh, chọn **Người thân**, nhập `gia-dinh-hoa`, điền số điện thoại thật của mẹ nếu muốn gọi, rồi cho phép thông báo Android.
+3. Đưa app của Minh xuống nền. Trên máy mẹ, mở **Người thân**, bấm biểu tượng nhắn tin cạnh **Minh**, rồi chọn **Gửi cho Minh**. Hoặc dùng luồng sau cuộc gọi của Android để tạo cảnh báo. Báo cáo có bản ghi khớp sẽ kèm nhãn AI và câu trả lời của bà khi có.
+4. Trong khoảng một lượt kiểm tra (15 giây khi hai máy có mạng), chạm thông báo trên máy Minh. Đọc chi tiết, chọn **Đừng chuyển** hoặc **Người quen**. Máy mẹ có thể xem lời nhắn ngay ở màn đang chờ, hoặc bấm **Minh gửi lời nhắn cho mẹ** trên trang chủ. Khi mẹ mở lời nhắn, màn đã gửi của Minh hiện giờ mẹ xem.
+
+**Một máy Android**
+
+Chọn vai bà Hoa, gửi câu hỏi rồi về trang chủ. Vào **Cá nhân → Đổi vai → Người thân**, ghép mã và mở cảnh báo vừa gửi trong danh sách. Trả lời rồi đổi lại vai bà để mở lời nhắn. Khi trở về vai Minh, chạm cảnh báo và chọn **Xem lời đã gửi** để xem giờ đọc. Có thể thử tương tự trên trình duyệt cùng địa chỉ máy chủ hoặc qua proxy Vite.
+
+Bản hackathon dùng phòng ghép sẵn `gia-dinh-hoa` và phiên gia đình của máy chủ. Trình duyệt nhận cookie HttpOnly từ điểm vào demo `/zalo`. APK giữ cookie trong bộ nhớ native theo máy chủ. Mở cảnh báo và gửi lời đáp bằng `/api/alerts`; chỉ đường trả lời báo cáo đã liên kết mới có thể xác nhận nội dung bản ghi. Số mẹ được lưu trên máy Minh. **Gọi mẹ ngay** mở trình quay số, kể cả khi kết nối máy chủ bị gián đoạn.
+
 **Báo cáo, tra cứu và xét hồ sơ**
 
 - Trên Android, B4 liệt kê cuộc gọi đến và tin nhắn đã nhận trong 7 ngày. Chọn một sự kiện để đọc tình trạng, kể thêm, gửi hoặc rút báo cáo. Android ký yêu cầu và gửi mã máy đến máy chủ. Trình duyệt chỉ hướng dẫn mở app trên điện thoại đã nhận sự kiện.
@@ -69,7 +85,7 @@ Mã màn ghi ở `data-name` của khung, cùng tên với bản V3.
 
 **Bài học**
 
-Tab Bài học mở bằng truyện tranh cùng Bé Nai. Bà Hoa thấy bài 1 và 3, Vy thấy bài 2 và 4. **Tất cả bài** mở thư viện. Dưới truyện là **Gọi video luyện tập** với anh Minh (bà Hoa), chị Lan và chú Tư (Vy). **Ôn nhanh** giữ bốn bài một phút và bài kiểm tra năm câu. Trình duyệt mở truyện qua `/prototype/hoc.html?kieu=…` và cuộc gọi qua `/prototype/video-call.html?canh=…`.
+Tab Bài học mở bằng truyện tranh cùng Bé Nai. Bà Hoa thấy bài 1 và 3, Vy thấy bài 2 và 4. Minh thấy cả bốn truyện, bốn cuộc gọi luyện tập và phần ôn nhanh. **Tất cả bài** mở thư viện. Dưới truyện là **Gọi video luyện tập** với anh Minh (bà Hoa), chị Lan và chú Tư (Vy). **Ôn nhanh** giữ bốn bài một phút và bài kiểm tra năm câu. Trình duyệt mở truyện qua `/prototype/hoc.html?kieu=…` và cuộc gọi qua `/prototype/video-call.html?canh=…`.
 
 **Đường dây nóng 113, 156** luôn chỉ mở màn gọi mô phỏng, không bao giờ quay số thật.
 
@@ -89,6 +105,9 @@ App tự tìm `window.LCSNative`. Chưa có thì dùng cách thay thế để v�
 | `layers()` | chuỗi JSON `{calls, messages, banking, asleep}` | A02, E01a, Cá nhân: trạng thái 3 lớp |
 | `enableLayer(key)` | | A02 "Bật", E01a "Bật lại ngay": mở đúng màn xin quyền (`calls`, `messages`, `banking`) |
 | `setVoiceAsk(on)` | | Cá nhân: "Hỏi bằng giọng nói" |
+| `setRole(role, familyCode?)` | | Đồng bộ lúc mở app và khi đổi vai hoặc mã. Nhận `elder`, `student`, `relative`, `team`. Dịch vụ nền chỉ theo dõi gia đình ở vai `relative` có mã và máy chủ |
+| `familyAlerts()` | Promise JSON danh sách cảnh báo mới nhất trước, hoặc `{detail}` | Danh sách gia đình và đường mở từ thông báo Android |
+| `familyAction(id, action, bodyJson)` | Promise JSON cảnh báo hoặc `{detail}` | Gọi `reply` hoặc `call` bằng phiên gia đình của APK |
 | `deviceId()` | Chuỗi mã máy Android | Đăng nhập đội, xét hồ sơ, khiếu nại và cảnh báo gia đình |
 | `recentEvents()` | Promise JSON chứa danh sách sự kiện đã nhận | B4 chọn theo `eventId`, hiển thị loại cuộc gọi/tin nhắn, số hiển thị, thời điểm, bản ghi và trạng thái báo cáo |
 | `reportEvent(eventId, story?)` | Promise JSON `{report, case, message}` hoặc `{detail}` | Báo sự kiện đã chọn. Android đối chiếu và ký biên nhận |

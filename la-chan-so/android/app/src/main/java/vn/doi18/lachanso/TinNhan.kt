@@ -204,6 +204,7 @@ class NgheThongBao : NotificationListenerService() {
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
+        if (CaiDat.relative(this)) return
         val isSms = sbn.packageName in SMS_PACKAGES || sbn.packageName == android.provider.Telephony.Sms.getDefaultSmsPackage(this)
         if (!isSms && sbn.packageName !in APP_NHAN_TIN) return
         val n = sbn.notification ?: return
@@ -281,6 +282,7 @@ object XuLyTinNhan {
                 NotificationCompat.Action(0, "Bỏ qua", boQua),
             ),
         )
+        if (eventId != null && CaiDat.pairedElder(c)) Api.sendMessageAlert(c, eventId, cleanPhone(address), kq)
     }
 
     private fun laTenTrongDanhBa(c: Context, ten: String): Boolean = try {

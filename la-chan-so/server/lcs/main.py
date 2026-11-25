@@ -65,8 +65,9 @@ store = Store()
 relay = Relay()
 alerts = compat.alerts
 hub = compat.hub
-for saved in store.db.execute("SELECT payload FROM linked_alerts ORDER BY rowid"):
+for saved in store.db.execute("SELECT payload, device FROM linked_alerts ORDER BY rowid"):
     alert = json.loads(saved[0])
+    alerts.owners[alert["id"]] = saved["device"]
     alerts.items.insert(0, alert)
     relay.asks[alert["id"]] = compat.FAMILY_ROOM
 
@@ -308,6 +309,7 @@ def list_alerts():
         visible = [a.copy() for a in alerts.items if a.get("room", compat.FAMILY_ROOM) == compat.FAMILY_ROOM]
         for a in visible:
             if a.get("reportId"):
+                a["selfAnswer"] = store.row(a["reportId"])["self_answer"]
                 a["case"] = store.public_level(store.target_level(target_key("phone", a["number"]), now))
         return visible
 
@@ -335,6 +337,7 @@ async def create_alert(body: AlertIn, x_lcs_device: str | None = Header(None)):
             alert["case"] = store.public_level(store.target_level(r["key"], config.now()))
             store.db.execute("INSERT INTO linked_alerts VALUES (?,?,?,?,?,?)", (alert["id"],r["id"],r["analysis"],
                                                                                r["event"],x_lcs_device,json.dumps(alert)))
+        alerts.owners[alert["id"]] = x_lcs_device
         return await _publish_alert(alert, compat.FAMILY_ROOM, body.sender)
     dedupe = (body.room, x_lcs_device, body.eventId) if body.eventId else None
     if dedupe in alerts.by_event:
@@ -345,6 +348,10 @@ async def create_alert(body: AlertIn, x_lcs_device: str | None = Header(None)):
                               scam_type=body.scamType, asked_transfer=asked, call_seconds=body.callSeconds,
                               summary=body.summary, timeline=body.timeline or None)
     alert["room"] = body.room
+    if body.kind in ("call", "message"):
+        alert["kind"] = body.kind
+    if x_lcs_device:
+        alerts.owners[alert["id"]] = x_lcs_device
     if dedupe:
         alerts.by_event[dedupe] = alert["id"]
     return await _publish_alert(alert, body.room, body.sender)
@@ -384,6 +391,35 @@ async def alert_reply(alert_id: str, body: LegacyReplyIn):
     return alert
 
 
+@app.get("/api/family/unread")
+def unread_family_replies(x_lcs_device: str = Header()):
+    with store.transaction():
+        store.secret(x_lcs_device)
+        return [{"askId": a["id"], "reply": a["reply"]} for a in alerts.items
+                if alerts.owners.get(a["id"]) == x_lcs_device and a.get("reply")
+                and not a["reply"].get("seenAt")]
+
+
+@app.post("/api/alerts/{alert_id}/reply/{reply_id}/seen")
+async def mark_reply_seen(alert_id: str, reply_id: str, x_lcs_device: str = Header()):
+    with store.transaction():
+        store.secret(x_lcs_device)
+        a = alerts.get(alert_id)
+        if not a or alerts.owners.get(alert_id) != x_lcs_device:
+            fail("Không thấy lời nhắn trên máy này.", 404)
+        reply = a.get("reply") or {}
+        if (reply.get("id") or reply.get("at")) != reply_id:
+            fail("Lời nhắn đã thay đổi.", 409)
+        if reply.get("seenAt"):
+            return {"seenAt": reply["seenAt"]}
+        updated = {**a, "reply": {**reply, "seenAt": compat.now_iso()}}
+        if a.get("reportId"):
+            store.db.execute("UPDATE linked_alerts SET payload=? WHERE id=?", (json.dumps(updated), alert_id))
+    a.update(updated)
+    await relay.publish(a.get("room", compat.FAMILY_ROOM), "alert.timeline", {"alertId": alert_id}, "ba-hoa")
+    return {"seenAt": updated["reply"]["seenAt"]}
+
+
 @app.post("/api/alerts/{alert_id}/call", dependencies=[Depends(require_family)])
 async def alert_call(alert_id: str):
     """Minh bấm "Gọi mẹ ngay": máy bà Hoa hiện thông báo."""
@@ -400,7 +436,7 @@ async def alert_call(alert_id: str):
 
 
 @app.post("/api/asks")
-async def create_ask(body: AskIn):
+async def create_ask(body: AskIn, x_lcs_device: str | None = Header(None)):
     """U4 (A08a): bà Hoa gửi câu hỏi cho người thân. Trang Zalo của Minh nhận như một cảnh báo."""
     _room(body.room)
     if not nfc(body.text).strip():
@@ -413,6 +449,8 @@ async def create_ask(body: AskIn):
         timeline=[{"text": "Mẹ bấm Hỏi người thân", "tone": "warn"}],
     )
     alert["room"] = body.room
+    if x_lcs_device:
+        alerts.owners[ask_id] = x_lcs_device
     relay.asks[ask_id] = body.room
     alerts.add(alert)
     data = {"askId": ask_id, "to": body.to, "text": text, "alertId": body.alertId}

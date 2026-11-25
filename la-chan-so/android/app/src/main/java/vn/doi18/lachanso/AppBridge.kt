@@ -245,6 +245,27 @@ internal class AppBridge(private val activity: Activity, private val web: WebVie
         }
     }
 
+    @JavascriptInterface fun setRole(role: String, familyCode: String) {
+        CaiDat.setRole(activity, role, familyCode.trim())
+        if (role == "relative" && familyCode == Api.ROOM) ui {
+            val prefs = activity.getSharedPreferences("family-notifications", 0)
+            if (android.os.Build.VERSION.SDK_INT >= 33 && !Quyen.co(activity, Manifest.permission.POST_NOTIFICATIONS)
+                && !prefs.getBoolean("permission-requested", false)) {
+                prefs.edit().putBoolean("permission-requested", true).apply()
+                activity.requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 502)
+            }
+        }
+    }
+
+    private fun familyRequest(id: String, action: () -> Any) = eventRequest(id) {
+        runCatching(action).getOrElse { JSONObject().put("detail",
+            "Chưa lấy được cảnh báo. Anh kiểm tra mạng và địa chỉ máy chủ trong Cài đặt nâng cao nhé.") }
+    }
+
+    @JavascriptInterface fun startFamilyAlerts(id: String) = familyRequest(id) { FamilySession.list(activity) }
+    @JavascriptInterface fun startFamilyAction(id: String, alertId: String, action: String, body: String) =
+        familyRequest(id) { FamilySession.action(activity, alertId, action, JSONObject(body)) }
+
     @JavascriptInterface fun startRecentEvents(id: String) = eventRequest(id) { EventReports.recent(activity) }
     @JavascriptInterface fun startReportEvent(id: String, eventId: String, story: String) =
         eventRequest(id) { EventReports.report(activity, eventId, story) }

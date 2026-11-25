@@ -26,6 +26,10 @@ import android.widget.TextView
 class SangLocCuocGoi : CallScreeningService() {
     override fun onScreenCall(d: Call.Details) {
         val den = d.callDirection == Call.Details.DIRECTION_INCOMING
+        if (CaiDat.relative(this)) {
+            if (den) respondToCall(d, CallResponse.Builder().build())
+            return
+        }
         val so = d.handle?.schemeSpecificPart.orEmpty()
         if (den && TraCuu.chuanHoa(so).let { it.isNotBlank() && it in CaiDat.soChan(this) }) {
             respondToCall(d, CallResponse.Builder().setDisallowCall(true).setRejectCall(true).build())
@@ -41,6 +45,7 @@ class SangLocCuocGoi : CallScreeningService() {
 /** Trạng thái máy: đổ chuông, đang nghe, rảnh. Nguồn thứ hai cho số gọi đến khi app chưa giữ vai trò sàng lọc. */
 class TheoDoiCuocGoi : BroadcastReceiver() {
     override fun onReceive(c: Context, i: Intent) {
+        if (CaiDat.relative(c)) return
         if (i.action != TelephonyManager.ACTION_PHONE_STATE_CHANGED) return
         val tt = i.getStringExtra(TelephonyManager.EXTRA_STATE) ?: return
         @Suppress("DEPRECATION")

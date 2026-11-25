@@ -133,10 +133,30 @@ object Api {
      * POST /api/alerts: báo người thân. Người thân chỉ nhận mức cảnh báo và tóm tắt đã che số.
      * Chỉ coi là đã báo khi máy chủ trả về cảnh báo có mã (id). Máy chủ chưa chống gửi trùng, nên bên gọi tự nhớ cuộc gọi nào đã báo.
      */
-    fun createAlert(c: Context, muc: Muc, so: String, giay: Int, tomTatDaChe: String, thu: Boolean): Boolean {
+    fun createAlert(c: Context, muc: Muc, so: String, giay: Int, tomTatDaChe: String, thu: Boolean,
+                    answer: String? = null, recordingLevel: Muc? = null): Boolean {
         val than = JSONObject().put("room", ROOM).put("from", SENDER).put("level", level(muc)).put("phone", so)
             .put("callSeconds", giay).put("summary", (if (thu) "[Thử] " else "") + tomTatDaChe)
+        val timeline = JSONArray().put(JSONObject().put("text", "Mẹ vừa nhận cuộc gọi lạ."))
+        recordingLevel?.let { timeline.put(JSONObject().put("text", "Nhãn phân tích bản ghi: ${it.ten}")) }
+        val answerText = when (answer) {
+            "yes" -> "Mẹ trả lời Bé Nai: có yêu cầu chuyển tiền."
+            "no" -> "Mẹ trả lời Bé Nai: không có yêu cầu chuyển tiền."
+            "known" -> "Mẹ trả lời Bé Nai: mẹ biết số này."
+            else -> null
+        }
+        answerText?.let { timeline.put(JSONObject().put("text", it)) }
+        than.put("timeline", timeline)
         return MayChu.gui(c, "/api/alerts", than, 4000)?.let { chu(it, "id").isNotEmpty() } == true
+    }
+
+    fun sendMessageAlert(c: Context, eventId: String, sender: String?, result: KetQuaTin) {
+        // Only the local risk labels leave this phone. No original text, contacts or quoted URLs.
+        val timeline = JSONArray().put(JSONObject().put("text", "Máy mẹ vừa nhận tin nhắn đáng ngờ.").put("tone", "warn"))
+        val body = JSONObject().put("room", ROOM).put("from", SENDER).put("kind", "message")
+            .put("eventId", eventId).put("level", level(result.muc)).put("phone", sender)
+            .put("scenario", result.kieu).put("summary", result.nhom.joinToString(". ")).put("timeline", timeline)
+        MayChu.gui(c, "/api/alerts", body, 4000)
     }
 
     // ---------- Cuộc gọi video (mảng 4) ----------

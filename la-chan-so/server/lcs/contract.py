@@ -75,6 +75,7 @@ class MessageIn(BaseModel):
 
 class AlertIn(BaseModel):
     """Nhận cả dạng của app/Android (phone, scamLabel, asksMoney) lẫn dạng của trang Zalo (number, scenario, askedTransfer)."""
+    kind: str | None = None
     reportId: str | None = None
     analysisId: str | None = None
     room: str = "gia-dinh-hoa"

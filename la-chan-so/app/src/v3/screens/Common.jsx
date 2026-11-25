@@ -5,13 +5,14 @@ import { APP, Art, Bar, Btn, Circle, Group, I, Logo, Progress, Row, Screen, Spea
 import { LAYERS, useLayers } from '../../lib/layers.js'
 import { memberRole, saveTeam } from '../../lib/api.js'
 import { native } from '../../lib/native.js'
-import { useApp } from '../../lib/state.jsx'
+import { FAMILY_ROOM, useApp } from '../../lib/state.jsx'
 import bieuTrung from '../art/bieu-trung-dong-nai.webp'
 
 export const WARDS = ['Trấn Biên', 'Biên Hòa', 'Tam Hiệp', 'Long Bình', 'Trảng Dài', 'Hố Nai', 'Long Hưng', 'Tam Phước', 'Phước Tân']
 export const ROLES = [
   { mode: 'simple', icon: 'user', title: 'Người lớn tuổi', sub: 'Chữ to, đọc to, hỏi con cháu một chạm' },
   { mode: 'full', icon: 'grad', title: 'Học sinh', sub: 'Kiểm tra tin nhắn, học qua truyện 1 phút' },
+  { mode: 'relative', icon: 'users', title: 'Người thân', sub: 'Nhận cảnh báo khi bố mẹ gặp cuộc gọi lạ' },
   { mode: 'volunteer', icon: 'mega', title: 'Đăng nhập đội', sub: 'Xem thống kê và xét hồ sơ của khu phố' },
 ]
 
@@ -45,6 +46,7 @@ export function RolePick() {
   const nav = useNavigate()
   const { mode, setMode, onboarded } = useApp()
   const pick = (m) => {
+    if (m === 'relative') return nav('/ma-gia-dinh')
     if (m !== 'volunteer') saveTeam(null)
     setMode(m)
     nav(m === 'volunteer' ? '/ma-doi' : onboarded ? '/' : '/rieng-tu', { replace: onboarded })
@@ -75,8 +77,11 @@ export function RolePick() {
 // ---------- 0b Quyền riêng tư ----------
 export function Privacy() {
   const nav = useNavigate()
-  const { onboarded } = useApp()
-  const rows = [
+  const { onboarded, persona } = useApp()
+  const rows = persona === 'relative' ? [
+    ['bell', 'Thông báo gia đình', 'Khi mẹ gặp rủi ro', 'ok'],
+    ['lock', 'Tóm tắt cuộc gọi', 'Đã che số', 'ok'],
+  ] : [
     ['mic', 'Micro', 'Khi bấm nói', 'ok'],
     ['msg', 'Thông báo tin nhắn', 'Lọc trên máy', 'ok'],
     ['phonein', 'Cuộc gọi đến', 'Chỉ tra số', 'ok'],
@@ -139,11 +144,12 @@ const demos = [
 // ---------- 0d Cá nhân ----------
 export function Profile() {
   const nav = useNavigate()
-  const { persona, relatives, ward, points, team, toast } = useApp()
+  const { mode, persona, familyCode, relatives, ward, points, team, toast } = useApp()
   const { on, asleep } = useLayers()
   const [auto, setAuto] = useState(() => localStorage.getItem('lcs.autoSpeak') !== '0')
   const [voice, setVoice] = useState(() => localStorage.getItem('lcs.voiceAsk') !== '0')
-  const role = ROLES.find((r) => r.mode === { elder: 'simple', student: 'full', volunteer: 'volunteer' }[persona])
+  const role = ROLES.find((r) => r.mode === mode)
+  const protectedPhone = persona === 'elder' || persona === 'student'
   const toggle = (key, set) => (v) => { set(v); localStorage.setItem(key, v ? '1' : '0'); if (key === 'lcs.voiceAsk') window.LCSNative?.setVoiceAsk?.(v) }
   return (
     <Screen name="0d-ca-nhan" nav="/ca-nhan">
@@ -153,11 +159,13 @@ export function Profile() {
       </div>
       <Group>
         {persona === 'volunteer' && team && <Row icon="user" title={team.member.name} sub={memberRole(team.member)} />}
-        {persona !== 'volunteer' && <Row icon="users" title="Người thân" value={relatives[0]?.name || 'Chưa có'} onClick={() => nav('/nguoi-than')} />}
-        <Row icon="pin" title="Phường" value={persona === 'volunteer' ? team?.member.ward : ward} onClick={persona === 'volunteer' ? undefined : () => nav('/phuong')} />
+        {protectedPhone && <Row icon="users" title="Người thân" value={relatives[0]?.name || 'Chưa có'} onClick={() => nav('/nguoi-than')} />}
+        {(persona === 'elder' || persona === 'relative') && <Row icon="users" title="Mã gia đình"
+          sub={persona === 'relative' ? familyCode : FAMILY_ROOM} onClick={persona === 'relative' ? () => nav('/ma-gia-dinh') : undefined} />}
+        {persona !== 'relative' && <Row icon="pin" title="Phường" value={persona === 'volunteer' ? team?.member.ward : ward} onClick={persona === 'volunteer' ? undefined : () => nav('/phuong')} />}
         <Row icon="swap" title="Đổi vai" value={persona === 'volunteer' ? undefined : role?.title} onClick={() => nav('/vai')} />
       </Group>
-      {persona !== 'volunteer' && (
+      {protectedPhone && (
         <Group>
           <Row icon={asleep ? 'shieldoff' : 'shieldok'} iconColor={asleep ? 'dang' : 'safe'} title="Lá chắn" onClick={() => nav('/thiet-lap')}
             right={<Tag kind={asleep ? 'off' : 'on'}>{asleep ? 'Đang ngủ' : `${on}/3 lớp`}</Tag>} />
@@ -165,7 +173,7 @@ export function Profile() {
         </Group>
       )}
       {persona === 'volunteer' && <Btn kind="o" onClick={() => { saveTeam(null); nav('/ma-doi', { replace: true }) }}>Đăng xuất đội</Btn>}
-      {persona !== 'volunteer' && native.available() && <>
+      {protectedPhone && native.available() && <>
         <h2 className="sec">Thử Lá chắn</h2>
         <Group>{demos.map(([key, icon, title, sub]) => <Row key={key} icon={icon} title={title} sub={sub}
           onClick={() => window.LCSNative.demo ? window.LCSNative.demo(key) : toast('Bạn cập nhật app để thử màn này nhé.')} />)}</Group>
@@ -200,7 +208,7 @@ export function Setup() {
           {LAYERS.map((l) => <Row key={l.key} lead={<Circle z={44} icon={l.icon} iz={22} />} title={l.title} right={<Tag kind="on">Đã bật</Tag>} />)}
         </Group>
         {first
-          ? <Group><Row lead={<div className="avatar">{first.name[0]}</div>} title={`${first.name} (${first.relation})`} sub="Nhận cảnh báo qua ứng dụng nhắn tin" right={<Tag kind="on">Đã ghép</Tag>} /></Group>
+          ? <Group><Row lead={<div className="avatar">{first.name[0]}</div>} title={`${first.name} (${first.relation})`} sub="Nhận cảnh báo qua Lá chắn số" right={<Tag kind="on">Đã ghép</Tag>} /></Group>
           : <Group><Row icon="plus" iconColor="pri" title="Thêm người thân nhận cảnh báo" onClick={() => nav('/nguoi-than/them')} /></Group>}
       </Screen>
     )

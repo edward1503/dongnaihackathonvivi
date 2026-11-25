@@ -145,7 +145,7 @@ export function AskSend() {
         {relatives.length > 1 && <button type="button" className="t-b c-pri tap" style={{ padding: 8, fontSize: 17 }} onClick={() => setIdx((i) => (i + 1) % relatives.length)}>Đổi</button>}
       </div>
       <div className="bubble rise">{text}</div>
-      <div className="t-sm" style={{ textAlign: 'right', padding: '0 6px' }}>{to.paired ? 'Gửi qua ứng dụng nhắn tin đã ghép' : 'Gửi tin nhắn thường'}</div>
+      <div className="t-sm" style={{ textAlign: 'right', padding: '0 6px' }}>{to.paired ? 'Gửi qua Lá chắn số của gia đình' : 'Gửi tin nhắn thường'}</div>
     </Screen>
   )
 }
@@ -174,7 +174,7 @@ export function AskReply() {
   const { ask, result } = useApp()
   const call = useCall()
   const [blocked, setBlocked] = useState(false)
-  const phone = result && (result.kind === 'phone' || result.kind === 'call') ? result.display : null
+  const phone = !ask?.fromInbox && result && (result.kind === 'phone' || result.kind === 'call') ? result.display : null
   useEffect(() => {
     if (!ask?.reply) return
     buzz([200, 100, 200])
@@ -182,6 +182,19 @@ export function AskReply() {
     if (phone && ask.reply.preset === 'dung_chuyen' && native.available()) setBlocked(native.blockNumber(phone))
     return () => native.stopSpeaking()
   }, [ask?.reply, phone])
+  useEffect(() => {
+    if (!ask?.reply?.id) return
+    let timer, active = true
+    const acknowledge = async () => {
+      clearTimeout(timer)
+      if (document.hidden) return
+      try { await api.replySeen(ask.askId, ask.reply.id) }
+      catch (error) { if (active && (!error.status || error.status >= 500)) timer = setTimeout(acknowledge, 5000) }
+    }
+    acknowledge()
+    document.addEventListener('visibilitychange', acknowledge)
+    return () => { active = false; clearTimeout(timer); document.removeEventListener('visibilitychange', acknowledge) }
+  }, [ask?.askId, ask?.reply?.id])
   if (!ask?.reply) return <Navigate to="/hoi-nguoi-than" replace />
   const stop = ask.reply.preset !== 'nguoi_quen'
   return (

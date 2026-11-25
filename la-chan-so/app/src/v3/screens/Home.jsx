@@ -44,6 +44,33 @@ function SleepCard() {
   )
 }
 
+function FamilyReplies() {
+  const nav = useNavigate()
+  const { setAsk, relatives } = useApp()
+  const [unread, setUnread] = useState([])
+  useEffect(() => {
+    let active = true
+    const refresh = () => {
+      if (!document.hidden) api.unreadReplies().then(rows => { if (active) setUnread(rows) }).catch(() => {})
+    }
+    refresh()
+    window.addEventListener('lcs-family-reply', refresh)
+    document.addEventListener('visibilitychange', refresh)
+    return () => {
+      active = false
+      window.removeEventListener('lcs-family-reply', refresh)
+      document.removeEventListener('visibilitychange', refresh)
+    }
+  }, [])
+  if (!unread.length) return null
+  return <Group>{unread.map(({ askId, reply }) => <Row key={askId} icon="msg" title="Minh gửi lời nhắn cho mẹ" sub={new Date(reply.at).toLocaleString('vi-VN')}
+    onClick={() => {
+      setAsk({ askId, fromInbox: true, to: relatives.find(r => r.id === 'minh') || { name: 'Minh' },
+        reply: { ...reply, id: reply.id || reply.at, text: reply.text.replace(/^Minh: /, ''), preset: reply.choice === 'nguoi-quen' ? 'nguoi_quen' : 'dung_chuyen' } })
+      nav('/hoi-nguoi-than/tra-loi')
+    }} />)}</Group>
+}
+
 function PersonHome({ student }) {
   const nav = useNavigate()
   const { recent, ward } = useApp()
@@ -59,6 +86,7 @@ function PersonHome({ student }) {
   return (
     <Screen name={asleep ? 'E01a-la-chan-dang-ngu' : student ? 'B1-trang-chu-hoc-sinh' : 'A1-trang-chu-lon-tuoi'} nav="/">
       <TopRow right={<button type="button" className="pill report-entry tap" onClick={() => nav('/bao-cao')}><I n="flag" z={20} /> {student ? 'Báo cáo' : 'Báo cuộc vừa nhận'}</button>} />
+      {!student && <FamilyReplies />}
       {!asleep && (
         <button type="button" className="row g8 tap" style={{ padding: '0 6px' }} onClick={() => nav('/thiet-lap')}>
           <I n="shieldok" z={20} c="safe" /><span className="t-sub c-ink" style={{ fontWeight: 600 }}>Lá chắn đang bật · {on}/3 lớp</span>
