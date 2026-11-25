@@ -90,9 +90,9 @@ def test_danh_sach_cho_duyet(client):
 
 def test_thong_ke_khop_man_W01_W02(client):
     s = client.get("/api/stats").json()
-    assert s["month"] == "2026-11"
+    assert s["monthKey"] == "2026-11" and s["month"] == "11/2026"
     assert s["total"] == 120
-    assert s["links"] == {"count": 42, "pct": 35}
+    assert (s["links"], s["linkPct"]) == (42, 35)
     assert (s["aiConfirmed"], s["aiRejected"], s["needsReview"], s["appeals"]) == (78, 18, 24, 2)
     assert [(t["label"], t["count"]) for t in s["byType"]] == [
         ("Đường dẫn giả mạo", 42), ("Giả danh công an", 30), ("Việc nhẹ lương cao", 24),
@@ -103,8 +103,8 @@ def test_thong_ke_khop_man_W01_W02(client):
         ("Khu phố 1", 31), ("Khu phố 4", 26), ("Khu phố 2", 24), ("Khu phố 5", 21), ("Khu phố 3", 18),
     ]
     assert [(g["group"], g["pct"]) for g in s["targetGroups"]] == [("Người cao tuổi", 46), ("Học sinh", 31), ("Khác", 23)]
-    assert [e["label"] for e in s["emerging"]] == ["Giả nhân viên điện lực"]
-    assert s["emerging"][0]["count"] == 7
+    assert s["emerging"]["title"] == "Giả nhân viên điện lực báo cắt điện"
+    assert s["emerging"]["count"] == s["emerging"]["reports"] == 7
     assert s["changePct"] == 18
 
 

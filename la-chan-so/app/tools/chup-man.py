@@ -58,10 +58,10 @@ def frame(name):
         errors.append(f"không thấy màn {name} (đang ở {d.current_url})")
 
 
-def shot(name):
+def shot(name, file=None):
     frame(name)
-    d.find_element(By.CSS_SELECTOR, ".frame").screenshot(str(OUT / f"{name}.png"))
-    print("chụp", name)
+    d.find_element(By.CSS_SELECTOR, ".frame").screenshot(str(OUT / f"{file or name}.png"))
+    print("chụp", file or name)
 
 
 def open_(query, route):
@@ -151,6 +151,45 @@ type_("input.field", "0912 345 678")
 click("Kiểm tra")
 shot("E01c-mat-mang")
 d.execute_script("localStorage.removeItem('lcs.api')")
+
+# ---------- Cuộc gọi lừa đảo: đổ chuông -> Bé Nai hỏi -> AI phân tích ghi âm -> tự báo Minh -> Minh trả lời ----------
+post("/api/demo/reset")
+d.execute_script("localStorage.clear()")
+open_("?mode=simple", "/cuoc-goi?so=0912345678")
+shot("A03a-do-chuong-nguy-hiem")
+click("Nghe")
+shot("A04a-hoi-nhanh")
+click("Có")
+frame("A04b-phan-tich-ghi-am")
+try:
+    WebDriverWait(d, 15).until(EC.presence_of_element_located((By.XPATH, '//*[contains(text(), "Đã báo cho")]')))
+except Exception:
+    errors.append("A04b: chưa thấy dòng 'Đã báo cho Minh'")
+shot("A04b-phan-tich-ghi-am")
+alert_id = get("/api/alerts")[0]["id"]
+app_tab = d.current_window_handle
+try:
+    urllib.request.urlopen(BASE + "/zalo", timeout=5)
+    d.switch_to.new_window("tab")
+    d.get(BASE + "/zalo")
+    btn = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, f'.msg-card[data-id="{alert_id}"] [data-act="quick"]')))
+    d.save_screenshot(str(OUT / "Z01a-tren-trang-zalo-cua-duc.png"))
+    btn.click()
+    time.sleep(1)
+    d.close()
+    d.switch_to.window(app_tab)
+except Exception as e:
+    print("bỏ qua bước trang Zalo:", type(e).__name__)
+    d.switch_to.window(app_tab)
+    post(f"/api/alerts/{alert_id}/reply", {"choice": "dung-chuyen"})
+shot("A08c-hoi-nguoi-than-tra-loi", "A08c-tra-loi-tu-trang-zalo")
+
+open_("", "/cuoc-goi?so=0987654321")
+shot("A03b-do-chuong-chua-ro")
+open_("", "/khong-ghi-am")
+shot("A04c-khong-co-ghi-am")
+open_("", "/dung-lai?phut=4")
+shot("A10a-phanh-sau-cuoc-goi")
 
 d.quit()
 print("\n".join(errors) if errors else "Xong, không lỗi.")

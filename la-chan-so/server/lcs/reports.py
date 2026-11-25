@@ -41,7 +41,9 @@ CREATE TABLE IF NOT EXISTS reports(
   verified_at TEXT,
   expires_at TEXT,
   appeal TEXT,
-  reporter TEXT
+  reporter TEXT,
+  label TEXT,
+  decided_at TEXT
 );
 CREATE INDEX IF NOT EXISTS idx_reports_target ON reports(target);
 """
@@ -115,12 +117,13 @@ class Store:
             "humanVerified": any(r["human_verified"] for r in rows),
             "scamType": types.most_common(1)[0][0] if types else None,
             "story": stories.most_common(1)[0][0] if stories else None,
+            "until": max(r["expires_at"] for r in rows),
         }
 
     def reporter_count(self, key: str) -> int:
         with self.lock:
             return self.db.execute(
-                "SELECT COUNT(*) FROM reports WHERE target=? AND status != 'ai_rejected' AND status != 'rejected'", (key,)
+                "SELECT COUNT(*) FROM reports WHERE target=? AND status NOT IN ('ai_rejected','rejected','spam')", (key,)
             ).fetchone()[0]
 
     # ---------- ghi ----------
@@ -153,7 +156,7 @@ class Store:
         with self.lock:
             self.db.execute(
                 "INSERT INTO reports VALUES (:id,:created_at,:kind,:target,:display,:story,:has_audio,:lost_money,:area,"
-                ":target_group,:status,:ai_type,:ai_label,:ai_confidence,:human_verified,:verified_at,:expires_at,:appeal,:reporter)",
+                ":target_group,:status,:ai_type,:ai_label,:ai_confidence,:human_verified,:verified_at,:expires_at,:appeal,:reporter,NULL,NULL)",
                 row,
             )
             self.db.commit()
@@ -163,18 +166,19 @@ class Store:
         self.points[who] = self.points.get(who, 0) + n
         return self.points[who]
 
-    def set_status(self, report_id: str, status: str) -> dict | None:
+    def set_status(self, report_id: str, status: str, label: str | None = None) -> dict | None:
+        """Người duyệt quyết định. confirmed và labeled có hạn 90 ngày; chỉ confirmed mới làm tra số ra Nguy hiểm."""
         now = config.now()
         with self.lock:
-            if status == "confirmed":
+            if status in ("confirmed", "labeled"):
                 self.db.execute(
-                    "UPDATE reports SET status='confirmed', human_verified=1, verified_at=?, expires_at=? WHERE id=?",
-                    (_iso(now), _iso(now + timedelta(days=TTL_DAYS)), report_id),
+                    "UPDATE reports SET status=?, label=?, human_verified=1, verified_at=?, expires_at=?, decided_at=? WHERE id=?",
+                    (status, label, _iso(now), _iso(now + timedelta(days=TTL_DAYS)), _iso(now), report_id),
                 )
-            else:
+            else:  # rejected, spam, forwarded
                 self.db.execute(
-                    "UPDATE reports SET status='rejected', human_verified=1, verified_at=NULL, expires_at=NULL WHERE id=?",
-                    (report_id,),
+                    "UPDATE reports SET status=?, human_verified=1, verified_at=NULL, expires_at=NULL, decided_at=? WHERE id=?",
+                    (status, _iso(now), report_id),
                 )
             self.db.commit()
         return self.get(report_id)
@@ -222,6 +226,9 @@ class Store:
             "verifiedAt": r["verified_at"],
             "expiresAt": r["expires_at"],
             "appeal": r["appeal"],
+            "label": r["label"],
+            "decidedAt": r["decided_at"],
+            "reporter": r["reporter"],
         }
 
     # ---------- thống kê cho W01 ----------
@@ -249,24 +256,40 @@ class Store:
         links = sum(1 for r in rows if r["ai_type"] == "duong_dan_gia")
         pct = (lambda n: round(100 * n / total) if total else 0)
 
+        change = round(100 * (total - 102) / 102) if total else 0
+        confirmed = status["ai_confirmed"] + status["confirmed"]
+        emerging = self._emerging(rows, today)
+        e = emerging[0] if emerging else None
+        by_area = areas.most_common()
+        by_group = [(g, pct(n)) for g, n in groups.most_common()]
         return {
-            "month": month,
+            "monthKey": month,
+            "month": f"{month[5:7]}/{month[:4]}",
             "area": "Phường Trấn Biên",
             "sample": True,
             "total": total,
             "prevMonthTotal": 102,
-            "changePct": round(100 * (total - 102) / 102) if total else 0,
-            "links": {"count": links, "pct": pct(links)},
-            "aiConfirmed": status["ai_confirmed"] + status["confirmed"],
-            "aiRejected": status["ai_rejected"] + status["rejected"],
+            "changePct": change,
+            "totalDelta": f"{change:+d}% so với tháng trước",
+            "links": links,
+            "linkPct": pct(links),
+            "aiConfirmed": confirmed,
+            "aiPct": pct(confirmed),
+            "aiRejected": status["ai_rejected"] + status["rejected"] + status["spam"],
             "needsReview": status["needs_review"],
+            "pending": status["needs_review"],
             "appeals": sum(1 for r in rows if r["appeal"]),
             "byType": by_type,
+            "scam": [[t["label"], t["count"]] for t in by_type],
             "weekly": weekly,
-            "byArea": [{"area": a, "count": n} for a, n in areas.most_common()],
-            "targetGroups": [{"group": g, "pct": pct(n)} for g, n in groups.most_common()],
+            "byArea": [{"area": a, "count": n} for a, n in by_area],
+            "areas": [[a, n] for a, n in by_area],
+            "targetGroups": [{"group": g, "pct": p} for g, p in by_group],
+            "targets": [[g, p] for g, p in by_group],
             "peakHours": "9–11 giờ sáng",
-            "emerging": self._emerging(rows, today),
+            "peak": "9–11 giờ sáng",
+            # Kiểu mới nổi nhất (W01, A01b); dạng đối tượng như trang web của Mảng 6 dùng
+            "emerging": {**e, "reports": e["count"]} if e else None,
             # Phễu bảo vệ lấy từ thiết bị; bản demo dùng số mẫu của màn W01
             "funnel": {"alertsShown": 310, "stopped": 268, "askedFamily": 97, "reported": 64},
         }

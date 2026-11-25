@@ -6,10 +6,14 @@ import MessageResult from './screens/MessageResult.jsx'
 import { AskReply, AskSend, AskWait } from './screens/Ask.jsx'
 import { ReportCommunity, ReportDone, ReportForm } from './screens/Report.jsx'
 import { NoRelatives, NotEnoughInfo, Offline } from './screens/States.jsx'
+import { AfterCall, CallAnalysis, IncomingCall, NoRecording, QuickAsk, StopScreen } from './screens/Call.jsx'
+import DemoPanel from './ui/DemoPanel.jsx'
 
 // Mỗi đường dẫn ứng với một khung trong thiết kế (mã màn ghi bên cạnh)
 export default function App() {
   return (
+    <>
+    <DemoPanel />
     <Routes>
       <Route path="/" element={<Home />} />                                   {/* A01a, A01b */}
       <Route path="/kiem-tra" element={<CheckNumber />} />                    {/* A06a */}
@@ -25,7 +29,14 @@ export default function App() {
       <Route path="/chua-co-nguoi-than" element={<NoRelatives />} />          {/* E01b */}
       <Route path="/mat-mang" element={<Offline />} />                        {/* E01c */}
       <Route path="/chua-du-thong-tin" element={<NotEnoughInfo />} />         {/* E01d */}
+      <Route path="/cuoc-goi" element={<IncomingCall />} />                 {/* A03a, A03b */}
+      <Route path="/sau-cuoc-goi" element={<AfterCall />} />               {/* điều phối khi cúp máy */}
+      <Route path="/hoi-nhanh" element={<QuickAsk />} />                   {/* A04a */}
+      <Route path="/phan-tich-cuoc-goi" element={<CallAnalysis />} />      {/* A04b */}
+      <Route path="/khong-ghi-am" element={<NoRecording />} />             {/* A04c */}
+      <Route path="/dung-lai" element={<StopScreen />} />                  {/* A10a */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </>
   )
 }

@@ -48,6 +48,10 @@ async function req(path, { method = 'GET', body, form, timeout = 15000 } = {}) {
 export const api = {
   health: () => req('/api/health', { timeout: 5000 }),
   check: (value, kind) => req('/api/check', { method: 'POST', body: { value, kind } }),
+  lookupPhone: (phone) => req(`/api/lookup/phone/${encodeURIComponent(phone)}`, { timeout: 5000 }),
+  analyzeCall: (form) => req('/api/analyze/call', { method: 'POST', form, timeout: 60000 }),
+  alert: (body) => req('/api/alerts', { method: 'POST', body }),
+  reset: () => req('/api/demo/reset', { method: 'POST' }),
   analyzeMessage: (text) => req('/api/analyze/message', { method: 'POST', body: { text } }),
   ask: (body) => req('/api/asks', { method: 'POST', body }),
   report: (body) => req('/api/reports', { method: 'POST', body }),

@@ -109,7 +109,7 @@ function HomeFull() {
 
   useEffect(() => {
     let alive = true
-    api.stats().then((s) => { if (alive) setEmerging(s.emerging?.[0] || null) }).catch(() => {})
+    api.stats().then((s) => { if (alive) setEmerging(s.emerging || null) }).catch(() => {})
     return () => { alive = false }
   }, [])
 

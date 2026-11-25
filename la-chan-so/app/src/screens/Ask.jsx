@@ -63,7 +63,13 @@ export function AskSend() {
   const send = async () => {
     setBusy(true)
     try {
-      const r = await api.ask({ room: FAMILY_ROOM, to: to.id, text, from: 'ba-hoa' })
+      const isCall = result && (result.kind === 'phone' || result.kind === 'call')
+      const r = await api.ask({
+        room: FAMILY_ROOM, to: to.id, text, from: 'ba-hoa',
+        phone: isCall ? result.display : null, level: result?.level === 'suspicious' ? 'warn' : 'danger',
+        scamType: result?.scamType || null, scamLabel: result?.scamLabel || null,
+        asksMoney: /chuyển tiền|nạp/i.test(text),
+      })
       setAsk({ askId: r.askId, to, text, sentAt: new Date().toISOString(), seen: false, reply: null })
       nav('/hoi-nguoi-than/cho')
     } catch (e) {

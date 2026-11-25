@@ -5,6 +5,22 @@ from datetime import date, datetime, timedelta, timezone
 VN = timezone(timedelta(hours=7))
 
 
+def _load_env_file() -> None:
+    """Đọc server/.env (không đưa lên kho) nếu có: mỗi dòng KHOA=giatri. Biến đã đặt sẵn thì giữ nguyên."""
+    path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
+    if not os.path.isfile(path):
+        return
+    for line in open(path, encoding="utf-8"):
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        k, v = line.split("=", 1)
+        os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
+
+
+_load_env_file()
+
+
 def env(name: str, default: str | None = None) -> str | None:
     v = os.environ.get(name)
     return v if v not in (None, "") else default

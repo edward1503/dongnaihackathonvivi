@@ -12,7 +12,7 @@ from fastapi import WebSocket
 from . import config
 
 ALLOWED_TYPES = {
-    "alert.created", "alert.timeline",
+    "alert.created", "alert.timeline", "alert.call",
     "ask.sent", "ask.seen", "ask.reply",
     "report.created", "report.updated",
     "demo.reset",

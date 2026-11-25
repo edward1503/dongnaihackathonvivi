@@ -1,30 +1,35 @@
 """Máy chủ Lá chắn số: API cho app, Android, Zalo và web đội tình nguyện.
 
 Chạy:  uvicorn lcs.main:app --host 0.0.0.0 --port 8000
+Trang của Mảng 5, 6 (mvp/zalo.html, mvp/web.html) chạy thẳng trên máy chủ này qua lớp tương thích (compat.py).
 """
 import json
 import os
 import uuid
 from pathlib import Path
 
-from fastapi import FastAPI, File, Form, HTTPException, Query, UploadFile, WebSocket, WebSocketDisconnect
+from fastapi import (Body, FastAPI, File, Form, HTTPException, Query, Request, UploadFile, WebSocket,
+                     WebSocketDisconnect)
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from pydantic import ValidationError
 
-from . import ai, config
+from . import ai, compat, config
 from .analyze import NeedInput, analyze_call, analyze_text
 from .checker import check_target
-from .contract import (AlertIn, AnalysisResult, AppealIn, AskIn, AskReplyIn, CheckIn, EventIn, MessageIn,
-                       ReportIn, ReportPatch)
-from .data import REPLY_PRESETS, SCAM_TYPES
+from .contract import (AlertIn, AnalysisResult, AppealIn, AskIn, AskReplyIn, BroadcastIn, CheckIn, DecisionIn,
+                       EventIn, LegacyReplyIn, MessageIn, ReportIn, ReportPatch)
+from .data import SCAM_TYPES
 from .masking import has_otp, mask
 from .relay import Relay, RelayError
 from .reports import CONFIRMED, Store
-from .text import detect_kind, digits, fmt_phone, nfc
+from .text import detect_kind, digits, nfc, target_key
 
 MAX_AUDIO = 20 * 1024 * 1024
+LCS_ROOT = Path(__file__).resolve().parents[2]  # thư mục la-chan-so/
 
-app = FastAPI(title="Lá chắn số", version="0.1.0")
+app = FastAPI(title="Lá chắn số", version="0.2.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[o.strip() for o in (config.env("LCS_CORS", "*") or "*").split(",")],
@@ -33,6 +38,8 @@ app.add_middleware(
 )
 store = Store()
 relay = Relay()
+alerts = compat.alerts
+hub = compat.hub
 
 
 def bad(msg: str, code: int = 400):
@@ -47,9 +54,13 @@ def health():
 
 
 @app.post("/api/demo/reset")
+@app.post("/api/reset")
 async def demo_reset():
+    """Đưa dữ liệu về đầu kịch bản và báo mọi máy đang mở (app: demo.reset, trang Zalo/web: reset)."""
     store.reset()
+    alerts.reset()
     await relay.reset()
+    hub.emit("reset", {})
     return {"ok": True}
 
 
@@ -61,6 +72,20 @@ def lookup_phone(phone: str):
     if len(digits(phone)) < 3:
         bad("Số này ngắn quá, bạn kiểm tra lại nhé")
     return check_target("phone", phone, store)
+
+
+@app.get("/api/lookup")
+def lookup_legacy(v: str = ""):
+    """Dạng của trang Zalo: chỉ danger hoặc unknown."""
+    value = compat.strip_tk(nfc(v).strip())
+    kind = detect_kind(value, None) if value else "message"
+    if kind == "message":
+        return {"level": "unknown"}
+    found = store.lookup(target_key(kind, value))
+    if found["count"]:
+        return {"level": "danger", "kind": SCAM_TYPES.get(found.get("scamType") or "", "Lừa đảo"),
+                "until": found.get("until")}
+    return {"level": "unknown"}
 
 
 @app.post("/api/check", response_model=AnalysisResult)
@@ -148,38 +173,78 @@ async def post_event(body: EventIn):
 
 
 @app.get("/api/events")
-def get_events(room: str, since: int = 0):
+def get_events(request: Request, room: str | None = None, since: int = 0):
+    """Có ?room: trả JSON (app hỏi định kỳ). Không có ?room hoặc EventSource: luồng SSE cho trang Zalo/web."""
+    if room is None or "text/event-stream" in request.headers.get("accept", ""):
+        return hub.response(request)
     return {"events": relay.history(_room(room), since)}
 
 
-@app.post("/api/alerts")
+async def _publish_alert(alert: dict, room: str, sender: str) -> dict:
+    relay.asks[alert["id"]] = room  # cảnh báo dùng được như câu hỏi: Minh trả lời thì về màn A08c
+    alerts.add(alert)
+    await relay.publish(room, "alert.created", alert, sender)
+    return alert
+
+
+@app.get("/api/alerts")
+def list_alerts():
+    return alerts.items
+
+
+@app.post("/api/alerts", status_code=201)
 async def create_alert(body: AlertIn):
-    """N1, N2, N3 gọi khi Lá chắn quyết định báo người thân. Minh chỉ thấy mức cảnh báo và tóm tắt đã che."""
+    """N1, N2, N3 (Android) hoặc màn A04b gọi khi Lá chắn quyết định báo người thân.
+    Minh chỉ thấy mức cảnh báo và tóm tắt đã che."""
     _room(body.room)
-    alert_id = "al_" + uuid.uuid4().hex[:8]
-    data = {
-        "alertId": alert_id,
-        "level": body.level,
-        "scamType": body.scamType,
-        "scamLabel": body.scamLabel or (SCAM_TYPES.get(body.scamType or "") if body.scamType else None),
-        "phoneDisplay": fmt_phone(body.phone) if body.phone else None,
-        "summaryMasked": mask(body.summary)[0] if body.summary else None,
-        "asksMoney": body.asksMoney,
-        "timeline": [t.model_dump() for t in body.timeline],
-    }
-    await relay.publish(body.room, "alert.created", data, body.sender)
-    return data
+    scenario = body.scenario or body.scamLabel or (SCAM_TYPES.get(body.scamType) if body.scamType else None)
+    asked = body.askedTransfer if body.askedTransfer is not None else bool(body.asksMoney)
+    alert = compat.make_alert(
+        level=body.level, who=body.who, number=body.number or body.phone, scenario=scenario,
+        scam_type=body.scamType, asked_transfer=asked, call_seconds=body.callSeconds,
+        summary=body.summary, timeline=body.timeline or None,
+    )
+    return await _publish_alert(alert, body.room, body.sender)
+
+
+@app.post("/api/alerts/{alert_id}/reply")
+async def alert_reply(alert_id: str, body: LegacyReplyIn):
+    """Trang Zalo (Z2): Minh trả lời một chạm trên cảnh báo."""
+    if not alerts.get(alert_id):
+        bad("Không thấy cảnh báo này", 404)
+    preset = compat.CHOICE_TO_PRESET[body.choice]
+    data = alerts.apply_reply(alert_id, preset, body.text)
+    await relay.publish(relay.asks.get(alert_id, compat.FAMILY_ROOM), "ask.reply", data, "minh")
+    return alerts.get(alert_id)
+
+
+@app.post("/api/alerts/{alert_id}/call")
+async def alert_call(alert_id: str):
+    """Minh bấm "Gọi mẹ ngay": máy bà Hoa hiện thông báo."""
+    a = alerts.add_timeline(alert_id, "Minh bấm gọi mẹ", "safe")
+    if not a:
+        bad("Không thấy cảnh báo này", 404)
+    hub.emit("call", {"alertId": alert_id, "at": compat.now_iso()})
+    await relay.publish(relay.asks.get(alert_id, compat.FAMILY_ROOM), "alert.call", {"alertId": alert_id}, "minh")
+    return a
 
 
 @app.post("/api/asks")
 async def create_ask(body: AskIn):
-    """U4 (A08a): bà Hoa gửi câu hỏi cho người thân."""
+    """U4 (A08a): bà Hoa gửi câu hỏi cho người thân. Trang Zalo của Minh nhận như một cảnh báo."""
     _room(body.room)
     if not nfc(body.text).strip():
         bad("Lời nhắn đang trống")
     ask_id = "ask_" + uuid.uuid4().hex[:8]
+    text = mask(body.text, phones=False)[0]
+    alert = compat.make_alert(
+        alert_id=ask_id, level=body.level or "danger", number=body.phone, scenario=body.scamLabel,
+        scam_type=body.scamType, asked_transfer=body.asksMoney, summary=text, keep_phones=True, source="ask",
+        timeline=[{"text": "Mẹ bấm Hỏi người thân", "tone": "warn"}],
+    )
     relay.asks[ask_id] = body.room
-    data = {"askId": ask_id, "to": body.to, "text": mask(body.text, phones=False)[0], "alertId": body.alertId}
+    alerts.add(alert)
+    data = {"askId": ask_id, "to": body.to, "text": text, "alertId": body.alertId}
     await relay.publish(body.room, "ask.sent", data, body.sender)
     return data
 
@@ -200,18 +265,16 @@ async def ask_seen(ask_id: str, who: str = "minh"):
 
 @app.post("/api/asks/{ask_id}/reply")
 async def ask_reply(ask_id: str, body: AskReplyIn):
-    """Z2 (Z01b): Minh trả lời một chạm; máy bà Hoa hiện to và đọc thành tiếng (A08c)."""
+    """Minh trả lời một chạm; máy bà Hoa hiện to và đọc thành tiếng (A08c)."""
     room = _ask_room(ask_id)
-    data = {"askId": ask_id, "preset": body.preset, "text": (body.text or REPLY_PRESETS[body.preset]).strip()}
+    data = alerts.apply_reply(ask_id, body.preset, body.text)
     await relay.publish(room, "ask.reply", data, body.sender)
     return data
 
 
 # ---------------- S6: báo cáo, kiểm duyệt, thống kê ----------------
 
-@app.post("/api/reports")
-async def create_report(body: ReportIn):
-    """U5 (A09a, A09b), Z3. AI phân loại trước; ca chưa chắc mới tới người duyệt (W02)."""
+async def _create_report(body: ReportIn) -> dict:
     target = nfc(body.target).strip()
     if not target:
         bad("Bạn điền số, đường dẫn hoặc tài khoản cần báo nhé")
@@ -238,13 +301,14 @@ async def create_report(body: ReportIn):
         confidence = analysis.confidence if analysis else 0.5
 
     report = store.add(
-        kind=body.kind, key_kind=key_kind, target=target, story=story_masked, has_audio=body.hasAudio, lost_money=body.lostMoney,
-        area=body.area, group=body.group, status=status, ai_type=scam_type,
+        kind=body.kind, key_kind=key_kind, target=target, story=story_masked, has_audio=body.hasAudio,
+        lost_money=body.lostMoney, area=body.area, group=body.group, status=status, ai_type=scam_type,
         ai_label=label or SCAM_TYPES.get(scam_type or "khac"), ai_confidence=round(confidence, 2), reporter=body.reporter,
     )
     total = store.add_points(body.reporter, 10)
-    await relay.publish("tnv-tran-bien", "report.created",
+    await relay.publish(compat.VOLUNTEER_ROOM, "report.created",
                         {"reportId": report["id"], "status": status, "scamType": scam_type}, "server")
+    hub.emit("report", compat.legacy_report(report))
     return {
         "report": report,
         "reporterCount": report["reporterCount"],
@@ -254,8 +318,31 @@ async def create_report(body: ReportIn):
     }
 
 
+@app.post("/api/reports", status_code=200)
+async def create_report(body: dict = Body(...)):
+    """U5 (A09a, A09b), Z3. AI phân loại trước; ca chưa chắc mới tới người duyệt (W02).
+    Nhận cả dạng của trang Zalo/web: {value, note, source, kind?}."""
+    if compat.is_legacy_request(body):
+        value = nfc(str(body.get("value") or "")).strip()
+        if not value:
+            bad("thiếu đối tượng cần báo")
+        req = ReportIn(kind=compat.legacy_kind(value, body.get("kind")), target=compat.strip_tk(value),
+                       story=body.get("note") or None, area=body.get("area"),
+                       reporter="minh" if body.get("source", "zalo") == "zalo" else "khoa")
+        return compat.legacy_report((await _create_report(req))["report"])
+    try:
+        req = ReportIn.model_validate(body)
+    except ValidationError as e:
+        raise HTTPException(status_code=422, detail=json.loads(e.json()))
+    return await _create_report(req)
+
+
 @app.get("/api/reports")
-def list_reports(status: str | None = None, limit: int = Query(20, ge=1, le=100), offset: int = Query(0, ge=0)):
+def list_reports(request: Request, status: str | None = None, limit: int = Query(20, ge=1, le=500),
+                 offset: int = Query(0, ge=0)):
+    """Có tham số: dạng {total, items}. Không tham số: mảng theo dạng trang web đội tình nguyện."""
+    if not request.query_params:
+        return [compat.legacy_report(r) for r in store.list(None, 500, 0)["items"]]
     return store.list(status, limit, offset)
 
 
@@ -267,14 +354,31 @@ def get_report(report_id: str):
     return r
 
 
+async def _decided(report_id: str, r: dict) -> None:
+    await relay.publish(compat.VOLUNTEER_ROOM, "report.updated", {"reportId": report_id, "status": r["status"]}, "server")
+    hub.emit("report", compat.legacy_report(r))
+
+
 @app.patch("/api/reports/{report_id}")
 async def review_report(report_id: str, body: ReportPatch):
     """W02: người duyệt xác nhận hoặc loại. Xác nhận thì nhãn có hiệu lực 90 ngày."""
     if not store.get(report_id):
         bad("Không tìm thấy báo cáo", 404)
     r = store.set_status(report_id, body.status)
-    await relay.publish("tnv-tran-bien", "report.updated", {"reportId": report_id, "status": r["status"]}, "server")
+    await _decided(report_id, r)
     return r
+
+
+@app.post("/api/reports/{report_id}/decision")
+async def decide_report(report_id: str, body: DecisionIn):
+    """Dạng của trang web: confirmed, spam, rejected, label (gắn nhãn nhẹ), police (chuyển Công an phường)."""
+    if not store.get(report_id):
+        bad("Không tìm thấy báo cáo", 404)
+    status = compat.DECISION_TO_STATUS[body.decision]
+    label = (body.label or "Giao hàng") if body.decision == "label" else None
+    r = store.set_status(report_id, status, label)
+    await _decided(report_id, r)
+    return compat.legacy_report(r)
 
 
 @app.post("/api/reports/{report_id}/appeal")
@@ -283,7 +387,7 @@ async def appeal_report(report_id: str, body: AppealIn):
     if not store.get(report_id):
         bad("Không tìm thấy báo cáo", 404)
     r = store.set_appeal(report_id, mask(nfc(body.text).strip())[0])
-    await relay.publish("tnv-tran-bien", "report.updated", {"reportId": report_id, "status": r["status"], "appeal": True}, "server")
+    await relay.publish(compat.VOLUNTEER_ROOM, "report.updated", {"reportId": report_id, "status": r["status"], "appeal": True}, "server")
     return r
 
 
@@ -292,8 +396,36 @@ def stats(month: str | None = None):
     return store.stats(month)
 
 
-# ---------------- phục vụ app React đã build (một địa chỉ cho cả demo) ----------------
+@app.get("/api/broadcasts")
+def list_broadcasts():
+    return alerts.broadcasts
 
-_static = config.env("LCS_STATIC") or str(Path(__file__).resolve().parents[2] / "app" / "dist")
+
+@app.post("/api/broadcasts", status_code=201)
+def create_broadcast(body: BroadcastIn):
+    """W03: gửi cảnh báo, tới cả Zalo người thân đã ghép."""
+    if not body.title.strip() or not body.body.strip():
+        bad("thiếu tiêu đề hoặc nội dung")
+    return compat.broadcast(body.title.strip(), body.body.strip(), body.to)
+
+
+# ---------------- Trang tĩnh: trang Mảng 5, 6 và app React đã build ----------------
+
+def _serve(path: Path):
+    """Trả đúng một tệp cố định. Hàm không nhận tham số nào để không ai đổi được đường dẫn tệp."""
+    def endpoint():
+        return FileResponse(path)
+    return endpoint
+
+
+for _route, _file in (("/zalo", "mvp/zalo.html"), ("/web", "mvp/web.html"),
+                      ("/ds.css", "ds.css"), ("/icons.js", "icons.js"), ("/motion.css", "motion.css"), ("/motion.js", "motion.js")):
+    if (LCS_ROOT / _file).is_file():
+        app.add_api_route(_route, _serve(LCS_ROOT / _file), methods=["GET"], include_in_schema=False)
+
+if (LCS_ROOT / "assets" / "fonts").is_dir():
+    app.mount("/assets/fonts", StaticFiles(directory=LCS_ROOT / "assets" / "fonts"), name="fonts")
+
+_static = config.env("LCS_STATIC") or str(LCS_ROOT / "app" / "dist")
 if os.path.isdir(_static):
     app.mount("/", StaticFiles(directory=_static, html=True), name="app")

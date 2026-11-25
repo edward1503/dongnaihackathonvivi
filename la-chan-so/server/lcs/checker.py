@@ -86,7 +86,8 @@ def check_target(kind: str, value: str, store: Store) -> AnalysisResult:
             scamType=scam_type, scamLabel=label,
             headline=f"{found['count']} người đã báo {noun} {label[:1].lower() + label[1:]}.",
             why=why, todo=TODO[("danger", kind)],
-            reports=ReportSummary(count=found["count"], last7d=found["last7d"], lastAt=found["lastAt"], verified=True),
+            reports=ReportSummary(count=found["count"], last7d=found["last7d"], lastAt=found["lastAt"],
+                                  lastWhen=when(found["lastAt"]), verified=True),
         )
 
     if kind == "link":

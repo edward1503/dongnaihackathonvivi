@@ -9,7 +9,7 @@ def test_so_bi_bao_ra_nguy_hiem(client):
     assert r["headline"] == "14 người đã báo số này giả danh công an."
     assert r["why"][0] == "14 báo cáo trong 7 ngày, gần nhất hôm qua"
     assert "Đội tình nguyện đã xác nhận" in r["why"]
-    assert r["reports"]["count"] == 14 and r["reports"]["verified"]
+    assert r["reports"]["count"] == 14 and r["reports"]["verified"] and r["reports"]["lastWhen"] == "hôm qua"
     assert r["scamType"] == "gia_danh_cong_an"
     assert r["todo"][0] == "Cúp máy, không gọi lại."
 

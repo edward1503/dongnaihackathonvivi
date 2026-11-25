@@ -20,6 +20,7 @@ class ReportSummary(BaseModel):
     count: int = 0
     last7d: int = 0
     lastAt: Optional[str] = None
+    lastWhen: Optional[str] = None  # "hôm nay", "hôm qua", "3 ngày trước" (theo ngày của kịch bản demo)
     verified: bool = False
 
 
@@ -53,20 +54,21 @@ class MessageIn(BaseModel):
     text: str
 
 
-class TimelineItem(BaseModel):
-    time: str
-    text: str
-
-
 class AlertIn(BaseModel):
+    """Nhận cả dạng của app/Android (phone, scamLabel, asksMoney) lẫn dạng của trang Zalo (number, scenario, askedTransfer)."""
     room: str = "gia-dinh-hoa"
-    level: Level = "danger"
+    level: str = "danger"
     scamType: Optional[str] = None
     scamLabel: Optional[str] = None
+    scenario: Optional[str] = None
     phone: Optional[str] = None
+    number: Optional[str] = None
+    who: str = "Mẹ Hoa"
     summary: Optional[str] = None
-    asksMoney: bool = False
-    timeline: list[TimelineItem] = []
+    asksMoney: Optional[bool] = None
+    askedTransfer: Optional[bool] = None
+    callSeconds: Optional[int] = None
+    timeline: list[dict[str, Any]] = []
     sender: str = Field("ba-hoa", alias="from")
 
     model_config = {"populate_by_name": True}
@@ -77,6 +79,11 @@ class AskIn(BaseModel):
     to: str = "minh"
     text: str
     alertId: Optional[str] = None
+    phone: Optional[str] = None
+    level: Optional[str] = None
+    scamType: Optional[str] = None
+    scamLabel: Optional[str] = None
+    asksMoney: bool = False
     sender: str = Field("ba-hoa", alias="from")
 
     model_config = {"populate_by_name": True}
@@ -112,6 +119,22 @@ class ReportIn(BaseModel):
 
 class ReportPatch(BaseModel):
     status: Literal["confirmed", "rejected"]
+
+
+class DecisionIn(BaseModel):
+    decision: Literal["confirmed", "spam", "rejected", "label", "police"]
+    label: Optional[str] = None
+
+
+class LegacyReplyIn(BaseModel):
+    choice: Literal["dung-chuyen", "nguoi-quen"] = "dung-chuyen"
+    text: Optional[str] = None
+
+
+class BroadcastIn(BaseModel):
+    title: str
+    body: str
+    to: list[str] = []
 
 
 class AppealIn(BaseModel):

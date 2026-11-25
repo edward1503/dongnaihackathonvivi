@@ -63,6 +63,7 @@ export function AppProvider({ children }) {
   const [relatives, setRelativesState] = useState(initialRelatives)
   const [ask, setAsk] = useState(null)
   const [report, setReport] = useState(null) // {draft, response}
+  const [call, setCall] = useState(null) // cuộc gọi vừa rồi: {phone, display, seconds, hasRecording, answeredYes, story}
   const [pointsBy, setPointsBy] = useState(() => load('lcs.points', { vy: 120, 'ba-hoa': 120 }))
   const [toastMsg, setToastMsg] = useState(null)
   const [online, setOnline] = useState(navigator.onLine)
@@ -111,17 +112,19 @@ export function AppProvider({ children }) {
       setAsk(null)
       setResult(null)
       setReport(null)
+      setCall(null)
       return
     }
-    if (!cur || ev.data?.askId !== cur.askId) return
+    if (!cur || (ev.data?.askId ?? ev.data?.alertId) !== cur.askId) return
     if (ev.type === 'ask.seen') setAsk((a) => ({ ...a, seen: true }))
     if (ev.type === 'ask.reply') setAsk((a) => ({ ...a, seen: true, reply: { text: ev.data.text, preset: ev.data.preset, at: ev.at } }))
-  }), [])
+    if (ev.type === 'alert.call') toast(`${cur.to?.name || 'Người thân'} đang gọi cho bà`)
+  }), [toast])
 
   const value = useMemo(() => ({
     mode, setMode, result, setResult, recent, addRecent, relatives, setRelatives, addDefaultRelatives,
-    ask, setAsk, report, setReport, toast, online, points, setPoints, reporter,
-  }), [mode, setMode, result, recent, addRecent, relatives, setRelatives, addDefaultRelatives, ask, report, toast, online, points, setPoints, reporter])
+    ask, setAsk, report, setReport, toast, online, points, setPoints, reporter, call, setCall,
+  }), [mode, setMode, result, recent, addRecent, relatives, setRelatives, addDefaultRelatives, ask, report, toast, online, points, setPoints, reporter, call])
 
   return (
     <Ctx.Provider value={value}>

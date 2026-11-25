@@ -21,6 +21,7 @@ def client():
     main.store.reset()
     main.relay.rooms.clear()
     main.relay.asks.clear()
+    main.alerts.reset()
     with TestClient(main.app) as c:
         yield c
 
