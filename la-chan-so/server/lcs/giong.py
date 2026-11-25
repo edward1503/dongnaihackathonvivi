@@ -115,7 +115,8 @@ def clean(pcm: bytes, rate: int) -> tuple[bytes, int]:
 def too_long(pcm: bytes, text: str, rate: int = RATE) -> bool:
     """Ngắn dưới 0,1 giây (hỏng) hoặc dài bất thường so với số chữ."""
     seconds = len(pcm) / 2 / rate
-    return seconds < 0.1 or seconds > len(text.split()) * 0.45 + 1.5
+    # 0,7 giây mỗi chữ + 2 giây: câu có cảm xúc (hoảng, ngắt "Dạ… dạ") đọc chậm tới khoảng 0,6 giây mỗi chữ; đọc lẫn lời dặn thì dư hơn chục giây
+    return seconds < 0.1 or seconds > len(text.split()) * 0.7 + 2.0
 
 
 async def speak(text: str, code: str | None) -> dict:

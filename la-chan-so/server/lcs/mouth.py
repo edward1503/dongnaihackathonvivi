@@ -20,7 +20,9 @@ from PIL import Image
 STAGE = Path(__file__).resolve().parents[2] / "vendor/vlearn-avatar/stage"
 SIZE = 384
 HALF = SIZE // 2
-WORKERS = 2
+# Số phiên mô hình chạy song song và số luồng mỗi phiên: máy nhiều nhân thì tăng (máy 20 nhân: 8 x 2)
+WORKERS = max(1, int(os.environ.get("LCS_MOUTH_WORKERS", "2")))
+THREADS = max(1, int(os.environ.get("LCS_MOUTH_THREADS", "2")))
 
 
 @lru_cache(maxsize=1)
@@ -87,7 +89,7 @@ class Avatar:
 
         self.sessions = SimpleQueue()
         options = ort.SessionOptions()
-        options.intra_op_num_threads = 2
+        options.intra_op_num_threads = THREADS
         for _ in range(WORKERS):
             self.sessions.put(ort.InferenceSession(str(path / "lite.onnx"), options,
                                                    providers=["CPUExecutionProvider"]))

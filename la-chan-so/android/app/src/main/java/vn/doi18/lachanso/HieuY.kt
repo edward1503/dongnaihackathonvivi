@@ -258,7 +258,7 @@ object HieuY {
             luuTieng(c, chu, pcm, sach)
             // Đo SAU khi lọc (đã cắt lặng và cụm nhiễu đuôi): dài bất thường so với số tiếng thì nhiều khả năng máy đã đọc luôn lời dặn, bỏ.
             val giaySach = sach.length * 3 / 4 / 2.0 / tanSo
-            if (giaySach < 0.2 || giaySach > soTieng * 0.45 + 1.5) return null
+            if (giaySach < 0.2 || giaySach > soTieng * 0.7 + 2.0) return null   // câu có cảm xúc đọc chậm tới ~0,6 giây mỗi chữ; đọc lẫn lời dặn thì dư hơn chục giây (cùng ngưỡng với server/lcs/giong.py)
             KhoGiong.luuTieng(c, GIONG, chu, sach, tanSo)
             JSONObject().put("chu", chu).put("pcm", sach).put("tanSo", tanSo).put("giay", sach.length * 3 / 4 / 2.0 / tanSo)
         } catch (e: Exception) { null }
