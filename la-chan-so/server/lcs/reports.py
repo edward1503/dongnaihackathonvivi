@@ -183,6 +183,19 @@ class Store:
             self.db.commit()
         return self.get(report_id)
 
+    def resolve_appeal(self, report_id: str, remove_label: bool) -> dict | None:
+        """Xử lý khiếu nại báo oan. Gỡ nhãn: về trạng thái bị loại, không còn làm tra số ra Nguy hiểm. Giữ nhãn: chỉ đóng khiếu nại."""
+        now = config.now()
+        with self.lock:
+            if remove_label:
+                self.db.execute(
+                    "UPDATE reports SET status='rejected', label=NULL, human_verified=1, verified_at=NULL, expires_at=NULL,"
+                    " decided_at=?, appeal=NULL WHERE id=?", (_iso(now), report_id))
+            else:
+                self.db.execute("UPDATE reports SET appeal=NULL, decided_at=? WHERE id=?", (_iso(now), report_id))
+            self.db.commit()
+        return self.get(report_id)
+
     def set_appeal(self, report_id: str, text: str) -> dict | None:
         with self.lock:
             self.db.execute("UPDATE reports SET appeal=? WHERE id=?", (text, report_id))

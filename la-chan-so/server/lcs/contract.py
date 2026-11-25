@@ -139,3 +139,8 @@ class BroadcastIn(BaseModel):
 
 class AppealIn(BaseModel):
     text: str
+
+
+class AppealResolveIn(BaseModel):
+    """Người duyệt xử lý khiếu nại: gỡ nhãn (remove) hoặc giữ nhãn (keep)."""
+    outcome: Literal["remove", "keep"]

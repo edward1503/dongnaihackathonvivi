@@ -1,11 +1,12 @@
 # MVP mảng 5 (Zalo người thân) và mảng 6 (web đội tình nguyện)
 
-Bản chạy thật, dữ liệu giả lập, không phụ thuộc gói ngoài (chỉ cần Node 18 trở lên).
+Bản chạy thật, dữ liệu giả lập. Chạy trên máy chủ FastAPI của mảng 2; hoặc bản dự phòng Node 18 trở lên, không cần cài gói.
 
 ```bash
-node mvp/server.mjs 8020      # chạy từ thư mục la-chan-so
-# http://127.0.0.1:8020/zalo   phía Minh (Z01a, Z01b, Z01c, báo số Z3)
-# http://127.0.0.1:8020/web    web đội tình nguyện (W01, W02, W03)
+cd server && pip install -r requirements.txt && uvicorn lcs.main:app --port 8000
+# http://127.0.0.1:8000/zalo   phía Minh (Z01a, Z01b, Z01c, báo số Z3)
+# http://127.0.0.1:8000/web    web đội tình nguyện (W01, W02, W03)
+# Không có Python: node mvp/server.mjs 8020 (bản dự phòng, chạy từ thư mục la-chan-so)
 ```
 
 Mở hai trang cạnh nhau. Ở `/zalo`, nút "Bà Hoa: cuộc gọi nguy hiểm" mô phỏng máy bà Hoa gửi cảnh báo lên (sau này mảng Android gọi `POST /api/alerts` thay nút này).
@@ -21,7 +22,7 @@ Mở hai trang cạnh nhau. Ở `/zalo`, nút "Bà Hoa: cuộc gọi nguy hiểm
 | W2 | AI phân loại trước, ca chưa chắc mới tới người duyệt; quyết định; kênh khiếu nại | `web.html` |
 | W3 | Soạn cảnh báo, gửi tới nhóm (tới Zalo người thân đã ghép), truyện 1 phút | `web.html` |
 
-`server.mjs` là bản tối thiểu của S5 và S6 để hai mảng này chạy được. Mảng 2 có thể thay bằng máy chủ thật, giữ nguyên các đường dẫn dưới đây. Việc "AI phân loại trước" hiện là quy tắc từ khóa (`classify` trong `server.mjs`), thay bằng gọi AI ở S2.
+**Máy chủ chính là `server/` (FastAPI, mảng 2)**: nó phục vụ luôn `/zalo` và `/web` và có thêm AI, SQLite, WebSocket. `mvp/server.mjs` chỉ còn là bản dự phòng không cần Python; hai trang tự nhận biết máy chủ nào đang chạy (khiếu nại chỉ có thật trên FastAPI). "AI phân loại trước" trên FastAPI dùng Gemini nếu có khóa trong `server/.env`, không có thì dùng bộ luật dự phòng; bản Node chỉ có quy tắc từ khóa (`classify` trong `server.mjs`).
 
 ## Hợp đồng API
 
@@ -37,6 +38,7 @@ Mở hai trang cạnh nhau. Ở `/zalo`, nút "Bà Hoa: cuộc gọi nguy hiểm
 - `GET /api/alerts`, `POST /api/alerts` (máy bà Hoa gửi lên)
 - `POST /api/alerts/:id/reply` `{ choice, text? }` (Minh trả lời; máy bà Hoa nghe sự kiện `reply` để hiện chữ to và đọc)
 - `POST /api/alerts/:id/call`
+- FastAPI thêm: `POST /api/reports/:id/appeal` (người dân khiếu nại báo oan), `GET /api/reports?status=appealed`, `POST /api/reports/:id/appeal/resolve` `{ outcome: "remove|keep" }` (gỡ hoặc giữ nhãn)
 
 **Báo cáo** (`report`):
 ```json

@@ -172,7 +172,7 @@ function renderDetail() {
       <div class="col grow"><div class="t-h2 c-${tone}-ink">${label}</div><div class="t-cap">Hôm nay ${hm(a.at)} · ${a.level === 'danger' ? 'cuộc gọi lạ' : 'tin nhắn lạ'}</div></div>
     </div>
     <div class="row gap-12">
-      <div class="avatar amber">${esc(a.who.slice(-1))}</div>
+      <div class="avatar amber">${esc(a.who.trim().split(/\s+/).pop().charAt(0).toUpperCase())}</div>
       <div class="col grow"><div class="t-label bold">${esc(a.who)}</div><div class="t-cap muted">Đang dùng Lá chắn · chế độ đơn giản</div></div>
     </div>
     <div class="card col gap-12">

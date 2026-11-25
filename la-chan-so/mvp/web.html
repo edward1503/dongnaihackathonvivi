@@ -237,7 +237,14 @@ function renderAppeals() {
     appeals.map(a => `<div class="row gap-12" style="padding:8px 0;border-top:1px solid var(--outline-2)"><i class="ic s18 muted" data-i="flag"></i>
       <div class="col grow"><div class="t-label bold">${esc(a.value)}</div><div class="t-cap muted">${esc(a.reason)}</div></div>
       ${a.open ? `<span class="btn outline sm" data-ap="${a.id}:ok">Gỡ nhãn</span><span class="btn ghost sm" data-ap="${a.id}:no">Giữ nhãn</span>` : '<span class="chip safe">Đã xử lý</span>'}</div>`).join('');
-  document.querySelectorAll('[data-ap]').forEach(b => b.onclick = () => { const [id, v] = b.dataset.ap.split(':'); appeals.find(a => a.id === id).open = false; toast(v === 'ok' ? 'Đã gỡ nhãn cảnh báo' : 'Giữ nhãn, đã báo lại người khiếu nại'); renderMod(); });
+  if (!appeals.length) $('#md-appeals').insertAdjacentHTML('beforeend', '<div class="t-label muted">Không có khiếu nại nào đang mở.</div>');
+  document.querySelectorAll('[data-ap]').forEach(b => b.onclick = async () => {
+    const [id, v] = b.dataset.ap.split(':');
+    if (appealsLive) { const r = await post(`/api/reports/${id}/appeal/resolve`, { outcome: v === 'ok' ? 'remove' : 'keep' }); if (r.error || r.detail) return toast('Không xử lý được khiếu nại này'); }
+    else appeals.find(a => a.id === id).open = false;
+    toast(v === 'ok' ? 'Đã gỡ nhãn cảnh báo' : 'Giữ nhãn, đã đóng khiếu nại');
+    await refresh();
+  });
 }
 
 /* ---------- W3: tuyên truyền ---------- */
@@ -275,7 +282,14 @@ async function loadSent() {
 }
 
 /* ---------- Dữ liệu và đồng bộ ---------- */
-async function refresh() { [S, reports] = await Promise.all([fetch('/api/stats').then(r => r.json()), fetch('/api/reports').then(r => r.json())]); renderStats(); renderMod(); }
+let appealsLive = false;
+async function loadAppeals() {   // máy chủ FastAPI có khiếu nại thật; máy chủ Node tối thiểu thì dùng dữ liệu mẫu ở trên
+  try {
+    const d = await fetch('/api/reports?status=appealed').then(r => r.json());
+    if (d && Array.isArray(d.items)) { appealsLive = true; appeals = d.items.map(i => ({ id: i.id, value: i.target, reason: i.appeal, open: true })); }
+  } catch { /* giữ dữ liệu mẫu */ }
+}
+async function refresh() { [S, reports] = await Promise.all([fetch('/api/stats').then(r => r.json()), fetch('/api/reports').then(r => r.json()), loadAppeals()]).then(x => [x[0], x[1]]); renderStats(); renderMod(); }
 refresh(); loadSent();
 const es = new EventSource('/api/events');
 es.addEventListener('report', e => { const r = JSON.parse(e.data); refresh(); if (r.source !== 'seed' && r.count === 1) toast('Báo cáo mới: ' + r.value + (r.auto ? ' · AI tự xác nhận' : ' · chờ duyệt')); });

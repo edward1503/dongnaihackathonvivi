@@ -18,7 +18,7 @@ from pydantic import ValidationError
 from . import ai, compat, config, roleplay
 from .analyze import NeedInput, analyze_call, analyze_text
 from .checker import check_target
-from .contract import (AlertIn, AnalysisResult, AppealIn, AskIn, AskReplyIn, BroadcastIn, CheckIn, DecisionIn,
+from .contract import (AlertIn, AnalysisResult, AppealIn, AppealResolveIn, AskIn, AskReplyIn, BroadcastIn, CheckIn, DecisionIn,
                        EventIn, LegacyReplyIn, MessageIn, ReportIn, ReportPatch)
 from .data import SCAM_TYPES
 from .masking import has_otp, mask
@@ -391,6 +391,19 @@ async def appeal_report(report_id: str, body: AppealIn):
     return r
 
 
+@app.post("/api/reports/{report_id}/appeal/resolve")
+async def resolve_appeal(report_id: str, body: AppealResolveIn):
+    """Người duyệt xử lý khiếu nại. Gỡ nhãn thì số hết bị cảnh báo; giữ nhãn thì chỉ đóng khiếu nại."""
+    r = store.get(report_id)
+    if not r:
+        bad("Không tìm thấy báo cáo", 404)
+    if not r["appeal"]:
+        bad("Báo cáo này không có khiếu nại đang mở", 409)
+    r = store.resolve_appeal(report_id, body.outcome == "remove")
+    await _decided(report_id, r)
+    return r
+
+
 @app.get("/api/stats")
 def stats(month: str | None = None):
     return store.stats(month)
@@ -458,7 +471,7 @@ def create_broadcast(body: BroadcastIn):
 def _serve(path: Path):
     """Trả đúng một tệp cố định. Hàm không nhận tham số nào để không ai đổi được đường dẫn tệp."""
     def endpoint():
-        return FileResponse(path)
+        return FileResponse(path, headers={"Cache-Control": "no-cache"})   # sửa trang xong tải lại là thấy
     return endpoint
 
 

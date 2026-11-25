@@ -114,3 +114,20 @@ def test_reset_demo(client):
     assert client.get("/api/stats").json()["total"] == 120
     evs = client.get("/api/events?room=gia-dinh-hoa").json()["events"]
     assert [e["type"] for e in evs] == ["demo.reset"]
+
+
+def test_xu_ly_khieu_nai_go_nhan(client):
+    items = client.get("/api/reports?status=appealed").json()["items"]
+    assert len(items) == 2
+    rid = items[0]["id"]
+    r = client.post(f"/api/reports/{rid}/appeal/resolve", json={"outcome": "remove"}).json()
+    assert r["appeal"] is None and r["status"] == "rejected" and r["expiresAt"] is None
+    assert client.get("/api/stats").json()["appeals"] == 1
+
+
+def test_xu_ly_khieu_nai_giu_nhan_va_loi(client):
+    rid = client.get("/api/reports?status=appealed").json()["items"][0]["id"]
+    r = client.post(f"/api/reports/{rid}/appeal/resolve", json={"outcome": "keep"}).json()
+    assert r["appeal"] is None and r["status"] == "ai_confirmed"
+    assert client.post(f"/api/reports/{rid}/appeal/resolve", json={"outcome": "keep"}).status_code == 409
+    assert client.post("/api/reports/khong-co/appeal/resolve", json={"outcome": "keep"}).status_code == 404
