@@ -6,7 +6,7 @@
 #   2. cắt theo khoảng lặng: tools/cat-theo-lang.py <lượt thu .wav> <[{"id","chu"}] .json> <thư mục>
 #   3. lọc rẹt:             tools/loc-giong.py <thư mục vào> prototype/audio/<nhân vật>
 #   4. nghe kiểm bằng máy:   tools/nghe-lai.py prototype/audio/<nhân vật>/*.m4a   (ghi kết quả vào trường "kiem" của từng câu; câu ngắn phải có người nghe)
-# Bộ khớp miệng dùng tạm của avatar 21 (kịch bản bài học mục 3). Mỗi câu bắt đầu ở một khung video khác nhau (cách nhau 67 khung) như bộ của chị Lan.
+# Bộ khớp miệng dùng tạm của avatar 21 (kịch bản bài học mục 3). Mọi câu dựng cho cùng dáng chuẩn (khung_noi trong meta.json, tools/khung-chuan.py); trình phát đưa nhân vật về dáng đó khi nói.
 set -e
 nv="$1"; goc="$(cd "$(dirname "$0")/.." && pwd)"; cd "$goc"
 ma=$(python3 -c "import json,sys;print(json.load(open('prototype/nhan-vat.json'))[sys.argv[1]]['avatar'])" "$nv")
@@ -15,7 +15,7 @@ for id in $(python3 -c "import json,sys;print(' '.join(x['id'] for x in json.loa
   t="prototype/audio/$nv/$id"
   if [ ! -s "$t.mieng.mp4" ] || [ "$t.m4a" -nt "$t.mieng.mp4" ]; then
     node tools/mieng-thong-so.mjs "$t.m4a" vendor/vlearn-avatar/stage/d01-tech/lipfit-21.json "$t.lip.json" >/dev/null
-    "$py" tools/dung-mieng.py "$ma" "$t.lip.json" $(( i * 67 % 600 ))
+    "$py" tools/dung-mieng.py "$ma" "$t.lip.json"   # dựng cho dáng chuẩn khung_noi của nhân vật
   fi
   i=$((i + 1))
 done

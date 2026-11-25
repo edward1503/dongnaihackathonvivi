@@ -245,7 +245,7 @@ export async function mountLiteAvatar(host, id, audioCtx) {
   }
 
   // ----- vòng vẽ -----
-  let frame = 0, newFrame = true, clip = null, t0 = 0, mouthOn = false, env = 0, src = null, analyser = null, alive = true, done = null;
+  let lac = 1, frame = 0, newFrame = true, clip = null, t0 = 0, mouthOn = false, env = 0, src = null, analyser = null, alive = true, done = null;
   const kr = () => { const j = frame % (2 * NR); return j < NR ? j : 2 * NR - 1 - j; };
   if (vid.requestVideoFrameCallback) { const on = (_, m) => { frame = Math.round(m.mediaTime * meta.fps) % meta.frames; newFrame = true; if (alive) vid.requestVideoFrameCallback(on); }; vid.requestVideoFrameCallback(on); }
   const TW = 20, w = (t, k, ph = 0) => Math.sin(2 * Math.PI * k * t / TW + ph), rad = Math.PI / 180, lv = new Float32Array(512);
@@ -277,9 +277,10 @@ export async function mountLiteAvatar(host, id, audioCtx) {
     }
     newFrame = false;
     if (analyser && clip) { analyser.getFloatTimeDomainData(lv); let q = 0; for (let i = 0; i < lv.length; i++) q += lv[i] * lv[i]; env += (Math.min(1, Math.sqrt(q / lv.length) * 6) - env) * 0.25; } else env *= 0.9;
+    lac += ((clip ? 0.4 : 1) - lac) * 0.04;   // la-chan-so 25/11: đang nói thì lắc lư nhẹ hơn (còn 40%), nói xong cử động lại bình thường
     const t = performance.now() / 1000; // lắc lư chậm + gật nhẹ theo giọng (cùng đường cong tools/lipcal/idle_motion.py)
-    gl.uniform3f(uPose, rad * (2.2 * w(t, 2) + 1.0 * w(t, 5, 1.0) + 0.4 * w(t, 9, 2.1)), rad * (1.3 * w(t, 3, 0.5) + 0.7 * w(t, 8, 1.7) + 1.4 * env), rad * (1.1 * w(t, 1, 0.8) + 0.5 * w(t, 4, 2.6)));
-    gl.uniform2f(uShift, 0.012 * w(t, 2, 0.4) + 0.006 * w(t, 7, 1.2), 0.006 * w(t, 5, 2.0));
+    gl.uniform3f(uPose, lac * rad * (2.2 * w(t, 2) + 1.0 * w(t, 5, 1.0) + 0.4 * w(t, 9, 2.1)), lac * rad * (1.3 * w(t, 3, 0.5) + 0.7 * w(t, 8, 1.7) + 1.4 * env), lac * rad * (1.1 * w(t, 1, 0.8) + 0.5 * w(t, 4, 2.6)));
+    gl.uniform2f(uShift, lac * (0.012 * w(t, 2, 0.4) + 0.006 * w(t, 7, 1.2)), lac * 0.006 * w(t, 5, 2.0));
     const goi = !!(clip && clip.mv && clip.len);   // đang dùng miếng miệng dựng sẵn
     gl.uniform1f(uOn, mouthOn ? 1 : 0); gl.uniform1i(uM, goi ? 3 : 1 + cur); gl.uniform1i(uP, 2 - cur); gl.uniform1f(uPk, goi ? 1 : 0);
     gl.uniform1f(uFade, Math.min(1, (performance.now() - tPatch) / Math.max(20, gap)));
@@ -296,10 +297,20 @@ export async function mountLiteAvatar(host, id, audioCtx) {
   // (mỗi BUOC khung một hình) và vòng vẽ chỉ việc lấy hình đã sẵn. Khi máy không theo kịp, vòng nạp tự nhảy cóc để miệng không bao giờ trễ tiếng.
   const BUOC = 2;
   // Câu có hình miệng dựng sẵn: nạp video miệng và đưa video nhân vật về đúng khung F mà hình miệng đã được dựng theo (dáng đầu phải khớp).
+  // la-chan-so 25/11 (ý người dùng): khi nói, nhân vật về DÁNG CHUẨN (meta.khung_noi: khung gần dáng trung bình nhất, tools/khung-chuan.py)
+  // rồi đứng yên tới hết câu; hình miệng dựng sẵn cũng dựng cho đúng khung đó, nên ghép khớp, không xéo khi đầu nghiêng
+  async function veDangChuan(c, F) {
+    c.dung = true; vid.pause();
+    await new Promise((ok) => { let xong = false; const het = () => { if (!xong) { xong = true; vid.removeEventListener("seeked", het); ok(); } };
+      vid.addEventListener("seeked", het); vid.currentTime = (F % meta.frames) / meta.fps; setTimeout(het, 700); });
+    frame = F % meta.frames; newFrame = true;
+  }
   async function chuanBiMieng(c) {
     const mv = Object.assign(document.createElement("video"), { muted: true, playsInline: true, preload: "auto", src: c.mieng.url });
     await new Promise((ok, no) => { mv.oncanplaythrough = ok; mv.onerror = () => no(new Error("không nạp được video miệng")); setTimeout(() => no(new Error("video miệng nạp quá lâu")), 4000); mv.load(); });
-    await new Promise((ok) => { let xong = false; const het = () => { if (!xong) { xong = true; vid.removeEventListener("seeked", het); ok(); } };
+    // la-chan-so 25/11: tệp dựng kiểu "đứng yên" (mieng.dung) thì video nhân vật đứng ở khung F suốt câu, khỏi lệch nhịp với video miệng (miệng xéo)
+    if (c.mieng.dung) await veDangChuan(c, c.mieng.F);
+    else await new Promise((ok) => { let xong = false; const het = () => { if (!xong) { xong = true; vid.removeEventListener("seeked", het); ok(); } };
       vid.addEventListener("seeked", het); vid.currentTime = (c.mieng.F % meta.frames) / meta.fps; setTimeout(het, 700); });
     c.mv = mv;
   }
@@ -347,11 +358,12 @@ export async function mountLiteAvatar(host, id, audioCtx) {
           // lùi tiếng một nhịp để vòng nạp kịp có sẵn vài hình đầu (máy càng chậm lùi càng nhiều, tối đa 0,9 giây); c.nhanh: tiếng đệm, phát gần như ngay
           // la-chan-so 25/11: điện thoại tính một hình miệng mất 120–160 ms, trong lúc đó đầu nhân vật (video gốc) đã đổi dáng, nên miệng dán vào bị lệch,
           // thấy rõ ở avatar cử động đầu nhiều (Minh). Câu tính tại chỗ thì cho video gốc đứng yên ở khung hiện tại; đầu vẫn lắc lư nhẹ nhờ uPose của cả hình.
-          c.dung = true; vid.pause();
           t0 = audioCtx.currentTime + (c.nhanh ? 0.12 : Math.min(0.9, Math.max(0.15, (PR.ms || 80) / 1000 * 5))); clip = c; src.start(t0); nap(c);
         }
       };
-      if (c.mieng) chuanBiMieng(c).then(batDau, (e) => { console.warn("miệng dựng sẵn:", e); batDau(); }); else batDau();
+      if (c.mieng) chuanBiMieng(c).then(batDau, (e) => { console.warn("miệng dựng sẵn:", e); batDau(); });
+      else if (meta.khung_noi != null) veDangChuan(c, meta.khung_noi).then(batDau);   // câu tính tại chỗ: cũng về dáng chuẩn rồi đứng yên
+      else { c.dung = true; vid.pause(); batDau(); }
     });
   }
   return { say, stop, ready: PR.ready, meta, speaking: () => !!clip, stats: () => ({ ms: Math.round(PR.ms * 10) / 10, runs: PR.runs, threads: GOC ? "gốc" : crossOriginIsolated ? ort.env.wasm.numThreads : 1 }),

@@ -68,7 +68,7 @@ export async function mountCall(host, id, onProgress = () => {}, readyWait = 150
         lipUrl ? fetch(lipUrl).then(r => (r.ok ? r.json() : null)).catch(() => null) : null]);
       const lip = lipF || lipFromSamples(await to16k(buf), M);
       // la-chan-so (25/11/2026): tệp khẩu hình có trường "mieng" = hình miệng đã dựng sẵn thành video (tools/dung-mieng.py); opt.nhanh = tiếng đệm
-      const mieng = lipF?.mieng ? { url: new URL(lipF.mieng.tep, new URL(lipUrl, location.href)).href, F: lipF.mieng.F } : null;
+      const mieng = lipF?.mieng ? { url: new URL(lipF.mieng.tep, new URL(lipUrl, location.href)).href, F: lipF.mieng.F, dung: !!lipF.mieng.dung } : null;
       onStart?.(buf.duration, mieng ? 'dung-san' : lipF ? 'file' : 'lipfit', lip);
       await av.say({ buf, params: lip.params, bg: lip.bg || [], mieng, nhanh: !!opt?.nhanh }, () => false);
       return { lip: mieng ? 'dung-san' : lipF ? 'file' : 'lipfit', duration: buf.duration };

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Dựng sẵn hình miệng cho một câu thu sẵn của nhân vật gọi video, để điện thoại chỉ việc phát chứ không phải tính.
 
-    <python có onnxruntime, numpy, Pillow> tools/dung-mieng.py <mã nhân vật> <tệp .lip.json> [khung bắt đầu F=0]
+    <python có onnxruntime, numpy, Pillow> tools/dung-mieng.py <mã nhân vật> <tệp .lip.json> [khung F, mặc định khung_noi trong meta.json]
 
 Vì sao cần: mô hình miệng mất 22 ms mỗi hình trên máy tính nhưng 140 ms trên điện thoại khi cuộc gọi đang chạy (đo 25/11/2026 trên
 Xiaomi M2012K10C), nên tính tại chỗ chỉ được khoảng 7 hình miệng mỗi giây. Câu soạn sẵn thì dựng trước ở đây, đủ 30 hình mỗi giây.
@@ -13,9 +13,10 @@ import numpy as np, onnxruntime as ort
 from PIL import Image
 
 ma, lip_f = sys.argv[1:3]
-F = int(sys.argv[3]) if len(sys.argv) > 3 else 0
+DUNG = os.environ.get("LCS_CHAY") != "1"   # mặc định: đầu đứng yên khi nói; LCS_CHAY=1 dựng kiểu cũ (khung chạy theo video)
 goc = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "vendor/vlearn-avatar/stage/_shared/voice/models/lite", ma)
 meta = json.load(open(os.path.join(goc, "meta.json")))
+F = int(sys.argv[3]) if len(sys.argv) > 3 else meta.get("khung_noi", 0)   # mặc định: dáng chuẩn của nhân vật (tools/khung-chuan.py)
 refs = open(os.path.join(goc, "refs.bin"), "rb").read()
 lip = json.load(open(lip_f))
 N, NR, off = 384, meta["refs"], meta["ref_offsets"]
@@ -87,11 +88,13 @@ def ghi(khung):
     else: ff.stdin.write(khung.tobytes())
 bg = lip.get("bg") or []
 for i, p in enumerate(lip["params"]):
-    khung = (F + round(i / 30 * meta["fps"])) % meta["frames"]
+    # đứng yên (25/11/2026): mọi hình miệng dựng cho đúng một khung F; trình phát cho video nhân vật đứng ở khung F suốt câu.
+    # Trước đây dựng theo khung chạy F+i, nhưng trên điện thoại video nhân vật và video miệng lệch nhau vài khung nên miệng bị xéo khi đầu nghiêng.
+    khung = F % meta["frames"] if DUNG else (F + round(i / 30 * meta["fps"])) % meta["frames"]
     k = k_cua(khung)
     m = s.run(None, {"ref": tham_chieu(k), "params": np.asarray(p, np.float32)[None]})[0][0]
     ghi(ghep(m, k, bg[i] if i < len(bg) else 0.0))
 ff.stdin.close(); ff.wait()
-lip["mieng"] = {"tep": os.path.basename(ra), "F": F}
+lip["mieng"] = {"tep": os.path.basename(ra), "F": F, **({"dung": True} if DUNG else {})}
 json.dump(lip, open(lip_f, "w"))
 print(ra, len(lip["params"]), "khung,", os.path.getsize(ra) // 1024, "KB")
