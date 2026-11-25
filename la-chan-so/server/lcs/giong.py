@@ -115,8 +115,20 @@ def clean(pcm: bytes, rate: int) -> tuple[bytes, int]:
 def too_long(pcm: bytes, text: str, rate: int = RATE) -> bool:
     """Ngắn dưới 0,1 giây (hỏng) hoặc dài bất thường so với số chữ."""
     seconds = len(pcm) / 2 / rate
-    # 0,7 giây mỗi chữ + 2 giây: câu có cảm xúc (hoảng, ngắt "Dạ… dạ") đọc chậm tới khoảng 0,6 giây mỗi chữ; đọc lẫn lời dặn thì dư hơn chục giây
-    return seconds < 0.1 or seconds > len(text.split()) * 0.7 + 2.0
+    # Đọc một lần: khoảng 0,25–0,3 giây mỗi tiếng. Gemini đôi khi đọc cả câu HAI LẦN (0,5–0,63 giây mỗi tiếng) hoặc đọc lẫn lời dặn.
+    return seconds < 0.1 or seconds > len(text.split()) * 0.42 + 1.2
+
+
+async def voiced(text: str, voice: str, notes: str, tries: int = 2) -> tuple[bytes, int] | None:
+    """Đọc rồi lọc; tiếng dài bất thường (đọc lặp, đọc lẫn lời dặn) thì đọc lại, tối đa `tries` lần. None nếu không được."""
+    for _ in range(tries):
+        got = await tts_pcm(text, voice, notes)
+        if not got:
+            return None
+        pcm, rate = await asyncio.to_thread(clean, *got)
+        if not too_long(pcm, text, rate):
+            return pcm, rate
+    return None
 
 
 async def speak(text: str, code: str | None) -> dict:
@@ -127,10 +139,8 @@ async def speak(text: str, code: str | None) -> dict:
     nv = character(code)
     if not nv:
         raise CannotSpeak("Không có nhân vật này")
-    got = await tts_pcm(text, nv[0], nv[1])
+    got = await voiced(text, nv[0], nv[1])
     if not got:
-        raise CannotSpeak("Chưa có khóa giọng đọc hoặc Gemini không trả tiếng")
-    pcm, rate = await asyncio.to_thread(clean, *got)
-    if too_long(pcm, text, rate):
-        raise CannotSpeak("Tiếng dài bất thường, có thể máy đã đọc lẫn lời dặn")
+        raise CannotSpeak("Gemini không trả tiếng, hoặc tiếng dài bất thường hai lần liền (đọc lặp, đọc lẫn lời dặn)")
+    pcm, rate = got
     return {"text": text, "audio": base64.b64encode(pcm).decode(), "sampleRate": rate, "seconds": round(len(pcm) / 2 / rate, 2)}

@@ -251,14 +251,19 @@ object HieuY {
             val than = JSONObject().put("contents", JSONArray().put(JSONObject().put("parts", JSONArray().put(JSONObject().put("text", loiDan)))))
                 .put("generationConfig", JSONObject().put("responseModalities", JSONArray().put("AUDIO"))
                     .put("speechConfig", JSONObject().put("voiceConfig", JSONObject().put("prebuiltVoiceConfig", JSONObject().put("voiceName", GIONG)))))
-            val d = (goiGiong(c, than) ?: return null).getJSONArray("candidates").getJSONObject(0).getJSONObject("content").getJSONArray("parts").getJSONObject(0).getJSONObject("inlineData")
-            val pcm = d.getString("data"); val tanSo = Regex("rate=(\\d+)").find(d.optString("mimeType"))?.groupValues?.get(1)?.toInt() ?: 24000
-            val giay = pcm.length * 3 / 4 / 2.0 / tanSo
-            val sach = locRet(pcm, tanSo)
-            luuTieng(c, chu, pcm, sach)
-            // Đo SAU khi lọc (đã cắt lặng và cụm nhiễu đuôi): dài bất thường so với số tiếng thì nhiều khả năng máy đã đọc luôn lời dặn, bỏ.
-            val giaySach = sach.length * 3 / 4 / 2.0 / tanSo
-            if (giaySach < 0.2 || giaySach > soTieng * 0.7 + 2.0) return null   // câu có cảm xúc đọc chậm tới ~0,6 giây mỗi chữ; đọc lẫn lời dặn thì dư hơn chục giây (cùng ngưỡng với server/lcs/giong.py)
+            // Gemini đôi khi đọc cả câu HAI LẦN (hoặc đọc lẫn lời dặn): tiếng dài bất thường so với số tiếng thì đọc lại một lần.
+            var tot: Pair<String, Int>? = null
+            for (lan in 1..2) {
+                val d = (goiGiong(c, than) ?: return null).getJSONArray("candidates").getJSONObject(0).getJSONObject("content").getJSONArray("parts").getJSONObject(0).getJSONObject("inlineData")
+                val pcm = d.getString("data"); val tanSo = Regex("rate=(\\d+)").find(d.optString("mimeType"))?.groupValues?.get(1)?.toInt() ?: 24000
+                val sach = locRet(pcm, tanSo)
+                luuTieng(c, chu, pcm, sach)
+                // Đo SAU khi lọc (đã cắt lặng và cụm nhiễu đuôi). Đọc một lần: khoảng 0,25–0,3 giây mỗi tiếng; đọc lặp: 0,5–0,63 (cùng ngưỡng với server/lcs/giong.py)
+                val giaySach = sach.length * 3 / 4 / 2.0 / tanSo
+                if (giaySach >= 0.2 && giaySach <= soTieng * 0.42 + 1.2) { tot = sach to tanSo; break }
+                Log.i("LcsTiming", "giọng dài bất thường ${"%.1f".format(giaySach)} s cho $soTieng tiếng, đọc lại (lần $lan)")
+            }
+            val (sach, tanSo) = tot ?: return null
             KhoGiong.luuTieng(c, GIONG, chu, sach, tanSo)
             JSONObject().put("chu", chu).put("pcm", sach).put("tanSo", tanSo).put("giay", sach.length * 3 / 4 / 2.0 / tanSo)
         } catch (e: Exception) { null }

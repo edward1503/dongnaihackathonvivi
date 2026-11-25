@@ -103,12 +103,10 @@ async def generate(body, scene, turn_id):
     voice = giong.character(character)
     if not voice:
         raise giong.CannotSpeak("Không có giọng cho nhân vật")
-    audio = await giong.tts_pcm(result["chu"], voice[0], song.get("loi_dan") or voice[1])
+    audio = await giong.voiced(result["chu"], voice[0], song.get("loi_dan") or voice[1])   # đọc lặp thì đọc lại một lần
     if not audio or audio[1] < 100 or not audio[0] or len(audio[0]) % 2:
-        raise giong.CannotSpeak("Tiếng không hợp lệ")
-    pcm, rate = await asyncio.to_thread(giong.clean, *audio)
-    if giong.too_long(pcm, result["chu"], rate):
-        raise giong.CannotSpeak("Độ dài tiếng không hợp lệ")
+        raise giong.CannotSpeak("Tiếng không hợp lệ hoặc dài bất thường hai lần liền")
+    pcm, rate = audio
     mouth_at = perf_counter()
     mouth = await asyncio.to_thread(optional_mouth, pcm, rate, character, turn_id)
     finished = perf_counter()
