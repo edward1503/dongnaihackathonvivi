@@ -304,7 +304,8 @@ export async function mountLiteAvatar(host, id, audioCtx) {
     c.mv = mv;
   }
   const khungNay = (truoc = 0) => Math.floor((audioCtx.currentTime - t0 - (audioCtx.outputLatency || audioCtx.baseLatency || 0) + truoc) * 30);
-  const kTai = (i, cur) => { const fr = frame + Math.round((i - cur) / 30 * meta.fps), M2 = 2 * NR, j = ((fr % M2) + M2) % M2; return j < NR ? j : M2 - 1 - j; };
+  // la-chan-so 25/11: câu tính miệng tại chỗ thì video nhân vật đứng yên (xem say()), nên mọi hình miệng tính cho đúng một khung đang hiện
+  const kTai = (i, cur) => { const fr = clip?.dung ? frame : frame + Math.round((i - cur) / 30 * meta.fps), M2 = 2 * NR, j = ((fr % M2) + M2) % M2; return j < NR ? j : M2 - 1 - j; };
   async function nap(c) {
     let i = 0;
     while (clip === c && alive && i < c.params.length) {
@@ -330,7 +331,7 @@ export async function mountLiteAvatar(host, id, audioCtx) {
   function say(c, more) {
     stop(); c = { ...c, more, san: new Map(), hien: -1 };
     return new Promise((ok) => {
-      done = () => { done = null; ok(); };
+      done = () => { done = null; if (c.dung) vid.play().catch(() => {}); ok(); };
       analyser ||= Object.assign(audioCtx.createAnalyser(), { fftSize: 512 });
       src = audioCtx.createBufferSource(); src.buffer = c.buf; src.connect(analyser); src.connect(audioCtx.destination);
       // tab bị ẩn thì trình duyệt ngừng requestAnimationFrame nên vòng vẽ không báo xong câu: tiếng vẫn phát,
@@ -344,6 +345,9 @@ export async function mountLiteAvatar(host, id, audioCtx) {
           setTimeout(() => { if (clip === c) c.mv.play().catch(() => {}); }, 80 + 1000 * (audioCtx.outputLatency || audioCtx.baseLatency || 0));
         } else {
           // lùi tiếng một nhịp để vòng nạp kịp có sẵn vài hình đầu (máy càng chậm lùi càng nhiều, tối đa 0,9 giây); c.nhanh: tiếng đệm, phát gần như ngay
+          // la-chan-so 25/11: điện thoại tính một hình miệng mất 120–160 ms, trong lúc đó đầu nhân vật (video gốc) đã đổi dáng, nên miệng dán vào bị lệch,
+          // thấy rõ ở avatar cử động đầu nhiều (Minh). Câu tính tại chỗ thì cho video gốc đứng yên ở khung hiện tại; đầu vẫn lắc lư nhẹ nhờ uPose của cả hình.
+          c.dung = true; vid.pause();
           t0 = audioCtx.currentTime + (c.nhanh ? 0.12 : Math.min(0.9, Math.max(0.15, (PR.ms || 80) / 1000 * 5))); clip = c; src.start(t0); nap(c);
         }
       };
