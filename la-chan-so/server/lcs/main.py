@@ -539,7 +539,7 @@ async def roleplay_intent(body: IntentIn):
 
 @app.post("/api/roleplay/speak", dependencies=[Depends(require_roleplay_token)])
 async def roleplay_speak(body: SpeakIn):
-    """Đọc một câu bằng giọng Gemini của nhân vật, đã lọc rẹt: {text, audio (PCM16 base64), sampleRate, seconds}."""
+    """Đọc một câu bằng giọng Gemini của nhân vật (kể cả Bé Nai), dùng lại tiếng đã lưu: {text, audio (PCM16 base64), sampleRate, seconds}."""
     try:
         return await giong.speak(body.text, body.character)
     except giong.CannotSpeak as e:

@@ -260,7 +260,7 @@ object HieuY {
                 luuTieng(c, chu, pcm, sach)
                 // Đo SAU khi lọc (đã cắt lặng và cụm nhiễu đuôi). Đọc một lần: khoảng 0,25–0,3 giây mỗi tiếng; đọc lặp: 0,5–0,63 (cùng ngưỡng với server/lcs/giong.py)
                 val giaySach = sach.length * 3 / 4 / 2.0 / tanSo
-                if (giaySach >= 0.2 && giaySach <= soTieng * 0.42 + 1.2) { tot = sach to tanSo; break }
+                if (giaySach >= 0.2 && giaySach <= maxSpeechSeconds(chu)) { tot = sach to tanSo; break }
                 Log.i("LcsTiming", "giọng dài bất thường ${"%.1f".format(giaySach)} s cho $soTieng tiếng, đọc lại (lần $lan)")
             }
             val (sach, tanSo) = tot ?: return null
@@ -393,4 +393,12 @@ object HieuY {
         KhoGiong.luuLuot(c, NHAN_VAT, lichSu, daCham, chu, y.toList(), sai, het)
         return tieng.put("y", JSONArray(y.toList())).put("sai", sai).put("het", het)
     }
+}
+
+/** Thời lượng tối đa của một lần đọc (giây), cùng công thức với server/lcs/giong.py max_seconds: 0,42 s mỗi tiếng + 0,6 s mỗi dấu ngắt câu + 0,2 s mỗi dấu phẩy + 1,2 s. */
+internal fun maxSpeechSeconds(text: String): Double {
+    val words = text.trim().split(Regex("\\s+")).count { it.isNotEmpty() }
+    val stops = Regex("[.!?:;…]+").findAll(text).count()
+    val commas = text.count { it == ',' }
+    return words * 0.42 + stops * 0.6 + commas * 0.2 + 1.2
 }

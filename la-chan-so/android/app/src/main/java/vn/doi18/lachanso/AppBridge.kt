@@ -3,6 +3,7 @@ package vn.doi18.lachanso
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,12 +15,17 @@ import android.telecom.TelecomManager
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import org.json.JSONObject
+import java.io.File
+import java.util.Base64
 import java.util.Locale
 
 internal class AppBridge(private val activity: Activity, private val web: WebView) {
     companion object { const val AUDIO_REQUEST = 501 }
 
     private var reader: TextToSpeech? = null
+    private var player: MediaPlayer? = null
+    private var generation = 0L
+    private var speechTimeout: Runnable? = null
     private var ready = false
     private var queuedText: String? = null
     private var recognizer: SpeechRecognizer? = null
@@ -37,6 +43,72 @@ internal class AppBridge(private val activity: Activity, private val web: WebVie
     }
 
     @JavascriptInterface fun speak(text: String) = ui {
+        cancelSpeech()
+        if (text.isBlank()) return@ui
+        val request = generation
+        val context = activity.applicationContext
+        val file = File(File(context.cacheDir, "speak"), speechFileName(text))
+        if (file.isFile && playSpeech(file, text)) return@ui
+        if (CaiDat.mayChu(context).isBlank()) {
+            readWithPhone(text)
+            return@ui
+        }
+
+        val deadline = Runnable {
+            cancelSpeech()
+            readWithPhone(text)
+        }
+        speechTimeout = deadline
+        handler.postDelayed(deadline, 20_000)
+        Luong.nen {
+            val saved = runCatching {
+                val reply = Api.roleplaySpeak(context, text, "be-nai") ?: return@runCatching false
+                val pcm = Base64.getDecoder().decode(reply.getString("pcm"))
+                saveSpeech(file, pcm, reply.getInt("tanSo"))
+                true
+            }.getOrDefault(false)
+            ui {
+                if (generation == request) {
+                    handler.removeCallbacks(deadline)
+                    speechTimeout = null
+                    if (!saved || !playSpeech(file, text)) readWithPhone(text)
+                }
+            }
+        }
+    }
+
+    private fun playSpeech(file: File, text: String): Boolean {
+        val current = MediaPlayer()
+        player = current
+        return try {
+            current.setOnCompletionListener {
+                if (player === current) releasePlayer()
+            }
+            current.setOnErrorListener { _, _, _ ->
+                if (player === current) {
+                    releasePlayer()
+                    file.delete()
+                    readWithPhone(text)
+                }
+                true
+            }
+            current.setDataSource(file.absolutePath)
+            current.prepare()
+            current.start()
+            true
+        } catch (_: Exception) {
+            releasePlayer()
+            file.delete()
+            false
+        }
+    }
+
+    private fun releasePlayer() {
+        player?.release()
+        player = null
+    }
+
+    private fun readWithPhone(text: String) {
         queuedText = text
         if (reader == null) {
             reader = TextToSpeech(activity.applicationContext) { status ->
@@ -61,7 +133,13 @@ internal class AppBridge(private val activity: Activity, private val web: WebVie
         queuedText = null
     }
 
-    @JavascriptInterface fun stopSpeaking() = ui {
+    @JavascriptInterface fun stopSpeaking() = ui { cancelSpeech() }
+
+    private fun cancelSpeech() {
+        generation++
+        speechTimeout?.let { handler.removeCallbacks(it) }
+        speechTimeout = null
+        releasePlayer()
         queuedText = null
         reader?.stop()
     }
@@ -179,12 +257,12 @@ internal class AppBridge(private val activity: Activity, private val web: WebVie
     }
 
     fun stop() {
-        queuedText = null
-        reader?.stop()
+        cancelSpeech()
         if (!awaitingPermission) finishListening(null)
     }
 
     fun close() {
+        cancelSpeech()
         finishListening(null)
         reader?.shutdown()
         reader = null

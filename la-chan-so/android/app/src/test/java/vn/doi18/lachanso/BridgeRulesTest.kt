@@ -4,6 +4,18 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class BridgeRulesTest {
+    @get:org.junit.Rule val temporary = org.junit.rules.TemporaryFolder()
+
+    @Test fun cachesSpeechAsPcmWave() {
+        val name = speechFileName("Chào bà")
+        assertEquals("29dbdc35c50105735d9984e7d29501681df6f0f4d3ab0cbf5839d07dad03c822.wav", name)
+        val file = java.io.File(temporary.root, name)
+        val pcm = byteArrayOf(1, 2, 3, 4)
+        saveSpeech(file, pcm, 24000)
+        assertArrayEquals(Api.wavHeader(4, 24000) + pcm, file.readBytes())
+        assertEquals(48L, file.length())
+    }
+
     @Test fun mapsOnlyPublishedLessons() {
         assertEquals("gia-danh-co-quan", lessonSlug("gia_danh_cong_an"))
         assertEquals("nguoi-than-gap-nan", lessonSlug("nguoi_than_tai_nan"))

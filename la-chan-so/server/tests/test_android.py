@@ -138,6 +138,11 @@ def test_intent_khuyen_sai_khong_duoc_y(client, bo_loi, monkeypatch):
 
 # ---------- /api/roleplay/speak ----------
 
+@pytest.fixture(autouse=True)
+def isolate_speech_cache(monkeypatch, tmp_path):
+    monkeypatch.setattr(giong, "SPEAK_CACHE", tmp_path / "speak")
+
+
 def _sine(seconds: float, rate: int = 24000) -> bytes:
     n = int(seconds * rate)
     return struct.pack(f"<{n}h", *(int(8000 * math.sin(2 * math.pi * 220 * i / rate)) for i in range(n)))
@@ -166,6 +171,25 @@ def test_speak_tra_pcm_da_loc(client, monkeypatch):
     j = r.json()
     assert calls["voice"] == "Aoede" and j["sampleRate"] == 24000 and 0.3 < j["seconds"] < 2
     assert j["text"] == "Ừ, để chị nghĩ coi em" and len(j["audio"]) > 1000
+
+
+def test_elder_voice_and_speech_cache(client, monkeypatch):
+    from unittest.mock import AsyncMock
+
+    profile = json.loads((giong.LCS_ROOT / "tools/giong-bai-hoc.json").read_text())["be-nai"]
+    notes = profile["loi_dan"]["don-gian"]
+    assert giong.character("be-nai") == ("Leda", notes)
+    synthesize = AsyncMock(side_effect=[None, (_sine(1), 24000)])
+    monkeypatch.setattr(giong, "tts_pcm", synthesize)
+    monkeypatch.setattr(giong, "clean", lambda pcm, rate: (pcm, rate))
+    body = {"text": "Chào bà", "character": "be-nai"}
+    route = "/api/roleplay/speak"
+    assert client.post(route, json=body).status_code == 503
+    first = client.post(route, json=body)
+    assert first.status_code == 200
+    assert client.post(route, json={**body, "text": " Chào  bà "}).json() == first.json()
+    synthesize.assert_awaited_with("Chào bà", "Leda", notes)
+    assert synthesize.await_count == 2
 
 
 def test_speak_bo_tieng_dai_bat_thuong(client, monkeypatch):

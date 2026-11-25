@@ -4,20 +4,18 @@ import base64
 import hashlib
 import json
 import logging
-import os
 import re
 import subprocess
-import tempfile
 from functools import lru_cache
-from pathlib import Path
 from time import perf_counter
 from weakref import WeakValueDictionary
 
 from . import ai, config, giong, hieu_y
 from .contract import LiveTurnIn
+from .result_cache import CACHE_ROOT, store_result
 
 PROTOTYPE = giong.LCS_ROOT / "prototype"
-CACHE = Path(__file__).resolve().parents[1] / ".cache/live"
+CACHE = CACHE_ROOT / "live"
 _turn_locks = WeakValueDictionary()
 
 
@@ -114,21 +112,6 @@ async def generate(body, scene, turn_id):
             "giay": len(pcm) / (2 * rate), "mouth": mouth,
             "timings": {"llm_ms": round((voiced_at - started) * 1000), "tts_ms": round((mouth_at - voiced_at) * 1000),
                         "mouth_ms": round((finished - mouth_at) * 1000), "total_ms": round((finished - started) * 1000)}}
-
-
-def store_result(path, result):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    # Mark generated files as ignored even when the cache directory is first created.
-    (path.parent / ".gitignore").write_text("*\n")
-    with tempfile.NamedTemporaryFile(dir=path.parent, mode="w", encoding="utf-8") as file:
-        json.dump(result, file, ensure_ascii=False, separators=(",", ":"))
-        file.flush()
-        try:
-            os.link(file.name, path)  # First completed response wins across server workers.
-        except FileExistsError:
-            return json.loads(path.read_bytes())
-    return result
-
 
 
 async def live_turn(body: LiveTurnIn):

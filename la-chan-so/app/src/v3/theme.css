@@ -27,14 +27,16 @@ i { font-style: normal; }
 .phone.t-dang { background: var(--dang-t); } .phone.t-warn { background: var(--warn-t); } .phone.t-safe { background: var(--safe-t); }
 .phone.t-red { background: var(--dang); color: #fff; } .phone.t-night { background: var(--night); color: #fff; } .phone.t-white { background: #fff; }
 .sbar { display: none; position: relative; z-index: 25; }
+:root.in-app .phone { max-width: none; }
+/* Màn rộng (máy tính): app nằm trong khung điện thoại. Trong app Android (lớp in-app) thì luôn toàn màn hình, kể cả máy tính bảng. */
 @media (min-width: 600px) {
-  body { background: #DDE1E9; }
-  .shell { align-items: center; min-height: 100vh; padding: 16px 0; }
-  .phone { width: 390px; height: min(844px, calc(100vh - 32px)); border-radius: 46px; padding: 0;
+  :root:not(.in-app) body { background: #DDE1E9; }
+  :root:not(.in-app) .shell { align-items: center; min-height: 100vh; padding: 16px 0; }
+  :root:not(.in-app) .phone { width: 390px; height: min(844px, calc(100vh - 32px)); border-radius: 46px; padding: 0;
     box-shadow: 0 0 0 9px #0B0F1A, 0 28px 80px rgba(20, 33, 61, .38); }
-  .sbar { display: flex; flex: none; height: 50px; padding: 8px 30px 0 34px; align-items: center; justify-content: space-between; font-size: 16px; font-weight: 700; }
-  .sbar .notch { width: 112px; height: 32px; border-radius: 16px; background: #0B0F1A; }
-  .sbar .sb-ic { display: flex; gap: 6px; align-items: center; }
+  :root:not(.in-app) .sbar { display: flex; flex: none; height: 50px; padding: 8px 30px 0 34px; align-items: center; justify-content: space-between; font-size: 16px; font-weight: 700; }
+  :root:not(.in-app) .sbar .notch { width: 112px; height: 32px; border-radius: 16px; background: #0B0F1A; }
+  :root:not(.in-app) .sbar .sb-ic { display: flex; gap: 6px; align-items: center; }
 }
 .scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
 .scroll::-webkit-scrollbar { display: none; }
@@ -106,7 +108,7 @@ i { font-style: normal; }
 .nav button { flex: 1; border-radius: 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 14px; font-weight: 600; color: var(--ink2); transition: background .2s; }
 .nav button.on { background: var(--pg); color: var(--ink); }
 .nav .dot { position: absolute; margin: -22px 0 0 22px; width: 10px; height: 10px; border-radius: 5px; background: var(--dang); border: 2px solid #fff; }
-@media (min-width: 600px) { .nav { bottom: 12px; } }
+@media (min-width: 600px) { :root:not(.in-app) .nav { bottom: 12px; } }
 
 /* ---------- Ô tìm, thẻ nổi bật ---------- */
 .search { height: 60px; border-radius: 30px; padding: 0 7px 0 18px; display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid var(--line); width: 100%; color: var(--ink2); font-size: 18px; }

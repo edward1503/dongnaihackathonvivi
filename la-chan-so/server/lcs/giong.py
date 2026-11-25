@@ -8,7 +8,9 @@ Chuyển từ android/doc_giong.py của Mảng 4 sang máy chủ chung, giữ n
 import array
 import asyncio
 import base64
+import hashlib
 import json
+import re
 import math
 import shutil
 import subprocess
@@ -17,6 +19,9 @@ from pathlib import Path
 import httpx
 
 from . import config
+from .result_cache import CACHE_ROOT, store_result
+
+SPEAK_CACHE = CACHE_ROOT / "speak"
 
 LCS_ROOT = Path(__file__).resolve().parents[2]
 LOC = ("volume=-3dB,highpass=f=70,adeclick,afftdn=nr=10:nf=-55:tn=1,silenceremove=start_periods=1:start_threshold=-45dB,"
@@ -37,10 +42,14 @@ def tts_models() -> list[str]:
 def character(code: str | None) -> tuple[str, str] | None:
     """(giọng, lời dặn) của nhân vật. Mã lạ thì None: không đọc bằng giọng người khác."""
     try:
+        if code == "be-nai":
+            source = LCS_ROOT / "tools" / "giong-bai-hoc.json"
+            profile = json.loads(source.read_text(encoding="utf-8"))[code]
+            return profile["giong"], profile["loi_dan"]["don-gian"]
         nv = json.loads((LCS_ROOT / "prototype" / "nhan-vat.json").read_text(encoding="utf-8")).get(str(code or "lan"))
         if isinstance(nv, dict) and nv.get("giong") and nv.get("loi_dan"):
             return nv["giong"], nv["loi_dan"]
-    except (OSError, ValueError):
+    except (OSError, ValueError, TypeError, KeyError):
         pass
     return ("Aoede", LAN_DAN) if code in (None, "", "lan") else None
 
@@ -115,8 +124,16 @@ def clean(pcm: bytes, rate: int) -> tuple[bytes, int]:
 def too_long(pcm: bytes, text: str, rate: int = RATE) -> bool:
     """Ngắn dưới 0,1 giây (hỏng) hoặc dài bất thường so với số chữ."""
     seconds = len(pcm) / 2 / rate
-    # Đọc một lần: khoảng 0,25–0,3 giây mỗi tiếng. Gemini đôi khi đọc cả câu HAI LẦN (0,5–0,63 giây mỗi tiếng) hoặc đọc lẫn lời dặn.
-    return seconds < 0.1 or seconds > len(text.split()) * 0.42 + 1.2
+    # Đọc một lần: khoảng 0,25–0,45 giây mỗi tiếng, thêm chừng nửa giây ngắt hơi ở mỗi dấu câu (Bé Nai đọc chậm cho người lớn tuổi).
+    # Gemini đôi khi đọc cả câu HAI LẦN (gấp đôi thời lượng) hoặc đọc lẫn lời dặn.
+    return seconds < 0.1 or seconds > max_seconds(text)
+
+
+def max_seconds(text: str) -> float:
+    """Thời lượng tối đa của một lần đọc: 0,42 giây mỗi tiếng + 0,6 giây mỗi dấu ngắt câu (. ! ? : ;) + 0,2 giây mỗi dấu phẩy + 1,2 giây."""
+    stops = len(re.findall(r"[.!?:;…]+", text))
+    commas = text.count(",")
+    return len(text.split()) * 0.42 + stops * 0.6 + commas * 0.2 + 1.2
 
 
 async def voiced(text: str, voice: str, notes: str, tries: int = 2) -> tuple[bytes, int] | None:
@@ -133,14 +150,21 @@ async def voiced(text: str, voice: str, notes: str, tries: int = 2) -> tuple[byt
 
 async def speak(text: str, code: str | None) -> dict:
     """{text, audio (PCM16 base64), sampleRate, seconds}. Ném CannotSpeak khi mã nhân vật lạ, thiếu khóa, hoặc tiếng hỏng."""
-    text = " ".join(text.split())[:400]
+    text = " ".join(text.split())
+    if code != "be-nai":
+        text = text[:400]
     if not text:
         raise CannotSpeak("Câu trống")
     nv = character(code)
     if not nv:
         raise CannotSpeak("Không có nhân vật này")
+    digest = hashlib.sha256(((code or "lan") + "\n" + text).encode()).hexdigest()
+    path = SPEAK_CACHE / (digest + ".json")
+    if path.is_file():
+        return json.loads(await asyncio.to_thread(path.read_bytes))
     got = await voiced(text, nv[0], nv[1])
     if not got:
         raise CannotSpeak("Gemini không trả tiếng, hoặc tiếng dài bất thường hai lần liền (đọc lặp, đọc lẫn lời dặn)")
     pcm, rate = got
-    return {"text": text, "audio": base64.b64encode(pcm).decode(), "sampleRate": rate, "seconds": round(len(pcm) / 2 / rate, 2)}
+    result = {"text": text, "audio": base64.b64encode(pcm).decode(), "sampleRate": rate, "seconds": round(len(pcm) / 2 / rate, 2)}
+    return await asyncio.to_thread(store_result, path, result)

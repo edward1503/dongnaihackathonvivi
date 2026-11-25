@@ -8,6 +8,9 @@ import { installAudioUnlock } from './lib/sound.js'
 
 installAudioUnlock()
 
+// Chạy trong app Android (có cầu LCSNative): luôn toàn màn hình, không vẽ khung điện thoại như trên máy tính
+if (window.LCSNative) document.documentElement.classList.add('in-app')
+
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <HashRouter>
