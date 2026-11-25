@@ -1,0 +1,16 @@
+{
+  "_ghi_chu": "Giọng Gemini TTS cho các bài học (tools/thu-bai-hoc.py). Minh và ông Tư KHÔNG ghi ở đây: lấy đúng giọng và lời dặn đã chốt trong prototype/nhan-vat.json (cùng giọng với avatar gọi video). Người gọi (kẻ gian) phải khác mọi giọng avatar (Aoede, Achird, Algenib).",
+  "be-nai": {
+    "ma": "bn", "giong": "Leda",
+    "loi_dan": {
+      "don-gian": "Bé Nai, chú nai nhỏ làm trợ lý trong ứng dụng, giọng nữ trẻ miền Nam, đang trò chuyện với một bà cụ sáu mươi lăm tuổi. Nói chậm rãi, rõ từng tiếng, lễ phép, ấm áp, tự nhiên như con cháu ngồi cạnh kể chuyện cho bà nghe, có lên xuống cảm xúc theo từng đoạn, không đọc đều đều như đọc bài.",
+      "day-du": "Bé Nai, chú nai nhỏ làm trợ lý trong ứng dụng, giọng nữ trẻ miền Nam, đang kể chuyện cho một bạn học sinh lớp mười một. Nói nhanh nhẹn vừa phải, tinh nghịch, tự nhiên như bạn bè ngồi cạnh kể chuyện, có lên xuống cảm xúc theo từng đoạn, không đọc đều đều như đọc bài."
+    }
+  },
+  "vy": { "ma": "vy", "giong": "Zephyr", "loi_dan": "Vy, nữ sinh lớp mười một người miền Nam, giọng nữ trẻ, nói nhanh, tự nhiên như đang nói chuyện ở nhà, cảm xúc rõ." },
+  "ba-hoa": { "ma": "bh", "giong": "Gacrux", "loi_dan": "Bà Hoa, bà cụ người miền Nam sáu mươi lăm tuổi, giọng nữ lớn tuổi, trầm, nói chậm rãi nhưng liền mạch, rõ từng chữ, mộc mạc, tự nhiên như đang nói chuyện ở nhà. Chỉ đọc đúng lời, không thêm tiếng thở dài, tiếng cười hay tiếng kêu nào." },
+  "nguoi-goi-nam": { "ma": "gn", "giong": "Alnilam", "loi_dan": "Một người đàn ông trung niên miền Nam đang gọi điện thoại cho một bà cụ, lễ phép, nghiêm, nói hơi nhanh và vội, giọng ngọt chứ không quát, không gằn giọng, không dọa nạt." },
+  "nguoi-goi-nu": { "ma": "gu", "giong": "Despina", "loi_dan": "Một cô gái miền Nam khoảng ba mươi tuổi đang gọi điện mời một em học sinh làm việc, giọng ngọt ngào, thân mật, nhanh nhảu, hơi vội." },
+  "minh": { "ma": "mi", "nhan_vat": "minh" },
+  "ong-tu": { "ma": "ot", "nhan_vat": "tu" }
+}

@@ -1,0 +1,376 @@
+{
+ "ma": "bai-03",
+ "so": 3,
+ "ma_kieu": "nguoi-than-gap-nan",
+ "ten": "Người thân gặp nạn, cần tiền gấp",
+ "che_do": "don-gian",
+ "nhan_vat": "Bà Hoa",
+ "bia": "comic3-1.png",
+ "truyen": [
+  {
+   "tranh": "comic3-1.png",
+   "tom_tat": "Số lạ nhắn rằng con bà bị tai nạn, cần tiền gấp.",
+   "loi": [
+    {
+     "ai": "be-nai",
+     "cam_xuc": "kể chậm",
+     "chu": "Chiều đó bà Hoa đang ngồi nghỉ thì điện thoại kêu ting một cái. Tin nhắn từ số lạ.",
+     "giong": "hoc/giong/b03/bn-01.m4a"
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "căng thẳng",
+     "chu": "Tin nhắn nói con trai bà bị tai nạn, đang cấp cứu, phải chuyển tiền liền. Còn dặn đừng gọi, vì máy con hư rồi.",
+     "giong": "hoc/giong/b03/bn-02.m4a"
+    },
+    {
+     "ai": "ba-hoa",
+     "cam_xuc": "giật thót",
+     "chu": "Trời đất, tin gì ghê vậy nè?",
+     "giong": "hoc/giong/b03/bh-01.m4a"
+    }
+   ]
+  },
+  {
+   "tranh": "comic3-2.png",
+   "tom_tat": "Bà hoảng quá, vội tìm ví.",
+   "loi": [
+    {
+     "ai": "ba-hoa",
+     "cam_xuc": "hốt hoảng, giọng run",
+     "chu": "Trời ơi, thằng Minh! Ví đâu, ví tôi đâu rồi?",
+     "giong": "hoc/giong/b03/bh-02.m4a"
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "lo theo",
+     "chu": "Bà cuống hết cả lên, tim đập thình thịch, chỉ muốn chuyển tiền liền cho xong.",
+     "giong": "hoc/giong/b03/bn-03.m4a"
+    }
+   ]
+  },
+  {
+   "tranh": "comic3-3.png",
+   "tom_tat": "Bà khựng lại, gọi số của con đã lưu. Con vẫn khỏe.",
+   "loi": [
+    {
+     "ai": "ba-hoa",
+     "cam_xuc": "khựng lại, tự nhủ",
+     "chu": "Mà khoan. Sao mình không gọi thẳng cho thằng Minh?",
+     "giong": "hoc/giong/b03/bh-03.m4a"
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "chậm lại",
+     "chu": "Bà bấm số của anh Minh, số mà bà lưu sẵn trong máy.",
+     "giong": "hoc/giong/b03/bn-04.m4a"
+    },
+    {
+     "ai": "minh",
+     "cam_xuc": "tỉnh bơ, vui vẻ",
+     "chu": "Dạ mẹ, con đang ở chỗ làm nè. Có chuyện gì vậy mẹ?",
+     "giong": "hoc/giong/b03/mi-01.m4a"
+    }
+   ]
+  },
+  {
+   "tranh": "comic3-4.png",
+   "tom_tat": "Bà báo cáo số lạ. Kẻ gian đành bỏ đi.",
+   "loi": [
+    {
+     "ai": "ba-hoa",
+     "cam_xuc": "thở ra, giọng còn run",
+     "chu": "Con không sao là mẹ mừng rồi.",
+     "giong": "hoc/giong/b03/bh-04.m4a"
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "dịu lại",
+     "chu": "Rồi bà bấm báo cáo số vừa nhắn, để người khác biết mà dè chừng.",
+     "giong": "hoc/giong/b03/bn-05.m4a"
+    }
+   ]
+  }
+ ],
+ "dau_hieu": [
+  "Tin dữ từ số lạ",
+  "Đòi chuyển tiền ngay",
+  "Viện cớ không gọi được"
+ ],
+ "nho_mot_cau": {
+  "ai": "be-nai",
+  "cam_xuc": "ấm áp",
+  "chu": "Nghe tin dữ, bà gọi số con cháu đã lưu trước, rồi hẵng tính nha.",
+  "giong": "hoc/giong/b03/bn-06.m4a"
+ },
+ "viec_o_nha": "Bà với anh Minh hẹn nhau một câu hỏi chỉ nhà mình biết. App không lưu câu hỏi đó.",
+ "luyen": [
+  {
+   "dang": "viec-nao-truoc",
+   "ma": "B5",
+   "ten": "Việc nào trước",
+   "mau": {
+    "loi": {
+     "ai": "be-nai",
+     "cam_xuc": "thong thả",
+     "chu": "Con làm mẫu một câu nha. Người lạ gọi tới đòi bà chuyển tiền. Việc đầu tiên là cúp máy, sau đó mới gọi cho con cháu. Cúp máy trước, để họ khỏi giục bà nữa ạ.",
+     "giong": "hoc/giong/b03/bn-07.m4a"
+    },
+    "tinh_huong": "Người lạ gọi tới đòi bà chuyển tiền.",
+    "viec": [
+     "Cúp máy",
+     "Gọi cho con cháu"
+    ],
+    "giai_thich": "Cúp máy trước, để họ khỏi giục bà nữa."
+   },
+   "tinh_huong": "Một số lạ nhắn rằng cháu bà nằm viện, cần tiền gấp.",
+   "hoi": {
+    "ai": "be-nai",
+    "cam_xuc": "hỏi nhỏ nhẹ",
+    "chu": "Giờ tới lượt bà. Một số lạ nhắn rằng cháu bà nằm viện, cần tiền gấp. Bà làm việc nào đầu tiên ạ?",
+    "giong": "hoc/giong/b03/bn-08.m4a"
+   },
+   "viec": [
+    {
+     "ai": "be-nai",
+     "cam_xuc": "đọc rõ, chậm",
+     "chu": "Gọi cho cháu bằng số bà đã lưu.",
+     "giong": "hoc/giong/b03/bn-09.m4a",
+     "dung": true,
+     "giai_thich": {
+      "ai": "be-nai",
+      "cam_xuc": "mừng",
+      "chu": "Dạ đúng rồi ạ! Bà gọi số bà vẫn gọi cháu lâu nay để hỏi lại. Lỡ cháu chưa bắt máy, bà gọi người nhà khác, chứ khoan chuyển tiền nha.",
+      "giong": "hoc/giong/b03/bn-10.m4a"
+     }
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "đọc rõ, chậm",
+     "chu": "Gọi lại số vừa nhắn để hỏi cho rõ.",
+     "giong": "hoc/giong/b03/bn-11.m4a",
+     "giai_thich": {
+      "ai": "be-nai",
+      "cam_xuc": "nhẹ nhàng",
+      "chu": "Số đó là của người nhắn mà bà. Gọi lại thì họ chỉ dọa thêm thôi ạ.",
+      "giong": "hoc/giong/b03/bn-12.m4a"
+     }
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "đọc rõ, chậm",
+     "chu": "Chuyển tiền trước cho kịp.",
+     "giong": "hoc/giong/b03/bn-13.m4a",
+     "giai_thich": {
+      "ai": "be-nai",
+      "cam_xuc": "lo",
+      "chu": "Ấy, tiền đi rồi khó lấy lại lắm ạ. Bà gọi số của cháu đã lưu, hỏi trước đã nha.",
+      "giong": "hoc/giong/b03/bn-14.m4a"
+     }
+    }
+   ],
+   "goi_y": [
+    {
+     "ai": "be-nai",
+     "cam_xuc": "gợi nhớ",
+     "chu": "Bà nhớ trong truyện, bà Hoa khựng lại rồi làm gì ạ?",
+     "giong": "hoc/giong/b03/bn-15.m4a"
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "gợi nhớ",
+     "chu": "Số vừa nhắn tới là số của ai, bà đâu có biết ạ.",
+     "giong": "hoc/giong/b03/bn-16.m4a"
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "gợi nhớ",
+     "chu": "Muốn biết cháu có sao không, bà hỏi thẳng người bà tin nhất ạ.",
+     "giong": "hoc/giong/b03/bn-17.m4a"
+    }
+   ],
+   "dap_an": "Việc đầu tiên: gọi cho cháu bằng số bà đã lưu."
+  },
+  {
+   "dang": "that-hay-lua",
+   "ma": "B2",
+   "ten": "Thật hay lừa",
+   "mo_dau": {
+    "ai": "be-nai",
+    "cam_xuc": "vui vẻ",
+    "chu": "Giờ con đọc từng thẻ cho bà nghe nha. Chuyện nào thấy lạ, bà bấm Khoan đã. Chuyện nào yên tâm, bà bấm Được ạ.",
+    "giong": "hoc/giong/b03/bn-18.m4a"
+   },
+   "the": [
+    {
+     "ai": "be-nai",
+     "cam_xuc": "đọc rõ, chậm",
+     "chu": "Số lạ nhắn, con bà đang cấp cứu, chuyển tiền vào tài khoản này.",
+     "giong": "hoc/giong/b03/bn-19.m4a",
+     "dap_an": "lua",
+     "mau": true,
+     "giai_thich": {
+      "ai": "be-nai",
+      "cam_xuc": "giảng giải",
+      "chu": "Thẻ này con làm mẫu, là Khoan đã. Tin dữ từ số lạ mà đòi tiền liền, bà đừng vội tin ạ.",
+      "giong": "hoc/giong/b03/bn-20.m4a"
+     }
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "đọc rõ, chậm",
+     "chu": "Bà tự gọi số anh Minh đã lưu. Anh Minh nói vẫn khỏe.",
+     "giong": "hoc/giong/b03/bn-21.m4a",
+     "dap_an": "binh-thuong",
+     "mau": true,
+     "giai_thich": {
+      "ai": "be-nai",
+      "cam_xuc": "giảng giải",
+      "chu": "Thẻ này thì Được. Chính bà bấm gọi số quen của anh Minh, rồi nghe anh Minh nói vẫn khỏe ạ.",
+      "giong": "hoc/giong/b03/bn-22.m4a"
+     }
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "đọc rõ, chậm",
+     "chu": "Người lạ gọi, khóc, xưng là cháu, nói đang mượn máy của bạn.",
+     "giong": "hoc/giong/b03/bn-23.m4a",
+     "dap_an": "can-kiem-tra",
+     "giai_thich": {
+      "ai": "be-nai",
+      "cam_xuc": "dặn dò",
+      "chu": "Nghe khóc thì ai mà không xót. Nhưng bà cứ cúp máy, rồi gọi số của cháu mà bà đã lưu nha.",
+      "giong": "hoc/giong/b03/bn-24.m4a"
+     }
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "đọc rõ, chậm",
+     "chu": "Cháu gái tới nhà chơi, khoe mới được điểm mười.",
+     "giong": "hoc/giong/b03/bn-25.m4a",
+     "dap_an": "binh-thuong",
+     "giai_thich": {
+      "ai": "be-nai",
+      "cam_xuc": "giảng giải",
+      "chu": "Cháu chỉ khoe điểm với bà thôi, không xin gì hết ạ.",
+      "giong": "hoc/giong/b03/bn-26.m4a"
+     }
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "đọc rõ, chậm",
+     "chu": "Số lạ nhắn đòi tiền viện phí, còn dặn bà đừng gọi cho ai.",
+     "giong": "hoc/giong/b03/bn-27.m4a",
+     "dap_an": "lua",
+     "giai_thich": {
+      "ai": "be-nai",
+      "cam_xuc": "giảng giải",
+      "chu": "Họ vừa đòi tiền, vừa ngăn bà hỏi lại. Bà gọi người nhà theo số đã lưu trước ạ.",
+      "giong": "hoc/giong/b03/bn-28.m4a"
+     }
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "đọc rõ, chậm",
+     "chu": "Số lạ nhắn, cháu đổi số mới rồi, bà lưu số này nha.",
+     "giong": "hoc/giong/b03/bn-29.m4a",
+     "dap_an": "can-kiem-tra",
+     "giai_thich": {
+      "ai": "be-nai",
+      "cam_xuc": "giảng giải",
+      "chu": "Bà khoan lưu ạ. Bà gọi số cũ của cháu hỏi lại cho chắc đã.",
+      "giong": "hoc/giong/b03/bn-30.m4a"
+     }
+    }
+   ],
+   "dung": {
+    "ai": "be-nai",
+    "cam_xuc": "reo",
+    "chu": "Dạ đúng rồi ạ!",
+    "giong": "hoc/giong/b03/bn-31.m4a"
+   },
+   "sai": {
+    "ai": "be-nai",
+    "cam_xuc": "nhẹ nhàng",
+    "chu": "Chưa đúng rồi bà ơi. Bà nghe con nói nè.",
+    "giong": "hoc/giong/b03/bn-32.m4a"
+   },
+   "can_than": {
+    "ai": "be-nai",
+    "cam_xuc": "hiền",
+    "chu": "Bà cẩn thận vậy cũng tốt ạ. Mà chuyện này thì bà yên tâm được.",
+    "giong": "hoc/giong/b03/bn-33.m4a"
+   },
+   "goi_y": [
+    {
+     "ai": "be-nai",
+     "cam_xuc": "gợi nhớ",
+     "chu": "Bà nhớ trong truyện, tin nhắn lạ đòi bà Hoa làm gì ạ?",
+     "giong": "hoc/giong/b03/bn-34.m4a"
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "gợi nhớ",
+     "chu": "Bà coi tin tới từ đâu, và họ muốn bà làm gì ạ.",
+     "giong": "hoc/giong/b03/bn-35.m4a"
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "gợi nhớ",
+     "chu": "Bà đã tự hỏi được người nhà, coi chuyện đó có thật chưa ạ?",
+     "giong": "hoc/giong/b03/bn-36.m4a"
+    }
+   ],
+   "xong": {
+    "ai": "be-nai",
+    "cam_xuc": "khen đúng việc",
+    "chu": "Bà nhớ kỹ rồi đó ạ. Nghe tin dữ về ai, bà gọi người đó theo số bà đã lưu trước ạ.",
+    "giong": "hoc/giong/b03/bn-37.m4a"
+   }
+  }
+ ],
+ "thu_thach": {
+  "dang": "goi-video",
+  "canh": "minh-3",
+  "ten": "Anh Minh gọi hỏi lại",
+  "nguoi": "Anh Minh",
+  "anh": "../assets/chan-dung-minh.png",
+  "mo_ta": "Anh Minh gọi hỏi bà hai câu về tin nhắn báo tin dữ. Bà trả lời bằng lời, hoặc bấm nút.",
+  "mo_dau": {
+   "ai": "be-nai",
+   "cam_xuc": "hào hứng",
+   "chu": "Tới thử thách rồi bà ơi. Anh Minh sắp gọi hỏi bà mấy câu. Bà cứ trả lời như ở nhà nha.",
+   "giong": "hoc/giong/b03/bn-38.m4a"
+  },
+  "y": [
+   "Gọi thẳng cho con trước",
+   "Dùng số đã lưu, không dùng số trong tin nhắn"
+  ],
+  "ket": {
+   "du": {
+    "ai": "be-nai",
+    "cam_xuc": "mừng",
+    "chu": "Bà trả lời anh Minh rành rọt ghê. Con yên tâm rồi ạ.",
+    "giong": "hoc/giong/b03/bn-39.m4a"
+   },
+   "thieu": {
+    "ai": "be-nai",
+    "cam_xuc": "nhẹ nhàng",
+    "chu": "Bà trả lời được một phần rồi ạ. Lúc nào rảnh, bà gọi lại anh Minh tập thêm nha.",
+    "giong": "hoc/giong/b03/bn-40.m4a"
+   },
+   "bo": {
+    "ai": "be-nai",
+    "cam_xuc": "hiền",
+    "chu": "Cuộc gọi chưa xong bà ơi. Lúc nào tiện, bà bấm gọi lại nha.",
+    "giong": "hoc/giong/b03/bn-41.m4a"
+   },
+   "khong": {
+    "ai": "be-nai",
+    "cam_xuc": "nhẹ nhàng",
+    "chu": "Lần này chưa được ý nào bà ơi. Không sao hết, bà gọi lại anh Minh tập thêm nha.",
+    "giong": "hoc/giong/b03/bn-42.m4a"
+   }
+  }
+ }
+}
