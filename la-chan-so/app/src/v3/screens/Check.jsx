@@ -166,6 +166,13 @@ const LOOK = {
   safe: { tone: 'safe', word: 'AN TOÀN', icon: 'shieldok', c: 'safe', say: '' },
   unknown: { tone: null, word: 'CHƯA RÕ', icon: 'info', c: 'ink2', say: 'Chưa chắc là an toàn.' },
 }
+// Bé Nai đọc kết quả cho bà (câu mở đầu, sau đó đọc lời giải thích của máy chủ)
+const SAY_ELDER = {
+  danger: 'cái này nguy hiểm lắm ạ, bà đừng chuyển tiền nha.',
+  suspicious: 'cái này con thấy đáng ngờ đó bà, bà hỏi người thân trước rồi hẵng làm nha.',
+  safe: 'cái này con chưa thấy dấu hiệu lừa đảo ạ.',
+  unknown: 'cái này con chưa đủ thông tin, chưa chắc là an toàn đâu bà.',
+}
 const SELF = ['Tôi biết người nhận ngoài đời thật', 'Không ai giục tôi chuyển gấp', 'Không ai bảo tôi giữ bí mật']
 
 export function Result() {
@@ -173,7 +180,8 @@ export function Result() {
   const { result: r, setReport, persona } = useApp()
   const [ticks, setTicks] = useState([])
   const L = LOOK[r?.level] || LOOK.unknown
-  const spoken = r ? `${L.word}. ${r.headline} ${L.say}` : ''
+  // Câu đọc to viết theo văn nói (không đọc nguyên chữ trên màn hình); với bà thì Bé Nai thưa gửi lễ phép
+  const spoken = r ? (persona === 'elder' ? `Bà ơi, ${SAY_ELDER[r.level] || SAY_ELDER.unknown} ${r.headline}` : `Kết quả là ${L.word.toLowerCase()}. ${r.headline} ${L.say}`) : ''
   useEffect(() => {
     if (r && persona === 'elder' && localStorage.getItem('lcs.autoSpeak') !== '0') native.speak(spoken)
     return () => native.stopSpeaking()
@@ -270,7 +278,7 @@ export function MessageResult() {
   const fromNotif = r.from === 'notification'
   const report = () => { setReport({ draft: { ...reportTarget(r), story: r.maskedText } }); nav('/bao-cao') }
   return (
-    <Screen name="B3-phan-tich-tin-nhan" bar={<Bar title="Tin nhắn lạ" right={<Speak text={`${L.word}. ${r.headline}`} />} />}
+    <Screen name="B3-phan-tich-tin-nhan" bar={<Bar title="Tin nhắn lạ" right={<Speak text={`Tin nhắn này được đánh giá là ${L.word.toLowerCase()}. ${r.headline}`} />} />}
       foot={<><Btn icon="flag" onClick={report}>Báo cáo</Btn>{r.lesson ? <Btn kind="o" icon="book" onClick={() => openLesson(nav, r.scamType, r.lesson)}>Xem bài học</Btn> : <Btn kind="o" icon="users" onClick={() => nav('/hoi-nguoi-than')}>Hỏi người thân</Btn>}</>}>
       <div className="row g8"><Tag kind="no" icon="msg">{fromNotif ? 'Ứng dụng nhắn tin · Người lạ' : 'Tin dán vào'}</Tag></div>
       <div className="sms rise">{highlight(r.maskedText || '', quotes)}</div>

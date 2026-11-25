@@ -237,7 +237,7 @@ export function CallAnalysis() {
   const quotes = (r.signs || []).flatMap((s) => s.quotes)
   const danger = r.level === 'danger'
   return (
-    <Screen name="A04b-phan-tich-ghi-am" tone={danger ? 'dang' : undefined} bar={<Bar title="Phân tích cuộc gọi" left="x" onLeft={() => nav('/', { replace: true })} right={<Speak text={`${danger ? 'Nguy hiểm' : ''}. ${r.headline}`} />} />}
+    <Screen name="A04b-phan-tich-ghi-am" tone={danger ? 'dang' : undefined} bar={<Bar title="Phân tích cuộc gọi" left="x" onLeft={() => nav('/', { replace: true })} right={<Speak text={`Bà ơi, ${danger ? 'cuộc gọi vừa rồi nguy hiểm lắm ạ.' : 'con nghe lại cuộc gọi rồi nè.'} ${r.headline}`} />} />}
       foot={<><Btn icon="phone" onClick={() => callTo(minh?.name || 'Người thân', minh?.phone)}>Gọi {minh?.name || 'người thân'} ngay</Btn><Btn kind="o" onClick={() => nav('/', { replace: true })}>Về trang chủ</Btn></>}>
       <div className="row g12 rise">
         <Circle z={64} bg={danger ? 'dang' : 'warn'} c="w" icon={danger ? 'xoct' : 'tri'} iz={32} />
@@ -282,7 +282,7 @@ export function StopScreen() {
   }, [inCall])
   useEffect(() => {
     buzz([600, 200, 600])
-    if (inCall) native.speak('Dừng lại. Bà đang nghe máy với số chưa quen và mở ứng dụng ngân hàng. Người gọi giục chuyển tiền thì bà cúp máy nhé.')
+    if (inCall) native.speak('Bà ơi, bà dừng lại chút nha. Bà đang nghe máy với số lạ mà lại mở ứng dụng ngân hàng. Nếu người gọi giục bà chuyển tiền thì bà cúp máy liền nha.')
     else play(stopAudio)
     return () => native.stopSpeaking()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps

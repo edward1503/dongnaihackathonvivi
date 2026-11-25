@@ -188,7 +188,7 @@ export function Setup() {
     )
   }
   return (
-    <Screen name="A02a-thiet-lap-dang-lam" bar={<Bar title="Thiết lập lá chắn" right={<Speak text={`Bật ba lớp bảo vệ. Mỗi lớp chỉ cần bật một lần. Đã bật ${on} trên 3.`} />} />}>
+    <Screen name="A02a-thiet-lap-dang-lam" bar={<Bar title="Thiết lập lá chắn" right={<Speak text={`Bà ơi, mình bật ba lớp bảo vệ nha. Mỗi lớp bà chỉ cần bật một lần thôi ạ. Giờ bà đã bật được ${on} trên ba lớp rồi.`} />} />}>
       <div className="row g12">
         <Circle z={64} icon="shield" iz={32} />
         <div className="col grow"><div className="h-m">Bật 3 lớp bảo vệ</div><div className="t-sub">Mỗi lớp chỉ cần bật một lần.</div></div>
@@ -212,7 +212,7 @@ export function Setup() {
       })}
       <Btn kind="o" icon="users" onClick={async () => {
         const text = `Con ơi, cài giúp mẹ ${APP} nhé: ${location.origin}${location.pathname}`
-        try { if (navigator.share) await navigator.share({ title: APP, text }); else { await navigator.clipboard.writeText(text); native.speak('Đã chép lời nhờ, bà dán vào Zalo gửi cho con nhé') } } catch { /* bấm hủy */ }
+        try { if (navigator.share) await navigator.share({ title: APP, text }); else { await navigator.clipboard.writeText(text); native.speak('Con chép lời nhờ rồi nè bà, bà dán vào Zalo gửi cho con cháu nha') } } catch { /* bấm hủy */ }
       }}>Nhờ người thân cài hộ</Btn>
       <div className="why t-sub"><I n="lock" z={18} /><span>Lá chắn không lưu nội dung cuộc gọi, tin nhắn.</span></div>
     </Screen>

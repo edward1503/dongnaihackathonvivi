@@ -178,14 +178,14 @@ export function AskReply() {
   useEffect(() => {
     if (!ask?.reply) return
     buzz([200, 100, 200])
-    native.speak(ask.reply.text)
+    native.speak(`Bà ơi, ${ask.to?.name || 'người thân'} trả lời rồi nè: ${ask.reply.text}`)
     if (phone && ask.reply.preset === 'dung_chuyen' && native.available()) setBlocked(native.blockNumber(phone))
     return () => native.stopSpeaking()
   }, [ask?.reply, phone])
   if (!ask?.reply) return <Navigate to="/hoi-nguoi-than" replace />
   const stop = ask.reply.preset !== 'nguoi_quen'
   return (
-    <Screen name="A4r-nguoi-than-tra-loi" tone={stop ? 'dang' : 'safe'} bar={<Bar title="" left="x" onLeft={() => nav('/', { replace: true })} right={<Speak text={ask.reply.text} />} />}
+    <Screen name="A4r-nguoi-than-tra-loi" tone={stop ? 'dang' : 'safe'} bar={<Bar title="" left="x" onLeft={() => nav('/', { replace: true })} right={<Speak text={`${ask.to?.name || 'Người thân'} trả lời: ${ask.reply.text}`} />} />}
       foot={<>
         <Btn icon="phone" onClick={() => call(ask.to.name, ask.to.phone)}>Gọi {ask.to.name}</Btn>
         {phone && !blocked && stop && <Btn kind="o" icon="phoneoff" onClick={() => setBlocked(native.blockNumber(phone) || true)}>Chặn số {fmtPhone(phone)}</Btn>}

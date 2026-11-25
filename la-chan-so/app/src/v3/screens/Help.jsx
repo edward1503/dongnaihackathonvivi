@@ -13,10 +13,14 @@ import { useCall } from './People.jsx'
 const STEPS = [['minus', 'Dừng lại'], ['phoneoff', 'Cúp máy'], ['users', 'Gọi người thân']]
 export function Emergency() {
   const nav = useNavigate()
-  const { relatives } = useApp()
+  const { relatives, persona } = useApp()
   const call = useCall()
   const first = relatives.find((r) => r.paired) || relatives[0]
-  const say = 'Bình tĩnh. Đừng chuyển tiền. Một: dừng lại. Hai: cúp máy. Ba: gọi người thân.'
+  const elder = persona === 'elder'
+  // Bé Nai nói với bà Hoa: lễ phép, có "bà ơi", "nha", "ạ"
+  const say = elder
+    ? 'Bà ơi, bà bình tĩnh nha, bà đừng chuyển tiền ạ. Bà làm ba bước nha: một là dừng lại, hai là cúp máy, ba là gọi cho người thân ạ.'
+    : 'Bạn bình tĩnh nhé, đừng chuyển tiền. Làm ba bước: một là dừng lại, hai là cúp máy, ba là gọi cho người thân.'
   useEffect(() => { buzz([400, 150, 400]); native.speak(say); return () => native.stopSpeaking() }, [])
   return (
     <Screen name="A5-khan-cap" tone="dang" bar={<Bar title="" left="x" onLeft={() => nav('/', { replace: true })} right={<Speak text={say} />} />}
@@ -25,7 +29,7 @@ export function Emergency() {
         <Btn kind="o" onClick={() => nav('/ke-lai')}>Kể lại cuộc gọi</Btn>
       </>}>
       <div className="row g12 as">
-        <div className="h-xl c-dang grow rise">Bình tĩnh.<br />Đừng chuyển tiền.</div>
+        <div className="h-xl c-dang grow rise">{elder ? <>Bà bình tĩnh nha.<br />Đừng chuyển tiền ạ.</> : <>Bình tĩnh.<br />Đừng chuyển tiền.</>}</div>
         <Art name="dung" z={96} className="pop" />
       </div>
       <div className="col g12">
@@ -74,7 +78,7 @@ export function AfterCallQuestions() {
   }
   if (busy) return <Checking value="" kind="text" />
   return (
-    <Screen name="A6-ke-lai-cuoc-goi" bar={<Bar title="Cuộc gọi lạ" right={<Speak text={QUESTIONS.map(([, q]) => q).join(' ')} />} />}
+    <Screen name="A6-ke-lai-cuoc-goi" bar={<Bar title="Cuộc gọi lạ" right={<Speak text="Bà nhớ lại giúp con nha. Người gọi có xưng là công an hay nhân viên ngân hàng không ạ? Họ có đòi tiền hay đòi mã OTP không bà? Họ có giục bà làm liền không? Rồi họ có dặn bà giữ bí mật, đừng nói với ai không ạ?" />} />}
       foot={<Btn onClick={submit} disabled={!all}>Xem kết quả</Btn>}>
       <div className="t-sub" style={{ padding: '0 4px' }}>{call?.phone ? `Cuộc gọi từ ${fmtPhone(call.phone)}. ` : ''}Bà nhớ lại và chọn Có hoặc Không.</div>
       {QUESTIONS.map(([k, q], i) => (
