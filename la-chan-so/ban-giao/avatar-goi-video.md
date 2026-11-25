@@ -171,3 +171,40 @@ Trạng thái lúc dừng: tệp trên đĩa nhất quán, không còn tiến tr
 
 ### Tệp đã sửa trong phiên này
 Trong kho: `prototype/audio/minh/*`, `prototype/audio/tu/*` (71 bộ tiếng + khẩu hình), `prototype/loi-minh.json`, `prototype/loi-tu.json`, `tools/ca-hoi-thoai-canh.json`, `bai-hoc/nghe-thu/CAN-NGHE.md`, `android/README.md`, `ban-giao/avatar-goi-video.md` (mục này); đã xóa `bai-hoc/nghe-thu/cho-thu-lai/`. Tạm (git bỏ qua, `ban-giao/tam-nv/`): `cat-tay-tu.sh`, `thay-giong-take2.py`, `ghi-kiem.py`, `gom-nghe-2.py`, `nghe-dich-danh.py`, `may-ao-2.mjs`, `may-ao-lui.mjs`, `dat-khoa-may-ao.py` (thêm `sai`, `xoa` tắt `goi-song`), `audio-cu/`, `take2/{cat-tu,loc-tu,cat-tu-sua,loc-tu-sua,sai-ranh-gioi}/`, các tệp nghe `take2/nghe-*.txt`, `take2/hoi-*.txt`, log `dung-mieng-2.log`, `dung-5.log`, `kiem-trang-f.log`, `may-ao-*.log`, `emu-2.log`.
+
+## Phiên Opus 3 (25/11/2026, 16:20–17:45): viết lại hai cảnh anh Minh, thu lại giọng Minh
+
+Trạng thái lúc dừng: tệp nhất quán, không còn tiến trình nền của tôi, máy ảo đã gỡ khóa giả (`goi-song` = tắt) và đã tắt, không cổng 8803–8809 nào mở. Không đụng điện thoại thật (đang cắm, mọi lệnh có `-s emulator-5554`). Không commit. Không đụng `prototype/hoc/**`, `bai-hoc/KICH-BAN-BAI-HOC.md`.
+
+### Đã làm
+- **Chuyện mới cho hai cảnh** (theo hợp đồng với agent bài học, mã cảnh và khóa `lcs-goi-<mã>` giữ nguyên):
+  - `minh-1` "Anh Minh hoảng hốt gọi": Minh vừa bị người xưng công an dọa (tài khoản dính đường dây rửa tiền, chuyển vào "tài khoản tạm giữ" trong hôm nay, cấm nói với ai), hoảng loạn hỏi mẹ. Ý `cup` "Cúp máy, không chuyển tiền", `hoilai` "Hỏi lại công an phường hoặc người nhà, đừng giấu". Nút mở đầu "Con cúp máy đi, đừng chuyển" / "Con làm theo họ cho xong đi".
+  - `minh-3` "Anh Minh hỏi mẹ về bé Vy": Minh lo, thương mẹ, hỏi lỡ có ai gọi khóc xưng là bé Vy mà bà gọi Vy không được thì bà làm sao. Ý `chuachuyen` "Chưa chuyển tiền khi chưa hỏi lại được", `goihoi` "Gọi người nhà khác hoặc cô giáo bằng số đã lưu". Nút mở đầu "Mẹ gọi con hỏi trước đã" (đủ cả hai ý) / "Mẹ chuyển trước cho kịp".
+  - Lời từng câu kèm cảm xúc: `ban-giao/tam-nv/take3/loi-moi.txt` (và `prototype/loi-minh.json`). 42 câu: 19 câu chung (giữ chữ cũ), 9 câu `b3-`, 14 câu `b1-` (gồm 4 tiếng đệm hoảng `b1-dem-…` và `b1-im-mot`).
+- **Thêm vào trang gọi video** (`prototype/video-call.html`): `nut_theo_cau` trong tệp cảnh đổi hai nút khi nhân vật hỏi tới ý còn lại (bấm nút đúng thôi cũng đủ điểm; `minh-1` cần, vì nút mở đầu chỉ cho một ý); cảnh có tiếng đệm riêng mang tiền tố của cảnh thì chỉ dùng tiếng đệm riêng, không lấy tiếng đệm của cảnh khác; thẻ ý dài xuống dòng thay vì tràn khỏi bảng (thấy khi xem ảnh: "Hỏi lại công an phường hoặc người nhà, đừng giấu" bị cắt).
+- **App:** `HieuY.canh` dùng `song.loi_dan` của cảnh làm lời dặn giọng cho câu AI đọc trực tiếp nếu có (minh-1: hoảng rồi bình tĩnh dần; minh-3: chậm, dịu dàng). Đường máy chủ (`/api/roleplay/speak`) vẫn dùng lời dặn của nhân vật. Kho giọng lưu câu theo giọng + lời, nên cùng một câu ở hai cảnh dùng chung tiếng đã lưu. `ma_kho` đổi thành `minh-hoang`, `minh-vy` để lượt AI đã lưu của chuyện cũ không phát lại nhầm. Tên nút ở màn chính: "Gọi video · Anh Minh hoảng hốt gọi", "Gọi video · Anh Minh hỏi mẹ về bé Vy".
+- **Lời nhắc AI** viết lại: `prototype/canh/minh-{1,3}.{song,tra-loi}.txt`.
+- **Giọng:** một lượt `gemini-3.8-flash-tts`, giọng Achird, 178,7 giây, một lần gọi TTS, khóa đầu đạt. Lời dặn ba phần cảm xúc ở `ban-giao/tam-nv/take3/minh-dan.txt`, chép vào `loi-minh.json` (`_loi_dan_luot_thu`). Cắt bằng `tools/cat-theo-lang.py`, sai ranh giới hai câu (`b1-dem-nghi` mất "để con nghĩ coi" sang đầu `b1-sua`), đã cắt tay lại (`ban-giao/tam-nv/cat-tay-minh.sh`); lọc rẹt; `tools/dung-bo-loi.sh minh` dựng đủ 42 bộ khẩu hình. Bộ cũ sao lưu ở `ban-giao/tam-nv/audio-cu-take2/minh/`; 24 tệp của câu cũ không còn dùng đã xóa khỏi `prototype/audio/minh/` (để APK không chở theo).
+- **Nghe kiểm** (OpenAI, người dùng cho phép; Gemini vẫn 429 cả lúc 17:20): `gpt-4o-transcribe` và `whisper-1` nghe cả lượt (`take3/nghe-o-take.txt`): đúng thứ tự từ câu đầu "Dạ, dạ.", không có lời dặn bị đọc lẫn. `gpt-4o-transcribe` nghe từng câu (`take3/nghe-o-cau.txt`, `nghe-o-cau-sua.txt`); phiên chính chép lại ba câu (`/tmp/claude-1000/lcs-chep/minh-3cau.txt`). Sửa chữ hai câu cho khớp tiếng đã thu: `b1-mo-dau` câu cuối "Con nên chuyển không mẹ?" (máy bỏ chữ "có"), `b1-ket-du` mở đầu "Trời ơi"; `b1-dem-tho` "thở một chút" theo hai trên ba lượt nghe. `kiem`: 20 `khop`, 14 `lech-nhe`, 1 `can-nghe` (`b3-goi-goihoi`, "Lỡ" nghe thành "Láo", ranh giới đã soi là đúng), 7 `ngan`. Tốc độ câu chung khoảng 4,9 tiếng mỗi giây, câu hai cảnh khoảng 4,1.
+- **Ca kiểm luật** viết lại cho hai cảnh (`tools/ca-hoi-thoai-canh.json`): minh-1 59 ca từng lượt và 11 cuộc gọi, minh-3 39 và 6, gồm câu trái nghĩa, lời thuật lại của kẻ gian, câu hỏi lại, câu cụt theo câu Minh vừa hỏi. Kỳ vọng viết theo nghĩa, luật sửa cho tới khi đạt.
+- `tools/kiem-goi-video.mjs`: kịch bản mới của hai cảnh, kiểm nút đổi theo câu hỏi (`nutDoi`).
+- Phụ: "Ông Tư" → "Chú Tư" trong `prototype/nhan-vat.json` (tên), chú thích trong `video-call.html` và `_ghi_chu` của `loi-tu.json`. Chưa đổi lời dặn giọng hay giọng của chú Tư. `CAN-NGHE.md` ghi `tu/b9-mo-dau` là người dùng đã chấp nhận ("Vy" nghe như "Di").
+
+### Kết quả kiểm
+- `node tools/kiem-hoi-thoai.mjs`: **422/422** (chị Lan 27, minh-1 134, minh-3 109, tu-9 120, tệp cảnh 32).
+- `tools/kiem-goi-video.mjs` cả bốn cảnh (`ban-giao/tam-nv/kiem-trang-g.log`): 170 ok, 1 SAI là 404 của `assets/comic1-5.png` khi trang bài học mở lúc 17:09; tệp này được agent bài học tạo lúc 17:12, chạy lại `lan-2` (`kiem-trang-h-lan2.log`) 62/62, không còn 404. Sau khi sửa thẻ ý xuống dòng, chạy lại `minh-1 minh-3` (`kiem-trang-i-minh.log`) **105/105**. Đã xem ảnh `export/preview/goi-minh-{1,3}-*.png` (tờ ghép): avatar, phụ đề câu mới, nút đổi theo câu hỏi, màn kết quả đủ thẻ ý.
+- Gradle (17:09 và 17:33): mã thoát 0, 22/22 bài kiểm đơn vị, APK 238 107 993 byte, có 126 tệp `audio/minh/`, không còn tệp của câu cũ.
+- Máy ảo (`may-ao-3.mjs`, logs `may-ao-3-minh1.log`, `may-ao-3-minh1-b.log`, `may-ao-3-minh3.log`, `may-ao-lui-minh1-moi.log`): minh-1 bấm nút đúng hai lần 1/2 → 2/2, nút đổi đúng, tiếng đệm `b1-dem-tho`, `b1-dem-nghe`, kết `ket-du`; minh-3 bấm một lần 2/2, tiếng đệm chung `dem-um`; khóa AI cố ý sai, minh-1 2/2 bằng câu thu sẵn (AI 0, lùi 2). Ảnh `export/preview/may-ao-nut-minh-*.png`, đã xem.
+- Thấy trên máy ảo, chưa xử lý: lúc nói câu thu sẵn, khung hình có lúc hiện biểu tượng phát video mặc định của WebView (tam giác xám) thay cho mặt nhân vật (đã có từ trước, cả ở tu-9 lúc 16:04; máy tính không bị); máy ảo hay hiện hộp "System UI isn't responding" khi máy tính đang chạy nặng. Cần xem trên điện thoại thật. Nếu điện thoại cũng bị, cách sửa là cho thẻ video miệng một `poster` trong suốt trong `vendor/vlearn-avatar/player/hoc-avatar.js` (tệp ngoài phần tôi được giao).
+
+### Câu cần người nghe (chi tiết ở `bai-hoc/nghe-thu/CAN-NGHE.md`, mục A)
+- Cảm xúc: `b1-mo-dau` và nhóm câu hoảng (`b1-goi-cup`, `b1-im-mot`, `b1-dem-*`, `b1-sua`): có nghe ra hoảng, hụt hơi, có quá lố không; `b1-nhan-cup`, `b1-ket-du`: bình tĩnh dần, nhẹ nhõm.
+- Nghi đọc sai: `b3-goi-goihoi` ("Lỡ", "Ngoài Vy ra"), `chao-cup` (hai lượt nghe cả take ra "cướp máy").
+- Dưới 1 giây hoặc quá nhanh: `dem-o` (0,7 s), `dem-um`, `dem-nghi` (5 tiếng trong khoảng 0,7 giây).
+
+### Việc còn lại
+1. Người nghe mục A của `CAN-NGHE.md`, nhất là cảm xúc của cảnh hoảng.
+2. Agent bài học chép lời cuối của hai cảnh (`take3/loi-moi.txt`, tên cảnh, ý, nút) vào `bai-01.json`, `bai-03.json` và `KICH-BAN-BAI-HOC.md`. Lưu ý cho họ: `minh-1` có thêm cặp nút thứ hai khi Minh hỏi ý `hoilai`; `minh-3` có nút riêng khi Minh hỏi lại từng ý.
+3. Thử trên điện thoại thật: tiếng thật của cảnh hoảng, chế độ AI trực tiếp với khóa thật (lời dặn giọng riêng của cảnh), biểu tượng video mặc định có hiện không.
+4. Khi Gemini có lại hạn mức: nghe đích danh cả lượt bằng `nghe-dich-danh.py` + `take3/hoi-take.txt`.
+5. Luật mới của hai cảnh chưa được kiểm thử độc lập (Astra).

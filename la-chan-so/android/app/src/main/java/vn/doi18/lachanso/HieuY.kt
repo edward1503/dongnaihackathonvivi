@@ -25,7 +25,8 @@ object HieuY {
     /** Đường dẫn tệp ghi trong tệp cảnh chỉ được trỏ vào thư mục prototype của chính app. */
     private fun duongSach(d: String) = d.takeIf { Regex("^[A-Za-z0-9_./-]{1,80}$").matches(it) && !it.contains("..") && !it.startsWith("/") }
 
-    /** Cảnh theo mã (mặc định lan-2). Mã lạ, tệp hỏng hoặc thiếu trường thì trả null: app không gọi AI cho cảnh đó, trang dùng câu thu sẵn. */
+    /** Cảnh theo mã (mặc định lan-2). Mã lạ, tệp hỏng hoặc thiếu trường thì trả null: app không gọi AI cho cảnh đó, trang dùng câu thu sẵn.
+     *  Lời dặn giọng cho câu AI đọc trực tiếp: song.loi_dan của cảnh nếu có (cảm xúc riêng của cảnh), không thì loi_dan của nhân vật. */
     @Synchronized
     fun canh(c: Context, ma: String?): Canh? {
         val id = ma?.takeIf { it.isNotBlank() } ?: "lan-2"
@@ -38,7 +39,7 @@ object HieuY {
             val nhan = (0 until y.length()).map { y.getJSONObject(it).getString("id") }
             require(nhan.isNotEmpty() && nhan.all { Regex("^[a-z0-9]{1,16}$").matches(it) })
             require(Regex("^[a-z_]{3,24}$").matches(song.getString("truong_loi")) && duongSach(song.getString("loi_nhac")) != null && duongSach(j.getString("bo_loi")) != null)
-            Canh(id, j.getString("nhan_vat"), j.getString("ma_kho"), nv.getString("giong"), nv.getString("loi_dan"), nhan, j.getString("bo_loi"), j.optString("tien_to"),
+            Canh(id, j.getString("nhan_vat"), j.getString("ma_kho"), nv.getString("giong"), song.optString("loi_dan").ifBlank { nv.getString("loi_dan") }, nhan, j.getString("bo_loi"), j.optString("tien_to"),
                 j.optString("bo_may") == "chi-lan", song, j.optJSONObject("tra_loi")).also { cacCanh[id] = it }
         } catch (e: Exception) { null }
     }

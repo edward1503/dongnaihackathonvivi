@@ -1,5 +1,5 @@
 {
- "_ghi_chu": "Bộ câu thu sẵn của ông Tư (Bài 9: chú của Vy; xưng chú, gọi con) cho cuộc gọi video. Câu có tiền tố b<số bài>- là câu riêng của cảnh đó (xem prototype/canh/); câu không tiền tố dùng chung cho mọi cảnh của nhân vật. Nhóm: mo-dau, dem (tiếng chờ), su-co (im lặng, nghe không rõ), hoi/goi (câu hỏi gợi mở cho một ý, lần một và lần hai), nhan (nhận một ý), sua (người học khuyên sai), ket, chao. Cả bộ thu MỘT lượt duy nhất bằng giọng ghi ở prototype/nhan-vat.json rồi cắt, lọc rẹt, nghe kiểm, dựng hình miệng: tools/dung-bo-loi.sh. Thêm hay đổi một câu thì thu lại cả lượt.",
+ "_ghi_chu": "Bộ câu thu sẵn của chú Tư (Bài 9: chú của Vy; xưng chú, gọi con) cho cuộc gọi video. Câu có tiền tố b<số bài>- là câu riêng của cảnh đó (xem prototype/canh/); câu không tiền tố dùng chung cho mọi cảnh của nhân vật. Nhóm: mo-dau, dem (tiếng chờ), su-co (im lặng, nghe không rõ), hoi/goi (câu hỏi gợi mở cho một ý, lần một và lần hai), nhan (nhận một ý), sua (người học khuyên sai), ket, chao. Cả bộ thu MỘT lượt duy nhất bằng giọng ghi ở prototype/nhan-vat.json rồi cắt, lọc rẹt, nghe kiểm, dựng hình miệng: tools/dung-bo-loi.sh. Thêm hay đổi một câu thì thu lại cả lượt.",
  "nhan_vat": "tu",
  "giong": "Algenib",
  "loi": [

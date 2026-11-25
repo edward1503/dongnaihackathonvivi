@@ -24,8 +24,10 @@ const VE = 'hoc.html?bai=1#thu-thach';
 const KICH = {
   'lan-2': { ten: 'Chị Lan', tong: 4, avatar: '21', luot: ['chị đừng nạp, lương cao bất thường, chị tra tên công ty đi rồi báo cáo tài khoản đó'], sai: 'cứ nạp đi chị',
     song: { y: ['nap', 'dauhieu', 'xacminh', 'baocao'], ai: ['chi-lan', 'em'], lui: false }, luotSong: ['chị đừng nạp', 'lương cao bất thường', 'chị tra tên công ty đi', 'báo cáo tài khoản đó đi chị'] },
-  'minh-1': { ten: 'Anh Minh', tong: 2, avatar: '125', luot: ['mẹ cúp máy', 'mẹ vẫn gọi cho con'], sai: 'Mẹ làm theo họ cho xong', nut: 2, song: { y: ['cup', 'goicon'], ai: ['nv', 'nh'], lui: true } },
-  'minh-3': { ten: 'Anh Minh', tong: 2, avatar: '125', luot: ['mẹ gọi thẳng cho con', 'số mẹ lưu trong máy'], sai: 'Mẹ chuyển tiền trước cho kịp', nut: 2, song: { y: ['goithang', 'soluu'], ai: ['nv', 'nh'], lui: true } },
+  // nutDoi: sau khi bấm nút đúng lúc mở đầu, nhân vật hỏi ý còn lại và hai nút phải đổi sang đúng các câu này (nut_theo_cau của tệp cảnh)
+  'minh-1': { ten: 'Anh Minh', tong: 2, avatar: '125', luot: ['con cúp máy đi, đừng chuyển', 'con lên công an phường hỏi cho chắc'], sai: 'Con làm theo họ cho xong đi', nut: 2,
+    nutDoi: ['Con lên công an phường hỏi, đừng giấu', 'Thôi con giấu đi, đừng nói ai'], song: { y: ['cup', 'hoilai'], ai: ['nv', 'nh'], lui: true } },
+  'minh-3': { ten: 'Anh Minh', tong: 2, avatar: '125', luot: ['mẹ chưa chuyển đâu', 'mẹ gọi cô giáo của Vy hỏi thử'], sai: 'Mẹ chuyển trước cho kịp', nut: 2, song: { y: ['chuachuyen', 'goihoi'], ai: ['nv', 'nh'], lui: true } },
   'tu-9': { ten: 'Chú Tư', tong: 4, avatar: '117', luot: ['không chú ơi', 'họ cho rút trước để chú tin', 'lãi gấp đôi là bất thường', 'chú báo cáo nhóm đó đi'], sai: 'chú cứ nạp đi', song: { y: ['nap', 'moinhu', 'dauhieu', 'baocao'], ai: ['nv', 'nh'], lui: true } },
 };
 const CANH = a.length ? a : Object.keys(KICH);
@@ -179,7 +181,16 @@ async function motCanh(ma) {
   if (K.nut) mong(g3.nut.length === K.nut && g3.nut.every((y) => y <= g3.thanh + 0.5), 'thanh gõ không che nút trả lời sẵn', `nút cuối kết thúc ở ${Math.round(Math.max(...g3.nut))}, thanh gõ bắt đầu ở ${Math.round(g3.thanh)}`);
   mong(g3.phuDe <= g3.bang + 0.5, 'phụ đề nằm trên bảng dưới, không bị che', `${Math.round(g3.phuDe)} ≤ ${Math.round(g3.bang)}`);
   await t3.anh(`goi-${ma}-6-app-toi-luot.png`);
-  if (K.nut) { await t3.js(`document.querySelector('#nutNhanh button').click()`); }   // bấm nút trả lời sẵn thứ nhất (đủ cả hai ý)
+  if (K.nut) {   // bấm nút trả lời sẵn thứ nhất (nút đúng); cảnh có nút đổi theo câu hỏi thì bấm tiếp nút đúng của câu sau
+    await t3.js(`document.querySelector('#nutNhanh button').click()`);
+    if (K.nutDoi) {
+      await t3.cho(`window.__call.state !== 'listening'`, 5000, 'máy nhận lượt'); await t3.cho(`window.__call.state === 'listening' || window.__call.state === 'done'`, 90000, 'nhân vật hỏi ý còn lại');
+      const chuNut = JSON.parse(await t3.js(`JSON.stringify([...document.querySelectorAll('#nutNhanh button')].map((b) => b.textContent))`));
+      mong(JSON.stringify(chuNut) === JSON.stringify(K.nutDoi), 'nhân vật hỏi ý còn lại thì hai nút đổi theo câu hỏi', chuNut.join(' / '));
+      await t3.anh(`goi-${ma}-6b-app-nut-doi.png`);
+      await t3.js(`document.querySelector('#nutNhanh button').click()`);
+    }
+  }
   else for (const chu of K.luot) { await t3.cho(go(chu), 60000, 'gửi lượt'); await t3.cho(`window.__call.state !== 'listening'`, 5000, 'máy nhận lượt'); await t3.cho(`window.__call.state === 'listening' || window.__call.state === 'done'`, 90000, 'nhân vật đáp'); }
   mong(await t3.cho(`window.__call.state === 'done'`, 90000, 'kết thúc (cầu nối giả)'), K.nut ? 'bấm nút trả lời sẵn là trả lời xong' : 'gõ đủ ý thì kết thúc', (await t3.js(`document.getElementById('pts').textContent`)) + '/' + K.tong);
   await sleep(400);

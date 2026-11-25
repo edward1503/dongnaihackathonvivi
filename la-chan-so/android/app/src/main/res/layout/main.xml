@@ -41,8 +41,8 @@
         <Button android:id="@+id/thuCuaSo" style="@style/Nut.Vien" android:layout_marginTop="8dp" android:text="Mở 2 phút canh app ngân hàng" />
         <Button android:id="@+id/moBaiHoc" style="@style/Nut.Vien" android:layout_marginTop="8dp" android:text="Bài học" />
         <Button android:id="@+id/thuGoiVideo" style="@style/Nut.Vien" android:layout_marginTop="8dp" android:text="Gọi video chị Lan (AI đóng vai)" />
-        <Button android:id="@+id/goiMinh1" style="@style/Nut.Vien" android:layout_marginTop="8dp" android:text="Gọi video với anh Minh · cuộc gọi giả công an" />
-        <Button android:id="@+id/goiMinh3" style="@style/Nut.Vien" android:layout_marginTop="8dp" android:text="Gọi video với anh Minh · tin báo người thân gặp nạn" />
+        <Button android:id="@+id/goiMinh1" style="@style/Nut.Vien" android:layout_marginTop="8dp" android:text="Gọi video · Anh Minh hoảng hốt gọi" />
+        <Button android:id="@+id/goiMinh3" style="@style/Nut.Vien" android:layout_marginTop="8dp" android:text="Gọi video · Anh Minh hỏi mẹ về bé Vy" />
         <Button android:id="@+id/goiTu9" style="@style/Nut.Vien" android:layout_marginTop="8dp" android:text="Khuyên chú Tư · đầu tư lãi cao" />
 
         <TextView style="@style/Chu.Muc" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="26dp" android:text="NHẬT KÝ (MỚI NHẤT Ở TRÊN)" />

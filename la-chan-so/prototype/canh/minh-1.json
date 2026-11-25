@@ -1,8 +1,8 @@
 {
-  "_ghi_chu": "Bài 1 phần C, Minh gọi hỏi lại: người học đóng vai bà Hoa (mẹ của Minh). Luật ngoại tuyến (y[].luat, ngoai_tuyen) là biểu thức chính quy chạy trên lời đã bỏ dấu, viết thường, có dấu cách hai đầu (hàm boDau); luat_dau chạy trên lời còn dấu, cho những chữ bỏ dấu thì lẫn nghĩa. Máy chạy luật: prototype/hoi-thoai-canh.js. Bộ ca kiểm: tools/ca-hoi-thoai-canh.json. lui_khi_hong = true: ở chế độ AI nói chuyện trực tiếp, lượt nào AI không đáp được (hết lượt API, mất mạng) thì dùng luật ngoại tuyến và câu thu sẵn cho lượt đó.",
+  "_ghi_chu": "Bài 1 phần C, Anh Minh hoảng hốt gọi: Minh vừa bị người xưng công an gọi dọa (tài khoản dính đường dây rửa tiền, phải chuyển vào tài khoản tạm giữ trong hôm nay, cấm nói với ai), hoảng loạn gọi hỏi mẹ có nên chuyển không. Người học đóng vai bà Hoa (mẹ của Minh), trấn an và khuyên con. Minh là người được giúp nên không tự nói ra việc nên làm. Luật ngoại tuyến (y[].luat, ngoai_tuyen) là biểu thức chính quy chạy trên lời đã bỏ dấu, viết thường, có dấu cách hai đầu (hàm boDau); luat_dau chạy trên lời còn dấu, cho những chữ bỏ dấu thì lẫn nghĩa. Máy chạy luật: prototype/hoi-thoai-canh.js. Bộ ca kiểm: tools/ca-hoi-thoai-canh.json. lui_khi_hong = true: ở chế độ AI nói chuyện trực tiếp, lượt nào AI không đáp được (hết lượt API, mất mạng) thì dùng luật ngoại tuyến và câu thu sẵn cho lượt đó. nut là hai nút trả lời sẵn lúc mở đầu; nut_theo_cau đổi nút khi Minh hỏi tới ý khác (khóa là biểu thức trên mã câu Minh vừa hỏi). song.loi_dan là lời dặn giọng cho câu AI đọc trực tiếp của riêng cảnh này.",
   "ma": "minh-1",
   "nhan_vat": "minh",
-  "ma_kho": "minh-1",
+  "ma_kho": "minh-hoang",
   "bo_may": "canh",
   "bo_loi": "loi-minh.json",
   "tien_to": "b1-",
@@ -10,42 +10,53 @@
   "anh": "canh/minh.jpg",
   "chu_lon": true,
   "chu": {
-    "tieu_de": "Anh Minh gọi video",
+    "tieu_de": "Anh Minh hoảng hốt gọi",
     "ten": "Anh Minh",
     "ten_thuong": "anh Minh",
     "nguoi_hoc": "bà",
-    "nhan_bai": "Thử thách · Cuộc gọi tự xưng cơ quan chức năng",
-    "huong_dan": "Anh Minh hỏi bà vài câu về bài vừa học. Bà nghe xong thì trả lời bằng giọng nói, hoặc bấm một trong hai nút.",
-    "go_goi_y": "Gõ câu trả lời cho anh Minh…",
-    "kq_du": "Bà trả lời trọn vẹn",
-    "kq_thieu": "Bà trả lời được {dat}/{tong} ý",
-    "kq_loi_du": "Gặp người tự xưng công an đòi chuyển tiền, bà cúp máy rồi gọi cho con.",
-    "kq_loi_thieu": "Lần sau bà nhớ nói thêm: {thieu}.",
+    "nhan_bai": "Thử thách · Anh Minh hoảng hốt gọi",
+    "huong_dan": "Anh Minh vừa bị người xưng công an gọi dọa nên đang rất hoảng. Bà nghe con nói rồi trấn an, khuyên con bằng giọng nói, hoặc bấm một trong hai nút.",
+    "go_goi_y": "Gõ lời khuyên cho anh Minh…",
+    "kq_du": "Bà giúp anh Minh bình tĩnh lại",
+    "kq_thieu": "Bà khuyên được {dat}/{tong} ý",
+    "kq_loi_du": "Bà bảo con cúp máy, không chuyển tiền, rồi hỏi lại công an phường và người nhà, không giấu.",
+    "kq_loi_thieu": "Lần sau bà nhớ khuyên thêm: {thieu}.",
     "nut_ve": "Tiếp tục bài học"
   },
   "nut": [
-    "Mẹ cúp máy rồi gọi con",
-    "Mẹ làm theo họ cho xong"
+    "Con cúp máy đi, đừng chuyển",
+    "Con làm theo họ cho xong đi"
   ],
+  "nut_theo_cau": {
+    "hoilai$": [
+      "Con lên công an phường hỏi, đừng giấu",
+      "Thôi con giấu đi, đừng nói ai"
+    ]
+  },
   "y": [
     {
       "id": "cup",
       "nhan": "Cúp máy, không chuyển tiền",
-      "luat": " (cup|tat|ngat|gac|dap|bo) (may|dien thoai)| cup (luon|ngay|lien|cai rup)| (khong|ko|hong|chang|cha|dung|khoi|dau co) (co )?(bao gio )?(chuyen|gui|dua|nop|nap|lam theo|nghe theo|nghe loi|tin|nghe may|bat may|tra loi)| khong (dua|chuyen|gui) (dong|xu|tien)| mac ke (ho|no)| ke (ho|no) "
+      "luat": " (cup|tat|ngat|gac|dap|bo) (may|dien thoai|ngang)| cup (luon|ngay|lien|cai rup|di)| (khong|ko|hong|chang|cha|dung|khoi|dau co|dung co|chua) (co )?(bao gio |duoc |nen |can )?(chuyen|gui|dua|nop|nap|lam theo|nghe theo|nghe loi|tin|nghe may|bat may|tra loi|so ho|so tui no)| khong (dua|chuyen|gui) (dong|xu|tien)| (mac|ke) (ho|no|tui no)| lua dao (do|day|roi|ca)| (do|la) (bon )?(lua|gia) | cong an gia | (ho|tui no|bon no) (la )?(gia|lua) "
     },
     {
-      "id": "goicon",
-      "nhan": "Gọi cho con hoặc người nhà",
-      "luat": " (goi|hoi|bao|noi|ke|nhan|dien|a lo|alo) (lai |ngay |lien |thu |dien )*(cho |voi |lai )?(con|thang minh|minh|anh minh|nguoi nha|nguoi than|con chau|chau|may dua|tui nho|con trai|con gai)( |$)"
+      "id": "hoilai",
+      "nhan": "Hỏi lại công an phường hoặc người nhà, đừng giấu",
+      "luat": " (hoi|goi|bao|trinh bao|to cao|len|ra|den|toi|xuong|chay ra|dua len) (lai |thu |thang |ngay |lien |cho |voi |o |tai |toi |len |ra |den |xuong |truc tiep |tan noi )*(cong an|phuong|xa|don|tru so|uy ban|ubnd|chinh quyen)( |$)| (noi|ke|bao|hoi|goi|ban) (lai |thu |het |cho |voi |ngay |lien |that |thiet )*(me|ba|vo|chong|nguoi nha|nguoi than|anh|chi|em|ca nha|gia dinh|nguoi lon|chi hai|anh hai|ba ngoai)( |$)| (dung|khong|ko|hong|chang) (co )?(giau|giu bi mat|im im|im lang)| (cu|phai) (noi|ke) (het|ra|cho)| di (len |ra |den |toi |xuong )?(cong an|phuong|xa|don|tru so|uy ban)(?! gia)( |$)"
     }
   ],
   "ngoai_tuyen": {
-    "sai": " (lam theo|nghe theo|nghe loi|tin loi|tin) (ho|nguoi ta|no|ong do|ong ta|cong an|can bo) | (thi |se |cu |danh |phai |lien |voi )chuyen | chuyen (tien |khoan )?(cho xong|lien|ngay|gap|cho ho|cho no|luon|dai|het|di cho) | cho xong | cho yen | (giau|khong cho|dung cho) (con|con chau|ai) (biet|hay) | giu bi mat | so (qua|lam) | (chuyen|gui|dua|nop) (tien |khoan )?(xong|roi) ",
+    "sai": " (lam theo|nghe theo|nghe loi|tin loi|tin) (loi )?(ho|nguoi ta|no|tui no|ong do|ong ta|cong an|can bo|loi ho) | (thi |se |cu |danh |phai |lien |voi |thoi )chuyen | chuyen (tien |khoan |het |vo |vao )?(cho xong|lien|ngay|gap|cho ho|cho no|luon|dai|het|cho yen|vo do|vao do|tam giu) | (chuyen|gui|dua) (tien |het |luon )?di | cho xong | cho yen | (giau|giu kin|giu bi mat) | (dung|khong|dung co) (noi|ke|bao|cho|hoi) (voi |cho )?(ai|nguoi nao|ai biet|ai hay|me|nguoi nha) | (chuyen|gui|dua|nop) (tien |khoan )?(xong|roi) | chuyen (tien |het )?(vo|vao) (tai khoan )?(tam giu|cua ho|do|ho dua) | chuyen (chu|thoi) ",
     "theo_cau": [
       {
-        "cau": "goicon$",
-        "y": "goicon",
-        "luat": " (van|cu|phai|thi|cung) (noi|goi|ke|bao|hoi|dien)( chu| thoi| ma| nha| lien| ngay| het| a| day| con| cho con| voi con| thang minh| cho thang minh| nguoi nha| cho nguoi nha)* $| (noi|ke|bao) het | mac ke (ho|no)| ke (ho|no) "
+        "cau": "^(mo-dau|goi-cup)$",
+        "y": "cup",
+        "luat": "^ (da |a |u |o |thoi |con oi |minh oi )*(khong|ko|hong|dung|dung co|khong nen|hong nen|dung chuyen|khong chuyen)( con| a| nha| nghen| dau| oi| chuyen| di| nghe| nghe chua| me| ma| luon| gi het| het)* $"
+      },
+      {
+        "cau": "hoilai$",
+        "y": "hoilai",
+        "luat": "^ (da |a |u |o |thi |thi con |con )*(hoi |ra |len |den |goi |bao )?(lai )?(cong an phuong|cong an xa|cong an|phuong|xa|don|nguoi nha|me|ca nha|gia dinh|ba|vo)( a| nha| nghen| di| do| thoi| cho chac| lien| ngay| hoi| con)* $"
       }
     ]
   },
@@ -56,7 +67,8 @@
     "ai_nh": "nh",
     "ten_nv": "MINH",
     "ten_nh": "MẸ",
-    "che_so": "(mẹ vừa đọc ra một dãy số riêng tư, app đã không gửi đi)"
+    "che_so": "(mẹ vừa đọc ra một dãy số riêng tư, app đã không gửi đi)",
+    "loi_dan": "Minh, người đàn ông Việt khoảng ba mươi tuổi, giọng nam trẻ miền Nam, ấm. Minh vừa bị kẻ giả công an gọi dọa nên còn hoảng, nói hơi nhanh, có lúc hụt hơi; khi mẹ trấn an thì bình tĩnh dần, nhẹ nhõm."
   },
   "tra_loi": {
     "loi_nhac": "canh/minh-1.tra-loi.txt",

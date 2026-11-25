@@ -52,7 +52,7 @@
   #demoTag.on{display:block}
   .lower{position:absolute;left:0;right:0;top:520px;bottom:0;padding:12px 16px 0;display:flex;flex-direction:column;gap:10px}
   .score{background:#16162A;border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:7px}
-  .chip.k{background:#262645;color:#A5A1D0;transition:background .3s,color .3s}
+  .chip.k{background:#262645;color:#A5A1D0;transition:background .3s,color .3s;height:auto;min-height:28px;padding:4px 10px;flex:0 1 auto;max-width:100%}   /* nhãn ý dài (cảnh anh Minh) thì xuống dòng, không tràn khỏi bảng */
   .chip.k .ic{display:none}
   .chip.k.ok{background:#14532D;color:#BBF7D0}
   .chip.k.ok .ic{display:inline-flex}
@@ -214,7 +214,7 @@ const canhDu = (c) => !!(c && BANG_NV[c.nhan_vat]?.avatar && Array.isArray(c.y) 
 const C = await docJson('canh/' + maCanh + '.json').then((c) => { if (!canhDu(c)) throw new Error('tệp cảnh thiếu trường'); return c; })
   .catch((e) => { console.warn('cảnh', maCanh, e); return docJson('canh/lan-2.json'); });
 const NV = BANG_NV[C.nhan_vat];
-const AVATAR = String(NV.avatar);                      // avatar LiteAvatar của nhân vật (21 chị Lan, 125 anh Minh, 117 ông Tư)
+const AVATAR = String(NV.avatar);                      // avatar LiteAvatar của nhân vật (21 chị Lan, 125 anh Minh, 117 chú Tư)
 const LIPFIT = V + 'stage/d01-tech/lipfit-21.json';    // bộ khớp miệng cho tiếng không có khẩu hình tính sẵn (của avatar 21, dùng tạm cho cả 117 và 125)
 const TONG = C.y.length, T = C.chu, hoa = (x) => x.charAt(0).toUpperCase() + x.slice(1);
 const NH = T.nguoi_hoc, Nh = hoa(NH);                  // cách trang gọi người học: "bạn", hoặc "bà" ở các cảnh cho người cao tuổi
@@ -260,8 +260,17 @@ $('#keys').replaceChildren(...C.y.map((y) => { const e = document.createElement(
 window.paintIcons?.($('#keys'));   // icons.js đã vẽ icon lúc trang nạp xong, trước khi các thẻ này được dựng lại
 if (C.chu_lon) document.body.classList.add('lon');
 if (!C.ban_dien) document.body.classList.add('khong-dien');
-$('#nutNhanh').replaceChildren(...(C.nut || []).map((chu) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = chu; b.addEventListener('click', () => { if (!window.__go) return; try { window.LaChan?.dungNghe(); } catch { /* không có micro */ } window.__go(chu); }); return b; }));   // bấm nút = trả lời bằng câu đó; micro đang nghe thì tắt
-$('#nutNhanh').classList.toggle('co', !!(C.nut || []).length);
+// Nút trả lời sẵn: nut của cảnh lúc mở đầu; nut_theo_cau = { "<biểu thức trên mã câu nhân vật vừa hỏi>": [nút…] } đổi nút khi nhân vật hỏi tới ý khác
+// (với người cao tuổi bấm nút là cách trả lời chính, nên ý nào cũng phải có nút đúng). Bấm nút = trả lời bằng câu đó; micro đang nghe thì tắt.
+let MAY = null;   // máy chọn câu của cuộc gọi đang chạy (để biết câu nhân vật vừa hỏi)
+function datNut() {
+  const cau = MAY?.cauHoi || 'mo-dau', rieng = Object.entries(C.nut_theo_cau || {}).find(([re]) => new RegExp(re, 'u').test(cau)), ds = rieng ? rieng[1] : (C.nut || []);
+  if ($('#nutNhanh').dataset.ds === ds.join('|')) return;
+  $('#nutNhanh').dataset.ds = ds.join('|');
+  $('#nutNhanh').replaceChildren(...ds.map((chu) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = chu; b.addEventListener('click', () => { if (!window.__go) return; try { window.LaChan?.dungNghe(); } catch { /* không có micro */ } window.__go(chu); }); return b; }));
+  $('#nutNhanh').classList.toggle('co', !!ds.length);
+}
+datNut();
 let call = null, model = null, timer = 0, t0 = 0, idx = -1, busy = false, ended = false, fallbackAudio = null, gen = 0, auto = false, vyCtx = null, vySrc = null;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -373,8 +382,12 @@ const bo = () => (BO ||= docJson(C.bo_loi).then((d) => {
   return { ds: d.loi, loi, yDinh: d.y_dinh || [], luat: Object.fromEntries((d.luat || []).map((x) => [x.y_dinh, x])) };
 }));
 // Máy chọn câu thu sẵn: chị Lan có máy riêng (hoi-thoai.js, 43 kiểu lượt nói); các cảnh khác dùng máy chung chạy theo luật trong tệp cảnh.
-const taoMay = (b) => (C.bo_may === 'chi-lan' ? taoHoiThoai(b) : taoHoiThoaiCanh(C, (id) => !!b.loi[id]));
-const demDs = () => (DEM.ds ||= bo().then((b) => b.ds.filter((x) => x.nhom === 'dem')).catch(() => []));
+const taoMay = (b) => (MAY = C.bo_may === 'chi-lan' ? taoHoiThoai(b) : taoHoiThoaiCanh(C, (id) => !!b.loi[id]));
+// Tiếng đệm: cảnh có tiếng đệm riêng (mang tiền tố của cảnh, ví dụ b1-dem-… lúc anh Minh đang hoảng) thì chỉ dùng tiếng đệm riêng; không thì dùng tiếng đệm chung, không lấy của cảnh khác.
+const demDs = () => (DEM.ds ||= bo().then((b) => {
+  const dem = b.ds.filter((x) => x.nhom === 'dem'), rieng = C.tien_to ? dem.filter((x) => x.id.startsWith(C.tien_to)) : [];
+  return rieng.length ? rieng : dem.filter((x) => !/^b\d+-/.test(x.id));
+}).catch(() => []));
 demDs();
 async function dem(g = gen) {
   const ds = await demDs(); if (!ds.length || !call || ended || g !== gen) return false;
@@ -459,7 +472,7 @@ function nghe() {   // một lượt của người học, nói hoặc gõ: { lo
     window.__go = (chu) => het('loi-noi', chu);
     window.__sangGo = () => { clearTimeout(h); luot('go-chu', CHU_GO); };
     window.__sangNoi = moMicro;
-    S.state = 'listening'; document.body.classList.add('luot-toi');   // tới lượt người học: hiện các nút trả lời sẵn (nếu cảnh có)
+    datNut(); S.state = 'listening'; document.body.classList.add('luot-toi');   // tới lượt người học: hiện các nút trả lời sẵn (nếu cảnh có), đúng với câu vừa hỏi
     if (goChu || !coMicro()) { if (!goChu) batGo(true); luot('go-chu', CHU_GO); }
     else moMicro();
   });

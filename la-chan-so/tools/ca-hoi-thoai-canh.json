@@ -3,144 +3,257 @@
  "minh-1": {
   "luot": [
    [
-    "Mẹ cúp máy rồi gọi con",
+    "Con cúp máy đi, đừng chuyển",
     [
-     "cup",
-     "goicon"
+     "cup"
     ]
    ],
    [
-    "Mẹ làm theo họ cho xong",
+    "Con làm theo họ cho xong đi",
     "sai"
    ],
    [
-    "thì mẹ cúp máy chứ sao",
+    "Con lên công an phường hỏi, đừng giấu",
+    [
+     "hoilai"
+    ]
+   ],
+   [
+    "Thôi con giấu đi, đừng nói ai",
+    "sai"
+   ],
+   [
+    "cúp máy liền đi con",
     [
      "cup"
     ]
    ],
    [
-    "mẹ tắt điện thoại luôn",
+    "đừng chuyển đồng nào hết con",
     [
      "cup"
     ]
    ],
    [
-    "mẹ không chuyển đồng nào hết",
+    "lừa đảo đó con, kệ tụi nó",
     [
      "cup"
     ]
    ],
    [
-    "mẹ đâu có tin",
+    "công an giả đó con",
     [
      "cup"
     ]
    ],
    [
-    "không, mẹ cúp máy liền",
+    "con tắt điện thoại đi",
     [
      "cup"
     ]
    ],
    [
-    "họ giục chuyển liền thì mẹ cúp máy",
+    "không con, không chuyển",
     [
      "cup"
     ]
    ],
    [
-    "họ bảo mẹ chuyển tiền thì mẹ không chuyển",
+    "không",
     [
      "cup"
-    ]
-   ],
-   [
-    "mẹ gọi cho thằng Minh",
-    [
-     "goicon"
-    ]
-   ],
-   [
-    "mẹ hỏi con cháu trước đã",
-    [
-     "goicon"
-    ]
-   ],
-   [
-    "mẹ báo cho người nhà",
-    [
-     "goicon"
-    ]
-   ],
-   [
-    "mẹ vẫn nói với con",
-    [
-     "goicon"
     ],
-    "hoi-goicon"
+    "mo-dau"
    ],
    [
-    "thì mẹ cứ gọi",
+    "đừng con ơi",
     [
-     "goicon"
+     "cup"
     ],
-    "hoi-goicon"
+    "mo-dau"
    ],
    [
-    "kệ họ, mẹ kể hết",
+    "không nha con",
+    [
+     "cup"
+    ],
+    "goi-cup"
+   ],
+   [
+    "con ra công an phường hỏi cho chắc",
+    [
+     "hoilai"
+    ]
+   ],
+   [
+    "con hỏi lại công an xã coi",
+    [
+     "hoilai"
+    ]
+   ],
+   [
+    "con báo công an đi",
+    [
+     "hoilai"
+    ]
+   ],
+   [
+    "con nói với ba con đi",
+    [
+     "hoilai"
+    ]
+   ],
+   [
+    "con cứ kể hết cho người nhà",
+    [
+     "hoilai"
+    ]
+   ],
+   [
+    "đừng giấu, con cứ nói với mẹ",
+    [
+     "hoilai"
+    ]
+   ],
+   [
+    "công an phường",
+    [
+     "hoilai"
+    ],
+    "hoi-hoilai"
+   ],
+   [
+    "hỏi người nhà",
+    [
+     "hoilai"
+    ],
+    "goi-hoilai"
+   ],
+   [
+    "con cúp máy rồi lên phường hỏi",
     [
      "cup",
-     "goicon"
-    ],
-    "hoi-goicon"
+     "hoilai"
+    ]
    ],
    [
-    "mẹ không cúp máy",
-    []
+    "Kệ họ, con cúp máy, rồi đến công an phường trình báo",
+    [
+     "cup",
+     "hoilai"
+    ]
    ],
    [
-    "mẹ không gọi con đâu",
-    []
+    "con không chuyển mà lên phường hỏi",
+    [
+     "cup",
+     "hoilai"
+    ]
    ],
    [
-    "mẹ đâu có dám gọi con",
-    []
+    "Con khỏi cần chuyển tiền, cúp máy đi",
+    [
+     "cup"
+    ]
    ],
    [
-    "mẹ có nên gọi con không",
+    "Đúng rồi, con cúp máy đi",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "con đừng tin, công an thật không gọi đòi tiền",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "con cúp máy đi công an giả đó",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "con chuyển cho xong chuyện",
+    "sai"
+   ],
+   [
+    "sợ quá thì chuyển đi con",
+    "sai"
+   ],
+   [
+    "ừ chuyển đi",
+    "sai"
+   ],
+   [
+    "con nghe theo công an đi",
+    "sai"
+   ],
+   [
+    "con đừng nói với ai hết",
+    "sai"
+   ],
+   [
+    "con đừng hỏi ai hết",
+    "sai"
+   ],
+   [
+    "con giữ bí mật nha",
+    "sai"
+   ],
+   [
+    "con cúp máy rồi chuyển tiền cho xong",
+    "sai"
+   ],
+   [
+    "con chuyển tiền xong rồi lên phường",
+    "sai"
+   ],
+   [
+    "hỏi công an làm gì cho mệt",
+    "sai"
+   ],
+   [
+    "nếu con chuyển là mất tiền đó, cúp máy đi",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "con có nên cúp máy không",
     "hoi-lai"
    ],
    [
-    "mẹ sợ quá thì chuyển cho họ",
-    "sai"
+    "con cúp máy hả?",
+    "hoi-lai"
    ],
    [
-    "thôi chuyển cho yên",
-    "sai"
-   ],
-   [
-    "mẹ giấu con cho xong chuyện",
-    "sai"
-   ],
-   [
-    "mẹ nghe theo công an thôi",
-    "sai"
-   ],
-   [
-    "mẹ cúp máy rồi chuyển tiền cho xong",
-    "sai"
-   ],
-   [
-    "họ dặn mẹ đừng nói với con",
+    "họ bảo con không được nói với ai",
     []
    ],
    [
-    "công an gọi thiệt hả con",
+    "họ bảo con chuyển vô tài khoản tạm giữ",
     []
    ],
    [
-    "hôm nay trời nóng quá",
+    "Họ bảo con cúp máy rồi lên phường",
+    []
+   ],
+   [
+    "con đừng cúp máy",
+    []
+   ],
+   [
+    "con chưa định cúp máy hay hỏi ai",
+    []
+   ],
+   [
+    "mẹ không biết nữa",
+    []
+   ],
+   [
+    "tiền nhiều không con",
     []
    ],
    [
@@ -156,83 +269,50 @@
     "xin-dung"
    ],
    [
-    "gọi con làm gì cho mệt",
-    "sai"
-   ],
-   [
-    "cúp máy chi cho mệt, mẹ cứ nghe họ nói",
-    "sai"
-   ],
-   [
-    "mẹ khỏi cần hỏi ai",
-    []
-   ],
-   [
-    "Mẹ vẫn gọi cho họ",
-    [],
-    "hoi-goicon"
-   ],
-   [
-    "Họ bảo mẹ cúp máy rồi gọi con",
-    []
-   ],
-   [
-    "Mẹ cúp máy rồi gọi con hả?",
-    "hoi-lai"
-   ],
-   [
-    "mẹ cúp máy rồi gọi con hả",
-    "hoi-lai"
-   ],
-   [
-    "Mẹ chưa định cúp máy hay gọi con",
-    []
-   ],
-   [
-    "Mẹ khỏi cần chuyển tiền, mẹ cúp máy rồi gọi con",
-    [
-     "cup",
-     "goicon"
-    ]
-   ],
-   [
-    "mẹ chuyển tiền xong rồi gọi con",
-    "sai"
-   ],
-   [
-    "con dặn mẹ gọi con mà",
-    [
-     "goicon"
-    ]
-   ],
-   [
-    "không mẹ cúp máy liền",
-    [
-     "cup"
-    ]
-   ],
-   [
-    "mẹ không chuyển tiền mà cúp máy rồi gọi con",
-    [
-     "cup",
-     "goicon"
-    ]
-   ],
-   [
-    "Đúng rồi, mẹ cúp máy",
-    [
-     "cup"
-    ]
-   ],
-   [
     "Mã PIN của mẹ là 4321",
     []
+   ],
+   [
+    "con đi công an hỏi",
+    [
+     "hoilai"
+    ]
+   ],
+   [
+    "chuyển vô tài khoản tạm giữ đi con",
+    "sai"
+   ],
+   [
+    "con cứ làm theo lời công an",
+    "sai"
+   ],
+   [
+    "con chuyển đi rồi tính",
+    "sai"
+   ],
+   [
+    "đừng nghe lời họ",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "con đừng giấu mẹ",
+    [
+     "hoilai"
+    ]
+   ],
+   [
+    "giấu chi con",
+    "sai",
+    "hoi-hoilai"
    ]
   ],
   "cuoc": [
    {
     "luot": [
-     "Mẹ cúp máy rồi gọi con"
+     "Con cúp máy đi, đừng chuyển",
+     "Con lên công an phường hỏi, đừng giấu"
     ],
     "diem": 2,
     "het": true,
@@ -240,8 +320,7 @@
    },
    {
     "luot": [
-     "mẹ cúp máy",
-     "mẹ vẫn gọi cho con"
+     "con cúp máy rồi lên phường hỏi"
     ],
     "diem": 2,
     "het": true,
@@ -249,9 +328,27 @@
    },
    {
     "luot": [
-     "Mẹ làm theo họ cho xong",
-     "vậy mẹ không chuyển tiền",
-     "mẹ hỏi thằng Minh"
+     "không",
+     "công an phường"
+    ],
+    "diem": 2,
+    "het": true,
+    "cuoi": "ket-du"
+   },
+   {
+    "luot": [
+     "Con làm theo họ cho xong đi",
+     "không con, đừng chuyển",
+     "hỏi lại công an phường"
+    ],
+    "diem": 2,
+    "het": true,
+    "cuoi": "ket-du"
+   },
+   {
+    "luot": [
+     "con nói với ba con đi",
+     "cúp máy liền đi con"
     ],
     "diem": 2,
     "het": true,
@@ -271,7 +368,7 @@
     "luot": [
      "(loi)",
      "(loi)",
-     "mẹ cúp máy"
+     "con cúp máy đi"
     ],
     "diem": 1,
     "het": false
@@ -288,7 +385,7 @@
    },
    {
     "luot": [
-     "mẹ cúp máy",
+     "con cúp máy đi",
      "thôi để bữa khác nói nha con"
     ],
     "diem": 1,
@@ -297,7 +394,7 @@
    },
    {
     "luot": [
-     "Mẹ cúp máy, tạm biệt con"
+     "Con cúp máy đi, tạm biệt con"
     ],
     "diem": 1,
     "het": true,
@@ -319,84 +416,157 @@
  "minh-3": {
   "luot": [
    [
-    "Mẹ gọi con bằng số mẹ đã lưu",
+    "Mẹ gọi con hỏi trước đã",
     [
-     "goithang",
-     "soluu"
+     "chuachuyen",
+     "goihoi"
     ]
    ],
    [
-    "Mẹ chuyển tiền trước cho kịp",
+    "Mẹ chuyển trước cho kịp",
     "sai"
    ],
    [
-    "mẹ gọi thẳng cho con",
+    "Mẹ gọi cô giáo của Vy hỏi thử",
     [
-     "goithang"
+     "goihoi"
     ]
    ],
    [
-    "mẹ điện cho thằng Minh trước",
+    "Chưa hỏi được thì mẹ chưa chuyển",
     [
-     "goithang"
+     "chuachuyen"
     ]
    ],
    [
-    "mẹ gọi con liền",
+    "mẹ chưa chuyển đâu",
     [
-     "goithang"
+     "chuachuyen"
     ]
    ],
    [
-    "số mẹ lưu trong máy",
+    "khoan đã, mẹ hỏi lại cho chắc",
     [
-     "soluu"
-    ],
-    "hoi-soluu"
+     "chuachuyen"
+    ]
    ],
    [
-    "số trong danh bạ",
+    "mẹ không chuyển vội",
     [
-     "soluu"
-    ],
-    "hoi-soluu"
+     "chuachuyen"
+    ]
    ],
    [
-    "số cũ của con",
+    "mẹ hỏi trước rồi mới chuyển",
     [
-     "soluu"
-    ],
-    "hoi-soluu"
+     "chuachuyen"
+    ]
    ],
    [
-    "mẹ không gọi số trong tin nhắn",
+    "từ từ đã con",
     [
-     "soluu"
-    ],
-    "hoi-soluu"
+     "chuachuyen"
+    ]
    ],
    [
-    "mẹ gọi lại số vừa nhắn hỏi cho rõ",
+    "mẹ gọi cho ba mẹ con bé",
+    [
+     "goihoi"
+    ]
+   ],
+   [
+    "mẹ gọi nhà trường hỏi",
+    [
+     "goihoi"
+    ]
+   ],
+   [
+    "mẹ điện cho thằng Minh",
+    [
+     "goihoi"
+    ]
+   ],
+   [
+    "mẹ gọi bằng số đã lưu trong máy",
+    [
+     "goihoi"
+    ]
+   ],
+   [
+    "Mẹ dùng danh bạ gọi ba nó",
+    [
+     "goihoi"
+    ]
+   ],
+   [
+    "mẹ khoan chuyển, gọi người nhà hỏi trước",
+    [
+     "chuachuyen",
+     "goihoi"
+    ]
+   ],
+   [
+    "cô giáo",
+    [
+     "goihoi"
+    ],
+    "hoi-goihoi"
+   ],
+   [
+    "hỏi con",
+    [
+     "goihoi"
+    ],
+    "goi-goihoi"
+   ],
+   [
+    "chưa",
+    [
+     "chuachuyen"
+    ],
+    "goi-chuachuyen"
+   ],
+   [
+    "khoan đã",
+    [
+     "chuachuyen"
+    ],
+    "goi-chuachuyen"
+   ],
+   [
+    "mẹ gọi lại số vừa gọi",
     "sai"
    ],
    [
-    "mẹ bấm vào số trong tin",
+    "thương cháu quá thì mẹ chuyển liền",
     "sai"
    ],
    [
-    "mẹ gửi tiền liền cho con",
+    "mẹ chuyển cho cháu",
     "sai"
    ],
    [
-    "mẹ không chuyển tiền",
+    "mẹ chuyển tiền xong rồi gọi con",
+    "sai"
+   ],
+   [
+    "hỏi con làm gì cho mệt, chuyển luôn",
+    "sai"
+   ],
+   [
+    "gọi cô giáo chi cho mệt",
+    "sai"
+   ],
+   [
+    "mẹ có nên chuyển không",
+    "hoi-lai"
+   ],
+   [
+    "nó khóc bảo chuyển gấp",
     []
    ],
    [
-    "mẹ không gọi con",
-    []
-   ],
-   [
-    "tin nhắn nói con bị tai nạn hả",
+    "Họ bảo mẹ gọi cô giáo",
     []
    ],
    [
@@ -404,57 +574,55 @@
     []
    ],
    [
-    "họ giục chuyển gấp thì mẹ gọi con",
-    [
-     "goithang"
-    ]
-   ],
-   [
-    "mẹ có nên gọi con không",
-    "hoi-lai"
-   ],
-   [
-    "gọi con chi cho mệt, chuyển luôn",
-    "sai"
-   ],
-   [
-    "số nào cũng được",
+    "mẹ không gọi ai hết",
     []
    ],
    [
-    "Mẹ chuyển tiền xong rồi gọi con bằng số đã lưu",
+    "mẹ gọi lại cho Vy",
+    []
+   ],
+   [
+    "mẹ chưa biết nữa",
+    []
+   ],
+   [
+    "không chín một hai ba bốn năm sáu bảy tám",
+    "lo-thong-tin"
+   ],
+   [
+    "con là người thật hay máy",
+    "ai-la"
+   ],
+   [
+    "mẹ chuyển ít thôi",
     "sai"
    ],
    [
-    "Gọi điện thoại cho con bằng số điện thoại đã lưu",
+    "chuyển chứ",
+    "sai",
+    "goi-chuachuyen"
+   ],
+   [
+    "mẹ đợi hỏi được Vy đã",
     [
-     "goithang",
-     "soluu"
+     "chuachuyen"
     ]
    ],
    [
-    "Mẹ dùng danh bạ",
+    "mẹ không tin, gọi con hỏi",
     [
-     "soluu"
-    ],
-    "hoi-soluu"
+     "goihoi"
+    ]
    ],
    [
-    "mẹ không dùng số trong tin nhắn",
-    [
-     "soluu"
-    ],
-    "hoi-soluu"
-   ],
-   [
-    "Họ bảo mẹ gọi con bằng số đã lưu",
-    []
+    "mẹ thương cháu, chuyển liền cho nó",
+    "sai"
    ]
   ],
   "cuoc": [
    {
     "luot": [
-     "Mẹ gọi con bằng số mẹ đã lưu"
+     "Mẹ gọi con hỏi trước đã"
     ],
     "diem": 2,
     "het": true,
@@ -462,8 +630,8 @@
    },
    {
     "luot": [
-     "mẹ gọi cho con",
-     "số mẹ lưu sẵn"
+     "mẹ chưa chuyển đâu",
+     "Mẹ gọi cô giáo của Vy hỏi thử"
     ],
     "diem": 2,
     "het": true,
@@ -471,10 +639,19 @@
    },
    {
     "luot": [
-     "Mẹ chuyển tiền trước cho kịp",
-     "mẹ gọi con trước",
-     "gọi lại số vừa nhắn",
-     "số trong danh bạ"
+     "Mẹ chuyển trước cho kịp",
+     "chưa",
+     "cô giáo"
+    ],
+    "diem": 2,
+    "het": true,
+    "cuoi": "ket-du"
+   },
+   {
+    "luot": [
+     "mẹ gọi nhà trường",
+     "Mẹ chuyển trước cho kịp",
+     "Chưa hỏi được thì mẹ chưa chuyển"
     ],
     "diem": 2,
     "het": true,
@@ -483,7 +660,7 @@
    {
     "luot": [
      "(im)",
-     "mẹ gọi con",
+     "mẹ gọi cho ba nó",
      "(im)",
      "(im)",
      "(im)"
@@ -491,6 +668,16 @@
     "diem": 1,
     "het": true,
     "cuoi": "im-ba"
+   },
+   {
+    "luot": [
+     "mẹ lo quá",
+     "trời ơi",
+     "mẹ không biết"
+    ],
+    "diem": 0,
+    "het": true,
+    "cuoi": "ket-thieu"
    }
   ]
  },
