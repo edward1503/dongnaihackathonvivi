@@ -13,7 +13,7 @@
 |---|---|
 | **Người lớn tuổi (bà Hoa)** | Bấm “Báo cuộc vừa nhận” trên thẻ cảnh báo cuộc gọi của Android hoặc ở màn Bé Nai sau cuộc gọi. Nếu bấm lúc đổ chuông, máy giữ lựa chọn đến khi đối chiếu được nhật ký cuộc gọi đến. Bà có thể tra số bằng giọng hoặc bàn phím, hỏi con cháu, dùng màn Dừng lại khi mở ứng dụng ngân hàng, màn Khẩn cấp, bài học 1 và 3, gọi video cho Minh. |
 | **Học sinh (Vy)** | Tra tin nhắn, đường dẫn, số hoặc tài khoản. Từ thông báo tin nhắn trên máy mình, Vy chọn báo người gửi hoặc đối tượng xuất hiện trong chính tin đó. Dùng `sms_received` hoặc kèm ảnh đã che theo quy tắc `screenshot` ở mục 3. Có bài học 2 và 4, gọi video với chị Lan, chú Tư và bài kiểm tra 5 câu. |
-| **Người thân (Minh, Zalo)** | Xem tóm tắt đã che, gọi lại cho bà, chọn “Đừng chuyển” hoặc “Người quen” trên cảnh báo của gia đình mình. Bỏ cả “Báo số lạ” và “Báo số này cho cộng đồng” trên Zalo. Minh chỉ trả lời về cuộc gọi bà đã nhận. |
+| **Người thân (Minh, vai "Người thân" trong app Lá chắn số; trang Zalo mẫu chỉ để trình diễn trên trình duyệt)** | Chọn vai "Người thân" và nhập mã gia đình (bản demo ghép sẵn với máy bà Hoa). Nhận **thông báo Android** khi máy bà có cuộc gọi hoặc tin nhắn đáng ngờ, kể cả khi không mở app. Xem tóm tắt đã che, nhãn AI và câu bà trả lời Bé Nai, chọn “Đừng chuyển” hoặc “Người quen”, gọi mẹ ngay. Không báo cáo, không duyệt. Minh chỉ trả lời về cuộc gọi bà đã nhận. Zalo Mini App thật để sau, vì phát hành cần xác thực doanh nghiệp. |
 | **Đội tình nguyện (Khoa)** | Đăng nhập để xem thống kê phường, xét cụm nhiều máy thiếu bản ghi, ý kiến trái nhau, đợt báo dồn và bằng chứng liên quan khiếu nại. Web đội chỉ có tác vụ xét hồ sơ. **Trưởng đội** tiếp nhận nhận xét, quyết định giữ hoặc gỡ nhãn khi có khiếu nại và phát thông báo khu phố. |
 
 APK dùng màn Android cho bảo vệ cuộc gọi, tin nhắn và dùng bài học hiện có. Khung React V3 có thể mở đúng màn Android. Web tra cứu và màn “Thử Lá chắn” không tạo bằng chứng đã nhận.
@@ -129,6 +129,8 @@ Tính hai tổng `S1`, `S2`. Với mỗi tổng, lấy **điểm cao nhất củ
 | `demo(key)` | | Mục "Thử Lá chắn": `ring` (thẻ đổ chuông), `ringKnown` (số quen), `afterCall` (Bé Nai hỏi sau cuộc gọi), `stop` (màn Dừng lại), `message` (tin nhắn lạ), `bankWatch` (mở app ngân hàng thì hiện Dừng lại) |
 | `openCall(scene)` | | Mở cuộc gọi video luyện tập: `minh-1`, `minh-3`, `lan-2`, `tu-9` |
 | `openStory(scamType)` | | Đã có: mở bài học truyện tranh |
+| `setRole(role, familyCode?)` | | App React báo vai đang dùng (`elder`, `student`, `relative`, `team`). Vai `relative` thì Android chạy dịch vụ nền theo dõi cảnh báo của gia đình và hiện thông báo; vai khác thì tắt |
+| `familyAlerts()` | Promise JSON danh sách cảnh báo của gia đình (mới nhất trước) | Màn Người thân, khi mở app từ thông báo |
 
 ## 5. Làm trong bản hackathon, để sau
 
