@@ -5,6 +5,7 @@ import { APP, Art, Bar, Btn, Circle, Group, I, Logo, Progress, Row, Screen, Spea
 import { LAYERS, useLayers } from '../../lib/layers.js'
 import { native } from '../../lib/native.js'
 import { useApp } from '../../lib/state.jsx'
+import bieuTrung from '../art/bieu-trung-dong-nai.webp'
 
 export const WARDS = ['Trấn Biên', 'Biên Hòa', 'Tam Hiệp', 'Long Bình', 'Trảng Dài', 'Hố Nai', 'Long Hưng', 'Tam Phước', 'Phước Tân']
 export const ROLES = [
@@ -23,7 +24,11 @@ export function Splash() {
   return (
     <Screen name="00-man-chao" tone="white" foot={<>
       <Btn onClick={() => nav('/vai', { replace: true })}>Bắt đầu</Btn>
-      <div className="t-sm center">Sản phẩm dự thi Hackathon thành phố Đồng Nai 2026</div>
+      {/* Biểu trưng Đồng Nai: chỉ đặt nhỏ ở đây để ghi cuộc thi, không dùng làm logo của app */}
+      <div className="row g10 jc" style={{ padding: '0 8px' }}>
+        <img src={bieuTrung} alt="Biểu trưng Đồng Nai" width={30} height={35} style={{ flex: 'none' }} />
+        <div className="t-sm" style={{ textAlign: 'left' }}>Sản phẩm dự thi Hackathon<br />thành phố Đồng Nai 2026</div>
+      </div>
     </>}>
       <div className="col ac jc g12 grow center">
         <Art name="chao" z={220} className="pop bounce" />

@@ -4,7 +4,7 @@ React 19, Vite. Chạy trong WebView của ứng dụng Android, hoặc trên tr
 
 **Giao diện V3:** gọn, chia theo 3 đối tượng (người lớn tuổi, học sinh, đội tình nguyện). Màu, cỡ chữ và bố cục theo bản `review/mockup/v3.html`. Linh vật Bé Nai lấy từ bộ tranh của Mảng 4.
 
-**Logo:** khiên của đội, không dùng biểu trưng của cơ quan nào (quy ước "không logo thật").
+**Logo:** khiên của đội. Biểu trưng Đồng Nai chỉ đặt nhỏ ở màn chào, cạnh dòng "Sản phẩm dự thi Hackathon thành phố Đồng Nai 2026", không dùng làm logo app (cần ban tổ chức đồng ý cho dùng biểu trưng).
 
 ## Chạy
 

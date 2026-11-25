@@ -41,7 +41,7 @@ AUDIT=1 node tools/export.mjs    # xuất lại toàn bộ màn và rà lỗi b�
 
 ## Quy ước
 
-- **Thiết kế:** tranh không có chữ (lời kể là chữ thật trên giao diện); không quốc huy, không bản đồ, không logo thật, không mặt người thật. Ngoại lệ: avatar chị Lan, có nhãn "AI đóng vai"; không dùng avatar người thật cho vai kẻ gian.
+- **Thiết kế:** tranh không có chữ (lời kể là chữ thật trên giao diện); không quốc huy, không bản đồ, không logo thật, không mặt người thật. Ngoại lệ: avatar chị Lan, có nhãn "AI đóng vai"; không dùng avatar người thật cho vai kẻ gian. Biểu trưng Đồng Nai chỉ đặt nhỏ ở màn chào của app, cạnh dòng "Sản phẩm dự thi…" (cần ban tổ chức cho phép), không dùng làm logo.
 - **Linh vật:** Bé Nai. Viết "thành phố Đồng Nai".
 - **Người cao tuổi:** ưu tiên giọng nói, hai nút Có và Không, không có khung chat; Lá chắn tự báo người thân.
 - **Khi nào lên tiếng:** mặc định im lặng với số chưa lưu; 5 mức, xem màn D05.
