@@ -10,15 +10,15 @@
   <style>
     @page {
       size: A4 portrait;
-      margin: 11mm 13mm;
+      margin: 10.5mm 13mm;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body, button {
       font-family: "Be Vietnam Pro", "Segoe UI", Tahoma, sans-serif;
     }
     body {
-      font-size: 9.6pt;
-      line-height: 1.38;
+      font-size: 9.5pt;
+      line-height: 1.36;
       color: #111827;
       background: #ffffff;
       max-width: 210mm;
@@ -28,7 +28,6 @@
     @media print {
       body { padding: 0; max-width: none; }
       .no-print { display: none !important; }
-      .page-break { page-break-before: always; }
     }
     .print-bar {
       background: #eff6ff;
@@ -52,29 +51,25 @@
     }
     .header {
       border-bottom: 2px solid #1d4ed8;
-      padding-bottom: 7px;
-      margin-bottom: 10px;
+      padding-bottom: 6px;
+      margin-bottom: 9px;
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
     }
     .header-left h1 {
-      font-size: 13.5pt;
+      font-size: 13pt;
       color: #1e3a8a;
       text-transform: uppercase;
-      letter-spacing: 0.2px;
       margin-bottom: 2px;
     }
-    .header-left p {
-      font-size: 9.5pt;
-      color: #374151;
-    }
+    .header-left p { font-size: 9.2pt; color: #374151; }
     .badge-topic {
       background: #1e3a8a;
       color: #fff;
       padding: 4px 10px;
       border-radius: 5px;
-      font-size: 8.8pt;
+      font-size: 8.6pt;
       font-weight: 700;
       text-align: right;
     }
@@ -84,115 +79,90 @@
       border-left: 4px solid #1d4ed8;
       padding: 6px 10px;
       border-radius: 4px;
-      margin-bottom: 10px;
-      font-size: 9pt;
+      margin-bottom: 9px;
+      font-size: 8.9pt;
     }
     h2 {
-      font-size: 10.8pt;
+      font-size: 10.4pt;
       color: #1e3a8a;
       background: #eff6ff;
       padding: 4px 8px;
       border-left: 3.5px solid #1d4ed8;
-      margin: 9px 0 6px 0;
+      margin: 8px 0 5px 0;
       text-transform: uppercase;
     }
-    p { margin-bottom: 5px; }
-    ul { padding-left: 16px; margin-bottom: 5px; }
-    li { margin-bottom: 2.5px; }
+    p { margin-bottom: 4px; }
+    ul { padding-left: 16px; margin-bottom: 4px; }
+    li { margin-bottom: 2px; }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 5px 0 8px 0;
-      font-size: 8.9pt;
+      margin: 4px 0 7px 0;
+      font-size: 8.7pt;
     }
     th, td {
       border: 1px solid #cbd5e1;
-      padding: 4.5px 6px;
+      padding: 4px 6px;
       vertical-align: top;
       text-align: left;
     }
-    th {
-      background: #f1f5f9;
-      color: #0f172a;
-      font-weight: 700;
-    }
+    th { background: #f1f5f9; color: #0f172a; font-weight: 700; }
     .flow-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 6px;
-      margin: 6px 0 8px 0;
+      margin: 5px 0 7px 0;
     }
     .flow-card {
       border: 1px solid #cbd5e1;
       border-top: 3px solid #1d4ed8;
       border-radius: 5px;
-      padding: 6px 7px;
+      padding: 5px 7px;
       background: #ffffff;
-      font-size: 8.6pt;
+      font-size: 8.4pt;
     }
     .flow-card strong {
       display: block;
       color: #1e3a8a;
-      margin-bottom: 3px;
-      font-size: 9pt;
+      margin-bottom: 2px;
+      font-size: 8.8pt;
     }
     .arch-box {
       border: 1px solid #93c5fd;
       background: #f8fafc;
       border-radius: 6px;
-      padding: 7px 10px;
-      margin: 5px 0 8px 0;
-      font-size: 8.8pt;
+      padding: 6px 9px;
+      margin: 4px 0 7px 0;
+      font-size: 8.6pt;
     }
-    .arch-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 5px;
-    }
+    .arch-row { display: flex; justify-content: space-between; gap: 7px; margin-bottom: 4px; }
     .arch-node {
       flex: 1;
       background: #fff;
       border: 1px solid #cbd5e1;
       border-radius: 4px;
-      padding: 4px 7px;
+      padding: 4px 6px;
       text-align: center;
     }
-    .arch-arrow {
-      text-align: center;
-      color: #1d4ed8;
-      font-weight: 700;
-      font-size: 9pt;
-      margin: 2px 0;
-    }
-    .tag {
-      display: inline-block;
-      padding: 1px 5px;
-      border-radius: 3px;
-      font-size: 8pt;
-      font-weight: 600;
-    }
+    .arch-arrow { text-align: center; color: #1d4ed8; font-weight: 700; font-size: 8.8pt; margin: 2px 0; }
+    .tag { display: inline-block; padding: 1px 5px; border-radius: 3px; font-size: 7.8pt; font-weight: 600; }
     .tag-green { background: #dcfce7; color: #166534; }
     .tag-amber { background: #fef3c7; color: #92400e; }
     .tag-red { background: #fee2e2; color: #991b1b; }
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .callout {
       border: 1px solid #cbd5e1;
       border-radius: 5px;
-      padding: 6px 8px;
-      font-size: 8.8pt;
+      padding: 5px 8px;
+      font-size: 8.5pt;
       background: #fcfcfd;
     }
   </style>
 </head>
 <body>
   <div class="print-bar no-print">
-    <span>📄 <strong>Bản Thuyết Minh Đề 2</strong> – Đã căn chỉnh vừa khít chuẩn <strong>tối đa 03 trang A4</strong> theo quy chế thi.</span>
-    <button class="print-btn" onclick="window.print()">🖨️ Xuất / Lưu PDF (Ctrl + P)</button>
+    <span><strong>Bản Thuyết Minh Đề 2</strong> – Đã căn chỉnh vừa khít chuẩn <strong>tối đa 03 trang A4</strong> và khớp 1:1 với Prototype.</span>
+    <button class="print-btn" onclick="window.print()">Xuất / Lưu PDF (Ctrl + P)</button>
   </div>
 
   <div class="header">
@@ -204,143 +174,146 @@
   </div>
 
   <div class="meta-strip">
-    <strong>• Đường dẫn Bản mẫu bấm được (Prototype):</strong> Mở tệp <code>./prototype/index.html</code> trong thư mục nộp bài (hoạt động độc lập ngoại tuyến 100%, tích hợp chuyển vai trò Người dân – Đoàn viên – Cán bộ Phường).<br/>
-    <strong>• Bối cảnh dữ liệu mẫu:</strong> Phường Trấn Biên (Tháng 11/2026) – <strong>64</strong> phản ánh (Rác thải 21, Đèn đường 18, Ngập nước 15, Mặt đường 10); Đã xử lý <strong>47 (73,4%)</strong>; Thời gian xử lý trung bình <strong>3,2 ngày</strong>.
+    <strong>• Đường dẫn Bản mẫu bấm được (Prototype):</strong> Trực tuyến tại <strong>https://mobile-app-mu-olive.vercel.app</strong> (Mobile PWA) hoặc mở tệp ngoại tuyến <code>./prototype/index.html</code> trong thư mục nộp bài.<br/>
+    <strong>• Dữ liệu mẫu sử dụng:</strong> Phường Trấn Biên (Tháng 11/2026) – <strong>64</strong> phản ánh (Rác thải 21, Đèn đường 18, Ngập nước 15, Mặt đường 10); Đã xử lý <strong>47 (73,4%)</strong>; Đang xử lý/chờ xác minh <strong>17</strong>; Thời gian xử lý trung bình <strong>3,2 ngày</strong>.
   </div>
 
-  <h2>(a) Vấn đề thực tiễn và Chân dung người dùng tại Đồng Nai</h2>
-  <p>Tại các phường trung tâm đông dân cư của TP. Đồng Nai như <strong>Phường Trấn Biên</strong>, sự cố hạ tầng dân sinh (đèn chiếu sáng hỏng trong hẻm, ổ gà mặt đường sau mưa, ngập cống cục bộ, điểm rác tự phát) xảy ra thường xuyên. Tuy nhiên, kênh kết nối hiện tại giữa người dân và chính quyền cơ sở đang gặp 03 rào cản lớn về trải nghiệm:</p>
+  <h2>(a) Vấn đề thực tiễn, Người dùng &amp; Chuỗi trách nhiệm tại Đồng Nai</h2>
+  <p>Tại địa bàn đô thị đông dân cư như <strong>Phường Trấn Biên</strong>, các sự cố hạ tầng (đèn đường hỏng, ổ gà, ngập nước sau mưa, rác tự phát) phát sinh hàng ngày. Khác với bài toán gửi tin đơn thuần, thực tế cấp phường đòi hỏi phân định rõ <strong>ai tiếp nhận – ai xác minh – ai trực tiếp sửa chữa – ai nghiệm thu công khai</strong>:</p>
 
   <table>
     <thead>
       <tr>
-        <th style="width: 21%;">Nhóm người dùng</th>
-        <th style="width: 25%;">Bối cảnh tại Đồng Nai</th>
-        <th style="width: 27%;">Nỗi đau cốt lõi (Pain Points)</th>
-        <th style="width: 27%;">Giải pháp UX trọng tâm</th>
+        <th style="width: 22%;">Tác nhân trong quy trình</th>
+        <th style="width: 25%;">Bối cảnh thực tế tại Phường</th>
+        <th style="width: 26%;">Nỗi đau cốt lõi (Pain Points)</th>
+        <th style="width: 27%;">Giải pháp UX giải quyết trực tiếp</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><strong>1. Người dân</strong><br/><em>(Gồm cả người cao tuổi 60–75 tuổi ít dùng công nghệ)</em></td>
-        <td>Đi bộ, đi chợ, tan ca qua các tuyến đường/khu phố; quen dùng điện thoại phổ thông &amp; nhóm Zalo khu phố.</td>
-        <td>• Không biết báo ai; ngại tải app nặng &amp; đăng ký rườm rà.<br/>• Chữ nhỏ, nhiều ô nhập liệu.<br/>• Báo xong không rõ đã sửa chưa.</td>
-        <td>• Mở ngay qua link/QR Zalo (PWA), không cần cài đặt.<br/>• <strong>Gửi 3 bước (&lt;15s)</strong>, AI điền hộ.<br/>• <strong>Chế độ Chữ lớn (1.5x)</strong> &amp; kéo xem ảnh Trước/Sau.</td>
+        <td><strong>1. Người dân</strong><br/><em>(Kể cả người cao tuổi 60–75 tuổi ít dùng công nghệ)</em></td>
+        <td>Đi bộ, đi chợ, đi làm qua khu phố; quen dùng điện thoại thông minh phổ thông &amp; nhóm Zalo khu phố.</td>
+        <td>• Không biết báo cho ai; ngại cài app nặng &amp; chữ nhỏ.<br/>• Báo xong không biết đã giao ai sửa hay hoàn thành chưa.</td>
+        <td>• Mở ngay qua link/QR Zalo (PWA).<br/>• <strong>Wizard 3 màn hình tuần tự</strong>, mỗi bước chỉ 1 quyết định.<br/>• <strong>Chế độ Chữ lớn xuyên suốt</strong> &amp; kéo xem ảnh Trước/Sau.</td>
       </tr>
       <tr>
-        <td><strong>2. Đội Thanh niên tình nguyện</strong><br/><em>(Đoàn viên khu phố)</em></td>
-        <td>Bám sát địa bàn từng khu phố, nhiệt tình hỗ trợ chuyển đổi số nhưng thiếu công cụ tác nghiệp hiện trường.</td>
-        <td>• Khó nhận danh sách điểm nóng quanh mình để kiểm chứng giúp phường hoặc báo hộ cô chú lớn tuổi.</td>
-        <td>• Giao diện <strong>Xác minh tại chỗ 1 chạm</strong> cho tin báo gần vị trí / AI độ tin cậy trung bình.<br/>• Nút <strong>"Gửi hộ người cao tuổi"</strong>.</td>
+        <td><strong>2. Đội Thanh niên tình nguyện</strong><br/><em>(Xác minh tại chỗ)</em></td>
+        <td>Đoàn viên thông thuộc từng hẻm nhỏ, hỗ trợ lọc tin mờ/ảo và giúp người lớn tuổi báo sự cố.</td>
+        <td>• Thiếu công cụ nhận yêu cầu kiểm tra thực địa gần mình hoặc đóng lưu vết các tin báo nhầm/đã tự hết.</td>
+        <td>• Màn hình <strong>Xác minh thực địa</strong> cho tin báo ảnh tối.<br/>• Chuyển tiếp lên Phường hoặc <strong>Đóng lưu vết đối soát</strong>; gửi hộ người già.</td>
       </tr>
       <tr>
-        <td><strong>3. Cán bộ tiếp nhận UBND Phường</strong></td>
-        <td>Điều phối đa đầu việc trên máy tính tại phường; phải báo cáo tiến độ định kỳ.</td>
-        <td>• Tin báo phân tán; <strong>trùng lặp nhiều người báo cùng 1 ổ gà</strong>.<br/>• Khó kiểm soát hạn xử lý (SLA) từng đơn vị thi công.</td>
-        <td>• Dashboard tập trung, <strong>tự gộp đơn trùng bán kính 50m</strong>.<br/>• Giao việc 2 nhấp chuột, đếm ngược SLA &amp; nghiệm thu ảnh.</td>
+        <td><strong>3. Cán bộ tiếp nhận UBND Phường</strong><br/><em>(Điều phối &amp; Nghiệm thu)</em></td>
+        <td>Làm việc trên máy tính tại UBND Phường; là đầu mối phân loại, giao việc (không trực tiếp đi vá đường) và duyệt công khai.</td>
+        <td>• Quá tải vì <strong>nhiều người báo trùng 1 ổ gà</strong>.<br/>• Nhập nhằng giữa bước <em>giao việc</em> và bước <em>nhận kết quả thi công</em>; khó theo dõi hạn xử lý (SLA).</td>
+        <td>• Web Dashboard tự gộp đơn trùng <code>50m</code> cùng loại.<br/>• Tách rõ 2 chặng: <strong>(1) Giao Đơn vị thực thi + SLA</strong> &rarr; <strong>(2) Nghiệm thu ảnh Sau xử lý</strong>.</td>
+      </tr>
+      <tr>
+        <td><strong>4. Đơn vị thực thi chuyên môn</strong><br/><em>(Điện lực, Môi trường, Duy tu...)</em></td>
+        <td>Tổ kỹ thuật nhận bàn giao từ Phường, trực tiếp ra hiện trường khắc phục sự cố.</td>
+        <td>• Cần vị trí/ảnh rõ để đi sửa đúng chỗ và kênh nộp ảnh hoàn thành minh bạch về lại Phường.</td>
+        <td>• Chỉ mở biểu mẫu <strong>Báo hoàn thành &amp; Tải ảnh Sau xử lý</strong> sau khi hồ sơ đã được Phường bàn giao chính thức.</td>
       </tr>
     </tbody>
   </table>
 
-  <h2>(b) Luồng sử dụng chính (End-to-End) &amp; Xử lý trải nghiệm đặc thù</h2>
-  <p>Toàn bộ 03 nhóm người dùng vận hành trên <strong>01 vòng đời sự cố thống nhất</strong>, tối giản thao tác nhập tay:</p>
+  <h2>(b) Luồng sử dụng chính (End-to-End) &amp; Xử lý các nhánh quyết định</h2>
+  <p>Luồng chính được thiết kế theo nguyên tắc <strong>dẫn dắt tuần tự từng bước – bàn giao rõ trạng thái – tôn trọng quyền quyết định của con người</strong>:</p>
 
   <div class="flow-grid">
     <div class="flow-card">
-      <strong>1. Gửi nhanh 3 bước (Dân)</strong>
-      [B1] Chụp ảnh &rarr; AI gợi ý loại + <em>Độ tin cậy (%)</em>.<br/>
-      [B2] Ghim GPS &amp; quét trùng <code>50m</code> (+1 Đồng tình nếu trùng).<br/>
-      [B3] Chạm chọn 1/4 loại &amp; Gửi.
+      <strong>Bước 1/3: Chụp ảnh &amp; AI</strong>
+      Người dân chụp/tải ảnh &rarr; AI kiểm tra chất lượng ảnh (chặn ảnh rung mờ) và gợi ý sơ bộ loại sự cố + dấu hiệu nhận biết &rarr; Bấm <em>Tiếp tục</em>.
     </div>
     <div class="flow-card">
-      <strong>2. Xác minh (Đoàn viên)</strong>
-      Các đơn có độ tin cậy AI trung bình (<code>60–84%</code>) hoặc cần kiểm tra thực địa được đẩy tới Đoàn viên khu phố xác nhận nhanh tại chỗ.
+      <strong>Bước 2/3: Vị trí &amp; Gộp 50m</strong>
+      Lấy GPS trình duyệt (hoặc chọn Khu phố/Tên đường khi mất GPS). Quét ngay bán kính <code>50m</code> cùng loại: nếu trùng, mời <strong>+1 Đồng tình</strong> ngay tại Bước 2.
     </div>
     <div class="flow-card">
-      <strong>3. Điều phối SLA (Phường)</strong>
-      Cụm sự cố nhiều người báo (+1) &amp; đã xác minh được ưu tiên lên đầu. Cán bộ chọn bộ phận chuyên trách và gắn <strong>Hạn xử lý (SLA)</strong>.
+      <strong>Bước 3/3: Chốt loại &amp; Gửi</strong>
+      Xác nhận 1/4 phân loại. Nếu dân <strong>không đồng ý với AI</strong> và chọn loại khác, hệ thống ghi nhận rõ lựa chọn của người dân và cập nhật lại mô tả.
     </div>
     <div class="flow-card">
-      <strong>4. Nghiệm thu &amp; Đánh giá</strong>
-      Cập nhật kết quả kèm <strong>Ảnh sau xử lý</strong> &rarr; Ghim bản đồ chuyển <strong>Xanh lá</strong> &rarr; Người dân xem ảnh <em>Trước/Sau</em> &amp; chấm 1–5 sao.
+      <strong>Bàn giao &amp; Nghiệm thu</strong>
+      Đoàn viên xác minh (nếu ảnh tối) &rarr; Phường bàn giao <strong>Đơn vị thực thi + SLA</strong> &rarr; Đơn vị tải <strong>Ảnh sau xử lý</strong> &rarr; Dân kéo xem <em>Trước/Sau</em> &amp; chấm 1–5 sao.
     </div>
   </div>
 
   <div class="two-col">
     <div class="callout">
-      <strong>• Cơ chế AI có trách nhiệm (Ngưỡng Độ tin cậy %):</strong><br/>
-      - <span class="tag tag-green">&ge; 85% (Cao)</span> Tự chọn sẵn loại sự cố &amp; điền mô tả gợi ý.<br/>
-      - <span class="tag tag-amber">60–84% (TB)</span> Hiện nhãn vàng <em>"Cần kiểm chứng"</em>, gợi ý 2 lựa chọn gần nhất &amp; chuyển Đoàn viên xác minh.<br/>
-      - <span class="tag tag-red">&lt; 60% (Thấp)</span> Nhắc chụp lại khi ảnh quá mờ/tối/sai lệch.
+      <strong>• Quy tắc ứng dụng AI thực chất (Không gán % tự báo):</strong><br/>
+      - <span class="tag tag-green">Ảnh rõ nét</span> Gợi ý sẵn danh mục &amp; mô tả; hỗ trợ 1 chạm đổi sang loại khác nếu AI đoán sai.<br/>
+      - <span class="tag tag-amber">Ảnh tối/chụp đêm</span> Giữ gợi ý sơ bộ và tự động chuyển Đoàn viên khu phố xác minh tại chỗ.<br/>
+      - <span class="tag tag-red">Ảnh rung nhòe</span> Tạm khóa bước tiếp theo, hướng dẫn bật đèn Flash chụp lại rõ sự cố.
     </div>
     <div class="callout">
-      <strong>• Thiết kế Trạng thái Lỗi &amp; Trống (Error / Empty States):</strong><br/>
-      - <em>Mất quyền/sóng GPS:</em> Tự chuyển sang chọn nhanh <strong>Khu phố + Tên đường</strong> thuộc Phường Trấn Biên (không chặn người dùng).<br/>
-      - <em>Trạng thái trống:</em> Bán kính 500m không có sự cố tồn đọng hiển thị thông điệp tích cực xác nhận khu phố an toàn, sạch đẹp.
+      <strong>• Xử lý Trạng thái Lỗi, Trống &amp; Lưu vết đối soát:</strong><br/>
+      - <em>Mất sóng/quyền GPS:</em> Chuyển sang chọn <strong>Khu phố + Tuyến đường</strong> thuộc Phường Trấn Biên.<br/>
+      - <em>Trạng thái trống:</em> Khu vực 500m không có sự cố hiển thị thông báo rõ ràng.<br/>
+      - <em>Tin báo nhầm/đã tự hết:</em> Đoàn viên chuyển sang <code>Đã đóng sau xác minh</code> (giữ lịch sử minh bạch, không xóa mất hồ sơ).
     </div>
   </div>
 
-  <h2>(c) Danh sách tính năng thực hiện trong 24 giờ tại Vòng Chung kết (Phạm vi MVP)</h2>
-  <p>Thiết kế bám sát năng lực lập trình thực tế để cam kết <strong>hoàn thiện 100% sản phẩm chạy thật trong 24 giờ</strong>:</p>
-
+  <h2>(c) Danh sách tính năng hiện thực hóa trong 24 giờ Chung kết (MVP khớp 1:1 Prototype)</h2>
   <table>
     <thead>
       <tr>
         <th style="width: 24%;">Phân hệ triển khai</th>
-        <th style="width: 60%;">Tính năng cụ thể hoàn thành trong 24 giờ (MVP + Điểm cộng)</th>
+        <th style="width: 60%;">Tính năng cam kết lập trình hoàn chỉnh trong 24 giờ</th>
         <th style="width: 16%;">Thời lượng</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><strong>1. Phân hệ Người dân</strong><br/><em>(Mobile PWA)</em></td>
-        <td>• Gửi phản ánh 03 bước (Camera/Upload ảnh, vị trí bản đồ Leaflet, 4 loại sự cố).<br/>• Bản đồ phản ánh quanh tôi (ghim Đỏ/Vàng/Xanh, lọc theo loại) &amp; Theo dõi tiến độ 4 mốc.<br/>• Thanh trượt đối chiếu <strong>Ảnh Trước – Sau xử lý</strong> &amp; Đánh giá mức độ hài lòng (1–5 sao).</td>
+        <td><strong>1. Luồng Người dân</strong><br/><em>(Mobile PWA)</em></td>
+        <td>• Wizard gửi phản ánh 03 màn hình tuần tự (Tải/chụp ảnh, định vị GPS trình duyệt + chọn đường thủ công, chọn 4 loại sự cố có ghi nhận khi sửa gợi ý AI).<br>• Bản đồ phản ánh quanh tôi, Theo dõi tiến độ 4 mốc, Thanh kéo đối chiếu <strong>Ảnh Trước – Sau</strong> &amp; Đánh giá 1–5 sao.</td>
         <td><strong>08 giờ</strong><br/><em>(Giờ 1 – 8)</em></td>
       </tr>
       <tr>
-        <td><strong>2. Phân hệ Phường &amp; Đoàn viên</strong></td>
-        <td>• Dashboard Cán bộ Phường: Thống kê KPI thời gian thực, lọc danh sách, phân loại, giao bộ phận xử lý, thiết lập hạn xử lý (SLA) &amp; cập nhật kết quả kèm Ảnh sau xử lý.<br/>• Giao diện Đoàn viên tình nguyện xác minh tại chỗ &amp; gửi phản ánh hộ người cao tuổi.</td>
+        <td><strong>2. Luồng Điều phối &amp; Thực thi</strong></td>
+        <td>• Dashboard Cán bộ Phường (64 đơn, lọc trạng thái/cụm gộp, phân loại, bàn giao 04 đơn vị thực thi kèm hạn SLA).<br>• Biểu mẫu Đơn vị thực thi tải tệp <strong>Ảnh sau xử lý</strong> &amp; Phường duyệt công khai.<br>• Màn hình Đoàn viên xác minh tại chỗ, đóng lưu vết tin nhầm &amp; gửi hộ người cao tuổi.</td>
         <td><strong>07 giờ</strong><br/><em>(Giờ 9 – 15)</em></td>
       </tr>
       <tr>
-        <td><strong>3. Điểm cộng Sáng tạo</strong><br/><em>(AI + Gộp trùng + Chữ lớn)</em></td>
-        <td>• Tích hợp API <strong>Vision AI</strong> phân loại tự động từ ảnh, trả về JSON lý do &amp; <strong>Độ tin cậy (%)</strong>.<br/>• Thuật toán không gian <strong>Haversine</strong> phát hiện &amp; gộp phản ánh trùng bán kính <code>&le; 50m</code>.<br/>• <strong>Chế độ Chữ lớn (Senior Mode)</strong> tương phản cao chuyển đổi tức thì cho người cao tuổi.</td>
+        <td><strong>3. Nhóm Điểm cộng</strong><br/><em>(AI + Gộp trùng + Chữ lớn)</em></td>
+        <td>• Tích hợp <strong>Gemini Flash Vision API</strong> trả về JSON phân loại gợi ý, dấu hiệu quan sát &amp; kiểm tra ảnh mờ.<br>• Hàm khoảng cách <strong>Haversine</strong> phát hiện &amp; gộp phản ánh trùng bán kính <code>&le; 50m</code> cùng loại sự cố.<br>• <strong>Chế độ Chữ lớn xuyên suốt</strong> toàn bộ các bước thao tác cho người cao tuổi.</td>
         <td><strong>05 giờ</strong><br/><em>(Giờ 16 – 20)</em></td>
       </tr>
       <tr>
-        <td><strong>4. Kiểm thử &amp; Triển khai</strong></td>
-        <td>• Hoàn thiện Empty/Error States, nạp dữ liệu Phường Trấn Biên, tối ưu tốc độ trên 4G di động và triển khai Cloud phục vụ BGK trải nghiệm trực tiếp qua mã QR.</td>
+        <td><strong>4. Kiểm thử &amp; Đóng gói</strong></td>
+        <td>• Kiểm thử đầy đủ Error/Empty States, nạp bộ dữ liệu Phường Trấn Biên, kiểm thử chéo trên điện thoại 4G và máy tính Cán bộ Phường.</td>
         <td><strong>04 giờ</strong><br/><em>(Giờ 21 – 24)</em></td>
       </tr>
     </tbody>
   </table>
 
-  <h2>(d) Kiến trúc hệ thống, Công nghệ dự kiến &amp; Khả năng nhân rộng</h2>
+  <h2>(d) Kiến trúc hệ thống &amp; Công nghệ dự kiến</h2>
   <div class="arch-box">
     <div class="arch-row">
-      <div class="arch-node"><strong>Người dân &amp; Người cao tuổi</strong><br/>Mobile-First PWA (Mở từ QR / Zalo Khu phố)</div>
-      <div class="arch-node"><strong>Đội TN Tình nguyện</strong><br/>Giao diện Mobile Xác minh thực địa</div>
-      <div class="arch-node"><strong>Cán bộ UBND Phường</strong><br/>Responsive Web Dashboard (Máy tính)</div>
+      <div class="arch-node"><strong>Người dân &amp; Cao tuổi</strong><br/>Mobile PWA (Mở từ QR / Zalo)</div>
+      <div class="arch-node"><strong>Đội TN Tình nguyện</strong><br/>Mobile Xác minh thực địa</div>
+      <div class="arch-node"><strong>Cán bộ UBND Phường</strong><br/>Web Dashboard Điều phối</div>
+      <div class="arch-node"><strong>Đơn vị Thực thi</strong><br/>Cập nhật Ảnh Sau xử lý</div>
     </div>
-    <div class="arch-arrow">&darr; Một mã nguồn thống nhất (HTTPS / REST &amp; Realtime) &darr;</div>
+    <div class="arch-arrow">&darr; Ứng dụng Web thống nhất (Next.js + TypeScript + Tailwind CSS) &darr;</div>
     <div class="arch-row" style="margin-bottom: 0;">
-      <div class="arch-node"><strong>Ứng dụng Next.js + Tailwind</strong><br/>Hỗ trợ PWA &amp; CSS Senior Mode 1.5x</div>
-      <div class="arch-node"><strong>Leaflet + OpenStreetMap</strong><br/>Bản đồ miễn phí + Gộp cụm Haversine 50m</div>
-      <div class="arch-node"><strong>Gemini 2.5 Flash Vision</strong><br/>Nhận diện ảnh &lt;2s + Điểm tin cậy %</div>
-      <div class="arch-node"><strong>Supabase (PostgreSQL)</strong><br/>CSDL sự cố + Lưu trữ ảnh Trước/Sau</div>
+      <div class="arch-node"><strong>Leaflet + OpenStreetMap</strong><br/>Bản đồ miễn phí + Định vị Geolocation</div>
+      <div class="arch-node"><strong>Thuật toán Haversine</strong><br/>So khớp &le;50m + Cùng danh mục</div>
+      <div class="arch-node"><strong>Gemini 2.5 Flash Vision</strong><br/>Gợi ý phân loại &amp; lọc ảnh mờ</div>
+      <div class="arch-node"><strong>Supabase (PostgreSQL)</strong><br/>CSDL hồ sơ + Lưu trữ ảnh Trước/Sau</div>
     </div>
   </div>
   <ul>
-    <li><strong>Lý do chọn Mobile-First PWA thay vì App cài đặt truyền thống:</strong> Loại bỏ hoàn toàn rào cản tải ứng dụng trên CH Play/App Store đối với người lớn tuổi; chỉ cần bấm link trong nhóm Zalo Tổ dân phố hoặc quét QR tại bảng tin khu phố là sử dụng ngay như ứng dụng di động gốc, đồng thời cung cấp màn hình rộng cho cán bộ phường trên máy tính.</li>
-    <li><strong>Sẵn sàng triển khai thật tại 95 xã, phường của TP. Đồng Nai:</strong> Không tốn chi phí bản quyền bản đồ thương mại (nhờ OpenStreetMap), hạ tầng đám mây gọn nhẹ và dễ dàng đóng gói thành <em>Zalo Mini App</em> tích hợp vào Zalo OA chính thức của địa phương.</li>
+    <li><strong>Khả năng triển khai thực tế tại xã, phường:</strong> Kiến trúc <strong>Mobile-First PWA</strong> giúp người dân và người cao tuổi mở dùng ngay từ đường dẫn nhóm Zalo Khu phố mà không cần tải ứng dụng qua kho CH Play/App Store; chi phí bản đồ bằng 0 nhờ OpenStreetMap.</li>
   </ul>
 
   <h2>(e) Công cụ Trí tuệ nhân tạo đã sử dụng trong Vòng Sơ loại</h2>
-  <p>Đội thi cam kết tuân thủ quy chế, không sao chép giao diện sản phẩm có sẵn và khai báo minh bạch việc sử dụng công cụ AI (<strong>Google Antigravity / Mô hình ngôn ngữ lớn Gemini</strong>) hỗ trợ các tác vụ sau:</p>
+  <p>Đội thi cam kết không sao chép giao diện sản phẩm có sẵn và khai báo minh bạch việc dùng công cụ AI (<strong>Google Antigravity / Mô hình Gemini</strong>) hỗ trợ:</p>
   <ul>
-    <li><strong>Phân tích người dùng &amp; Tối ưu luồng UX:</strong> Đối chiếu đặc thù thao tác của người cao tuổi, đoàn viên và cán bộ phường để rút gọn quy trình gửi phản ánh còn đúng 03 bước và thiết kế cơ chế ngưỡng Độ tin cậy AI an toàn.</li>
-    <li><strong>Biên tập nội dung giao diện (Microcopy), Ảnh giả lập &amp; Dữ liệu mẫu:</strong> Chuẩn hóa câu thông báo ngắn gọn cho người lớn tuổi; sinh bộ ảnh hiện trường giả lập an toàn quyền riêng tư (không chứa mặt người/biển số xe thật) và tạo các ca phản ánh tại Phường Trấn Biên khớp chính xác thống kê đề bài (64 đơn, 47 đã xử lý, TB 3,2 ngày).</li>
-    <li><strong>Hỗ trợ sinh mã nguồn Bản mẫu bấm được (Prototype):</strong> Tăng tốc viết khung giao diện HTML/CSS/JS ngoại tuyến và định dạng tài liệu in ấn dựa trên bản đặc tả thiết kế do đội thi trực tiếp xây dựng và kiểm duyệt.</li>
+    <li><strong>Phân tích luồng nghiệp vụ &amp; Phản biện UX:</strong> Rà soát chuỗi bàn giao giữa Người dân – Đoàn viên – Cán bộ Phường – Đơn vị thực thi; chuẩn hóa Wizard 3 bước tuần tự và nhánh xử lý khi người dân chọn khác gợi ý của AI.</li>
+    <li><strong>Biên tập nội dung giao diện &amp; Tạo dữ liệu/ảnh giả lập:</strong> Chuẩn hóa câu chữ ngắn gọn cho người cao tuổi; sinh bộ ảnh hiện trường giả lập an toàn quyền riêng tư (không chứa mặt người/biển số xe thật) và dữ liệu mẫu khớp thống kê Phường Trấn Biên (64 đơn, 47 đã xử lý, TB 3,2 ngày).</li>
+    <li><strong>Hỗ trợ dựng mã nguồn Prototype &amp; Dàn trang:</strong> Viết mã giao diện HTML/CSS/JS cho Bản mẫu bấm được và bố cục xuất PDF theo đặc tả thiết kế của đội.</li>
   </ul>
 </body>
 </html>

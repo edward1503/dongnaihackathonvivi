@@ -1,0 +1,18 @@
+{
+  "name": "TrấnBiên Trực Tuyến – Phản Ánh Hiện Trường",
+  "short_name": "TrấnBiên Số",
+  "description": "Ứng dụng Phản ánh Hiện trường 3 bước & Đô thị Minh bạch Phường Trấn Biên, TP. Đồng Nai",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1e3a8a",
+  "theme_color": "#1d4ed8",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

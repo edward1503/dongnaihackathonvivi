@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lá chắn số · Web đội tình nguyện</title>
+<link rel="stylesheet" href="../ds.css">
+<script src="../icons.js"></script>
+<style>
+  body{display:flex;gap:0;padding:0;background:var(--bg);min-height:100vh;flex-wrap:nowrap;align-items:stretch}
+  .sidebar{position:sticky;top:0;height:100vh;flex:none}
+  .main{overflow:auto;min-width:0;padding:24px 32px 48px}
+  .side-item{cursor:pointer}
+  .w-brand{font-size:16px;line-height:22px;font-weight:700;color:#fff}.w-sub{font-size:12px;line-height:16px;color:#94A3B8}.w-user{font-size:14px;font-weight:700;color:#fff}
+  .page{display:none;flex-direction:column;gap:16px}.page.on{display:flex}
+  .btn{cursor:pointer;user-select:none}.btn:active{opacity:.85}.btn.off{opacity:.45;pointer-events:none}
+  .num{font-size:32px;line-height:38px;font-weight:700}
+  .tr{cursor:default}.tr.row-click{cursor:pointer}.tr.row-click:hover{background:var(--surface-2)}.tr.sel{background:var(--brand-c)}
+  .field{width:100%;border:1.5px solid var(--outline);border-radius:12px;padding:10px 12px;font:inherit;font-size:14px;line-height:20px;background:#fff;color:var(--ink);outline:none}
+  .field:focus{border-color:var(--brand)}textarea.field{min-height:120px;resize:vertical}
+  .quote{padding:8px 10px;border-radius:10px}
+  .toast{position:fixed;right:24px;bottom:24px;background:var(--navy);color:#fff;border-radius:12px;padding:12px 16px;font-size:14px;display:none;z-index:9}.toast.on{display:block}
+  .split{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:start}
+  .panel{position:sticky;top:16px}
+  .cmp{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .cmp .card{padding:10px;border-radius:12px}
+  .cmp .n{width:22px;height:22px;border-radius:11px;background:var(--brand);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  label.chk{display:flex;gap:10px;align-items:center;font-size:14px;line-height:20px;cursor:pointer}
+  label.chk input{width:18px;height:18px}
+  @media (max-width:1100px){.split{grid-template-columns:1fr}.panel{position:static}.grid-4{grid-template-columns:1fr 1fr}.sidebar{width:200px}}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="row gap-12" style="padding:0 10px">
+    <div class="icon-box solid-brand" style="width:36px;height:36px;border-radius:10px"><i class="ic s20" data-i="shield-check"></i></div>
+    <div class="col"><div class="w-brand">Lá chắn số</div><div class="w-sub">Đội tình nguyện</div></div>
+  </div>
+  <div class="none" style="height:16px"></div>
+  <div class="side-item active" data-go="stats"><i class="ic s20" data-i="chart"></i><span class="grow">Tổng quan</span></div>
+  <div class="side-item" data-go="mod"><i class="ic s20" data-i="inbox"></i><span class="grow">Kiểm duyệt</span><span class="chip solid-danger" id="side-count" style="height:22px;padding:0 8px">0</span></div>
+  <div class="side-item" data-go="camp"><i class="ic s20" data-i="megaphone"></i><span class="grow">Cảnh báo và tuyên truyền</span></div>
+  <div class="row gap-12 mt-auto" style="padding:0 10px">
+    <div class="avatar">K</div>
+    <div class="col grow"><div class="w-user">Khoa</div><div class="w-sub">Tình nguyện viên</div><div class="w-sub">Phường Trấn Biên</div></div>
+  </div>
+</div>
+
+<div class="main grow">
+
+<!-- ===================== W1: Thống kê ===================== -->
+<div class="page on" id="p-stats">
+  <div class="row between wrap gap-12">
+    <div class="col gap-2"><div class="t-h1" id="st-title">Tổng quan</div><div class="t-label muted" id="st-sub"></div></div>
+    <div class="row gap-12"><span class="btn outline sm" id="st-export"><i class="ic s18" data-i="download"></i>Xuất báo cáo (CSV)</span></div>
+  </div>
+  <div class="grid-4" id="st-cards"></div>
+  <div class="split" style="align-items:stretch">
+    <div class="card col gap-12" id="st-scam"></div>
+    <div class="card ai col gap-8" id="st-emerging"></div>
+  </div>
+  <div class="grid-3" style="grid-template-columns:1.2fr 1fr 1fr">
+    <div class="card col gap-12" id="st-week"></div>
+    <div class="card col gap-12" id="st-target"></div>
+    <div class="card col gap-8" id="st-area"></div>
+  </div>
+</div>
+
+<!-- ===================== W2: Kiểm duyệt ===================== -->
+<div class="page" id="p-mod">
+  <div class="col gap-2"><div class="t-h1">Kiểm duyệt báo cáo</div><div class="t-label muted" id="md-sub"></div></div>
+  <div class="grid-4" id="md-cards"></div>
+  <div class="split">
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="tr head"><div style="flex:2">Đối tượng</div><div style="flex:1.4">AI đoán</div><div style="width:64px">Tin cậy</div><div style="width:44px">Báo</div></div>
+      <div id="md-list"></div>
+      <div class="tr last"><div class="t-cap muted grow" id="md-foot"></div></div>
+    </div>
+    <div class="col gap-12 panel" id="md-detail"></div>
+  </div>
+  <div class="card col gap-8" id="md-appeals"></div>
+</div>
+
+<!-- ===================== W3: Tuyên truyền ===================== -->
+<div class="page" id="p-camp">
+  <div class="col gap-2"><div class="t-h1">Cảnh báo và tuyên truyền</div><div class="t-label muted">Từ báo cáo của người dân thành nội dung dễ hiểu</div></div>
+  <div class="split">
+    <div class="card col gap-12">
+      <div class="row between"><div class="t-h2">Soạn cảnh báo</div><span class="ai-tag"><i class="ic s14" data-i="sparkles"></i>AI soạn từ báo cáo · người duyệt sửa</span></div>
+      <div class="col gap-6"><div class="t-label bold">Kiểu lừa đảo</div><select class="field" id="c-type"></select></div>
+      <div class="col gap-6"><div class="t-label bold">Tiêu đề</div><input class="field" id="c-title"></div>
+      <div class="col gap-6"><div class="t-label bold">Nội dung</div><textarea class="field" id="c-body"></textarea></div>
+      <div class="col gap-8"><div class="t-label bold">Gửi tới</div>
+        <label class="chk"><input type="checkbox" value="Người dùng app (1.240)" checked>Người dùng app (1.240)</label>
+        <label class="chk"><input type="checkbox" value="Nhóm khu phố (12 nhóm)">Nhóm khu phố (12 nhóm)</label>
+        <label class="chk"><input type="checkbox" value="Người thân đã ghép (860)" checked>Người thân đã ghép (860) · hiện trong Zalo của người thân</label></div>
+      <div class="row gap-8"><span class="btn primary" id="c-send"><i class="ic s18" data-i="send"></i>Duyệt và gửi</span><span class="btn outline" id="c-copy">Sao chép nội dung</span></div>
+      <div class="t-cap c-danger" id="c-err" style="display:none"></div>
+      <div class="col gap-8" id="c-sent"></div>
+    </div>
+    <div class="col gap-16">
+      <div class="card col gap-12">
+        <div class="row between"><div class="t-h2">Truyện tranh 1 phút</div><span class="ai-tag"><i class="ic s14" data-i="sparkles"></i>Lời do AI soạn · người duyệt</span></div>
+        <div class="t-label bold" id="s-title"></div>
+        <div class="cmp" id="s-panels"></div>
+        <div class="card soft t-label" id="s-msg" style="padding:10px 12px"></div>
+        <div class="row gap-8 wrap"><span class="btn outline sm" id="s-share"><i class="ic s18" data-i="megaphone"></i>Chia sẻ vào nhóm khu phố</span><span class="btn outline sm" id="s-print"><i class="ic s18" data-i="download"></i>Tải bản in A4</span></div>
+      </div>
+      <div class="card col gap-10">
+        <div class="t-h2">Buổi tuyên truyền sắp tới</div>
+        <div class="row gap-12"><div class="icon-box brand"><i class="ic" data-i="calendar"></i></div><div class="col grow"><div class="t-label bold">Thứ Bảy 28/11 · 19:00</div><div class="t-cap muted">Nhà văn hóa Khu phố 4 · 45 người đăng ký</div></div><span class="btn tonal sm" data-quiz>Mở câu đố</span></div>
+        <div class="row gap-12"><div class="icon-box brand"><i class="ic" data-i="calendar"></i></div><div class="col grow"><div class="t-label bold">Chủ nhật 29/11 · 08:00</div><div class="t-cap muted">Trường THPT (lớp 11) · 3 lớp tham gia</div></div><span class="btn outline sm" data-quiz>Chuẩn bị</span></div>
+      </div>
+      <div class="grid-3" style="grid-template-columns:repeat(3,1fr)">
+        <div class="card col gap-2"><div class="num" style="font-size:24px;line-height:28px">1.860</div><div class="t-cap muted">lượt đọc truyện tháng này</div></div>
+        <div class="card col gap-2"><div class="num" style="font-size:24px;line-height:28px">74%</div><div class="t-cap muted">đọc hết 4 khung</div></div>
+        <div class="card col gap-2"><div class="num" style="font-size:24px;line-height:28px">+12</div><div class="t-cap muted">điểm kiểm tra sau khi đọc</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const post = (u, b) => fetch(u, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(b || {}) }).then(r => r.json());
+const toast = t => { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('on'), 2400); };
+const kindIcon = { phone: 'phone', link: 'link', account: 'card', other: 'flag' };
+let S = null, reports = [], sel = null, appeals = [
+  { id: 'ap1', value: '0905 123 456', reason: 'Số của tiệm giao hoa, bị gắn nhãn nhầm là lừa đảo.', open: true },
+  { id: 'ap2', value: 'giaohang-nhanh-24h.top', reason: 'Đây là trang của cửa hàng em, em xin được xem lại.', open: true }];
+
+/* ---------- Điều hướng ---------- */
+function go(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.toggle('on', p.id === 'p-' + name));
+  document.querySelectorAll('.side-item').forEach(s => s.classList.toggle('active', s.dataset.go === name));
+  location.hash = name;
+}
+document.querySelectorAll('.side-item').forEach(s => s.onclick = () => go(s.dataset.go));
+
+/* ---------- W1: thống kê ---------- */
+const bar = (cls, w) => `<div class="bar-track"><div class="bar-fill ${cls}" style="width:${w}%"></div></div>`;
+function renderStats() {
+  const s = S; if (!s) return;
+  $('#st-title').textContent = 'Tổng quan tháng ' + s.month; $('#st-sub').textContent = s.area + ' · dữ liệu giả lập, cập nhật theo báo cáo mới';
+  $('#st-cards').innerHTML = `
+    <div class="card col" style="padding:12px 16px"><div class="row between"><div class="t-label muted">Báo cáo trong tháng</div><i class="ic s18 faint" data-i="flag"></i></div><div class="num">${s.total}</div><div class="row gap-6"><i class="ic s16 c-danger" data-i="trend-up"></i><div class="t-cap c-danger">${s.totalDelta}</div></div></div>
+    <div class="card col" style="padding:12px 16px"><div class="row between"><div class="t-label muted">Đường dẫn giả mạo</div><i class="ic s18 faint" data-i="link"></i></div><div class="num">${s.links}</div><div class="t-cap muted">${s.linkPct}% tổng số báo cáo</div></div>
+    <div class="card col" style="padding:12px 16px"><div class="row between"><div class="t-label muted">AI tự xác nhận</div><i class="ic s18 c-ai" data-i="sparkles"></i></div><div class="num">${s.aiConfirmed}</div><div class="t-cap muted">${s.aiPct}% · không cần người duyệt</div></div>
+    <div class="card col" style="padding:12px 16px;cursor:pointer" data-go-mod><div class="row between"><div class="t-label muted">Chờ đội duyệt</div><i class="ic s18 faint" data-i="inbox"></i></div><div class="num">${s.pending}</div><span class="chip warn" style="height:24px"><i class="ic s14" data-i="alert"></i>Cần cân nhắc</span></div>`;
+  const max = s.scam[0][1];
+  $('#st-scam').innerHTML = `<div class="row between"><div class="t-h2">Kiểu lừa đảo trong tháng</div><div class="t-cap muted">tổng ${s.total} báo cáo</div></div>` +
+    s.scam.map(([l, v], i) => `<div class="row gap-12"><div class="t-label" style="width:190px;flex:none">${esc(l)}</div>${bar(i === 0 ? 'danger' : l === 'Khác' ? 'gray' : '', v / max * 100)}<div class="t-label bold right" style="width:32px;flex:none">${v}</div></div>`).join('');
+  const e = s.emerging;
+  $('#st-emerging').innerHTML = `<div class="row between gap-8"><span class="chip solid-danger"><i class="ic s14" data-i="trend-up"></i>Mới nổi tại Trấn Biên</span><span class="ai-tag"><i class="ic s14" data-i="sparkles"></i>AI gom từ ${e.reports} báo cáo</span></div>
+    <div class="t-h2">${esc(e.title)}</div><div class="t-label c-ai-ink">${e.reports} báo cáo trong ${e.days} ngày · tăng nhanh</div>
+    <div class="row gap-8" style="align-items:stretch">${e.quotes.map(q => `<div class="card grow t-cap quote">“${esc(q)}”</div>`).join('')}</div>
+    <div class="row gap-8 mt-auto"><span class="btn primary sm" id="em-compose"><i class="ic s18" data-i="megaphone"></i>Soạn cảnh báo</span><span class="btn outline sm" data-go-mod>Xem báo cáo</span></div>`;
+  const w = s.weekly, wmax = Math.max(...w), wmin = Math.min(...w);
+  const pts = w.map((v, i) => `${45 + i * 90},${90 - (v - wmin) / Math.max(wmax - wmin, 1) * 70}`);
+  $('#st-week').innerHTML = `<div class="row between"><div class="t-h2">Báo cáo theo tuần</div><span class="chip danger" style="height:24px"><i class="ic s14" data-i="trend-up"></i>Tăng ${w.length} tuần liền</span></div>
+    <svg width="100%" viewBox="0 0 360 110" style="display:block"><line x1="0" y1="20" x2="360" y2="20" stroke="#E2E8F0"/><line x1="0" y1="55" x2="360" y2="55" stroke="#E2E8F0"/><line x1="0" y1="90" x2="360" y2="90" stroke="#E2E8F0"/>
+    <polyline points="${pts.join(' ')}" fill="none" stroke="#1D4ED8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${pts.map(p => `<circle cx="${p.split(',')[0]}" cy="${p.split(',')[1]}" r="5" fill="#1D4ED8"/>`).join('')}</svg>
+    <div class="row">${w.map((v, i) => `<div class="col grow acenter"><div class="t-cap muted">Tuần ${i + 1}</div><div class="t-label bold">${v}</div></div>`).join('')}</div>`;
+  $('#st-target').innerHTML = `<div class="t-h2">Nhóm bị nhắm tới</div>` + s.targets.map(([l, v], i) => `<div class="row gap-10"><div class="t-label" style="width:112px;flex:none">${l}</div>${bar(['danger', 'warn', 'gray'][i], v)}<div class="t-label bold right" style="width:36px;flex:none">${v}%</div></div>`).join('') +
+    `<div class="card soft row gap-8 mt-auto" style="padding:10px 12px;border-radius:12px"><i class="ic s18 muted" data-i="clock"></i><div class="t-cap c-ink">Khung giờ cao điểm: ${s.peak}</div></div>`;
+  const am = s.areas[0][1];
+  $('#st-area').innerHTML = `<div class="row between"><div class="t-h2">Theo khu phố</div><div class="t-cap muted">Số báo cáo</div></div>` +
+    s.areas.map(([l, v]) => `<div class="row gap-10" style="min-height:32px"><div class="t-label" style="width:80px;flex:none">${l}</div>${bar('', v / am * 100)}<div class="t-label bold right" style="width:24px;flex:none">${v}</div></div>`).join('');
+  $('#side-count').textContent = s.pending;
+  document.querySelectorAll('[data-go-mod]').forEach(b => b.onclick = () => go('mod'));
+  const em = $('#em-compose'); if (em) em.onclick = () => { $('#c-type').value = 'dien-luc'; fillCampaign(); go('camp'); };
+  paintIcons($('#p-stats'));
+}
+$('#st-export').onclick = () => {
+  if (!S) return;
+  const csv = '﻿Kiểu lừa đảo,Số báo cáo\n' + S.scam.map(r => r.join(',')).join('\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = 'thong-ke-' + S.month.replace('/', '-') + '.csv'; a.click();
+};
+
+/* ---------- W2: kiểm duyệt ---------- */
+const STATUS = { pending: ['Chờ duyệt', 'warn'], confirmed: ['Đã xác nhận', 'danger'], spam: ['Spam quảng cáo', 'outline'], rejected: ['Không đủ căn cứ', 'outline'], labeled: ['Đã gắn nhãn', 'brand'], forwarded: ['Đã chuyển Công an phường', 'brand'] };
+function renderMod() {
+  const pend = reports.filter(r => r.status === 'pending');
+  const auto = reports.filter(r => r.auto).length;
+  $('#md-sub').textContent = `AI đã tự xử lý ${S ? S.aiConfirmed + S.aiRejected : '…'}/${S ? S.total : '…'} ca · chỉ ca AI chưa chắc mới chuyển tới người duyệt`;
+  const openAppeals = appeals.filter(a => a.open).length;
+  $('#md-cards').innerHTML = [['Cần cân nhắc', S ? S.pending : pend.length, 'warn'], ['AI đã xác nhận', S ? S.aiConfirmed : 0, 'danger'], ['AI đã loại', S ? S.aiRejected : 0, ''], ['Khiếu nại', openAppeals, 'brand']]
+    .map(([l, v, c]) => `<div class="card col" style="padding:12px 16px"><div class="t-label muted">${l}</div><div class="num">${v}</div></div>`).join('');
+  const list = reports.filter(r => r.status === 'pending');
+  if (sel && !reports.find(r => r.id === sel)) sel = null;
+  if (!sel && list[0]) sel = list[0].id;
+  $('#md-list').innerHTML = list.length ? list.map(r => `<div class="tr row-click ${r.id === sel ? 'sel' : ''}" data-id="${r.id}">
+      <div style="flex:2" class="row gap-8"><i class="ic s16 muted" data-i="${kindIcon[r.kind] || 'flag'}"></i><div class="t-label bold">${esc(r.value)}</div></div>
+      <div style="flex:1.4" class="t-label">${esc(r.aiGuess)}</div>
+      <div style="width:64px"><span class="chip ${r.confidence >= 70 ? 'warn' : ''}">${r.confidence}%</span></div>
+      <div style="width:44px" class="t-label bold">${r.count}</div></div>`).join('')
+    : '<div class="tr last"><div class="t-label muted">Không còn ca nào chờ duyệt. AI đã tự xử lý phần còn lại.</div></div>';
+  $('#md-foot').textContent = `Hiển thị ${list.length} ca chờ duyệt · ${auto} ca AI tự xác nhận trong phiên này`;
+  document.querySelectorAll('#md-list .row-click').forEach(row => row.onclick = () => { sel = row.dataset.id; renderMod(); });
+  renderDetail();
+  renderAppeals();
+  paintIcons($('#p-mod'));
+}
+function renderDetail() {
+  const r = reports.find(x => x.id === sel), el = $('#md-detail');
+  if (!r || r.status !== 'pending') { el.innerHTML = '<div class="card t-label muted">Chọn một ca bên trái để xem bằng chứng và quyết định.</div>'; return; }
+  el.innerHTML = `
+    <div class="card col gap-12">
+      <div class="row gap-8 wrap"><div class="t-h2">${esc(r.value)}</div><span class="chip warn">Cần cân nhắc</span></div>
+      <div class="t-cap muted">Báo lúc ${new Date(r.at).toTimeString().slice(0, 5)} · ${r.count} người báo · ${esc(r.area)}${r.note ? ' · ghi chú: “' + esc(r.note) + '”' : ''}</div>
+      <div class="card ai col gap-8"><span class="ai-tag"><i class="ic s14" data-i="sparkles"></i>AI nhận định</span>
+        <div class="row between"><div class="t-label bold">${esc(r.aiGuess)}</div><div class="t-label">Độ tin cậy <b>${r.confidence}%</b></div></div>
+        ${(r.signs || []).map(s => `<div class="row gap-8"><i class="ic s16 c-ai" data-i="check"></i><div class="t-label">${esc(s)}</div></div>`).join('')}</div>
+      <div class="col gap-6"><div class="t-over muted">Vì sao AI chưa chắc</div>${(r.whyUnsure || []).map(s => `<div class="row gap-8"><i class="ic s16 c-warn" data-i="alert"></i><div class="t-label">${esc(s)}</div></div>`).join('')}</div>
+      ${(r.history || []).length ? `<div class="col gap-6"><div class="t-over muted">Lịch sử của số này</div>${r.history.map(h => `<div class="t-cap muted">${esc(h)}</div>`).join('')}</div>` : ''}
+    </div>
+    <div class="grid-2">
+      <span class="btn danger" data-d="confirmed"><i class="ic s18" data-i="alert-oct"></i>Xác nhận lừa đảo</span>
+      <span class="btn outline" data-d="spam">Spam quảng cáo</span>
+      <span class="btn outline" data-d="rejected">Không đủ căn cứ</span>
+      <span class="btn outline" data-d="label">Gắn nhãn giao hàng</span></div>
+    <span class="btn tonal block" data-d="police"><i class="ic s18" data-i="send"></i>Chuyển tin báo cho Công an phường</span>
+    <div class="t-cap muted">Nhãn tự hết hạn sau 90 ngày nếu không có báo cáo mới, vì số điện thoại có thể được cấp lại cho người khác.</div>`;
+  el.querySelectorAll('[data-d]').forEach(b => b.onclick = async () => {
+    const d = b.dataset.d, id = r.id; await post(`/api/reports/${id}/decision`, { decision: d });
+    toast(({ confirmed: 'Đã xác nhận và gắn nhãn 90 ngày', spam: 'Đã loại: spam quảng cáo', rejected: 'Đã đóng: không đủ căn cứ', label: 'Đã gắn nhãn giao hàng', police: 'Đã gom hồ sơ chuyển Công an phường (mô phỏng)' })[d]);
+    sel = null; await refresh();
+  });
+}
+function renderAppeals() {
+  $('#md-appeals').innerHTML = `<div class="row between"><div class="t-h2">Khiếu nại báo oan</div><span class="chip brand">${appeals.filter(a => a.open).length} đang mở</span></div>` +
+    appeals.map(a => `<div class="row gap-12" style="padding:8px 0;border-top:1px solid var(--outline-2)"><i class="ic s18 muted" data-i="flag"></i>
+      <div class="col grow"><div class="t-label bold">${esc(a.value)}</div><div class="t-cap muted">${esc(a.reason)}</div></div>
+      ${a.open ? `<span class="btn outline sm" data-ap="${a.id}:ok">Gỡ nhãn</span><span class="btn ghost sm" data-ap="${a.id}:no">Giữ nhãn</span>` : '<span class="chip safe">Đã xử lý</span>'}</div>`).join('');
+  if (!appeals.length) $('#md-appeals').insertAdjacentHTML('beforeend', '<div class="t-label muted">Không có khiếu nại nào đang mở.</div>');
+  document.querySelectorAll('[data-ap]').forEach(b => b.onclick = async () => {
+    const [id, v] = b.dataset.ap.split(':');
+    if (appealsLive) { const r = await post(`/api/reports/${id}/appeal/resolve`, { outcome: v === 'ok' ? 'remove' : 'keep' }); if (r.error || r.detail) return toast('Không xử lý được khiếu nại này'); }
+    else appeals.find(a => a.id === id).open = false;
+    toast(v === 'ok' ? 'Đã gỡ nhãn cảnh báo' : 'Giữ nhãn, đã đóng khiếu nại');
+    await refresh();
+  });
+}
+
+/* ---------- W3: tuyên truyền ---------- */
+const TYPES = {
+  'dien-luc': { name: 'Giả nhân viên điện lực báo cắt điện', title: 'Cảnh báo: giả nhân viên điện lực báo cắt điện', body: 'Có người gọi điện tự xưng nhân viên điện lực, báo nhà bạn nợ tiền và sắp cắt điện, rồi yêu cầu chuyển khoản ngay. Điện lực không thu tiền qua cuộc gọi. Hãy cúp máy và tự gọi tổng đài chính thức.',
+    story: ['Người thân gặp tai nạn, cần tiền gấp', ['Bà Hoa nhận tin báo con gặp tai nạn, cần tiền gấp.', 'Bà hốt hoảng, định mang tiền đi chuyển.', 'Bà dừng lại, gọi thẳng cho con. Con vẫn khỏe.', 'Bà báo cáo số lạ. Kẻ gian bỏ đi.'], 'Nghe tin dữ, hãy gọi thẳng cho người thân trước khi chuyển tiền.'] },
+  'cong-an': { name: 'Giả danh công an', title: 'Cảnh báo: giả danh công an yêu cầu chuyển tiền', body: 'Công an không làm việc qua điện thoại và không yêu cầu chuyển tiền vào "tài khoản tạm giữ". Nếu nhận cuộc gọi như vậy, hãy cúp máy, không nói chuyện với ai về mã OTP, và báo cho người thân hoặc công an phường.',
+    story: ['Cuộc gọi "cán bộ điều tra"', ['Bà Hoa nhận cuộc gọi tự xưng cán bộ điều tra.', 'Người gọi dọa bà liên quan vụ án, đòi giữ bí mật.', 'Lá chắn hiện màn Dừng lại và báo con trai.', 'Bà không chuyển tiền. Con gọi lại, mọi chuyện ổn.'], 'Công an không bao giờ đòi chuyển tiền qua điện thoại.'] },
+  'viec-nhe': { name: 'Việc nhẹ lương cao', title: 'Cảnh báo: "việc nhẹ lương cao" bắt nạp tiền trước', body: 'Các lời mời làm cộng tác viên, đặt đơn online lương cao rồi yêu cầu nạp tiền để "kích hoạt" đều là lừa đảo. Không nạp tiền cho bất kỳ công việc nào. Hãy gửi tin cho Lá chắn kiểm tra trước.',
+    story: ['Việc nhẹ lương cao', ['Vy nhận tin mời làm cộng tác viên, lương 500k mỗi ngày.', 'Người lạ yêu cầu nạp 200k để kích hoạt tài khoản.', 'Vy dán tin vào Lá chắn, thấy các dấu hiệu bị tô đỏ.', 'Vy báo cáo, cả lớp được cảnh báo.'], 'Việc làm thật không bắt bạn nạp tiền trước.'] }
+};
+function fillCampaign() {
+  const t = TYPES[$('#c-type').value]; $('#c-title').value = t.title; $('#c-body').value = t.body;
+  $('#s-title').textContent = t.story[0]; $('#s-msg').innerHTML = '<b>Thông điệp:</b> ' + esc(t.story[2]);
+  $('#s-panels').innerHTML = t.story[1].map((x, i) => `<div class="card col gap-6"><div class="n">${i + 1}</div><div class="t-cap">${esc(x)}</div></div>`).join('');
+}
+$('#c-type').innerHTML = Object.entries(TYPES).map(([k, v]) => `<option value="${k}">${v.name}</option>`).join('');
+$('#c-type').onchange = fillCampaign; fillCampaign();
+$('#c-send').onclick = async () => {
+  const to = [...document.querySelectorAll('#p-camp input[type=checkbox]:checked')].map(c => c.value), err = $('#c-err');
+  if (!$('#c-title').value.trim() || !$('#c-body').value.trim()) { err.textContent = 'Cần có tiêu đề và nội dung trước khi gửi.'; err.style.display = 'block'; return; }
+  if (!to.length) { err.textContent = 'Chọn ít nhất một nhóm nhận.'; err.style.display = 'block'; return; }
+  err.style.display = 'none';
+  await post('/api/broadcasts', { title: $('#c-title').value.trim(), body: $('#c-body').value.trim(), to });
+  toast('Đã duyệt và gửi tới ' + to.length + ' nhóm'); loadSent();
+};
+$('#c-copy').onclick = () => navigator.clipboard.writeText($('#c-title').value + '\n\n' + $('#c-body').value).then(() => toast('Đã sao chép'), () => toast('Trình duyệt không cho sao chép'));
+$('#s-share').onclick = () => toast('Đã chia sẻ truyện vào 12 nhóm khu phố (mô phỏng)');
+$('#s-print').onclick = () => window.print();
+document.querySelectorAll('[data-quiz]').forEach(b => b.onclick = () => toast('Câu đố chạy từ bài kiểm tra của mảng Học như chơi game'));
+async function loadSent() {
+  const b = await fetch('/api/broadcasts').then(r => r.json());
+  $('#c-sent').innerHTML = b.length ? '<div class="t-over muted">Đã gửi</div>' + b.slice(0, 3).map(x => `<div class="card soft row gap-10" style="padding:10px 12px"><i class="ic s18 c-safe" data-i="check-circle"></i><div class="col grow"><div class="t-label bold">${esc(x.title)}</div><div class="t-cap muted">${new Date(x.at).toTimeString().slice(0, 5)} · ${esc(x.to.join(', '))}</div></div></div>`).join('') : '';
+  paintIcons($('#c-sent'));
+}
+
+/* ---------- Dữ liệu và đồng bộ ---------- */
+let appealsLive = false;
+async function loadAppeals() {   // máy chủ FastAPI có khiếu nại thật; máy chủ Node tối thiểu thì dùng dữ liệu mẫu ở trên
+  try {
+    const d = await fetch('/api/reports?status=appealed').then(r => r.json());
+    if (d && Array.isArray(d.items)) { appealsLive = true; appeals = d.items.map(i => ({ id: i.id, value: i.target, reason: i.appeal, open: true })); }
+  } catch { /* giữ dữ liệu mẫu */ }
+}
+async function refresh() { [S, reports] = await Promise.all([fetch('/api/stats').then(r => r.json()), fetch('/api/reports').then(r => r.json()), loadAppeals()]).then(x => [x[0], x[1]]); renderStats(); renderMod(); }
+refresh(); loadSent();
+const es = new EventSource('/api/events');
+es.addEventListener('report', e => { const r = JSON.parse(e.data); refresh(); if (r.source !== 'seed' && r.count === 1) toast('Báo cáo mới: ' + r.value + (r.auto ? ' · AI tự xác nhận' : ' · chờ duyệt')); });
+es.addEventListener('reset', () => { sel = null; refresh(); loadSent(); });
+go(['stats', 'mod', 'camp'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'stats');
+</script>
+</body>
+</html>
