@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import Icon from '../ui/Icon.jsx'
 import { BottomNav, Phone } from '../ui/Phone.jsx'
 import { api } from '../lib/api.js'
-import { openLearn, openProfile } from '../lib/links.js'
+import { useLayers } from '../lib/layers.js'
+import { openLearn } from '../lib/links.js'
 import { native } from '../lib/native.js'
 import { useApp } from '../lib/state.jsx'
 
@@ -34,6 +35,7 @@ function HomeSimple() {
   const { setMode, relatives, toast } = useApp()
   const stats = weekStats()
   const first = relatives.find((r) => r.paired) || relatives[0]
+  const { state, on, asleep, wakeUp } = useLayers()
 
   const talk = async () => {
     const heard = (await native.listen()) || ''
@@ -45,8 +47,8 @@ function HomeSimple() {
   }
 
   return (
-    <Phone name="A01a-trang-chu-don-gian" lg gesture="solid">
-      <div className="content" style={{ gap: 10, paddingTop: 10, paddingBottom: 12 }}>
+    <Phone name={asleep ? 'E01a-la-chan-dang-ngu' : 'A01a-trang-chu-don-gian'} lg gesture="solid">
+      <div className="content" style={asleep ? { gap: 12, paddingTop: 12 } : { gap: 10, paddingTop: 10, paddingBottom: 12 }}>
         <div className="row between">
           <div className="col gap-2">
             <div className="t-label muted">{today()}</div>
@@ -57,22 +59,50 @@ function HomeSimple() {
           </button>
         </div>
 
-        <button type="button" className="card solid-brand r24 col gap-10 tap" style={{ padding: 16 }} onClick={() => toast('Lá chắn đang chạy ngầm, bà không cần mở app')}>
-          <div className="row gap-12">
-            <div className="icon-box lgx white" style={{ color: '#1D4ED8' }}><Icon name="shield-check" size={32} /></div>
-            <div className="col grow">
-              <div className="t-h2 c-white">Lá chắn đang bật</div>
-              <div className="t-label" style={{ color: '#DBEAFE' }}>Bà đang được bảo vệ</div>
+        {asleep ? (
+          // E01a: máy tắt Lá chắn (tiết kiệm pin) hoặc chưa bật đủ 3 lớp
+          <div className="card danger r24 col gap-10" style={{ padding: 16 }}>
+            <div className="row gap-12">
+              <div className="icon-box lgx solid-danger"><Icon name="shield-off" size={32} /></div>
+              <div className="col grow">
+                <div className="t-h2 c-danger-ink">Lá chắn đang ngủ</div>
+                <div className="t-label">Bà chưa được bảo vệ</div>
+              </div>
             </div>
+            <div className="t-label">{state.asleep ? <>Máy đã tắt Lá chắn để tiết kiệm&nbsp;pin.</> : `Bà mới bật ${on}/3 lớp bảo vệ.`}</div>
+            <button type="button" className="btn danger block" onClick={() => (state.asleep ? (wakeUp(), toast('Lá chắn đã bật lại')) : nav('/thiet-lap'))}>
+              <Icon name="power" />{state.asleep ? 'Bật lại ngay' : 'Bật tiếp'}
+            </button>
           </div>
-          <div className="t-label c-white">Tuần này đã cảnh báo {stats.calls} cuộc gọi và {stats.messages} tin nhắn đáng ngờ.</div>
-        </button>
+        ) : (
+          <button type="button" className="card solid-brand r24 col gap-10 tap" style={{ padding: 16 }} onClick={() => toast('Lá chắn đang chạy ngầm, bà không cần mở app')}>
+            <div className="row gap-12">
+              <div className="icon-box lgx white" style={{ color: '#1D4ED8' }}><Icon name="shield-check" size={32} /></div>
+              <div className="col grow">
+                <div className="t-h2 c-white">Lá chắn đang bật</div>
+                <div className="t-label" style={{ color: '#DBEAFE' }}>Bà đang được bảo vệ</div>
+              </div>
+            </div>
+            <div className="t-label c-white">Tuần này đã cảnh báo {stats.calls} cuộc gọi và {stats.messages} tin nhắn đáng ngờ.</div>
+          </button>
+        )}
 
-        <BigCard icon="search" box="brand" title="Kiểm tra trước khi chuyển tiền" onClick={() => nav('/kiem-tra')} />
-        <BigCard icon="users" box="safe" title="Hỏi người thân" sub={first ? `Gửi ngay cho con: ${first.name}` : 'Thêm con, cháu'} onClick={() => nav('/hoi-nguoi-than')} />
-        <BigCard icon="flag" box="danger" title="Báo lừa đảo" sub={<>Kể lại để cảnh báo<br />mọi người</>} onClick={() => nav('/bao-cao')} />
+        {asleep ? (
+          <>
+            {/* E01a: thẻ giữ chiều cao tự nhiên như thiết kế */}
+            <SmallCard icon="search" box="brand" title="Kiểm tra" sub="Số lạ, đường dẫn, tài khoản" onClick={() => nav('/kiem-tra')} />
+            <SmallCard icon="users" box="safe" title="Hỏi người thân" sub={first ? `Gửi ngay cho con: ${first.name}` : 'Thêm con, cháu'} onClick={() => nav('/hoi-nguoi-than')} />
+            <SmallCard icon="flag" box="danger" title="Báo lừa đảo" sub="Kể lại để cảnh báo mọi người" onClick={() => nav('/bao-cao')} />
+          </>
+        ) : (
+          <>
+            <BigCard icon="search" box="brand" title="Kiểm tra trước khi chuyển tiền" onClick={() => nav('/kiem-tra')} />
+            <BigCard icon="users" box="safe" title="Hỏi người thân" sub={first ? `Gửi ngay cho con: ${first.name}` : 'Thêm con, cháu'} onClick={() => nav('/hoi-nguoi-than')} />
+            <BigCard icon="flag" box="danger" title="Báo lừa đảo" sub={<>Kể lại để cảnh báo<br />mọi người</>} onClick={() => nav('/bao-cao')} />
+          </>
+        )}
 
-        <button type="button" className="row gap-12 tap" onClick={talk}
+        {!asleep && <button type="button" className="row gap-12 tap" onClick={talk}
           style={{ height: 60, borderRadius: 30, background: '#1D4ED8', color: '#fff', padding: '0 8px 0 20px', flex: 'none' }}>
           <div className="col grow">
             <div style={{ fontSize: 17, lineHeight: '22px', fontWeight: 700 }}>Nói với Lá chắn</div>
@@ -81,7 +111,7 @@ function HomeSimple() {
           <div style={{ width: 44, height: 44, borderRadius: 22, background: '#fff', color: '#1D4ED8', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
             <Icon name="mic" />
           </div>
-        </button>
+        </button>}
       </div>
       <BottomNav active="home" />
     </Phone>
@@ -101,10 +131,24 @@ function BigCard({ icon, box, title, sub, onClick }) {
   )
 }
 
+function SmallCard({ icon, box, title, sub, onClick }) {
+  return (
+    <button type="button" className="card row gap-12 tap" style={{ padding: '10px 16px' }} onClick={onClick}>
+      <div className={`icon-box lgx ${box}`}><Icon name={icon} size={28} /></div>
+      <div className="col grow">
+        <div className="t-h2">{title}</div>
+        <div className="t-label muted">{sub}</div>
+      </div>
+      <Icon name="chev-right" className="faint" />
+    </button>
+  )
+}
+
 function HomeFull() {
   const nav = useNavigate()
   const { toast, points } = useApp()
   const stats = weekStats()
+  const { state, on } = useLayers()
   const [emerging, setEmerging] = useState(null)
 
   useEffect(() => {
@@ -126,24 +170,24 @@ function HomeFull() {
         <div className="title" style={{ whiteSpace: 'nowrap' }}>Lá chắn số</div>
         <button type="button" className="chip warn tap" onClick={() => openLearn(null, toast)}><Icon name="award" size={14} />{points} điểm</button>
         <button type="button" className="tap muted" aria-label="Thông báo" onClick={() => nav('/kiem-tra/tin-nhan')}><Icon name="bell" /></button>
-        <button type="button" className="avatar tap" style={{ width: 32, height: 32, fontSize: 13 }} aria-label="Hồ sơ" onClick={() => openProfile(toast)}>V</button>
+        <button type="button" className="avatar tap" style={{ width: 32, height: 32, fontSize: 13 }} aria-label="Thiết lập" onClick={() => nav('/thiet-lap')}>V</button>
       </div>
 
       <div className="content" style={{ paddingTop: 8, gap: 16 }}>
-        <button type="button" className="card col gap-12 tap" onClick={() => openProfile(toast)}>
+        <button type="button" className="card col gap-12 tap" onClick={() => nav('/thiet-lap')}>
           <div className="row between">
             <div className="col">
-              <div className="t-h2">Bạn đang được bảo vệ</div>
+              <div className="t-h2">{on === 3 && !state.asleep ? 'Bạn đang được bảo vệ' : 'Lá chắn đang ngủ'}</div>
               <div className="t-cap muted">Tuần này: {stats.calls + stats.messages} cảnh báo</div>
             </div>
-            <span className="chip safe"><Icon name="check" size={14} />{stats.layersOn}/3 lớp</span>
+            <span className={`chip ${on === 3 && !state.asleep ? 'safe' : 'danger'}`}><Icon name={on === 3 && !state.asleep ? 'check' : 'alert'} size={14} />{state.asleep ? 0 : on}/3 lớp</span>
           </div>
           <div className="divider" />
           {layers.map((l, i) => (
             <div className="row gap-12" key={l.title}>
               <div className="icon-box brand"><Icon name={l.icon} size={20} /></div>
               <div className="col grow"><div className="t-label semi">{l.title}</div><div className="t-cap muted">{l.sub}</div></div>
-              <span className={`dot ${i < stats.layersOn ? 'safe' : ''}`} />
+              <span className={`dot ${state[['calls', 'messages', 'banking'][i]] && !state.asleep ? 'safe' : ''}`} />
             </div>
           ))}
         </button>

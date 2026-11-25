@@ -29,6 +29,9 @@ RULES = [
          "Dọa cắt điện", "gia_dien_luc", "Giả nhân viên điện lực"),
     Rule("prize", re.compile(r"trúng thưởng|quà tri ân|nhận quà|tri ân khách hàng", I),
          "Hứa tặng quà, trúng thưởng", "qua_tri_an", "Giả chương trình tặng quà"),
+    Rule("invest", re.compile(r"đầu tư[^.!?\n]{0,30}(?:lãi|lời|lợi nhuận)|lãi (?:suất )?\d+(?:[.,]\d+)?\s*%\s*(?:một |mỗi |/\s*)?(?:ngày|tuần|tháng)"
+                              r"|lợi nhuận \d+\s*%|cam kết (?:lãi|lời|hoàn vốn)|bao lời|sàn (?:ngoại hối|forex|coin|tiền ảo)", I),
+         "Hứa lãi cao bất thường", "dau_tu_lai_cao", "Lừa đảo đầu tư lãi cao"),
     Rule("income", re.compile(r"việc nhẹ lương cao(?:\s*\d+\s*k\s*/\s*ngày)?|lương cao|\d+\s*k\s*/\s*ngày|hoa hồng\s*\d+\s*%|thu nhập (?:cao|khủng)", I),
          "Hứa thu nhập cao bất thường", "viec_nhe_luong_cao", "Lừa đảo tuyển cộng tác viên"),
     Rule("prepay", re.compile(r"nạp (?:trước|tiền)(?:\s*\d+(?:[.,]\d+)?\s*(?:k|nghìn|ngàn|triệu|đồng|đ)\b)?|đóng phí|phí kích hoạt", I),
@@ -48,7 +51,7 @@ RULES = [
 ]
 
 # Thứ tự chọn kiểu lừa đảo chính khi có nhiều dấu hiệu
-TYPE_PRIORITY = ["police", "accident", "electric", "prize", "income", "prepay", "lock", "link"]
+TYPE_PRIORITY = ["police", "accident", "electric", "prize", "invest", "income", "prepay", "lock", "link"]
 
 # Gộp hai dấu hiệu hay đi cùng nhau thành một dòng (khớp màn A04b, A05b)
 MERGES = [

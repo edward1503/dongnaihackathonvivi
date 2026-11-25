@@ -57,7 +57,12 @@ export const api = {
   report: (body) => req('/api/reports', { method: 'POST', body }),
   stats: () => req('/api/stats'),
   events: (room, since) => req(`/api/events?room=${encodeURIComponent(room)}&since=${since}`, { timeout: 8000 }),
+  // Buổi trình diễn: laptop điều khiển điện thoại (sự kiện demo.go), lấy địa chỉ LAN và mã QR
+  demoGo: (data) => req('/api/events', { method: 'POST', body: { type: 'demo.go', room: 'gia-dinh-hoa', from: 'dieu-khien', data } }),
+  demoLinks: () => req('/api/demo/links', { timeout: 5000 }),
 }
+
+export const qrUrl = (path) => `${API_BASE}/api/demo/qr.svg?path=${encodeURIComponent(path)}`
 
 export function wsUrl(path) {
   const base = API_BASE || location.origin

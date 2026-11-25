@@ -4,23 +4,27 @@ Chạy:  uvicorn lcs.main:app --host 0.0.0.0 --port 8000
 Trang của Mảng 5, 6 (mvp/zalo.html, mvp/web.html) chạy thẳng trên máy chủ này qua lớp tương thích (compat.py).
 """
 import json
+import logging
 import os
+import re
+import shutil
 import uuid
 from pathlib import Path
 
 from fastapi import (Body, FastAPI, File, Form, HTTPException, Query, Request, UploadFile, WebSocket,
                      WebSocketDisconnect)
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import ValidationError
 
-from . import ai, compat, config, roleplay
+from . import ai, compat, config, demo, giong, hieu_y, roleplay
+from .audio import prepare as prepare_audio
 from .analyze import NeedInput, analyze_call, analyze_text
 from .checker import check_target
-from .contract import (AlertIn, AnalysisResult, AppealIn, AskIn, AskReplyIn, BroadcastIn, CheckIn, DecisionIn,
-                       EventIn, LegacyReplyIn, MessageIn, ReportIn, ReportPatch)
-from .data import SCAM_TYPES
+from .contract import (AlertIn, AnalysisResult, AppealIn, AppealResolveIn, AskIn, AskReplyIn, BroadcastIn, CheckIn, DecisionIn,
+                       EventIn, IntentIn, LegacyReplyIn, MessageIn, ReportIn, ReportPatch, SpeakIn)
+from .data import LESSONS, SCAM_TYPES
 from .masking import has_otp, mask
 from .relay import Relay, RelayError
 from .reports import CONFIRMED, Store
@@ -29,7 +33,24 @@ from .text import detect_kind, digits, nfc, target_key
 MAX_AUDIO = 20 * 1024 * 1024
 LCS_ROOT = Path(__file__).resolve().parents[2]  # thư mục la-chan-so/
 
-app = FastAPI(title="Lá chắn số", version="0.2.0")
+
+
+class _HideNumbers(logging.Filter):
+    """Nhật ký truy cập của uvicorn không được ghi số người gọi nằm trong đường dẫn tra số."""
+    PATTERNS = [(re.compile(r"(/api/lookup/phone/)[^?\s]*"), r"\1•••"), (re.compile(r"([?&]v=)[^&\s]*"), r"\1•••")]
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        if isinstance(record.args, tuple) and len(record.args) >= 3 and isinstance(record.args[2], str):
+            path = record.args[2]
+            for pat, sub in self.PATTERNS:
+                path = pat.sub(sub, path)
+            record.args = record.args[:2] + (path,) + record.args[3:]
+        return True
+
+
+logging.getLogger("uvicorn.access").addFilter(_HideNumbers())
+
+app = FastAPI(title="Lá chắn số", version="0.3.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[o.strip() for o in (config.env("LCS_CORS", "*") or "*").split(",")],
@@ -50,7 +71,14 @@ def bad(msg: str, code: int = 400):
 
 @app.get("/api/health")
 def health():
-    return {"ok": True, "ai": ai.available(), "today": config.demo_today().isoformat()}
+    return {"ok": True, "ai": ai.available(), "intentAI": hieu_y.available(), "ffmpeg": bool(shutil.which("ffmpeg")),
+            "today": config.demo_today().isoformat()}
+
+
+@app.get("/api/scam-types")
+def scam_types():
+    """Danh sách kiểu lừa đảo chung của đội, kèm mã bài học của Mảng 4 (null: chưa có bài, mở thư viện)."""
+    return [{"id": k, "label": v, "lesson": LESSONS.get(k)} for k, v in SCAM_TYPES.items()]
 
 
 @app.post("/api/demo/reset")
@@ -62,6 +90,23 @@ async def demo_reset():
     await relay.reset()
     hub.emit("reset", {})
     return {"ok": True}
+
+
+@app.get("/api/demo/links")
+def demo_links(request: Request):
+    """Địa chỉ cho điện thoại trong mạng LAN (HTTPS nếu chạy bằng chay-demo.py)."""
+    return demo.links(str(request.base_url))
+
+
+@app.get("/api/demo/qr.svg")
+def demo_qr(request: Request, path: str = "/"):
+    """Mã QR mở một trang của chính máy chủ này trên điện thoại. Chỉ nhận đường dẫn bắt đầu bằng "/"."""
+    if not path.startswith("/") or path.startswith("//"):
+        bad("Đường dẫn phải bắt đầu bằng /")
+    svg = demo.qr_svg(demo.public_base(str(request.base_url)) + path)
+    if svg is None:
+        bad("Máy chủ chưa cài thư viện qrcode (pip install qrcode)", 501)
+    return Response(svg, media_type="image/svg+xml", headers={"Cache-Control": "no-store"})
 
 
 # ---------------- S1, S2: kiểm tra nhanh ----------------
@@ -123,7 +168,8 @@ async def analyze_call_api(
             bad("Tệp ghi âm lớn quá (tối đa 20 MB)", 413)
     try:
         return await analyze_call(store, audio=data, mime=audio.content_type if audio else None,
-                                  transcript=transcript, phone=phone, unknown_number=unknownNumber)
+                                  transcript=transcript, phone=phone, unknown_number=unknownNumber,
+                                  filename=audio.filename if audio else None)
     except NeedInput as e:
         bad(str(e))
     finally:
@@ -195,8 +241,13 @@ def list_alerts():
 @app.post("/api/alerts", status_code=201)
 async def create_alert(body: AlertIn):
     """N1, N2, N3 (Android) hoặc màn A04b gọi khi Lá chắn quyết định báo người thân.
-    Minh chỉ thấy mức cảnh báo và tóm tắt đã che."""
+    Minh chỉ thấy mức cảnh báo và tóm tắt đã che. Gửi lại cùng eventId thì trả cảnh báo cũ, không báo trùng."""
     _room(body.room)
+    dedupe = f"{body.room}:{body.eventId}" if body.eventId else None
+    if dedupe and dedupe in alerts.by_event:
+        old = alerts.get(alerts.by_event[dedupe])
+        if old:
+            return old
     scenario = body.scenario or body.scamLabel or (SCAM_TYPES.get(body.scamType) if body.scamType else None)
     asked = body.askedTransfer if body.askedTransfer is not None else bool(body.asksMoney)
     alert = compat.make_alert(
@@ -204,6 +255,8 @@ async def create_alert(body: AlertIn):
         scam_type=body.scamType, asked_transfer=asked, call_seconds=body.callSeconds,
         summary=body.summary, timeline=body.timeline or None,
     )
+    if dedupe:
+        alerts.by_event[dedupe] = alert["id"]
     return await _publish_alert(alert, body.room, body.sender)
 
 
@@ -391,6 +444,19 @@ async def appeal_report(report_id: str, body: AppealIn):
     return r
 
 
+@app.post("/api/reports/{report_id}/appeal/resolve")
+async def resolve_appeal(report_id: str, body: AppealResolveIn):
+    """Người duyệt xử lý khiếu nại. Gỡ nhãn thì số hết bị cảnh báo; giữ nhãn thì chỉ đóng khiếu nại."""
+    r = store.get(report_id)
+    if not r:
+        bad("Không tìm thấy báo cáo", 404)
+    if not r["appeal"]:
+        bad("Báo cáo này không có khiếu nại đang mở", 409)
+    r = store.resolve_appeal(report_id, body.outcome == "remove")
+    await _decided(report_id, r)
+    return r
+
+
 @app.get("/api/stats")
 def stats(month: str | None = None):
     return store.stats(month)
@@ -416,7 +482,8 @@ async def roleplay_turn(request: Request):
             if not ai.available():
                 bad("Máy chủ chưa có AI để nghe giọng nói. Bạn bấm Gõ chữ nhé")
             try:
-                text = await ai.transcribe_plain(data, audio.content_type or "audio/webm")
+                clip, kind = await prepare_audio(data, audio.content_type or "audio/webm", audio.filename)
+                text = await ai.transcribe_plain(clip, kind)
             except ai.AIUnavailable:
                 bad("Mình chưa nghe rõ. Bạn nói lại hoặc bấm Gõ chữ nhé")
     else:
@@ -440,6 +507,30 @@ async def roleplay_finish(body: dict = Body(...)):
         bad("Không thấy cuộc gọi này", 404)
 
 
+# Hai đường cho app Android (Mảng 4, android/HOP-DONG-DU-LIEU.md): app tự chọn câu thu sẵn, máy chủ chỉ phân loại và đọc giọng.
+
+@app.post("/api/roleplay/intent")
+async def roleplay_intent(body: IntentIn):
+    """Hiểu ý một lượt của người học: {ideas[], intent, wantsStop, offScript}. Không lưu lời người học."""
+    try:
+        return await hieu_y.classify(body.scene, body.text, body.lastLine, body.scored)
+    except hieu_y.SceneUnsupported as e:
+        bad(str(e), 422)
+    except hieu_y.DataMissing as e:
+        bad(str(e), 503)
+    except ai.AIUnavailable:
+        bad("Chưa có khóa AI hoặc AI không trả lời; app dùng luật trên máy", 503)
+
+
+@app.post("/api/roleplay/speak")
+async def roleplay_speak(body: SpeakIn):
+    """Đọc một câu bằng giọng Gemini của nhân vật, đã lọc rẹt: {text, audio (PCM16 base64), sampleRate, seconds}."""
+    try:
+        return await giong.speak(body.text, body.character)
+    except giong.CannotSpeak as e:
+        bad(str(e), 503)
+
+
 @app.get("/api/broadcasts")
 def list_broadcasts():
     return alerts.broadcasts
@@ -458,7 +549,7 @@ def create_broadcast(body: BroadcastIn):
 def _serve(path: Path):
     """Trả đúng một tệp cố định. Hàm không nhận tham số nào để không ai đổi được đường dẫn tệp."""
     def endpoint():
-        return FileResponse(path)
+        return FileResponse(path, headers={"Cache-Control": "no-cache"})   # sửa trang xong tải lại là thấy
     return endpoint
 
 

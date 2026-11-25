@@ -219,29 +219,13 @@ def pcm_to_wav(pcm: bytes, rate: int = 24000) -> bytes:
 
 
 async def tts(text: str) -> bytes | None:
-    import httpx
+    """Giọng chị Lan (Aoede) cho câu AI viết, đã cắt nhiễu đuôi và lọc như câu thu sẵn (giong.py)."""
+    import asyncio
 
-    keys = config.gemini_keys()
-    models = [m.strip() for m in (config.env("GEMINI_TTS_MODELS", "gemini-3.8-flash-tts,gemini-3.1-flash-tts-preview,gemini-2.5-flash-preview-tts") or "").split(",") if m.strip()]
-    body = {
-        "contents": [{"parts": [{"text": "# DIRECTOR'S NOTES (không đọc phần này)\n" + TTS_STYLE + "\n\n# TRANSCRIPT (chỉ đọc phần dưới đây)\n" + text}]}],
-        "generationConfig": {"responseModalities": ["AUDIO"],
-                             "speechConfig": {"voiceConfig": {"prebuiltVoiceConfig": {"voiceName": "Aoede"}}}},
-    }
-    async with httpx.AsyncClient() as client:
-        for m in models:
-            for k in keys:
-                try:
-                    r = await client.post(f"{config.gemini_base()}/models/{m}:generateContent", json=body,
-                                          headers={"x-goog-api-key": k}, timeout=20)
-                    if r.status_code != 200:
-                        continue
-                    part = r.json()["candidates"][0]["content"]["parts"][0]["inlineData"]
-                    rate = 24000
-                    mt = part.get("mimeType", "")
-                    if "rate=" in mt:
-                        rate = int(mt.split("rate=")[1].split(";")[0])
-                    return pcm_to_wav(base64.b64decode(part["data"]), rate)
-                except Exception:
-                    continue
-    return None
+    from . import giong
+
+    got = await giong.tts_pcm(text, "Aoede", TTS_STYLE)
+    if not got:
+        return None
+    pcm, rate = await asyncio.to_thread(giong.clean, *got)
+    return pcm_to_wav(pcm, rate)

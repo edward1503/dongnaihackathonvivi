@@ -15,6 +15,7 @@ import { hhmm, LEVEL } from '../lib/format.js'
 import { native } from '../lib/native.js'
 import { FAMILY_ROOM, useApp } from '../lib/state.jsx'
 import { highlight } from './MessageResult.jsx'
+import { buzz, playSound, startRinging, stopSound } from '../lib/sound.js'
 import spotMascot from '../../../assets/spot-mascot.png'
 import askAudio from '../../../prototype/audio/benai-10.m4a'
 import yesAudio from '../../../prototype/audio/benai-11.m4a'
@@ -55,18 +56,10 @@ function durationWords(sec) {
   return `${Math.floor(s / 60)} phút ${s % 60} giây`
 }
 
-// Phát giọng Bé Nai thu sẵn (Gemini, giọng Leda); máy chặn tự phát thì bỏ qua
+// Phát giọng Bé Nai thu sẵn (Gemini, giọng Leda) qua trình phát dùng chung đã mở khóa (lib/sound.js)
 function useVoice() {
-  const ref = useRef(null)
-  const play = (src) => {
-    try {
-      ref.current?.pause()
-      ref.current = new Audio(src)
-      ref.current.play().catch(() => {})
-    } catch { /* trình duyệt không phát được */ }
-  }
-  useEffect(() => () => ref.current?.pause(), [])
-  return play
+  useEffect(() => () => stopSound(), [])
+  return playSound
 }
 
 // ---------------- A03a, A03b: đổ chuông ----------------
@@ -85,6 +78,8 @@ export function IncomingCall() {
   }, [phone])
 
   const danger = r?.level === 'danger'
+  // Đổ chuông và rung như cuộc gọi thật cho tới khi bà bấm Nghe hoặc Từ chối (trên điện thoại cần chạm trang một lần trước)
+  useEffect(() => (native.available() || !r ? undefined : startRinging({ danger })), [r, danger])
   const answer = () => {
     setCall({ phone, display: r?.display || phone, lookup: r, startedAt: new Date().toISOString(), seconds: 252, hasRecording: true })
     if (!native.available()) toast('Mô phỏng: bà nghe máy 4 phút rồi cúp')
@@ -278,6 +273,7 @@ export function CallAnalysis() {
       }
       setR(res)
       setResult(res)
+      if (res.level === 'danger') buzz([300, 120, 300])
       if (res.level === 'danger' && minh) notify(res)
     } catch (e) {
       setError(e.offline ? 'Không có mạng. Bà gọi Minh trước nhé.' : e.message || 'Chưa phân tích được')
@@ -297,6 +293,7 @@ export function CallAnalysis() {
         room: FAMILY_ROOM, level: 'danger', who: 'Mẹ Hoa', phone: c.phone, scamType: res.scamType, scamLabel: res.scamLabel,
         asksMoney: Boolean(c.answeredYes) || (res.signs || []).some((s) => /chuyển tiền|nạp/i.test(s.text)),
         callSeconds: c.seconds, summary, timeline, from: 'ba-hoa',
+        eventId: `web-${c.phone}-${c.endedAt || c.startedAt || ''}`,   // mở lại màn này không báo Minh lần hai
       })
       setAlerted({ id: a.id, at: new Date() })
       setAsk({ askId: a.id, to: minh, text: summary, sentAt: new Date().toISOString(), seen: false, reply: null })
@@ -465,13 +462,74 @@ export function NoRecording() {
 // ---------------- A10a: Dừng lại ----------------
 
 export function StopScreen() {
+  const [params] = useSearchParams()
+  return params.get('danggoi') === '1' ? <StopInCall /> : <StopAfterCall />
+}
+
+// ---------------- A10b: "Dừng lại" khi ĐANG gọi với số chưa quen và mở ứng dụng ngân hàng ----------------
+// Android mở #/dung-lai?danggoi=1&so=…&giay=401; nút "Cúp máy ngay" gọi LCSNative.endCall().
+
+function mmss(sec) {
+  const s = Math.max(0, Math.round(sec || 0))
+  return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`
+}
+
+function StopInCall() {
+  const nav = useNavigate()
+  const [params] = useSearchParams()
+  const { relatives, toast } = useApp()
+  const minh = relatives.find((x) => x.paired) || relatives[0]
+  const phone = params.get('so') || '0987654321'
+  const [sec, setSec] = useState(Number(params.get('giay') || 401))
+  useEffect(() => {
+    const t = setInterval(() => setSec((x) => x + 1), 1000)
+    return () => clearInterval(t)
+  }, [])
+  useEffect(() => {
+    buzz([600, 200, 600])
+    native.speak('Dừng lại. Bà đang nghe máy với số chưa quen và mở ứng dụng ngân hàng. Người gọi giục chuyển tiền thì bà cúp máy nhé.')
+    return () => native.stopSpeaking()
+  }, [])
+  const hangUp = () => {
+    native.stopSpeaking()
+    if (window.LCSNative?.endCall) window.LCSNative.endCall()
+    else toast('Mô phỏng: đã cúp máy')
+    nav(`/sau-cuoc-goi?so=${encodeURIComponent(phone)}&giay=${sec}&ghiam=1`, { replace: true })
+  }
+  return (
+    <Phone name="A10b-phanh-dang-goi" lg className="bg-danger" dark>
+      <style>{css}</style>
+      <div className="content acenter" style={{ padding: '16px 16px 12px' }}>
+        <span className="chip solid-white big"><Icon name="phone" size={16} className="c-danger" />Đang gọi với số chưa quen · {mmss(sec)}</span>
+        <div className="icon-box xl white"><Icon name="hand" size={48} /></div>
+        <div className="col gap-8 w-full">
+          <div className="stop">DỪNG LẠI</div>
+          <div className="t-body c-white center">Bà đang nghe máy với số chưa quen và mở ứng dụng ngân hàng.<br />Đây là dấu hiệu lừa đảo<br />thường gặp nhất.</div>
+        </div>
+        <div className="card plain r20 p-20 col gap-8 w-full" style={{ marginTop: 'auto', marginBottom: 'auto' }}>
+          <div className="t-h2 c-danger-ink center">Người gọi đang giục bà chuyển tiền?</div>
+          <div className="t-label muted center">Hãy cúp máy.<br />Người thật sẽ không giận.</div>
+        </div>
+        <div className="col gap-12 w-full">
+          <button type="button" className="btn white xl block" onClick={hangUp}><Icon name="phone-off" />Cúp máy ngay</button>
+          <button type="button" className="btn xl block on-red" onClick={() => nav('/hoi-nguoi-than', { replace: true })}><Icon name="users" />Hỏi con {minh?.name || ''} trước</button>
+          <div className="t-cap c-white center">Không cơ quan nào yêu cầu<br />chuyển tiền qua điện thoại.</div>
+        </div>
+      </div>
+    </Phone>
+  )
+}
+
+// ---------------- A10a: "Dừng lại" sau cuộc gọi lạ ----------------
+
+function StopAfterCall() {
   const nav = useNavigate()
   const [params] = useSearchParams()
   const { relatives } = useApp()
   const play = useVoice()
   const minh = relatives.find((x) => x.paired) || relatives[0]
   const minutes = params.get('phut') || '4'
-  useEffect(() => { play(stopAudio) }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { play(stopAudio); buzz([600, 200, 600]) }, []) // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <Phone name="A10a-phanh-sau-cuoc-goi" lg className="bg-danger" dark>
       <style>{css}</style>

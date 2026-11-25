@@ -1,0 +1,105 @@
+# Hướng dẫn chạy demo Lá chắn số (vòng chung kết)
+
+Một laptop chạy máy chủ. Điện thoại của đội và của ban giám khảo mở app qua mạng Wi-Fi chung, hoặc qua điểm phát 4G của laptop. Dữ liệu là dữ liệu giả lập.
+
+## 1. Cài một lần
+
+```bash
+cd la-chan-so/server
+pip install -r requirements.txt          # Python 3.11 trở lên
+cd ../app && npm install                 # Node 20 trở lên
+```
+
+Khóa AI (không bắt buộc, không có thì demo vẫn chạy bằng bộ luật và câu thu sẵn). Tạo tệp `la-chan-so/server/.env`, hoặc dùng chung tệp `la-chan-so/.env` của Mảng 4. Cả hai tệp đều không đưa lên kho.
+
+```
+GEMINI_API_KEYS=khóa1,khóa2
+OPENAI_API_KEY=...        # tùy chọn: hiểu ý người học trong gọi video, giống máy chủ giả của Mảng 4
+```
+
+## 2. Chạy
+
+```bash
+cd la-chan-so/server
+python chay-demo.py --build      # build app React rồi chạy; lần sau chỉ cần: python chay-demo.py
+```
+
+Cửa sổ dòng lệnh in ra mọi địa chỉ và một mã QR:
+
+| Ai dùng | Mở địa chỉ |
+|---|---|
+| Laptop người trình bày (bảng mô phỏng, mã QR) | `http://localhost:8000/?demo=1` |
+| Điện thoại "bà Hoa" | `https://<ip-laptop>:8443/?mode=simple` (hoặc quét mã QR) |
+| Điện thoại "Vy" (học sinh) | `https://<ip-laptop>:8443/?mode=full` |
+| Máy Minh trên Zalo (Mảng 5) | `https://<ip-laptop>:8443/zalo` |
+| Web đội tình nguyện (Mảng 6) | `https://<ip-laptop>:8443/web` |
+| Gọi video khuyên chị Lan (Mảng 4) | `https://<ip-laptop>:8443/prototype/video-call.html` |
+| App Android của Mảng 1, ô "Máy chủ của đội" | `http://<ip-laptop>:8000` |
+
+**Vì sao điện thoại phải dùng `https`:** trình duyệt điện thoại chỉ cho dùng micro ("Giữ để nói", "Nói với Lá chắn") và chạy avatar nhiều luồng khi trang mở bằng https. `chay-demo.py` tự tạo chứng chỉ cho IP của laptop. Lần đầu mở, điện thoại báo "Kết nối không riêng tư": bấm **Nâng cao**, rồi **Tiếp tục truy cập**.
+
+Muốn cài app ra màn hình chính cho giống app thật: trong Chrome bấm ⋮, chọn **Thêm vào màn hình chính**. App mở toàn màn hình, có biểu tượng khiên.
+
+## 3. Kịch bản trình diễn
+
+Trước mỗi lượt diễn, bấm **Đặt lại demo** ở bảng mô phỏng. Ở bảng mô phỏng trên laptop, chọn **Điện thoại** thì mỗi nút sẽ đổi màn trên điện thoại đang mở app. Chọn **Máy này** thì đổi ngay trên laptop. Trên điện thoại cũng mở được bảng này: thêm `&demo=1` vào địa chỉ, rồi chạm vào mấu nhỏ ở mép trái màn hình.
+
+Mỗi điện thoại cần được chạm vào màn hình một lần sau khi mở trang, để trình duyệt cho phát tiếng và rung.
+
+**a. Cuộc gọi lừa đảo (phần chính):**
+1. Laptop bấm **Có cuộc gọi lạ**. Điện thoại bà Hoa đổ chuông và rung, thẻ đỏ "Nghi lừa đảo" (A03a).
+2. Bấm **Nghe**. Bé Nai hỏi: "Người gọi có đòi chuyển tiền không?" (A04a). Bấm **Có**.
+3. AI chép lời và tô đỏ 3 dấu hiệu, rồi tự báo Minh (A04b).
+4. Trên máy Minh (`/zalo`), cảnh báo hiện ra. Bấm **Mẹ đừng chuyển**. Điện thoại bà Hoa hiện lời Minh thật to và đọc thành tiếng (A08c).
+5. Laptop bấm **Mở app ngân hàng sau cuộc gọi**. Màn đỏ "DỪNG LẠI" hiện lên (A10a).
+
+**b. Đang nghe máy mà mở app ngân hàng:** laptop bấm **Đang gọi số lạ, mở app ngân hàng** (A10b). Bấm **Cúp máy ngay** thì Bé Nai hỏi tiếp như bước a.2.
+
+**c. Tin nhắn lừa đảo (Vy):** laptop bấm **Có tin nhắn lạ**. Thông báo nổi hiện ra (A05a). Bấm **Xem phân tích** để thấy tin được tô đỏ từng dấu hiệu (A05b), rồi bấm **Báo cho cộng đồng**. Báo cáo hiện ngay ở `/web` để đội tình nguyện duyệt.
+
+**d. Thiết lập và Lá chắn đang ngủ:**
+- **Thiết lập lần đầu:** bật từng lớp bảo vệ (A02a), đủ 3 lớp thì sang màn "Lá chắn đã sẵn sàng" (A02b).
+- **Máy tắt Lá chắn:** trang chủ chuyển sang thẻ đỏ "Lá chắn đang ngủ" (E01a). Bấm **Bật lại ngay**.
+
+**e. Gọi video khuyên chị Lan:** mở `/prototype/video-call.html` trên điện thoại. Nhân vật có nhãn "AI đóng vai".
+
+## 4. Khi có sự cố
+
+| Hiện tượng | Cách xử lý |
+|---|---|
+| Điện thoại không mở được trang | Laptop và điện thoại phải chung một mạng. Mạng của khách sạn hoặc trường thường chặn các máy nhìn thấy nhau: dùng điểm phát 4G của điện thoại khác, cho laptop vào mạng đó |
+| Bấm trên laptop mà điện thoại không đổi màn | Bảng mô phỏng phải đang chọn **Điện thoại**. Điện thoại phải đang mở app, không phải trang Zalo hay web |
+| Không có tiếng Bé Nai trên điện thoại | Chạm vào màn hình điện thoại một lần, rồi bấm lại |
+| Mất mạng Internet | Demo vẫn chạy: AI lùi về bộ luật và bản chép lời mẫu. Riêng nhận giọng nói của trình duyệt cần Internet |
+| Đổi mạng (IP laptop khác) | Chạy lại `python chay-demo.py`, tệp sẽ tự tạo chứng chỉ mới |
+
+## 5. Kiểm tra trước giờ diễn
+
+```bash
+cd la-chan-so/server && python -m pytest -q                            # 73 bài kiểm thử máy chủ
+python ../app/tools/chup-man.py /tmp/chup                              # bấm qua 29 màn, chụp để so với export/png/
+python ../app/tools/kiem-dien-thoai.py /tmp/dt https://<ip>:8443       # khổ điện thoại và điều khiển từ xa
+```
+
+## 6. AI dùng vào việc gì (bổ sung cho mục (e) của bản thuyết minh)
+
+**Trong sản phẩm** (máy chủ gọi AI, khóa nằm ở máy chủ):
+
+| Việc | Mô hình | Gửi đi những gì |
+|---|---|---|
+| Phân tích tin nhắn: tô dấu hiệu, gợi ý việc nên làm (A05b, A06b) | Gemini | Nội dung tin, đã thay số điện thoại và số tài khoản bằng [SĐT], [TK]. Tin có mã OTP không bao giờ được gửi đi |
+| Chép lời và phân tích bản ghi âm cuộc gọi (A04b) | Gemini | Tệp ghi âm (máy chủ không lưu), rồi bản chép lời đã che số |
+| Phân tích lời kể khi báo cáo (A09a) | Gemini | Lời kể đã che số |
+| Hiểu ý người học trong cuộc gọi video với chị Lan | OpenAI nếu đặt khóa, không thì Gemini | Câu người học nói, mọi dãy từ 4 chữ số đã thay bằng ••• |
+| Đọc lời nhân vật gọi video | Gemini TTS | Câu nhân vật nói |
+
+Luật chung:
+- AI không bao giờ kết luận "an toàn". Chỉ danh bạ trắng các tổng đài đã xác thực mới cho mức An toàn.
+- AI hỏng, hết giờ hoặc không có khóa thì máy chủ dùng bộ luật và câu thu sẵn. Kết quả lúc đó ghi nguồn là `heuristic` hoặc `fallback`.
+
+**Khi làm sản phẩm ở vòng chung kết:**
+- **Claude (Claude Code):** viết mã máy chủ (Mảng 2) và app React (Mảng 3) theo kế hoạch của đội, cùng các bài kiểm thử. Commit có dòng `Co-Authored-By: Claude`.
+- **Giao diện:** dựng theo đúng 53 khung thiết kế của đội trên Figma, không sao chép giao diện sản phẩm có sẵn.
+- **Các mảng khác:** công cụ AI dùng ở Mảng 1, 4, 5, 6 xem README của từng mảng (ví dụ `android/README.md`).
+
+Đội rà soát và quyết định cuối cùng mọi nội dung.

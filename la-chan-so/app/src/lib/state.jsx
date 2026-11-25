@@ -1,6 +1,7 @@
 // Trạng thái chung của app: chế độ hiển thị, kết quả vừa kiểm tra, lịch sử, người thân, câu hỏi đang chờ.
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { connectRoom } from './relay.js'
+import { setLayersForDemo } from './layers.js'
 
 const Ctx = createContext(null)
 export const FAMILY_ROOM = 'gia-dinh-hoa'
@@ -56,6 +57,15 @@ function initialRelatives() {
   return load('lcs.relatives', DEFAULT_RELATIVES)
 }
 
+// Mã của tab này, để máy điều khiển không tự nhận lại lệnh demo.go của chính nó
+export const CLIENT_ID = (() => {
+  try {
+    let id = sessionStorage.getItem('lcs.client')
+    if (!id) { id = Math.random().toString(36).slice(2, 10); sessionStorage.setItem('lcs.client', id) }
+    return id
+  } catch { return Math.random().toString(36).slice(2, 10) }
+})()
+
 export function AppProvider({ children }) {
   const [mode, setModeState] = useState(initialMode)
   const [result, setResult] = useState(null)
@@ -108,18 +118,30 @@ export function AppProvider({ children }) {
   // S5: nghe phòng gia đình để nhận "Minh đã xem" và lời trả lời
   useEffect(() => connectRoom(FAMILY_ROOM, 'ba-hoa', (ev) => {
     const cur = askRef.current
+    // Sự kiện phát lại lúc vừa mở trang (replay): không làm lại lệnh trình diễn cũ
+    if (ev.replay && (ev.type === 'demo.reset' || ev.type === 'demo.go')) return
     if (ev.type === 'demo.reset') {
       setAsk(null)
       setResult(null)
       setReport(null)
       setCall(null)
+      setLayersForDemo(null)
+      return
+    }
+    if (ev.type === 'demo.go') {
+      // Laptop bấm ở bảng mô phỏng (chế độ "Điện thoại"): máy này chuyển màn như khi Android mở WebView
+      const d = ev.data || {}
+      if (d.client === CLIENT_ID || typeof d.path !== 'string' || !d.path.startsWith('/')) return
+      if (d.mode === 'simple' || d.mode === 'full') setMode(d.mode)
+      if (d.layers && typeof d.layers === 'object') setLayersForDemo(d.layers)
+      window.location.hash = '#' + d.path
       return
     }
     if (!cur || (ev.data?.askId ?? ev.data?.alertId) !== cur.askId) return
     if (ev.type === 'ask.seen') setAsk((a) => ({ ...a, seen: true }))
     if (ev.type === 'ask.reply') setAsk((a) => ({ ...a, seen: true, reply: { text: ev.data.text, preset: ev.data.preset, at: ev.at } }))
     if (ev.type === 'alert.call') toast(`${cur.to?.name || 'Người thân'} đang gọi cho bà`)
-  }), [toast])
+  }), [toast, setMode])
 
   const value = useMemo(() => ({
     mode, setMode, result, setResult, recent, addRecent, relatives, setRelatives, addDefaultRelatives,

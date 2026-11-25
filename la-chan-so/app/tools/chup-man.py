@@ -70,8 +70,12 @@ def open_(query, route):
 
 def click(text):
     xp = f'//button[contains(normalize-space(.), "{text}")]'
-    el = wait.until(EC.element_to_be_clickable((By.XPATH, xp)))
-    el.click()
+    try:
+        el = wait.until(EC.element_to_be_clickable((By.XPATH, xp)))
+        el.click()
+    except Exception as e:
+        here = d.find_elements(By.CSS_SELECTOR, ".frame")
+        errors.append(f"không bấm được “{text}” ở màn {here[0].get_attribute('data-name') if here else d.current_url}: {type(e).__name__}")
 
 
 def type_(css, text):
@@ -190,6 +194,37 @@ open_("", "/khong-ghi-am")
 shot("A04c-khong-co-ghi-am")
 open_("", "/dung-lai?phut=4")
 shot("A10a-phanh-sau-cuoc-goi")
+
+# ---------- Đang gọi số lạ và mở app ngân hàng (A10b): Cúp máy ngay -> Bé Nai hỏi ----------
+open_("", "/dung-lai?danggoi=1&giay=401")
+shot("A10b-phanh-dang-goi")
+click("Cúp máy ngay")
+frame("A04a-hoi-nhanh")
+
+# ---------- Tin nhắn lạ: thông báo nổi (A05a) -> Xem phân tích (A05b, nhãn "Ứng dụng nhắn tin") ----------
+open_("?mode=full", "/thong-bao")
+time.sleep(1.0)
+shot("A05a-thong-bao-noi")
+click("Xem phân tích")
+frame("A05b-phan-tich-tin-nhan")
+if "Ứng dụng nhắn tin" not in d.find_element(By.CSS_SELECTOR, ".frame").text:
+    errors.append("A05b mở từ thông báo mà không ghi nguồn 'Ứng dụng nhắn tin'")
+
+# ---------- Thiết lập 3 lớp (A02a -> A02b) và Lá chắn đang ngủ (E01a) ----------
+d.execute_script("localStorage.setItem('lcs.layers', JSON.stringify({calls:true,messages:false,banking:false,asleep:false}))")
+open_("?mode=simple", "/thiet-lap")
+shot("A02a-thiet-lap-dang-lam")
+click("Bật")          # lớp tin nhắn
+click("Bật")          # lớp nhắc trước khi chuyển tiền
+shot("A02b-thiet-lap-hoan-tat")
+click("Về trang chủ")
+frame("A01a-trang-chu-don-gian")
+d.execute_script("localStorage.setItem('lcs.layers', JSON.stringify({calls:true,messages:true,banking:true,asleep:true}));"
+                 "window.dispatchEvent(new Event('lcs-layers'))")   # như Android báo máy vừa tắt Lá chắn
+shot("E01a-la-chan-dang-ngu")
+click("Bật lại ngay")
+frame("A01a-trang-chu-don-gian")
+d.execute_script("localStorage.removeItem('lcs.layers')")
 
 d.quit()
 print("\n".join(errors) if errors else "Xong, không lỗi.")

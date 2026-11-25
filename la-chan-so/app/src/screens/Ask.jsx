@@ -8,6 +8,7 @@ import { api } from '../lib/api.js'
 import { hhmm, LEVEL } from '../lib/format.js'
 import { native } from '../lib/native.js'
 import { FAMILY_ROOM, useApp } from '../lib/state.jsx'
+import { buzz } from '../lib/sound.js'
 
 const css = `
 .tl-row{display:flex;align-items:center;gap:12px}
@@ -161,6 +162,7 @@ export function AskReply() {
 
   useEffect(() => {
     if (!ask?.reply) return
+    buzz([200, 100, 200])
     native.speak(ask.reply.text)
     // Minh bảo đừng chuyển: chặn luôn số vừa gọi nếu máy cho phép (Android, Mảng 1)
     if (phone && ask.reply.preset === 'dung_chuyen' && native.available()) setBlocked(native.blockNumber(phone))

@@ -9,6 +9,15 @@ body { display: block; padding: 0; gap: 0; background: var(--bg); -webkit-tap-hi
 /* Trên điện thoại thật, thanh trạng thái và thanh cử chỉ là của máy: ẩn bản vẽ */
 .frame.phone > .statusbar, .frame.phone > .gesture { display: none; }
 
+/* Điện thoại thật: chừa tai thỏ và thanh cử chỉ (cài ra màn hình chính thì trang chiếm cả màn) */
+@media (max-width: 599px) {
+  html, body { overscroll-behavior-y: none; }
+  .frame.phone { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); box-sizing: border-box; }
+  /* iPhone tự phóng to khi chạm ô nhập có chữ nhỏ hơn 16px */
+  input, textarea, select, .field { font-size: max(16px, 1em); }
+  .toast { bottom: calc(96px + env(safe-area-inset-bottom)); max-width: calc(100vw - 32px); }
+}
+
 /* Trên máy tính: đặt app trong khung điện thoại 360x800 để trình diễn */
 @media (min-width: 600px) {
   body { background: #D9DEE8; }

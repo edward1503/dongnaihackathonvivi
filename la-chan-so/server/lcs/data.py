@@ -7,7 +7,17 @@ SCAM_TYPES = {
     "nguoi_than_tai_nan": "Người thân gặp tai nạn",
     "gia_dien_luc": "Giả nhân viên điện lực",
     "qua_tri_an": "Quà tri ân",
+    "dau_tu_lai_cao": "Đầu tư lãi cao",
     "khac": "Khác",
+}
+
+# Kiểu lừa đảo -> mã bài học của Mảng 4 (hoc.html?kieu=…), theo bảng bi_danh trong bai-hoc/KICH-BAN-BAI-HOC.md.
+# Kiểu chưa có bài thì không có ở đây: app mở thư viện bài.
+LESSONS = {
+    "gia_danh_cong_an": "gia-danh-co-quan",
+    "viec_nhe_luong_cao": "viec-nhe-luong-cao",
+    "nguoi_than_tai_nan": "nguoi-than-gap-nan",
+    "dau_tu_lai_cao": "dau-tu-lai-cao",
 }
 
 EMERGING_TITLES = {

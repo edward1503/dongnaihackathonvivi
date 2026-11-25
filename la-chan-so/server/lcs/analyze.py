@@ -4,6 +4,7 @@ Luồng: bỏ qua tin có mã OTP -> che số (S4) -> luật dự phòng -> AI (
 Không ghi nội dung tin nhắn, bản chép lời ra nhật ký hay cơ sở dữ liệu.
 """
 from . import ai, config
+from .audio import prepare as prepare_audio
 from .checker import check_target, new_id
 from .contract import LEVEL_ORDER, AnalysisResult, ReportSummary, Sign
 from .data import DEMO_TRANSCRIPT, SCAM_TYPES
@@ -108,7 +109,7 @@ class NeedInput(Exception):
 
 async def analyze_call(store: Store, *, audio: bytes | None = None, mime: str | None = None,
                        transcript: str | None = None, phone: str | None = None,
-                       unknown_number: bool = False) -> AnalysisResult:
+                       unknown_number: bool = False, filename: str | None = None) -> AnalysisResult:
     """S3: chép lời bản ghi (không lưu tệp), che số, phân tích; gộp với tra số nếu có số gọi đến."""
     used_demo = False
     if transcript and transcript.strip():
@@ -117,7 +118,8 @@ async def analyze_call(store: Store, *, audio: bytes | None = None, mime: str | 
         turns = None
         if ai.available():
             try:
-                turns = await ai.transcribe(audio, mime or "audio/mpeg")
+                data, kind = await prepare_audio(audio, mime, filename)  # m4a, amr, webm -> flac
+                turns = await ai.transcribe(data, kind)
             except ai.AIUnavailable:
                 turns = None
         if turns is None:
@@ -144,6 +146,7 @@ async def analyze_call(store: Store, *, audio: bytes | None = None, mime: str | 
             result.reports = ReportSummary(**found.reports.model_dump())
             if result.scamType is None:
                 result.scamType, result.scamLabel, result.headline = found.scamType, found.scamLabel, found.headline
+                result.lesson = found.lesson
         elif found.level == "safe" and level == "unknown":
             level, result.source = "safe", "directory"
             result.headline = found.headline

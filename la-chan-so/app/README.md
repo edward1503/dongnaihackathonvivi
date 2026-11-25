@@ -1,17 +1,19 @@
 # App Lá chắn số (Mảng 3)
 
-React 19, Vite. Chạy trong WebView của ứng dụng Android, hoặc trên trình duyệt để trình diễn. Dùng thẳng `../ds.css`, `../icons.js` và phông chữ của bản thiết kế, nên app và thiết kế luôn chung một bộ.
+React 19, Vite. Dựng theo 53 khung thiết kế của đội (Figma, bản xuất ở `../export/png/`): 29 màn của bà Hoa và Vy. Chạy trong WebView của ứng dụng Android, hoặc trên trình duyệt để trình diễn. Dùng thẳng `../ds.css`, `../icons.js` và phông chữ của bản thiết kế, nên app và thiết kế luôn chung một bộ.
 
 ## Chạy
 
 ```bash
-cd la-chan-so/server && uvicorn lcs.main:app --port 8000     # máy chủ, xem server/README.md
+cd la-chan-so/server && python chay-demo.py --build         # build app rồi chạy máy chủ HTTP 8000 + HTTPS 8443 (xem ../HUONG-DAN-CHAY-DEMO.md)
+cd la-chan-so/server && uvicorn lcs.main:app --port 8000     # hoặc chỉ chạy máy chủ, xem server/README.md
 cd la-chan-so/app && npm install && npm run dev              # http://localhost:5173, tự chuyển /api sang cổng 8000
 npm run build                                                # ra dist/; máy chủ phục vụ luôn ở http://<máy>:8000/
 ```
 
 - **Trên máy tính** (cửa sổ rộng hơn 600px): app hiện trong khung điện thoại 360×800, giống thiết kế.
-- **Trên điện thoại:** app chiếm toàn màn hình, ẩn thanh trạng thái vẽ sẵn.
+- **Trên điện thoại:** app chiếm toàn màn hình, ẩn thanh trạng thái vẽ sẵn, chừa tai thỏ và thanh cử chỉ. Cài ra màn hình chính được (`manifest.webmanifest`, biểu tượng khiên).
+- **Tiếng và rung** (`src/lib/sound.js`): một trình phát dùng chung, mở khóa ở lần chạm đầu tiên, nên Bé Nai vẫn nói được khi màn đổi do lệnh từ xa. Màn đổ chuông có tiếng chuông tổng hợp và rung; kết quả Nguy hiểm, màn "Dừng lại", lời Minh trả lời đều rung.
 
 Tham số trên địa chỉ trang, dùng khi trình diễn:
 
@@ -20,13 +22,13 @@ Tham số trên địa chỉ trang, dùng khi trình diễn:
 | `?mode=simple` · `?mode=full` | Máy bà Hoa (A01a) · máy Vy (A01b) |
 | `?api=http://192.168.1.10:8000` | Trỏ tới máy chủ khác (lưu lại cho lần sau) |
 | `?nguoithan=0` | Xóa người thân để xem màn E01b |
-| `?demo=1` | Hiện hàng số mẫu ở A06a và bảng mô phỏng bên trái (có cuộc gọi lạ, mở app ngân hàng, đặt lại demo) |
+| `?demo=1` | Hiện hàng số mẫu ở A06a và bảng mô phỏng. Trên laptop: bảng bên trái có công tắc **Máy này / Điện thoại** (gửi lệnh `demo.go` để điện thoại đang mở app tự đổi màn) và mã QR bên phải. Trên điện thoại: chạm mấu nhỏ ở mép trái |
 
 ## Màn và đường dẫn
 
 | Đường dẫn | Màn | Tệp |
 |---|---|---|
-| `#/` | A01a, A01b | `screens/Home.jsx` |
+| `#/` | A01a, A01b; E01a khi Lá chắn đang ngủ | `screens/Home.jsx` |
 | `#/kiem-tra` · `#/kiem-tra/tin-nhan` | A06a · A06b | `screens/Check.jsx` |
 | `#/ket-qua` | A07a–d (theo `level`) | `screens/Result.jsx` |
 | `#/phan-tich` | A05b | `screens/MessageResult.jsx` |
@@ -36,7 +38,9 @@ Tham số trên địa chỉ trang, dùng khi trình diễn:
 | `#/cuoc-goi?so=…` | A03a (số bị báo) · A03b (số chưa rõ) | `screens/Call.jsx` |
 | `#/sau-cuoc-goi?so=…&giay=252&ghiam=1` | điều phối khi cúp máy, mở A04a | `screens/Call.jsx` |
 | `#/hoi-nhanh` · `#/phan-tich-cuoc-goi` · `#/khong-ghi-am` | A04a · A04b · A04c | `screens/Call.jsx` |
-| `#/dung-lai?phut=4` | A10a | `screens/Call.jsx` |
+| `#/dung-lai?phut=4` · `#/dung-lai?danggoi=1&so=…&giay=401` | A10a (sau cuộc gọi) · A10b (đang gọi, nút "Cúp máy ngay") | `screens/Call.jsx` |
+| `#/thiet-lap` | A02a (đang bật từng lớp) · A02b (đã đủ 3 lớp); tab "Tôi" mở màn này | `screens/Setup.jsx` |
+| `#/thong-bao?tin=…` | A05a thông báo nổi, rồi "Xem phân tích" mở A05b | `screens/Notification.jsx` |
 
 **Luồng cuộc gọi:**
 1. Đổ chuông (A03a), bà bấm Nghe.
@@ -62,6 +66,10 @@ App tự tìm `window.LCSNative`. Chưa có thì dùng cách thay thế để v�
 | `openSettings()` | | Tab "Tôi", thiết lập (A02) |
 | `analyzeRecording(phone)` | chuỗi JSON `AnalysisResult` | A04b: Android đọc tệp ghi âm của máy, gửi `POST /api/analyze/call`, trả kết quả |
 | `dismissStop()` | | A10a "Đóng cảnh báo": tắt lớp phủ |
+| `endCall()` | | A10b "Cúp máy ngay": ngắt cuộc gọi đang diễn ra |
+| `layers()` | chuỗi JSON `{calls, messages, banking, asleep}` | A02a, A02b, E01a, A01b: trạng thái 3 lớp; `asleep` khi máy tắt dịch vụ nền |
+| `enableLayer(key)` | | A02a "Bật", E01a "Bật lại ngay": mở đúng màn xin quyền (`calls`, `messages`, `banking`). App đọc lại `layers()` khi người dùng quay về |
+| `setVoiceAsk(on)` | | A02b công tắc "Hỏi bằng giọng nói" |
 
 Ngoài ra có thể gán `window.LCS_API_BASE` (địa chỉ máy chủ) và `window.LCS_LEARN_URL` trước khi nạp trang. Đóng gói `dist/` vào `assets` của ứng dụng thì app vẫn mở được khi mất mạng (màn E01c).
 
@@ -78,7 +86,8 @@ Ngoài ra có thể gán `window.LCS_API_BASE` (địa chỉ máy chủ) và `wi
 ## Kiểm tra
 
 ```bash
-python tools/chup-man.py chup/      # Selenium + Firefox: bấm qua 24 màn như người dùng (cả bước Minh trả lời trên trang Zalo), chụp để so với ../export/png/
+python tools/chup-man.py chup/                              # Selenium + Firefox: bấm qua 29 màn như người dùng (cả bước Minh trả lời trên trang Zalo), chụp để so với ../export/png/
+python tools/kiem-dien-thoai.py dt/ https://<ip>:8443       # khổ điện thoại qua HTTPS + laptop điều khiển từ xa, kiểm không tràn ngang
 ```
 
 ## Khác thiết kế có chủ đích

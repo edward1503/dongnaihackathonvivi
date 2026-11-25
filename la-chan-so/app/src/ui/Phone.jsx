@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Icon from './Icon.jsx'
 import { hhmm } from '../lib/format.js'
 import { useApp } from '../lib/state.jsx'
-import { openLearn, openProfile } from '../lib/links.js'
+import { openLearn } from '../lib/links.js'
 
 export function Phone({ name, lg = false, className = '', dark = false, gesture = 'clear', children }) {
   return (
@@ -48,7 +48,7 @@ export function BottomNav({ active }) {
   const go = (item) => {
     if (item.to) nav(item.to)
     else if (item.key === 'learn') openLearn(null, toast)
-    else openProfile(toast)
+    else nav('/thiet-lap')   // A02: thiết lập 3 lớp; Android mở màn xin quyền qua LCSNative.enableLayer
   }
   return (
     <nav className="bottomnav">
