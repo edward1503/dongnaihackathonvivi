@@ -10,6 +10,7 @@ import dung from './art/dung.webp'
 import nghi from './art/nghi.webp'
 import anToan from './art/an-toan.webp'
 import giaDinh from './art/gia-dinh.webp'
+import bieuTrung from './art/bieu-trung-dong-nai.webp'
 
 export { I }
 const ART = { chao, mung, dung, nghi, 'an-toan': anToan, 'gia-dinh': giaDinh }
@@ -65,8 +66,14 @@ export function Logo({ z = 30 }) {
   )
 }
 
+// Ô tên app ở đầu trang chủ: biểu trưng Đồng Nai cạnh tên app (theo bản V3)
 export function AppPill() {
-  return <div className="pill" style={{ paddingLeft: 9, gap: 9 }}><Logo z={30} /><span style={{ fontSize: 18, fontWeight: 700 }}>{APP}</span></div>
+  return (
+    <div className="pill" style={{ paddingLeft: 10, gap: 8 }}>
+      <img src={bieuTrung} alt="Biểu trưng Đồng Nai" width={28} height={32} style={{ flex: 'none' }} />
+      <span style={{ fontSize: 18, fontWeight: 700 }}>{APP}</span>
+    </div>
+  )
 }
 
 export function Art({ name, z = 160, className = '', style }) {

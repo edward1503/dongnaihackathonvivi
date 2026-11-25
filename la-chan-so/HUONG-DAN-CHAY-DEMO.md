@@ -115,7 +115,7 @@ Luật chung:
 
 **Khi làm sản phẩm ở vòng chung kết:**
 - **Claude (Claude Code):** viết mã máy chủ (Mảng 2) và app React (Mảng 3) theo kế hoạch của đội, cùng các bài kiểm thử. Commit có dòng `Co-Authored-By: Claude`.
-- **Giao diện:** dựng theo thiết kế V3 của đội (`review/mockup/v3.html`, gọn, 3 đối tượng) và linh vật Bé Nai của đội. Không sao chép giao diện sản phẩm có sẵn. Logo app là khiên của đội; biểu trưng Đồng Nai chỉ đặt nhỏ ở màn chào để ghi cuộc thi (đội cần hỏi ban tổ chức cho phép dùng biểu trưng).
+- **Giao diện:** dựng theo thiết kế V3 của đội (`review/mockup/v3.html`, gọn, 3 đối tượng) và linh vật Bé Nai của đội. Không sao chép giao diện sản phẩm có sẵn. Biểu trưng Đồng Nai đặt ở ô tên app đầu trang chủ và ở màn chào; biểu tượng app là khiên của đội (đội cần hỏi ban tổ chức cho phép dùng biểu trưng).
 - **Các mảng khác:** công cụ AI dùng ở Mảng 1, 4, 5, 6 xem README của từng mảng (ví dụ `android/README.md`).
 
 Đội rà soát và quyết định cuối cùng mọi nội dung.
