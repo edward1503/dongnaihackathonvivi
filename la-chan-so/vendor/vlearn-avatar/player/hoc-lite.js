@@ -308,7 +308,9 @@ export async function mountLiteAvatar(host, id, audioCtx) {
   }
   await vid.play().catch(() => {});
   // lấy khung chớp mắt từ chính video nhân vật trước khi vẽ (video ẩn thứ hai không nạp được trong WebView Android khi chưa phát)
-  if (meta.chuoi_chop?.length && meta.mat) {
+  // Người dùng 25/11: thôi bỏ chớp mắt khi nói (lắc nhẹ là đủ). Giữ sẵn mã, bật lại bằng CHOP_KHI_NOI = true.
+  const CHOP_KHI_NOI = false;
+  if (CHOP_KHI_NOI && meta.chuoi_chop?.length && meta.mat) {
     try {
       vid.pause();
       // cắt dải mắt của từng khung trong chuỗi chớp thật (meta.chuoi_chop) xếp dọc vào một ảnh nhỏ, đưa lên GPU một lần
