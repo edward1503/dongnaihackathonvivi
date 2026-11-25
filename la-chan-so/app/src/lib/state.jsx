@@ -3,6 +3,8 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { connectRoom } from './relay.js'
 import { setLayersForDemo } from './layers.js'
 
+import { getDeviceId, readTeam } from './api.js'
+
 const Ctx = createContext(null)
 export const FAMILY_ROOM = 'gia-dinh-hoa'
 
@@ -73,13 +75,25 @@ export const CLIENT_ID = (() => {
 
 export function AppProvider({ children }) {
   const [mode, setModeState] = useState(initialMode)
+  const [team, setTeam] = useState(readTeam)
+  useEffect(() => {
+    if (!window.LCSNative) getDeviceId().catch(() => { /* Retry when a device-bound action needs it. */ })
+    const sync = () => setTeam(readTeam())
+    const storage = (event) => { if (!event.key || event.key === 'lcs.team') sync() }
+    window.addEventListener('storage', storage)
+    window.addEventListener('lcs-team-change', sync)
+    return () => {
+      window.removeEventListener('storage', storage)
+      window.removeEventListener('lcs-team-change', sync)
+    }
+  }, [])
   const [result, setResult] = useState(null)
   const [recent, setRecent] = useState(() => load('lcs.recent', SAMPLE_RECENT))
   const [relatives, setRelativesState] = useState(initialRelatives)
   const [ask, setAsk] = useState(null)
-  const [report, setReport] = useState(null) // {draft, response}
+  const [report, setReport] = useState(null)
   const [call, setCall] = useState(null) // cuộc gọi vừa rồi: {phone, display, seconds, hasRecording, answeredYes, story}
-  const [pointsBy, setPointsBy] = useState(() => load('lcs.points', { vy: 120, 'ba-hoa': 120 }))
+  const [points, setPointsState] = useState(() => load('lcs.awardedTotal', null))
   const [ward, setWardState] = useState(() => load('lcs.ward', 'Trấn Biên'))
   const [onboarded, setOnboardedState] = useState(() => load('lcs.onboarded', false))
   const [toastMsg, setToastMsg] = useState(null)
@@ -88,18 +102,27 @@ export function AppProvider({ children }) {
   const askRef = useRef(null)
   askRef.current = ask
 
-  const setMode = useCallback((m) => { if (PERSONA[m]) { setModeState(m); save('lcs.mode', m) } }, [])
+  const setMode = useCallback((m) => {
+    if (!PERSONA[m]) return
+    setModeState(m)
+    save('lcs.mode', m)
+    const url = new URL(location.href)
+    if (url.searchParams.has('mode') && url.searchParams.get('mode') !== m) {
+      url.searchParams.set('mode', m)
+      window.history.replaceState(window.history.state, '', url)
+    }
+  }, [])
   const setWard = useCallback((w) => { setWardState(w); save('lcs.ward', w) }, [])
   const setOnboarded = useCallback((v) => { setOnboardedState(v); save('lcs.onboarded', v) }, [])
   const persona = PERSONA[mode] || 'elder'
   const setRelatives = useCallback((list) => { setRelativesState(list); save('lcs.relatives', list) }, [])
   const addDefaultRelatives = useCallback(() => setRelatives(DEFAULT_RELATIVES), [setRelatives])
-  const reporter = mode === 'full' ? 'vy' : mode === 'volunteer' ? 'tnv' : 'ba-hoa'
-  const points = pointsBy[reporter] ?? 0
   const setPoints = useCallback((n) => {
-    if (typeof n !== 'number') return
-    setPointsBy((m) => { const next = { ...m, [reporter]: n }; save('lcs.points', next); return next })
-  }, [reporter])
+    if (Number.isFinite(n)) {
+      setPointsState(n)
+      save('lcs.awardedTotal', n)
+    }
+  }, [])
 
   const toast = useCallback((msg) => {
     clearTimeout(toastTimer.current)
@@ -130,7 +153,13 @@ export function AppProvider({ children }) {
     const cur = askRef.current
     // Sự kiện phát lại lúc vừa mở trang (replay): không làm lại lệnh trình diễn cũ
     if (ev.replay && (ev.type === 'demo.reset' || ev.type === 'demo.go')) return
+    if (ev.type === 'report.updated' && !ev.replay) {
+      window.dispatchEvent(new CustomEvent('lcs-community-update', { detail: ev.data }))
+      return
+    }
     if (ev.type === 'demo.reset') {
+      setPointsState(null)
+      localStorage.removeItem('lcs.awardedTotal')
       setAsk(null)
       setResult(null)
       setReport(null)
@@ -155,8 +184,8 @@ export function AppProvider({ children }) {
 
   const value = useMemo(() => ({
     mode, setMode, persona, ward, setWard, onboarded, setOnboarded, result, setResult, recent, addRecent, relatives, setRelatives, addDefaultRelatives,
-    ask, setAsk, report, setReport, toast, online, points, setPoints, reporter, call, setCall,
-  }), [mode, setMode, persona, ward, setWard, onboarded, setOnboarded, result, recent, addRecent, relatives, setRelatives, addDefaultRelatives, ask, report, toast, online, points, setPoints, reporter, call])
+    ask, setAsk, report, setReport, toast, online, points, setPoints, team, call, setCall,
+  }), [mode, setMode, persona, ward, setWard, onboarded, setOnboarded, result, recent, addRecent, relatives, setRelatives, addDefaultRelatives, ask, report, toast, online, points, setPoints, team, call])
 
   return (
     <Ctx.Provider value={value}>

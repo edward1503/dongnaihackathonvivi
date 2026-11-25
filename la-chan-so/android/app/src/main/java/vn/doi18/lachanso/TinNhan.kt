@@ -190,6 +190,7 @@ object LocTinNhan {
 /** N4. Đọc thông báo của các ứng dụng nhắn tin. Chỉ xem tiêu đề và nội dung hiện trên thông báo. */
 class NgheThongBao : NotificationListenerService() {
     companion object {
+        private val SMS_PACKAGES = setOf("com.google.android.apps.messaging", "com.android.mms", "com.samsung.android.messaging")
         val APP_NHAN_TIN = setOf(
             "com.google.android.apps.messaging", "com.android.mms", "com.samsung.android.messaging",
             "com.zing.zalo", "com.facebook.orca", "org.telegram.messenger", "com.viber.voip", "com.whatsapp",
@@ -203,14 +204,25 @@ class NgheThongBao : NotificationListenerService() {
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
-        if (sbn.packageName !in APP_NHAN_TIN) return
+        val isSms = sbn.packageName in SMS_PACKAGES || sbn.packageName == android.provider.Telephony.Sms.getDefaultSmsPackage(this)
+        if (!isSms && sbn.packageName !in APP_NHAN_TIN) return
         val n = sbn.notification ?: return
         if (n.flags and Notification.FLAG_GROUP_SUMMARY != 0) return
         val e = n.extras ?: return
         val nguoi = e.getCharSequence(Notification.EXTRA_TITLE)?.toString().orEmpty()
         val tin = (e.getCharSequence(Notification.EXTRA_BIG_TEXT) ?: e.getCharSequence(Notification.EXTRA_TEXT))?.toString().orEmpty()
         val c = applicationContext
-        Luong.nen { XuLyTinNhan.xuLy(c, nguoi, tin) }
+        val messages = NotificationCompat.MessagingStyle.extractMessagingStyleFromNotification(n)
+        val latest = messages?.messages?.lastOrNull()
+        // A null MessagingStyle sender denotes our own reply. Summary and outgoing updates cannot create receipts.
+        val incoming = isSms && if (messages != null) latest?.person != null && latest.person != messages.user
+            else n.category == Notification.CATEGORY_MESSAGE || n.category == null && cleanPhone(nguoi) != null
+        val sender = latest?.person?.name?.toString()?.takeIf(String::isNotBlank) ?: nguoi
+        val address = latest?.person?.uri?.takeIf { it.startsWith("tel:") }
+            ?.removePrefix("tel:")?.let(::cleanPhone) ?: sender
+        val body = latest?.text?.toString() ?: tin
+        val receivedAt = if (incoming) latest?.timestamp?.takeIf { it > 0 } ?: n.`when`.takeIf { it in 1..sbn.postTime } ?: sbn.postTime else null
+        Luong.nen { XuLyTinNhan.xuLy(c, sender, body, receivedAt, address) }
     }
 }
 
@@ -227,11 +239,11 @@ object XuLyTinNhan {
         return true
     }
 
-    fun xuLy(c: Context, nguoi: String, tin: String) {
+    fun xuLy(c: Context, nguoi: String, tin: String, receivedAt: Long? = null, address: String = nguoi) {
         if (tin.isBlank()) return   // tin ngắn vẫn xét: "Nạp tiền ở pay.top" đã đủ hai dấu hiệu
         // Ứng dụng nhắn tin cập nhật cùng một thông báo nhiều lần: mỗi tin chỉ xét một lần.
         val ma = (nguoi + "|" + tin).hashCode()
-        if (!lanDau(c, ma.toString())) return
+        if (!lanDau(c, receivedAt?.let { "$ma|$it" } ?: ma.toString())) return
         if (LocTinNhan.laOtp(tin)) {
             NhatKy.ghi(c, "Bỏ qua một tin có mã xác thực")
             return
@@ -247,7 +259,9 @@ object XuLyTinNhan {
         val quen = laTenTrongDanhBa(c, nguoi)
         NhatKy.ghi(c, "Tin nhắn đáng ngờ: $soDauHieu dấu hiệu" + (if (soBiBao > 0) ", số gửi đang bị báo" else "") + if (quen) " (người gửi có trong danh bạ)" else "")
         val id = ThongBao.ID_TIN_NHAN + (ma and 0x3ff)
+        val eventId = receivedAt?.let { ReceivedEvents.saveSms(c, address, it, tin) }
         val mo = Intent(c, PhanTichTinNhanActivity::class.java)
+            .putExtra("eventId", eventId)
             .putExtra("nguoi", nguoi).putExtra("tin", tin).putExtra("quen", quen).putExtra("id", id).putExtra("soBiBao", soBiBao)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         val boQua = PendingIntent.getBroadcast(
@@ -307,7 +321,7 @@ class PhanTichTinNhanActivity : Activity() {
         }
         hienKetQua(kq.muc, kq.kieu, kq.loiKhuyen)
         v<TextView>(R.id.nguon).text = "Dấu hiệu nhận ra (lọc trên máy)"
-        v<TextView>(R.id.dauHieu).text = (kq.nhom + if (soBiBao > 0) listOf("Số gửi tin đã bị $soBiBao người báo") else emptyList()).joinToString("\n") { "•  $it" }
+        v<TextView>(R.id.dauHieu).text = (kq.nhom + if (soBiBao > 0) listOf("Tin nhắn hiển thị số này đã bị báo cáo từ $soBiBao máy") else emptyList()).joinToString("\n") { "•  $it" }
 
         // Chỉ tin đã vượt ngưỡng trên máy mới tới đây, và chỉ gửi bản đã che số.
         if (!LocTinNhan.laOtp(tin)) Luong.nen {
@@ -324,14 +338,52 @@ class PhanTichTinNhanActivity : Activity() {
             }
         }
 
-        v<Button>(R.id.nutBao).setOnClickListener {
-            if (LocTinNhan.laOtp(tin)) return@setOnClickListener   // tin có mã xác thực không bao giờ rời máy
+        val eventId = intent.getStringExtra("eventId").orEmpty()
+        val report = v<Button>(R.id.nutBao)
+        val info = v<TextView>(R.id.smsReportInfo)
+        fun refresh() {
+            val eligible = eventId.isNotBlank()
+            val submitted = eligible && EventReports.reportId(this, eventId) != null
+            val withdrawn = eligible && EventReports.isWithdrawn(this, eventId)
+            report.visibility = if (eligible && !withdrawn) View.VISIBLE else View.GONE
+            report.isEnabled = true
+            report.text = if (submitted) "Rút báo cáo" else "Báo cho cộng đồng"
+            v<TextView>(R.id.smsReportTitle).visibility = if (eligible && !submitted && !withdrawn) View.VISIBLE else View.GONE
+            if (!eligible) info.text = "Bà có thể báo từ thông báo SMS đã nhận trên máy này nha."
+            else EventReports.lastMessage(this, eventId).takeIf(String::isNotBlank)?.let { info.text = it }
+            if (!eligible || submitted || withdrawn) v<Button>(R.id.nutKhong).text = "Đóng"
+        }
+        refresh()
+        fun send(action: () -> JSONObject) {
+            report.isEnabled = false
             Luong.nen {
-                // Chỉ coi là đã gửi khi máy chủ trả về báo cáo có mã. Kiểu lừa đảo do máy chủ tự phân loại lại từ nội dung đã che số.
-                val daGui = Api.createReport(this, nguoi, tin, LocTinNhan.che(tin))
+                val reply = action()
                 Luong.chinh {
-                    Toast.makeText(this, if (daGui) "Đã gửi, chờ đội tình nguyện duyệt" else "Chưa gửi được, thử lại sau", Toast.LENGTH_LONG).show()
-                    if (daGui) finish()
+                    if (isFinishing || isDestroyed) return@chinh
+                    refresh()
+                    val message = EventReports.message(reply)
+                    info.text = message
+                    if (CaiDat.hoiBangGiong(this)) Giong.noi(this, message)
+                }
+            }
+        }
+        fun submit(target: String) = send { EventReports.report(this, eventId, selectedTarget = target) }
+        report.setOnClickListener {
+            EventReports.reportId(this, eventId)?.let { id ->
+                send { EventReports.withdraw(this, id) }
+                return@setOnClickListener
+            }
+            Luong.nen {
+                val event = ReceivedEvents.find(this, eventId)
+                Luong.chinh {
+                    if (isFinishing || isDestroyed) return@chinh
+                    if (event == null) {
+                        Toast.makeText(this, "Bé Nai chưa tìm thấy tin nhắn này trên máy ạ.", Toast.LENGTH_LONG).show()
+                    } else if (event.alternatives.size > 1) {
+                        val options = event.alternatives.keys.toTypedArray()
+                        android.app.AlertDialog.Builder(this).setTitle("Bà muốn báo đối tượng nào trong tin ạ?")
+                            .setItems(options) { _, index -> submit(options[index]) }.setNegativeButton("Để sau", null).show()
+                    } else submit(event.target)
                 }
             }
         }

@@ -1,108 +1,31 @@
-// B4 báo cáo (B4a thiếu thông tin) · B4b đã gửi · B5 bài học 1 phút · B6 thẻ bài học · B7 bài kiểm tra · B8 kết quả
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { Art, Bar, Btn, Circle, Group, I, Progress, Row, Screen, StateView, Tag } from '../ui.jsx'
-import { api } from '../../lib/api.js'
+import { Art, Bar, Btn, Circle, Group, I, Progress, Row, Screen, Tag } from '../ui.jsx'
 import { useApp } from '../../lib/state.jsx'
-import { LESSONS, QUIZ, hasHocPage } from '../lessons.js'
+import { LESSONS, QUIZ, COMICS, PRACTICE_CALLS, openComic, openPracticeCall } from '../lessons.js'
 
-// ---------- B4 ----------
-const TYPES = ['Giả công an', 'Nhận quà', 'Tuyển việc', 'Giả người thân', 'Giả ngân hàng', 'Khác']
-function kindOf(target, fallback) {
-  const t = target.trim()
-  if (fallback && fallback !== 'phone') return fallback
-  if (/^[\d\s.+-]{6,}$/.test(t)) return t.replace(/\D/g, '').length > 11 ? 'account' : 'call'
-  if (/\.[a-z]{2,}/i.test(t) && !/\s/.test(t)) return 'link'
-  return 'message'
-}
-
-export function Report() {
-  const nav = useNavigate()
-  const { report, setReport, setPoints, reporter, toast } = useApp()
-  const seed = report?.draft || {}
-  const [type, setType] = useState(seed.type || null)
-  const [target, setTarget] = useState(seed.target || '')
-  const [story, setStory] = useState(seed.story || '')
-  const [anon, setAnon] = useState(true)
-  const [bad, setBad] = useState(false)
-  const [busy, setBusy] = useState(false)
-  const submit = async () => {
-    if (!target.trim()) { setBad(true); return }
-    setBusy(true)
-    try {
-      const response = await api.report({
-        kind: kindOf(target, seed.kind), target: target.trim(),
-        story: [type ? `Kiểu: ${type}.` : '', story.trim()].filter(Boolean).join(' ') || null,
-        hasAudio: false, lostMoney: false, reporter: anon ? 'an-danh' : reporter,
-      })
-      if (typeof response.totalPoints === 'number') setPoints(response.totalPoints)
-      setReport({ draft: { type, target, story }, response })
-      nav('/bao-cao/xong', { replace: true })
-    } catch (e) {
-      toast(e.offline ? 'Không có mạng. Báo cáo chưa gửi được, bạn thử lại nhé' : e.message)
-    } finally { setBusy(false) }
-  }
-  return (
-    <Screen name={bad ? 'B4a-bao-cao-thieu-thong-tin' : 'B4-bao-cao'}
-      bar={<Bar title="Báo cáo" right={<button type="button" className={`pill tap${anon ? '' : ' off'}`} style={{ height: 44, padding: '0 12px', fontSize: 15 }} aria-pressed={anon} onClick={() => setAnon(!anon)}><I n="lock" z={18} c={anon ? 'pri' : 'mute'} />Ẩn danh</button>} />}
-      foot={<Btn icon="send" onClick={submit} busy={busy}>Gửi báo cáo</Btn>}>
-      <div className="col g8"><span className="t-lbl">Kiểu lừa đảo</span>
-        <div className="chips">{TYPES.map((x) => <button key={x} type="button" className={`chip${type === x ? ' on' : ''}`} onClick={() => setType(type === x ? null : x)}>{x}</button>)}</div>
-      </div>
-      <label className="col g8"><span className="t-lbl">Số hoặc đường dẫn</span>
-        <input className={`field${bad ? ' bad' : ''}`} value={target} onChange={(e) => { setTarget(e.target.value); setBad(false) }} placeholder="09xx xxx xxx hoặc viec-nhe.example" autoComplete="off" />
-        {bad && <span className="t-sm c-dang t-s">Nhập số hoặc đường dẫn.</span>}
-      </label>
-      <label className="col g8"><span className="t-lbl">Kể ngắn (không bắt buộc)</span>
-        <textarea className="field" style={{ minHeight: 110 }} value={story} onChange={(e) => setStory(e.target.value)} placeholder="Người đó nói gì, đòi gì?" />
-      </label>
-      <div className="why t-sub"><I n="lock" z={18} /><span>Số tài khoản, số điện thoại trong lời kể được che trước khi gửi AI.</span></div>
-    </Screen>
-  )
-}
-
-export function ReportDone() {
-  const nav = useNavigate()
-  const { report, ward } = useApp()
-  if (!report?.response) return <Navigate to="/bao-cao" replace />
-  const st = report.response.report?.status
-  const points = report.response.points
-  return (
-    <Screen name="B4b-da-gui" bar={<Bar title="Báo cáo" left="x" onLeft={() => nav('/', { replace: true })} />}
-      foot={<Btn onClick={() => nav('/', { replace: true })}>Về trang chủ</Btn>}>
-      <StateView art="mung" title="Đã gửi!" text={`Đội tình nguyện ${ward} đã nhận.`}>
-        <div className="row g8 jc" style={{ flexWrap: 'wrap', marginTop: 4 }}>
-          <Tag kind={st === 'ai_confirmed' || st === 'confirmed' ? 'on' : 'new'}>{st === 'ai_confirmed' || st === 'confirmed' ? 'Đã xác nhận' : 'Chờ đội duyệt'}</Tag>
-          {points ? <Tag kind="ok" icon="award">+{points} điểm</Tag> : null}
-        </div>
-        <div className="t-sm" style={{ marginTop: 6 }}>Dự kiến chuyển công an phường (mô phỏng)</div>
-      </StateView>
-    </Screen>
-  )
-}
-
-// ---------- B5 ----------
 export function Lessons() {
   const nav = useNavigate()
-  const [hoc, setHoc] = useState(false)
-  useEffect(() => { hasHocPage().then(setHoc) }, [])
+  const { persona } = useApp()
+  const role = persona === 'elder' ? 'elder' : 'student'
   return (
     <Screen name="B5-bai-hoc" nav="/bai-hoc">
-      <div className="h-xl" style={{ paddingTop: 10 }}>Bài học 1 phút</div>
-      <Group>{LESSONS.map((l) => <Row key={l.id} icon={l.icon} title={l.title} onClick={() => nav(`/bai-hoc/${l.id}`)} />)}</Group>
-      <Btn icon="grad" onClick={() => nav('/kiem-tra-bai')}>Làm bài kiểm tra</Btn>
-      <button type="button" className="card row g12 tap" style={{ background: 'var(--cream)', textAlign: 'left' }}
-        onClick={() => { window.location.href = hoc ? '/prototype/hoc.html' : '/prototype/video-call.html' }}>
-        <Art name="chao" z={72} />
-        <div className="col grow g2"><div className="t-row">{hoc ? 'Truyện tranh cùng Bé Nai' : 'Gọi video khuyên chị Lan'}</div>
-          <div className="t-sub">{hoc ? 'Chọn lối rẽ, gọi video với nhân vật AI đóng vai' : 'Nhân vật AI đóng vai, chấm 4 ý'}</div></div>
-        <I n="next" z={22} className="chev" />
-      </button>
+      <div className="row g12"><Art name="chao" z={64} /><h1 className="h-l">Truyện tranh cùng Bé Nai</h1></div>
+      <Group>{COMICS[role].map(([slug, label, title]) =>
+        <Row key={slug} icon="book" title={title} sub={label} onClick={() => openComic(slug)} />)}
+        <Row icon="book" title="Tất cả bài" onClick={() => openComic('')} />
+      </Group>
+      <h2 className="sec">Gọi video luyện tập</h2>
+      <Group>{PRACTICE_CALLS[role].map(([scene, name, topic]) =>
+        <Row key={scene} icon="phone" title={name} sub={topic} onClick={() => openPracticeCall(scene)} />)}</Group>
+      <h2 className="sec">Ôn nhanh</h2>
+      <Group>{LESSONS.map((lesson) => <Row key={lesson.id} icon={lesson.icon} title={lesson.title} sub="Bài học 1 phút" onClick={() => nav(`/bai-hoc/${lesson.id}`)} />)}</Group>
+      <Btn icon="grad" onClick={() => nav('/kiem-tra-bai')}>Làm bài kiểm tra 5 câu</Btn>
     </Screen>
   )
 }
 
-// ---------- B6 ----------
+
 export function LessonCards() {
   const nav = useNavigate()
   const { id } = useParams()

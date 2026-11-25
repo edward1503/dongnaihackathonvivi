@@ -80,12 +80,13 @@ object Api {
     private fun chu(j: JSONObject, k: String): String = if (j.isNull(k)) "" else j.optString(k).trim()
     private fun mang(a: JSONArray?): List<String> = (0 until (a?.length() ?: 0)).mapNotNull { i -> a!!.opt(i)?.takeIf { it is String }?.toString()?.trim()?.takeIf { it.isNotEmpty() } }
 
-    private fun phanTich(j: JSONObject, laBanGhi: Boolean): KetQuaAI? {
+    internal fun phanTich(j: JSONObject, laBanGhi: Boolean): KetQuaAI? {
         if (j.isNull("level")) return null
         val signs = j.optJSONArray("signs")
         val dauHieu = (0 until (signs?.length() ?: 0)).mapNotNull { signs!!.optJSONObject(it)?.let { s -> chu(s, "text") }?.takeIf { it.isNotEmpty() } }
+        val level = if (laBanGhi) chu(j, "aiLevel").ifBlank { chu(j, "level") } else chu(j, "level")
         return KetQuaAI(
-            muc(chu(j, "level")), chu(j, "scamLabel"), chu(j, "scamType"),
+            muc(level), chu(j, "scamLabel"), chu(j, "scamType"),
             giaiThich(mang(j.optJSONArray("todo")), chu(j, "headline")),
             // why[] là bằng chứng máy chủ rút từ bản ghi ("Bản ghi có câu đòi chuyển tiền"): với tin nhắn và lời kể thì không dùng.
             ((if (laBanGhi) mang(j.optJSONArray("why")) else emptyList()) + dauHieu).distinct(),
@@ -117,9 +118,9 @@ object Api {
     fun analyzeRecording(c: Context, tep: InputStream, mime: String, soLa: Boolean): KetQuaAI? =
         recordingResult(c, tep, mime, soLa)?.let { phanTich(it, true) }
 
-    fun recordingResult(c: Context, audio: InputStream, mime: String, unknownNumber: Boolean): JSONObject? {
+    fun recordingResult(c: Context, audio: InputStream, mime: String, unknownNumber: Boolean, eventFields: Map<String, String> = emptyMap()): JSONObject? {
         val duoi = when { "mpeg" in mime || "mp3" in mime -> "mp3"; "wav" in mime -> "wav"; "ogg" in mime -> "ogg"; "amr" in mime -> "amr"; "flac" in mime -> "flac"; "aac" in mime -> "aac"; else -> "m4a" }
-        val j = MayChu.guiNhieuPhan(c, "/api/analyze/call", mapOf("unknownNumber" to unknownNumber.toString()), "audio", "ghi-am.$duoi", mime, audio, 60000) ?: return null
+        val j = MayChu.guiNhieuPhan(c, "/api/analyze/call", eventFields + ("unknownNumber" to unknownNumber.toString()), "audio", "ghi-am.$duoi", mime, audio, 60000) ?: return null
         if (chu(j, "source") == "fallback") return null
         return j.takeUnless { it.isNull("level") }
     }
@@ -136,12 +137,6 @@ object Api {
         val than = JSONObject().put("room", ROOM).put("from", SENDER).put("level", level(muc)).put("phone", so)
             .put("callSeconds", giay).put("summary", (if (thu) "[Thử] " else "") + tomTatDaChe)
         return MayChu.gui(c, "/api/alerts", than, 4000)?.let { chu(it, "id").isNotEmpty() } == true
-    }
-
-    /** POST /api/reports: báo một tin nhắn cho cộng đồng. story là nội dung tin đã che số. Chỉ coi là đã gửi khi máy chủ trả về báo cáo có mã. */
-    fun createReport(c: Context, nguoiGui: String, tin: String, tinDaChe: String): Boolean {
-        val than = JSONObject().put("kind", "message").put("target", doiTuongBaoCao(nguoiGui, tin)).put("story", tinDaChe)
-        return MayChu.gui(c, "/api/reports", than)?.optJSONObject("report")?.let { chu(it, "id").isNotEmpty() } == true
     }
 
     // ---------- Cuộc gọi video (mảng 4) ----------

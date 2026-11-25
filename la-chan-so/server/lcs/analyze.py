@@ -36,6 +36,7 @@ def _clean_ai(raw: dict, masked: str) -> dict:
         confidence = 0.5
     return {
         "enoughInfo": bool(raw.get("enoughInfo", True)),
+        "transferRequested": raw.get("transferRequested") is True,
         "level": level,
         "scamType": scam_type,
         "scamLabel": (str(raw.get("scamLabel") or "").strip()[:60] or None),
@@ -65,6 +66,7 @@ async def analyze_text(text: str, mode: str = "message") -> AnalysisResult:
     masked, _ = mask(text)
     heur = rules.analyze(masked, mode)
     out, source = heur, "heuristic"
+    ai_fields = {}
 
     if ai.available():
         try:
@@ -83,6 +85,20 @@ async def analyze_text(text: str, mode: str = "message") -> AnalysisResult:
                 "confidence": got["confidence"],
             }
             source = "ai"
+            if mode == "call":
+                # Store the model's recording label before any heuristic or community merge.
+                raw_level = got["level"] if got["enoughInfo"] else "unknown"
+                labels = " ".join([got["headline"], *(s["text"] for s in got["signs"])])
+                hits = rules.find(labels)
+                transfer = got["transferRequested"] and raw_level != "unknown"
+                scam = got["scamType"] if raw_level != "unknown" else None
+                summary = ("Bản ghi có yêu cầu chuyển tiền." if transfer else
+                           "Bản ghi có dấu hiệu yêu cầu cung cấp mã OTP." if "otp" in hits and raw_level != "unknown" else
+                           "Bản ghi có dấu hiệu đáng ngờ." if raw_level != "unknown" else "Chưa thấy dấu hiệu rủi ro trong bản ghi.")
+                if scam and scam != "khac":
+                    summary += " Dấu hiệu được nhận diện: " + SCAM_TYPES[scam] + "."
+                ai_fields = dict(aiLevel=raw_level, aiScamType=scam, aiConfidence=got["confidence"],
+                                 transferRequested=transfer, summary=summary)
         except ai.AIUnavailable:
             source = "fallback"
 
@@ -99,7 +115,7 @@ async def analyze_text(text: str, mode: str = "message") -> AnalysisResult:
         id=new_id(), kind=kind, display=display, level=out["level"], reason=out.get("reason"),
         scamType=out["scamType"], scamLabel=out["scamLabel"], headline=out["headline"],
         signs=[Sign(**s) for s in out["signs"]], todo=out["todo"], maskedText=masked,
-        source=source, confidence=out["confidence"],
+        source=source, confidence=out["confidence"], **ai_fields,
     )
 
 
@@ -113,7 +129,7 @@ async def analyze_call(store: Store, *, audio: bytes | None = None, mime: str | 
     """S3: chép lời bản ghi (không lưu tệp), che số, phân tích; gộp với tra số nếu có số gọi đến."""
     used_demo = False
     if transcript and transcript.strip():
-        lines = [l.strip() for l in nfc(transcript).splitlines() if l.strip()]
+        lines = [line.strip() for line in nfc(transcript).splitlines() if line.strip()]
     elif audio:
         turns = None
         if ai.available():
@@ -122,7 +138,7 @@ async def analyze_call(store: Store, *, audio: bytes | None = None, mime: str | 
                 turns = await ai.transcribe(data, kind)
             except ai.AIUnavailable:
                 turns = None
-        if turns is None:
+        if not turns:
             if not config.demo_fallback():
                 raise NeedInput("Chưa chép lời được bản ghi. Thử lại sau.")
             turns = [{"speaker": s, "text": t} for s, t in DEMO_TRANSCRIPT]
@@ -140,15 +156,19 @@ async def analyze_call(store: Store, *, audio: bytes | None = None, mime: str | 
     if phone:
         result.display = fmt_phone(phone)
         found = check_target("phone", phone, store)
-        if found.level == "danger":
-            evidence.append(f"{found.reports.count} người đã báo số này")
-            level = "danger"
+        result.communityLevel = found.level
+        result.canAppeal, result.appealOpen, result.count = found.canAppeal, found.appealOpen, found.count
+        if found.level in ("danger", "suspicious"):
+            evidence.append(found.headline)
+            level = _max_level(level, found.level)
             result.reports = ReportSummary(**found.reports.model_dump())
             if result.scamType is None:
                 result.scamType, result.scamLabel, result.headline = found.scamType, found.scamLabel, found.headline
                 result.lesson = found.lesson
         elif found.level == "safe" and level == "unknown":
-            level, result.source = "safe", "directory"
+            level = "safe"
+            if result.source != "ai":
+                result.source = "directory"
             result.headline = found.headline
     if unknown_number:
         evidence.append("Số chưa từng liên lạc với bà")

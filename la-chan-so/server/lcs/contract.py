@@ -31,6 +31,16 @@ class AnalysisResult(BaseModel):
     kind: Kind
     display: str
     level: Level
+    analysisId: str | None = None
+    transferRequested: bool = False
+    aiLevel: Level | None = None
+    aiScamType: str | None = None
+    aiConfidence: float | None = None
+    summary: str | None = None
+    communityLevel: Level | None = None
+    appealOpen: bool = False
+    canAppeal: bool = False
+    count: int = 0
     reason: Reason = None
     scamType: Optional[str] = None
     scamLabel: Optional[str] = None
@@ -65,6 +75,8 @@ class MessageIn(BaseModel):
 
 class AlertIn(BaseModel):
     """Nhận cả dạng của app/Android (phone, scamLabel, asksMoney) lẫn dạng của trang Zalo (number, scenario, askedTransfer)."""
+    reportId: str | None = None
+    analysisId: str | None = None
     room: str = "gia-dinh-hoa"
     level: str = "danger"
     scamType: Optional[str] = None
@@ -116,28 +128,8 @@ class EventIn(BaseModel):
     model_config = {"populate_by_name": True}
 
 
-class ReportIn(BaseModel):
-    kind: Literal["call", "message", "link", "account"]
-    target: str
-    story: Optional[str] = None
-    hasAudio: bool = False
-    lostMoney: bool = False
-    area: Optional[str] = None
-    group: Optional[str] = None
-    reporter: str = "vy"
-
-
-class ReportPatch(BaseModel):
-    status: Literal["confirmed", "rejected"]
-
-
-class DecisionIn(BaseModel):
-    decision: Literal["confirmed", "spam", "rejected", "label", "police"]
-    label: Optional[str] = None
-
-
 class LegacyReplyIn(BaseModel):
-    choice: Literal["dung-chuyen", "nguoi-quen"] = "dung-chuyen"
+    choice: Literal["dung-chuyen", "nguoi-quen"]
     text: Optional[str] = None
 
 
@@ -148,12 +140,16 @@ class BroadcastIn(BaseModel):
 
 
 class AppealIn(BaseModel):
-    text: str
+    target: str
+    kind: Literal["phone", "call"]
+    contact: str
+    text: str = ""
 
 
 class AppealResolveIn(BaseModel):
     """Người duyệt xử lý khiếu nại: gỡ nhãn (remove) hoặc giữ nhãn (keep)."""
     outcome: Literal["remove", "keep"]
+    note: str = ""
 
 
 class IntentIn(BaseModel):
@@ -179,3 +175,30 @@ class LiveTurnIn(BaseModel):
     scene: str = Field(pattern=r"^[a-z0-9-]{1,24}$")
     history: list[LiveHistoryItem] = Field(min_length=1, max_length=14)
     scored: list[str] = Field(default_factory=list)
+
+
+class Vote(BaseModel):
+    reviewId: str
+    decision: Literal["confirm", "reject", "spam"]
+    note: str = ""
+
+
+class Code(BaseModel):
+    code: str
+
+
+class LegacyVote(BaseModel):
+    reviewId: str | None = None
+    decision: str | None = None
+    status: str | None = None
+    note: str = ""
+
+
+class LegacyAppeal(BaseModel):
+    text: str = ""
+    contact: str | None = None
+
+
+class Withdrawal(BaseModel):
+    at: str
+    signature: str

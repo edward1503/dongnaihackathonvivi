@@ -13,6 +13,7 @@ import pathlib
 import sys
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+import secrets
 from urllib.parse import parse_qs, urlparse
 
 # Khóa AI của đội nằm ở la-chan-so/.env (git bỏ qua). Nạp vào tiến trình này, không in ra, không gửi cho app.
@@ -74,7 +75,7 @@ class XuLy(BaseHTTPRequestHandler):
                 return self._tra(200, ket_qua("safe", source="directory", headline="Số này khớp danh bạ tổng đài."))
             if so in SO_BI_BAO:
                 ma, ten, n, khi = SO_BI_BAO[so]
-                return self._tra(200, ket_qua("danger", scamType=ma, scamLabel=ten, headline=f"{n} người đã báo số này {ten[0].lower() + ten[1:]}.",
+                return self._tra(200, ket_qua("danger", scamType=ma, scamLabel=ten, headline=f"Cuộc gọi hiển thị số này đã bị báo cáo từ {n} máy.",
                                               reports={"count": n, "last7d": n, "lastAt": None, "lastWhen": khi, "verified": True}))
             return self._tra(200, ket_qua("unknown", headline="Chưa ai báo cáo số này.", note="Điều đó không có nghĩa là an toàn."))
         if u.path == "/api/alerts":
@@ -84,6 +85,8 @@ class XuLy(BaseHTTPRequestHandler):
     def do_POST(self):
         u = urlparse(self.path)
         than = self._than()
+        if u.path == "/api/devices":
+            return self._tra(201, {"deviceId": secrets.token_hex(8), "deviceSecret": secrets.token_hex(32)})
         if u.path == "/api/alerts":
             j = json.loads(than or b"{}")
             j["id"] = "al_%d" % int(time.time() * 1000)
@@ -130,7 +133,7 @@ class XuLy(BaseHTTPRequestHandler):
                 return self._tra(503, {"detail": "chưa có khóa giọng đọc hoặc không đọc được"})
             return self._tra(200, {"text": kq["chu"], "audio": kq["pcm"], "sampleRate": kq["tanSo"], "seconds": kq["giay"]})
         if u.path == "/api/reports":
-            return self._tra(200, {"report": {"id": "rp_%d" % int(time.time() * 1000), "status": "needs_review"}, "points": 10})
+            return self._tra(501, {"detail": "Máy chủ giả chỉ dùng để thử màn hình. Bà chọn máy chủ của đội để gửi báo cáo nha."})
         self._tra(404, {"detail": "không có đường dẫn này"})
 
     def log_message(self, mau, *a):

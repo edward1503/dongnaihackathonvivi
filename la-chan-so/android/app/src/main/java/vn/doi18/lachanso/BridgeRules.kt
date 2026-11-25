@@ -20,3 +20,6 @@ internal fun dialNumber(phone: String): String? = cleanPhone(phone)?.takeIf {
 
 internal fun layersJson(calls: Boolean, messages: Boolean, banking: Boolean): String =
     """{"calls":$calls,"messages":$messages,"banking":$banking,"asleep":${!calls && !messages && !banking}}"""
+
+internal fun isDemoKey(key: String) = key in setOf("ring", "ringKnown", "afterCall", "stop", "message", "bankWatch")
+internal fun isCallScene(scene: String) = scene in setOf("minh-1", "minh-3", "lan-2", "tu-9")

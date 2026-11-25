@@ -161,7 +161,7 @@ export function Banner({ bg = 'pri', title, btn, icon, art, onClick }) {
 const NAVS = {
   elder: [['shieldok', 'Kiểm tra', '/'], ['users', 'Người thân', '/nguoi-than'], ['book', 'Bài học', '/bai-hoc'], ['user', 'Cá nhân', '/ca-nhan']],
   student: [['shieldok', 'Kiểm tra', '/'], ['users', 'Người thân', '/nguoi-than'], ['book', 'Bài học', '/bai-hoc'], ['user', 'Cá nhân', '/ca-nhan']],
-  volunteer: [['chart', 'Thống kê', '/'], ['check', 'Duyệt', '/duyet'], ['book', 'Bài học', '/bai-hoc'], ['user', 'Cá nhân', '/ca-nhan']],
+  volunteer: [['chart', 'Thống kê', '/'], ['check', 'Duyệt', '/duyet'], ['user', 'Cá nhân', '/ca-nhan']],
 }
 
 export function Nav({ active }) {

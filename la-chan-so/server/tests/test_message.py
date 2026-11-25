@@ -76,7 +76,7 @@ def test_cuoc_goi_ban_chep_loi_ra_nguy_hiem(client):
     assert r["level"] == "danger"
     assert r["headline"] == "Người gọi đòi chuyển tiền và dặn giữ bí mật."
     assert [s["text"] for s in r["signs"]] == ["Giả danh cơ quan chức năng", "Đòi chuyển tiền", "Giục gấp, bắt giữ bí mật"]
-    assert r["why"] == ["14 người đã báo số này", "Số chưa từng liên lạc với bà", "Bản ghi có câu đòi chuyển tiền"]
+    assert r["why"] == ["Có 14 máy báo cuộc gọi hiển thị số này có dấu hiệu đáng ngờ.", "Số chưa từng liên lạc với bà", "Bản ghi có câu đòi chuyển tiền"]
     assert r["display"] == "0912 345 678"
 
 

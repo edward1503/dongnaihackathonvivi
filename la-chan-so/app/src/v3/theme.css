@@ -194,3 +194,10 @@ textarea.field::-webkit-scrollbar { display: none; }
 .bounce { animation: bounce 2.4s ease-in-out infinite; }
 @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+.report-entry { flex: 0 1 auto; min-width: 0; margin-left: 6px; line-height: 1.2; }
+.quiet-link { color: var(--pri); font-size: 16px; text-decoration: underline; text-underline-offset: 3px; align-self: flex-start; min-height: 44px; }
+.review-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.review-actions .btn { width: auto; flex: 1 1 auto; min-height: 46px; }
+.review-evidence { border-top: 1px solid var(--line); padding-top: 10px; overflow-wrap: anywhere; }
+.review-evidence summary { cursor: pointer; color: var(--pri); padding-block: 6px; }

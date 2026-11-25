@@ -26,7 +26,7 @@
   .oa-quick{height:52px;padding:0 12px;display:flex;align-items:center;gap:8px;flex:none;background:#E8EEF7;overflow:auto}
   .q{height:36px;padding:0 14px;border-radius:18px;background:#fff;border:1px solid var(--outline-2);display:flex;align-items:center;font-size:13px;line-height:18px;font-weight:600;color:var(--ink);flex:none;cursor:pointer}
   .chat-input{height:56px;padding:0 16px;display:flex;align-items:center;gap:12px;flex:none;background:#fff;border-top:1px solid var(--outline-2)}
-  .chat-field{flex:1;height:36px;border-radius:18px;background:var(--surface-2);padding:0 14px;display:flex;align-items:center;font-size:14px;color:var(--ink-3)}
+  .chat-field{flex:1;height:36px;border-radius:18px;background:var(--surface-2);padding:0 14px;display:flex;align-items:center;font-size:14px;color:var(--ink-2)}
   .mini-bar{height:48px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;flex:none;background:#fff;border-bottom:1px solid var(--outline-2)}
   .mini-title{font-size:16px;line-height:24px;font-weight:600}
   .mini-pill{height:32px;border-radius:16px;border:1px solid var(--outline);padding:0 10px;display:flex;align-items:center;gap:8px;flex:none;background:#fff}
@@ -75,7 +75,6 @@
     <div class="oa-quick">
       <div class="q" id="q-call">Gọi mẹ ngay</div>
       <div class="q" id="q-hist">Lịch sử cảnh báo</div>
-      <div class="q" id="q-report">Báo số lạ</div>
     </div>
     <div class="chat-input"><i class="ic muted" data-i="plus"></i><div class="chat-field">Tin nhắn</div><i class="ic c-brand" data-i="send"></i></div>
   </div>
@@ -113,9 +112,14 @@
 <script>
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const post = (u, b) => fetch(u, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(b || {}) }).then(r => r.json());
+const post = (u, b) => fetch(u, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(b || {}) }).then(async r => {
+  const data = await r.json();
+  if (!r.ok) throw new Error(typeof data.detail === 'string' ? data.detail : 'Không gửi được. Anh thử lại nhé.');
+  return data;
+});
+window.addEventListener('unhandledrejection', e => { toast(e.reason?.message || 'Chưa kết nối được.'); e.preventDefault(); });
 const hm = iso => new Date(iso).toTimeString().slice(0, 5);
-let alerts = [], broadcasts = [], cur = null, lastRep = null;
+let alerts = [], broadcasts = [], cur = null;
 
 function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('on'), 2600); }
 function show(view) {
@@ -124,7 +128,7 @@ function show(view) {
   $('#sb').className = 'statusbar on-dark bg-brand'; if (mini) $('#sb').className = 'statusbar bg-white';
   paintIcons();
 }
-const toneOf = a => a.level === 'danger' ? ['Nguy hiểm', 'alert-oct', 'danger'] : ['Nghi ngờ', 'alert', 'warn'];
+const toneOf = a => a.level === 'unknown' ? ['Chưa rõ', 'phone', 'brand'] : a.level === 'danger' ? ['Nguy hiểm', 'alert-oct', 'danger'] : ['Nghi ngờ', 'alert', 'warn'];
 
 /* ---------- Z01a: luồng tin ---------- */
 function renderFeed() {
@@ -138,14 +142,22 @@ function renderFeed() {
   $('#feed').scrollTop = $('#feed').scrollHeight;
   paintIcons($('#feed'));
 }
+const levels = {danger:'Nguy hiểm', suspicious:'Nghi ngờ', unknown:'Chưa rõ', safe:'Khớp danh bạ'};
+function validationText(a, summary = true) {
+  return `<div class="t-label bold">Bà đã báo cuộc này, câu trả lời của anh giúp xác nhận.</div>
+    <div class="t-label">Nhãn AI của bản ghi · ${esc(levels[a.aiLevel])}</div>
+    ${summary ? '<div class="t-label">' + esc(a.summaryMasked) + '</div>' : ''}
+    ${a.case ? '<div class="t-label">Cộng đồng · ' + esc(levels[a.case.level]) + ' · ' + a.case.count + ' máy</div>' : ''}`;
+}
 function alertCard(a) {
   const [label, icon, tone] = toneOf(a);
   return `<div class="msg-card" data-id="${a.id}">
-    <div class="msg-head ${tone}"><i class="ic s20" data-i="shield-alert"></i><div class="t-label bold">Cảnh báo lừa đảo · ${label}</div></div>
+    <div class="msg-head ${tone}"><i class="ic s20" data-i="shield-alert"></i><div class="t-label bold">${a.reportId ? 'Cuộc gọi của bà' : 'Cảnh báo gia đình'} · ${label}</div></div>
     <div class="msg-body">
-      <div class="t-h2">${esc(a.who)} vừa nhận ${a.level === 'danger' ? 'cuộc gọi' : 'tin nhắn'} nghi lừa đảo</div>
+      <div class="t-h2">${esc(a.who)} vừa nhận ${a.reportId || a.level === 'danger' ? 'cuộc gọi' : 'tin nhắn'}${a.aiLevel === 'unknown' ? '' : ' đáng ngờ'}</div>
       <div class="row gap-8"><i class="ic s16 muted" data-i="phone"></i><div class="t-label">Số: ${esc(a.number)}</div></div>
-      <div class="row gap-8"><i class="ic s16 muted" data-i="message-alert"></i><div class="t-label">Kịch bản: ${esc(a.scenario.toLowerCase())}</div></div>
+      <div class="row gap-8"><i class="ic s16 muted" data-i="message-alert"></i><div class="t-label">Kịch bản: ${esc((a.scenario || 'Chưa rõ').toLowerCase())}</div></div>
+      ${a.reportId ? validationText(a) : ''}
       ${a.askedTransfer ? '<div class="row gap-8"><i class="ic s16 muted" data-i="alert"></i><div class="t-label">Có yêu cầu chuyển tiền</div></div>' : ''}
       ${a.reply ? '' : `<div class="btn danger block" data-act="quick" style="padding:0 8px;font-size:15px">Mẹ đừng chuyển, con gọi ngay</div>`}
       <div class="btn outline block" data-act="open">Xem chi tiết</div>
@@ -169,7 +181,7 @@ function renderDetail() {
   $('#mini').innerHTML = `
     <div class="card ${tone} row gap-12">
       <div class="icon-box solid-${tone === 'danger' ? 'danger' : 'brand'}" style="${tone === 'warn' ? 'background:var(--warn)' : ''}"><i class="ic" data-i="${icon}"></i></div>
-      <div class="col grow"><div class="t-h2 c-${tone}-ink">${label}</div><div class="t-cap">Hôm nay ${hm(a.at)} · ${a.level === 'danger' ? 'cuộc gọi lạ' : 'tin nhắn lạ'}</div></div>
+      <div class="col grow"><div class="t-h2 c-${tone}-ink">${label}</div><div class="t-cap">Hôm nay ${hm(a.at)} · ${a.reportId || a.level === 'danger' ? 'cuộc gọi lạ' : 'tin nhắn lạ'}</div></div>
     </div>
     <div class="row gap-12">
       <div class="avatar amber">${esc(a.who.trim().split(/\s+/).pop().charAt(0).toUpperCase())}</div>
@@ -186,11 +198,12 @@ function renderDetail() {
     <div class="card ai col gap-8">
       <span class="ai-tag"><i class="ic s14" data-i="sparkles"></i>Tóm tắt của AI (đã che thông tin riêng)</span>
       <div class="t-label">${esc(a.summary)}</div>
+      ${a.reportId ? validationText(a, false) : ''}
     </div>
     <div class="col gap-10 mt-auto">
       <div class="btn safe block" id="b-call"><i class="ic s20" data-i="phone"></i>Gọi mẹ ngay</div>
       <div class="btn danger block" id="b-stop"><i class="ic s20" data-i="send"></i>Nhắn: Mẹ đừng chuyển!</div>
-      <div class="btn outline block" id="b-known">An toàn, đây là người quen</div>
+      <div class="btn outline block" id="b-known">Người quen</div>
     </div>`;
   paintIcons($('#mini'));
   $('#b-call').onclick = callMom;
@@ -213,78 +226,24 @@ function renderSent() {
     <div class="col acenter jcenter gap-8" style="padding:8px 0">
       <div class="icon-box xl solid-safe"><i class="ic s48" data-i="check"></i></div>
       <div class="t-h1 center mt-8">Đã gửi cho mẹ</div>
-      <div class="t-body muted center">${known ? 'Lá chắn sẽ hạ mức cảnh báo trên máy mẹ.' : 'Lời nhắn đang hiện to trên máy mẹ và được đọc thành tiếng.'}</div>
+      <div class="t-body muted center">${known ? 'Đã ghi nhận đây là người quen.' : 'Lời nhắn đã được ghi nhận. Mẹ có thể nghe khi máy kết nối.'}</div>
     </div>
     <div class="col gap-8" style="border:2px solid var(--ink);border-radius:20px;background:var(--safe-c);padding:16px">
-      <div class="t-over c-safe-ink">Trên máy mẹ lúc này</div>
+      <div class="t-over c-safe-ink">Lời anh gửi cho mẹ</div>
       <div style="font-size:20px;line-height:28px;font-weight:700">${esc(r.text)}</div>
     </div>
     <div class="card brand row gap-12">
       <div class="icon-box solid-brand"><i class="ic" data-i="shield-check"></i></div>
       <div class="t-label grow">Tuần này Lá chắn đã cảnh báo mẹ 3 cuộc gọi và 2 tin nhắn đáng ngờ.</div>
     </div>
+    ${cur.reportId ? validationText(cur, false) : ''}
     <div class="col gap-10 mt-auto">
       <div class="btn safe block" id="s-call"><i class="ic s20" data-i="phone"></i>Gọi mẹ ngay</div>
-      <div class="btn outline block" id="s-report"><i class="ic s20" data-i="megaphone"></i>Báo số này cho cộng đồng</div>
       <div class="btn ghost block" id="s-back">Về cuộc trò chuyện</div>
     </div>`;
   paintIcons($('#mini'));
   $('#s-call').onclick = callMom;
-  $('#s-report').onclick = () => openReport(cur.number);
   $('#s-back').onclick = () => { show('chat'); renderFeed(); };
-}
-
-/* ---------- Z3: báo số cho cộng đồng ---------- */
-function openReport(value = '') {
-  $('#mini-title').textContent = 'Báo cho cộng đồng'; show('mini');
-  $('#mini').innerHTML = `
-    <div class="t-h1">Báo số hoặc đường dẫn lạ</div>
-    <div class="t-label muted">Đội tình nguyện sẽ xem và gắn nhãn để người khác được cảnh báo. Không cần nêu tên bạn.</div>
-    <div class="col gap-8"><div class="t-label bold">Số điện thoại, đường dẫn hoặc tài khoản</div>
-      <input class="field" id="r-value" placeholder="Ví dụ: 0912 345 678" value="${esc(value)}" autocomplete="off"></div>
-    <div class="col gap-8"><div class="t-label bold">Chuyện gì đã xảy ra? (không bắt buộc)</div>
-      <textarea class="field" id="r-note" placeholder="Ví dụ: tự xưng công an, đòi chuyển tiền"></textarea></div>
-    <label class="row gap-10 top" style="cursor:pointer"><input type="checkbox" id="r-consent" checked style="width:20px;height:20px;margin-top:2px">
-      <span class="t-label">Tôi đồng ý gửi thông tin trên cho đội tình nguyện. Số dài sẽ được che trước khi gửi.</span></label>
-    <div class="t-cap c-danger" id="r-err" style="display:none"></div>
-    <div class="col gap-10 mt-auto">
-      <div class="btn primary block" id="r-send"><i class="ic s20" data-i="send"></i>Gửi báo cáo</div>
-      <div class="btn ghost block" id="r-back">Quay lại</div>
-    </div>`;
-  paintIcons($('#mini'));
-  $('#r-back').onclick = () => { show('chat'); renderFeed(); };
-  $('#r-send').onclick = async () => {
-    const v = $('#r-value').value.trim(), err = $('#r-err');
-    if (!v) { err.textContent = 'Bạn nhập số hoặc đường dẫn cần báo nhé.'; err.style.display = 'block'; return; }
-    if (!$('#r-consent').checked) { err.textContent = 'Cần bạn đồng ý thì mới gửi được.'; err.style.display = 'block'; return; }
-    const look = await fetch('/api/lookup?v=' + encodeURIComponent(v)).then(r => r.json());
-    const r = await post('/api/reports', { value: v, note: $('#r-note').value, source: 'zalo-minh' });
-    renderReported(r, look);
-  };
-}
-function renderReported(r, look) {
-  const auto = r.status === 'confirmed';
-  $('#mini').innerHTML = `
-    <div class="col acenter jcenter gap-8" style="padding:8px 0">
-      <div class="icon-box xl solid-safe"><i class="ic s48" data-i="check"></i></div>
-      <div class="t-h1 center mt-8">Đã gửi báo cáo</div>
-      <div class="t-body muted center">Cảm ơn bạn. Nhờ bạn mà người khác được cảnh báo sớm hơn.</div>
-    </div>
-    <div class="card ${auto ? 'danger' : 'warn'} col gap-6">
-      <div class="t-over muted">${esc(r.value)}</div>
-      <div class="row gap-8"><i class="ic s18 ${auto ? 'c-danger' : 'c-warn'}" data-i="${auto ? 'alert-oct' : 'alert'}"></i>
-        <div class="t-label bold">${auto ? 'AI đã xác nhận: ' + esc(r.aiGuess) : 'Đang chờ đội tình nguyện xem (' + r.count + ' người báo)'}</div></div>
-      ${look.level === 'danger' ? '<div class="t-cap">Số này đã có nhãn cảnh báo từ trước.</div>' : ''}
-    </div>
-    <div class="card ai"><span class="ai-tag"><i class="ic s14" data-i="sparkles"></i>AI phân loại trước</span>
-      <div class="t-label" style="margin-top:6px">Đoán: ${esc(r.aiGuess)} · độ tin cậy ${r.confidence}%</div></div>
-    <div class="col gap-10 mt-auto">
-      <div class="btn outline block" id="r-more">Báo thêm một số khác</div>
-      <div class="btn ghost block" id="r-back">Về cuộc trò chuyện</div>
-    </div>`;
-  paintIcons($('#mini'));
-  $('#r-more').onclick = () => openReport('');
-  $('#r-back').onclick = () => { show('chat'); renderFeed(); };
 }
 
 /* ---------- Lịch sử ---------- */
@@ -302,7 +261,6 @@ function openHistory() {
 $('#btn-close').onclick = () => { show('chat'); renderFeed(); };
 $('#q-call').onclick = callMom;
 $('#q-hist').onclick = openHistory;
-$('#q-report').onclick = () => openReport('');
 $('#sim-danger').onclick = () => post('/api/alerts', { level: 'danger', number: '0' + (900000000 + Math.floor(Math.random() * 99999999)), scenario: 'Giả danh công an' });
 $('#sim-warn').onclick = () => post('/api/alerts', { level: 'warn', scenario: 'Việc nhẹ lương cao', askedTransfer: false, summary: 'Tin nhắn mời làm việc nhẹ lương cao, yêu cầu nạp trước 200k để kích hoạt.', timeline: [{ t: new Date().toTimeString().slice(0, 5), text: 'Lá chắn tin nhắn lọc thấy dấu hiệu "nạp trước", "hoa hồng"', tone: 'warn' }] });
 $('#sim-reset').onclick = async () => { await post('/api/reset'); cur = null; await load(); show('chat'); };
@@ -314,6 +272,15 @@ load();
 const es = new EventSource('/api/events');
 es.addEventListener('alert', e => { const a = JSON.parse(e.data); alerts.unshift(a); renderFeed(); if (!$('#v-chat').classList.contains('on')) toast('Có cảnh báo mới từ ' + a.who); });
 es.addEventListener('reply', e => { const { alertId, reply } = JSON.parse(e.data); const a = alerts.find(x => x.id === alertId); if (a) { a.reply = reply; renderFeed(); } });
+es.addEventListener('community', e => {
+  const c = JSON.parse(e.data);
+  for (const a of alerts) if (a.reportId && a.number?.replace(/\D/g,'') === c.key) a.case = c;
+  if (cur?.reportId && cur.number?.replace(/\D/g,'') === c.key) {
+    cur.case = c;
+    if ($('#s-back')) renderSent(); else if ($('#b-call')) renderDetail();
+  }
+  renderFeed();
+});
 es.addEventListener('broadcast', e => { broadcasts.unshift(JSON.parse(e.data)); renderFeed(); });
 es.addEventListener('reset', () => { broadcasts = []; load(); });
 </script>

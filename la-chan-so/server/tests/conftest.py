@@ -9,6 +9,7 @@ os.environ["LCS_NO_ENV_FILE"] = "1"  # không đọc khóa thật trong .env khi
 for _k in ("GEMINI_API_KEYS", "GEMINI_API_KEY", "OPENAI_API_KEY"):
     os.environ.pop(_k, None)
 os.environ["LCS_TODAY"] = "2026-11-24"
+os.environ["LCS_DEMO"] = "1"
 os.environ["LCS_DB"] = ":memory:"
 os.environ["LCS_STATIC"] = "/khong-co-thu-muc-nay"
 
@@ -24,6 +25,7 @@ def client():
     main.relay.asks.clear()
     main.alerts.reset()
     with TestClient(main.app) as c:
+        c.get("/zalo")  # pre-paired demo relative
         yield c
 
 

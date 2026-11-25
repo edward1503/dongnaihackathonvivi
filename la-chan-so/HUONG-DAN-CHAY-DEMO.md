@@ -13,6 +13,7 @@ cd ../app && npm install                 # Node 20 trở lên
 Khóa AI (không bắt buộc, không có thì demo vẫn chạy bằng bộ luật và câu thu sẵn). Tạo tệp `la-chan-so/server/.env`, hoặc dùng chung tệp `la-chan-so/.env` của Mảng 4. Cả hai tệp đều không đưa lên kho.
 
 ```
+LCS_DEMO=1
 GEMINI_API_KEYS=khóa1,khóa2
 OPENAI_API_KEY=...        # tùy chọn: hiểu ý người học trong gọi video, giống máy chủ giả của Mảng 4
 ```
@@ -66,12 +67,13 @@ Mở đầu nên cho xem màn chào và màn **Bạn là ai?**: một app, 3 đ�
 - Thử 4 số: `0912 345 678` cho Nguy hiểm, `1900 5555 88` cho An toàn, `0987 654 321` cho Chưa rõ, và đường dẫn `qua-tri-an-khach-hang.top` cho Nghi ngờ.
 - Ở kết quả, bấm **Hỏi người thân** để gửi cho Minh.
 
-**e. Tin nhắn lừa đảo (học sinh):** laptop bấm **Có tin nhắn lạ**. Thông báo nổi hiện ra (A05a). Bấm **Xem phân tích** để thấy tin được tô đỏ từng dấu hiệu (B3), rồi bấm **Báo cáo**. Báo cáo hiện ngay ở `/web` và ở mục Duyệt của đội tình nguyện. Mục **Bài học** có bài 1 phút và bài kiểm tra 5 câu.
+**e. Tin nhắn lừa đảo (học sinh).** Màn mô phỏng cho xem cách lọc và phân tích tin nhắn. Để báo cho cộng đồng, chọn tin nhắn thật trên máy Android đã nhận. Mục **Bài học** có bài 1 phút và bài kiểm tra 5 câu.
 
-**f. Đội tình nguyện:** đổi vai sang **Đội tình nguyện**, nhập mã đội `246 810`. Có các mục:
-- Thống kê, điểm nóng theo khu phố, kiểu lừa đảo mới.
-- **Duyệt:** bấm Xác nhận thì số đó bị cảnh báo 90 ngày.
-- **Gửi cảnh báo:** người thân đã ghép nhận trên Zalo.
+**f. Đội tình nguyện.** Mở `/web`. Ba mã thử của phường Trấn Biên là **246810** (Khoa), **135790** (Lan Anh) và **999111** (Hùng, trưởng đội).
+
+- Xem tổng quan, rồi mở **Kiểm duyệt** để đối chiếu số máy, thời điểm nhận, bản ghi đã che và ý kiến của gia đình. Chọn cụm 5 máy có một phiếu để thử bỏ phiếu thứ hai bằng tài khoản khác.
+- Tra **028 9999 1234** để thấy đỏ với 7 máy. Khiếu nại từ kết quả tra số. Dùng mã **246810** khi bật `LCS_DEMO=1`. Xác minh xong, số chuyển vàng trong lúc chờ xét. Đăng nhập bằng mã của Hùng để giữ hoặc gỡ nhãn.
+- Hùng có thể phát cảnh báo khu phố. Chọn người thân đã ghép để Minh nhận trên Zalo.
 
 **g. Thiết lập và Lá chắn đang ngủ:**
 - **Thiết lập lần đầu:** bật từng lớp bảo vệ (A02a), đủ 3 lớp thì sang màn "Lá chắn đã sẵn sàng" (A02b).
@@ -105,7 +107,6 @@ python ../app/tools/kiem-dien-thoai.py /tmp/dt https://<ip>:8443       # khổ �
 |---|---|---|
 | Phân tích tin nhắn: tô dấu hiệu, gợi ý việc nên làm (A05b, A06b) | Gemini | Nội dung tin, đã thay số điện thoại và số tài khoản bằng [SĐT], [TK]. Tin có mã OTP không bao giờ được gửi đi |
 | Chép lời và phân tích bản ghi âm cuộc gọi (A04b) | Gemini | Tệp ghi âm (máy chủ không lưu), rồi bản chép lời đã che số |
-| Phân tích lời kể khi báo cáo (A09a) | Gemini | Lời kể đã che số |
 | Hiểu ý người học trong cuộc gọi video với chị Lan | OpenAI nếu đặt khóa, không thì Gemini | Câu người học nói, mọi dãy từ 4 chữ số đã thay bằng ••• |
 | Đọc lời nhân vật gọi video | Gemini TTS | Câu nhân vật nói |
 

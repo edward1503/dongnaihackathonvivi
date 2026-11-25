@@ -236,6 +236,27 @@ internal class AppBridge(private val activity: Activity, private val web: WebVie
 
     @JavascriptInterface fun setVoiceAsk(on: Boolean) = CaiDat.datHoiBangGiong(activity, on)
 
+    @JavascriptInterface fun deviceId() = DeviceRegistration.get(activity)?.id.orEmpty()
+
+    private fun eventRequest(id: String, action: () -> Any) {
+        Luong.nen {
+            val response = runCatching(action).getOrElse { JSONObject().put("detail", "Bé Nai chưa đọc được dữ liệu trên máy ạ.") }
+            resolve(id, response.toString())
+        }
+    }
+
+    @JavascriptInterface fun startRecentEvents(id: String) = eventRequest(id) { EventReports.recent(activity) }
+    @JavascriptInterface fun startReportEvent(id: String, eventId: String, story: String) =
+        eventRequest(id) { EventReports.report(activity, eventId, story) }
+    @JavascriptInterface fun startWithdrawReport(id: String, reportId: String) =
+        eventRequest(id) { EventReports.withdraw(activity, reportId) }
+
+    @JavascriptInterface fun demo(key: String) = ui { if (isDemoKey(key)) DemoActions.run(activity, key) }
+    @JavascriptInterface fun openCall(scene: String) = ui {
+        if (isCallScene(scene)) activity.startActivity(Intent(activity, GoiVideoActivity::class.java)
+            .putExtra("trang", "prototype/video-call.html?canh=$scene"))
+    }
+
     @JavascriptInterface fun openStory(scamType: String) = ui {
         val path = "prototype/hoc.html" + lessonSlug(scamType)?.let { "?kieu=$it" }.orEmpty()
         activity.startActivity(Intent(activity, GoiVideoActivity::class.java).putExtra("trang", path))

@@ -33,8 +33,8 @@ def env(name: str, default: str | None = None) -> str | None:
 
 
 def demo_today() -> date:
-    """Ngày của kịch bản demo. Mặc định 24/11/2026 để khớp thiết kế; đặt LCS_TODAY=real để dùng ngày thật."""
-    v = env("LCS_TODAY", "2026-11-24")
+    """Ngày thật của máy chủ hoặc ngày cố định khi kiểm thử."""
+    v = env("LCS_TODAY", "real")
     if v == "real":
         return datetime.now(VN).date()
     return date.fromisoformat(v)
@@ -70,4 +70,4 @@ def demo_fallback() -> bool:
 
 
 def db_path() -> str:
-    return env("LCS_DB", ":memory:")
+    return env("LCS_DB", os.path.join(os.path.dirname(os.path.dirname(__file__)), "community.db"))

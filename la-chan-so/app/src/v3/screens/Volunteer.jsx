@@ -2,43 +2,62 @@
 // Dùng chung máy chủ với web đội tình nguyện của Mảng 6 (/web): duyệt ở đây thì web cũng thấy.
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Bar, Btn, Circle, Group, I, Keypad, Row, Screen, StateView, Switch, Tag, TopRow, maskPhone } from '../ui.jsx'
-import { api } from '../../lib/api.js'
+import { Bar, Btn, Circle, Group, I, Row, Screen, StateView, Switch, Tag, TopRow } from '../ui.jsx'
+import { api, memberRole, saveTeam } from '../../lib/api.js'
 import { useApp } from '../../lib/state.jsx'
+import { levels, reportStatuses, voteProgress } from '../review.js'
 import { highlight } from './Check.jsx'
 
-const TEAM_CODE = '246810'   // mã thử cho buổi trình diễn; triển khai thật thì phường cấp mã cho từng đội
-
 function useStats() {
+  const { persona } = useApp()
   const [s, setS] = useState(null)
   useEffect(() => {
-    let alive = true
-    api.stats().then((x) => alive && setS(x)).catch(() => alive && setS(false))
-    return () => { alive = false }
-  }, [])
+    let active = true
+    let latest = 0
+    function refresh() {
+      const request = ++latest
+      api.stats(persona === 'volunteer').then((stats) => {
+        if (active && request === latest) setS(stats)
+      }).catch(() => { if (active && request === latest) setS(false) })
+    }
+    refresh()
+    window.addEventListener('lcs-community-update', refresh)
+    return () => { active = false; window.removeEventListener('lcs-community-update', refresh) }
+  }, [persona])
   return s
 }
 
 // ---------- C0 ----------
 export function TeamCode() {
   const nav = useNavigate()
-  const { setOnboarded } = useApp()
+  const { setMode, setOnboarded } = useApp()
   const [code, setCode] = useState('')
-  const [bad, setBad] = useState(false)
-  const key = (k) => { setBad(false); setCode((c) => (k === 'del' ? c.slice(0, -1) : c.length < 6 ? c + k : c)) }
-  const go = () => {
-    if (code !== TEAM_CODE) { setBad(true); return }
-    localStorage.setItem('lcs.team', code)
-    setOnboarded(true)
-    nav('/', { replace: true })
+  const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
+  async function login(event) {
+    event.preventDefault()
+    if (busy || !code.trim()) return
+    setBusy(true)
+    setError('')
+    try {
+      const session = await api.teamLogin(code.trim())
+      if (!session.token || !['lead', 'volunteer'].includes(session.member?.role)) throw new Error('Máy chủ chưa cấp phiên đội. Bạn thử lại nhé.')
+      saveTeam(session)
+      setMode('volunteer')
+      setOnboarded(true)
+      nav('/', { replace: true })
+    } catch (e) { setError(e.message) }
+    finally { setBusy(false) }
   }
-  const shown = (code + '••••••').slice(0, 6)
   return (
-    <Screen name={bad ? 'C0b-ma-doi-sai' : 'C0-ma-doi'} bar={<Bar title="Mã đội" />} foot={<Btn onClick={go} disabled={code.length < 6}>{bad ? 'Thử lại' : 'Vào'}</Btn>}>
-      <div className="t-sub center">Nhập mã do phường cấp</div>
-      <div className="numdisp" style={{ letterSpacing: 6, color: bad ? 'var(--dang)' : undefined, borderColor: bad ? 'var(--dang)' : undefined }}>{shown.slice(0, 3)} {shown.slice(3)}</div>
-      {bad ? <div className="t-sm c-dang center t-s">Mã chưa đúng.</div> : <div className="t-sm center">Mã thử cho buổi trình diễn: 246 810</div>}
-      <Keypad onKey={key} />
+    <Screen name={error ? 'C0b-ma-doi-sai' : 'C0-ma-doi'} bar={<Bar title="Đăng nhập đội" onLeft={() => nav('/vai', { replace: true })} />}>
+      <form className="col g14" onSubmit={login}>
+        <label className="col g8"><span className="t-row">Mã do đội cấp</span>
+          <input className="field" type="password" autoComplete="current-password" value={code} required
+            onChange={(e) => { setCode(e.target.value); setError('') }} /></label>
+        {error && <p role="alert" className="t-sub c-dang">{error}</p>}
+        <Btn type="submit" busy={busy} disabled={!code.trim()}>Đăng nhập</Btn>
+      </form>
     </Screen>
   )
 }
@@ -46,12 +65,13 @@ export function TeamCode() {
 // ---------- C1 ----------
 export function VolunteerHome() {
   const nav = useNavigate()
-  const { ward } = useApp()
+  const { team } = useApp()
   const s = useStats()
   const top = (s?.byType || []).slice(0, 2)
   return (
     <Screen name="C1-trang-chu-tinh-nguyen" nav="/">
-      <TopRow right={<button type="button" className="pill tap" onClick={() => nav('/phuong')}><I n="pin" z={20} />{ward}</button>} />
+      <TopRow right={<span className="pill"><I n="pin" z={20} />{team.member.ward}</span>} />
+      <div className="col g2"><h1 className="h-l">{team.member.name}</h1><p className="t-sub">{memberRole(team.member)}</p></div>
       <div className="row g12">
         <div className="card col g2 grow"><div className="h-xl c-pri">{s ? s.total : '…'}</div><div className="t-sub">báo cáo tháng này</div></div>
         <div className="card col g2 grow"><div className="h-xl c-pri">{s ? `${s.linkPct}%` : '…'}</div><div className="t-sub">đường dẫn giả</div></div>
@@ -66,7 +86,7 @@ export function VolunteerHome() {
       <Group>
         <Row icon="chart" title="Điểm nóng theo khu phố" onClick={() => nav('/thong-ke')} />
         <Row icon="check" title="Chờ duyệt" right={s ? <Tag kind="off">{s.needsReview}</Tag> : null} onClick={() => nav('/duyet')} />
-        <Row icon="mega" title="Gửi cảnh báo cho người dân" onClick={() => nav('/chia-se')} />
+        {team.member.role === 'lead' && <Row icon="mega" title="Báo nhầm và cảnh báo khu phố" onClick={() => nav('/chia-se')} />}
       </Group>
     </Screen>
   )
@@ -75,14 +95,15 @@ export function VolunteerHome() {
 // ---------- C2 ----------
 const HEAT = ['#344D9C', '#5C72B5', '#9AA8D3', '#CDD4EA', '#E9EDF8']
 export function Stats() {
+  const { team } = useApp()
   const nav = useNavigate()
   const s = useStats()
   if (!s) return <Screen name="C2-thong-ke" bar={<Bar title="Thống kê" />}><StateView icon={s === false ? 'wifioff' : 'chart'} title={s === false ? 'Chưa tải được số liệu' : 'Đang tải…'} /></Screen>
-  if (!s.total) return <Screen name="C2c-chua-co-bao-cao" bar={<Bar title="Thống kê" />} foot={<Btn onClick={() => nav('/bao-cao')}>Ghi nhận báo cáo</Btn>}><StateView icon="chart" title="Chưa có báo cáo" /></Screen>
+  if (!s.total) return <Screen name="C2c-chua-co-bao-cao" bar={<Bar title="Thống kê" />}><StateView icon="chart" title="Chưa có báo cáo" /></Screen>
   const max = Math.max(...s.byArea.map((a) => a.count))
   const maxT = Math.max(...s.byType.map((t) => t.count))
   return (
-    <Screen name="C2-thong-ke" bar={<Bar title="Thống kê" />} foot={<Btn icon="share" onClick={() => nav('/chia-se')}>Chia sẻ cảnh báo</Btn>}>
+    <Screen name="C2-thong-ke" bar={<Bar title="Thống kê" />} foot={team?.member.role === 'lead' && <Btn icon="share" onClick={() => nav('/chia-se')}>Chia sẻ cảnh báo</Btn>}>
       <div className="t-sub">Tháng {s.month} · {s.area} · {s.totalDelta}</div>
       <div className="card col g12">
         <div className="t-row">Điểm nóng</div>
@@ -114,12 +135,13 @@ export function Stats() {
 
 // ---------- C3 ----------
 export function NewType() {
+  const { persona, team } = useApp()
   const nav = useNavigate()
   const s = useStats()
   const e = s?.emerging
   if (!e) return <Screen name="C3-kieu-moi" bar={<Bar title="Kiểu mới" />}><StateView icon="tri" iconBg="warn-t" iconColor="warn" title={s === null ? 'Đang tải…' : 'Chưa có kiểu mới'} /></Screen>
   return (
-    <Screen name="C3-kieu-moi" bar={<Bar title="Kiểu mới" />} foot={<Btn icon="share" onClick={() => nav('/chia-se')}>Chia sẻ cảnh báo</Btn>}>
+    <Screen name="C3-kieu-moi" bar={<Bar title="Kiểu mới" />} foot={persona === 'volunteer' && team?.member.role === 'lead' && <Btn icon="share" onClick={() => nav('/chia-se')}>Chia sẻ cảnh báo</Btn>}>
       <div className="h-l">{e.title}</div>
       <div className="row g12">
         <div className="card col g2 grow"><div className="h-xl c-warn">{e.count}</div><div className="t-sub">lượt tuần này</div></div>
@@ -135,59 +157,11 @@ export function NewType() {
   )
 }
 
-// ---------- C4 ----------
-export function Review() {
-  const nav = useNavigate()
-  const { toast } = useApp()
-  const [items, setItems] = useState(null)
-  const [gone, setGone] = useState({})
-  useEffect(() => {
-    let alive = true
-    api.reportsQueue(8).then((x) => alive && setItems(x.items || [])).catch(() => alive && setItems(false))
-    return () => { alive = false }
-  }, [])
-  const decide = async (r, status) => {
-    setGone((g) => ({ ...g, [r.id]: status }))
-    try { await api.reviewReport(r.id, status); toast(status === 'confirmed' ? 'Đã xác nhận. Số này sẽ bị cảnh báo 90 ngày' : 'Đã bỏ báo cáo') } catch (e) {
-      setGone((g) => { const n = { ...g }; delete n[r.id]; return n })
-      toast(e.message)
-    }
-  }
-  const left = (items || []).filter((r) => !gone[r.id])
-  if (items && !left.length) {
-    return (
-      <Screen name="C4b-da-duyet-het" nav="/duyet" foot={<Btn onClick={() => nav('/', { replace: true })}>Về trang chủ</Btn>}>
-        <StateView art="an-toan" title="Đã duyệt hết" text="Cảm ơn đội đã giữ an toàn cho khu phố." />
-      </Screen>
-    )
-  }
-  return (
-    <Screen name="C4-duyet-bao-cao" nav="/duyet">
-      <div className="h-xl" style={{ paddingTop: 10 }}>Duyệt báo cáo</div>
-      {items === null && <div className="t-sub">Đang tải…</div>}
-      {items === false && <div className="t-sub">Chưa tải được danh sách. Kiểm tra mạng rồi mở lại.</div>}
-      {left.map((r) => (
-        <div key={r.id} className="card col g10 rise">
-          <div className="row g8" style={{ flexWrap: 'wrap' }}>
-            <Tag kind="ok">{r.ai?.scamLabel || 'Chưa rõ kiểu'}</Tag>
-            <span className="t-sm">{r.area} · {r.reporterCount} lượt · AI chắc {Math.round((r.ai?.confidence || 0) * 100)}%</span>
-          </div>
-          <div className="t-row" style={{ wordBreak: 'break-all' }}>{r.kind === 'link' ? r.target : maskPhone(r.target)}</div>
-          {r.story && <div className="t-sub">“{r.story}”</div>}
-          <div className="row g10">
-            <button type="button" className="btn o sm" style={{ flex: 1 }} onClick={() => decide(r, 'rejected')}>Bỏ</button>
-            <button type="button" className="btn p sm" style={{ flex: 1.4 }} onClick={() => decide(r, 'confirmed')}><I n="check" z={20} />Xác nhận</button>
-          </div>
-        </div>
-      ))}
-    </Screen>
-  )
-}
-
 // ---------- C5 ----------
 export function Share() {
   const nav = useNavigate()
-  const { ward, toast } = useApp()
+  const { team, toast } = useApp()
+  const ward = team.member.ward
   const [text, setText] = useState(`Cảnh báo ${ward}: có người giả danh điện lực gọi báo cắt điện, gửi đường dẫn thu tiền. Đừng bấm, đừng chuyển tiền. Gọi tổng đài điện lực bằng số in trên hóa đơn.`)
   const [zalo, setZalo] = useState(true)
   const [board, setBoard] = useState(true)
@@ -209,7 +183,9 @@ export function Share() {
     )
   }
   return (
-    <Screen name="C5-chia-se-canh-bao" bar={<Bar title="Chia sẻ" left="x" />} foot={<Btn icon="send" onClick={send} busy={busy} disabled={!text.trim() || (!zalo && !board)}>Gửi cảnh báo</Btn>}>
+    <Screen name="C5-chia-se-canh-bao" bar={<Bar title="Việc của trưởng đội" left="x" />}>
+      <Appeals />
+      <h2 className="h-m">Gửi cảnh báo khu phố</h2>
       <div className="t-lbl">Nội dung gửi cho người dân</div>
       <textarea className="field" value={text} onChange={(e) => setText(e.target.value)} style={{ background: 'var(--pri)', color: '#fff', borderColor: 'var(--pri)', minHeight: 210 }} aria-label="Nội dung cảnh báo" />
       <div className="sec">Gửi tới</div>
@@ -217,6 +193,187 @@ export function Share() {
         <Row icon="users" title="Người thân đã ghép" sub="Qua ứng dụng nhắn tin" right={<Switch on={zalo} onChange={setZalo} label="Gửi người thân" />} />
         <Row icon="mega" title="Bảng tin khu phố" sub={ward} right={<Switch on={board} onChange={setBoard} label="Gửi bảng tin" />} />
       </Group>
+      <Btn icon="send" onClick={send} busy={busy} disabled={!text.trim() || (!zalo && !board)}>Gửi cảnh báo</Btn>
     </Screen>
   )
+}
+
+// Cases and appeals can change while another team member is reviewing them.
+function useQueue(read) {
+  const [items, setItems] = useState(null)
+  const [error, setError] = useState('')
+  const [revision, setRevision] = useState(0)
+  useEffect(() => {
+    let active = true
+    let pending = false
+    async function load() {
+      if (pending || document.hidden) return
+      pending = true
+      try {
+        const data = await read()
+        const list = Array.isArray(data) ? data : data.items
+        if (!Array.isArray(list)) throw new Error('Chưa đọc được danh sách. Bạn tải lại nhé.')
+        if (active) { setItems(list); setError('') }
+      } catch (e) { if (active) setError(e.message) }
+      finally { pending = false }
+    }
+    load()
+    const timer = setInterval(load, 10000)
+    window.addEventListener('lcs-community-update', load)
+    document.addEventListener('visibilitychange', load)
+    return () => {
+      active = false
+      clearInterval(timer)
+      window.removeEventListener('lcs-community-update', load)
+      document.removeEventListener('visibilitychange', load)
+    }
+  }, [read, revision])
+  return { items, error, reload: () => setRevision((n) => n + 1) }
+}
+
+function QueueMessage({ items, error, reload, empty }) {
+  if (error) return <div className="col g8"><p role="alert" className="t-sub c-dang">{error}</p><Btn kind="o" onClick={reload}>Tải lại</Btn></div>
+  if (items === null) return <p role="status" className="t-sub">Đang tải…</p>
+  return items.length ? null : <p className="t-sub">{empty}</p>
+}
+
+const flags = { burst: 'Báo dồn', conflict: 'Ý kiến trái nhau', appeal: 'Đang xét báo nhầm', w2: 'Bản ghi chờ xét', w3: 'Cụm nhiều máy' }
+const decisions = { confirm: 'Xác nhận', reject: 'Bác', spam: 'Spam' }
+const answers = { yes: 'Có đòi chuyển tiền', no: 'Không đòi chuyển tiền', known: 'Tôi biết số này', 'dung-chuyen': 'Đừng chuyển', 'nguoi-quen': 'Người quen' }
+const scamTypes = { gia_danh_cong_an: 'Giả danh công an', duong_dan_gia: 'Đường dẫn giả mạo', viec_nhe_luong_cao: 'Việc nhẹ lương cao',
+  nguoi_than_tai_nan: 'Người thân gặp nạn', gia_dien_luc: 'Giả nhân viên điện lực', qua_tri_an: 'Quà tri ân', dau_tu_lai_cao: 'Đầu tư lãi cao', khac: 'Khác' }
+
+// Describe evidence in this review. The server alone awards points and sets the public level.
+function evidenceGroup(report) {
+  if (report.status === 'validated') return 'W1'
+  if (report.status === 'unvalidated' || (report.analysisId && report.status === 'confirmed')) return 'W2'
+  if (!report.analysisId && ['call_log', 'sms_received', 'screenshot'].includes(report.evidence?.type)) return 'W3'
+  return 'Chờ phân nhóm'
+}
+
+function Evidence({ reports }) {
+  const mix = { W1: 0, W2: 0, W3: 0 }
+  for (const report of reports) {
+    const group = evidenceGroup(report)
+    if (group in mix) mix[group]++
+  }
+  return (
+    <details className="review-evidence">
+      <summary>Bằng chứng · {Object.entries(mix).map(([group, count]) => `${group} · ${count}`).join(' / ')}</summary>
+      <div className="col g12">{reports.map((report) => {
+        const when = report.evidence?.at
+        const source = { call_log: 'Cuộc gọi đến', sms_received: 'Tin nhắn đến', screenshot: 'Ảnh đã che' }[report.evidence?.type]
+        return <div className="col g4" key={report.id}>
+          <div className="t-lbl">{source} · {evidenceGroup(report)}</div>
+          {when && <div className="t-sm">{new Date(when).toLocaleString('vi-VN')}</div>}
+          <div className="t-sub">{reportStatuses[report.status]}</div>
+          <div className="t-sm">AI · {levels[report.aiLevel] || 'Chưa có nhãn bản ghi'}{report.aiScamType && ` · ${scamTypes[report.aiScamType] || report.aiScamType}`}</div>
+          {report.summary && <p className="t-sub">{report.summary}</p>}
+          {report.story && <p className="t-sub">{report.story}</p>}
+          <div className="t-sm">Người nhận · {answers[report.selfAnswer] || 'Chưa trả lời'}</div>
+          <div className="t-sm">Người thân · {answers[report.relativeChoice] || 'Chưa trả lời'}</div>
+          {report.lateAnswers?.map((answer, index) => <div key={index} className="t-sm">
+            {answer.actor === 'self' ? 'Người nhận' : 'Người thân'} trả lời muộn · {answers[answer.choice] || answer.choice}</div>)}
+        </div>
+      })}</div>
+    </details>
+  )
+}
+
+function CaseCard({ item, reload }) {
+  const { toast } = useApp()
+  const [note, setNote] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [voted, setVoted] = useState(false)
+  const [error, setError] = useState('')
+  const conflict = item.flags.includes('conflict')
+  async function vote(decision) {
+    setBusy(true)
+    setError('')
+    try {
+      await api.vote(item.key, { reviewId: item.reviewId, decision, note: note.trim() || undefined })
+      setVoted(true)
+      toast('Đã ghi nhận phiếu của bạn.')
+    } catch (e) { setError(e.message) }
+    finally { setBusy(false); reload() }
+  }
+  return (
+    <article className="card col g10" style={{ overflowWrap: 'anywhere' }}>
+      <h2 className="h-m">{item.reports[0]?.target || item.key}</h2>
+      <p className="t-row">{item.reportedCount ?? item.count} máy đã báo</p>
+      <p className="t-sm">Mức công khai · {levels[item.level]} · {item.count} máy được tính</p>
+      <div className="chips">{item.flags.map((flag) => <Tag key={flag} kind="new">{flags[flag] || flag}</Tag>)}</div>
+      <Evidence reports={item.reports} />
+      <p className="t-lbl">{voteProgress(item.votes)}</p>
+      {item.notes?.filter((vote) => vote.note).map((vote) => <p className="t-sm" key={vote.member}>{decisions[vote.decision]} · {vote.note}</p>)}
+      {item.myVote && <p className="t-sm">Phiếu của bạn · {decisions[item.myVote]}</p>}
+      {item.reasonCannotVote && <p className="t-sub">{item.reasonCannotVote}</p>}
+      {item.canVote && !voted && <>
+        <label className="col g6"><span className="t-lbl">{conflict ? 'Lý do xử lý ý kiến trái nhau (bắt buộc)' : 'Nhận xét (nếu có)'}</span>
+          <textarea className="field" rows={2} style={{ minHeight: 78 }} required={conflict} value={note} onChange={(e) => setNote(e.target.value)} /></label>
+        <div className="review-actions">{Object.entries(decisions).map(([decision, label]) =>
+          <Btn key={decision} kind={decision === 'confirm' ? 'p sm' : 'o sm'} disabled={busy || (conflict && !note.trim())}
+            onClick={() => vote(decision)}>{label}</Btn>)}</div>
+      </>}
+      {error && <p role="alert" className="t-sub c-dang">{error}</p>}
+    </article>
+  )
+}
+
+export function Review() {
+  const queue = useQueue(api.cases)
+  return (
+    <Screen name="C4-duyet-bao-cao" nav="/duyet">
+      <h1 className="h-xl">Hồ sơ chờ xét</h1>
+      <QueueMessage {...queue} empty="Đã xét hết hồ sơ đang chờ." />
+      {queue.items?.map((item) => <CaseCard key={item.reviewId} item={item} reload={queue.reload} />)}
+    </Screen>
+  )
+}
+
+const appealStates = { pending_verification: 'Chờ chủ số xác minh', verified: 'Đã xác minh', resolved: 'Đã giải quyết', remove: 'Đã gỡ nhãn', keep: 'Đã giữ nhãn' }
+
+function AppealCard({ item, reload }) {
+  const { toast } = useApp()
+  const [note, setNote] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [resolved, setResolved] = useState(false)
+  const [error, setError] = useState('')
+  async function resolve(outcome) {
+    setBusy(true)
+    setError('')
+    try {
+      await api.resolveAppeal(item.id, { outcome, note: note.trim() || undefined })
+      setResolved(true)
+      toast(outcome === 'remove' ? 'Đã gỡ nhãn.' : 'Đã giữ nhãn.')
+    } catch (e) { setError(e.message) }
+    finally { setBusy(false); reload() }
+  }
+  return (
+    <section className="card col g8">
+      <h3 className="t-row">{item.target || item.key}</h3>
+      <p className="t-sub">{appealStates[item.outcome || item.status]}</p>
+      {item.contact && <p className="t-sm">Số liên hệ · {item.contact}</p>}
+      {item.text && <p className="t-sub">{item.text}</p>}
+      {item.note && <p className="t-sub">{item.note}</p>}
+      {item.status === 'verified' && !resolved && <>
+        <label className="col g6"><span className="t-lbl">Lý do quyết định (nếu có)</span>
+          <textarea className="field" value={note} onChange={(e) => setNote(e.target.value)} /></label>
+        <div className="review-actions">
+          <Btn kind="o sm" disabled={busy} onClick={() => resolve('keep')}>Giữ nhãn</Btn>
+          <Btn kind="o sm" disabled={busy} onClick={() => resolve('remove')}>Gỡ nhãn</Btn>
+        </div>
+      </>}
+      {error && <p role="alert" className="t-sub c-dang">{error}</p>}
+    </section>
+  )
+}
+
+function Appeals() {
+  const queue = useQueue(api.appeals)
+  return <>
+    <h2 className="h-m">Yêu cầu xem lại số</h2>
+    <QueueMessage {...queue} empty="Chưa có yêu cầu xem lại." />
+    {queue.items?.map((item) => <AppealCard key={item.id} item={item} reload={queue.reload} />)}
+  </>
 }

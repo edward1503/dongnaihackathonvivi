@@ -18,8 +18,8 @@
             <TextView android:id="@+id/nguon" style="@style/Chu.Muc" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Dấu hiệu nhận ra" android:textColor="@color/ai" />
             <TextView android:id="@+id/dauHieu" style="@style/Chu" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" />
         </LinearLayout>
-        <TextView style="@style/Chu.Dam" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:text="Báo tin này cho cộng đồng?" android:textSize="18sp" />
-        <TextView style="@style/Chu.Phu" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="Số điện thoại, số tài khoản trong tin được che trước khi gửi." />
+        <TextView android:id="@+id/smsReportTitle" style="@style/Chu.Dam" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:text="Báo tin này cho cộng đồng?" android:textSize="18sp" />
+        <TextView android:id="@+id/smsReportInfo" style="@style/Chu.Phu" android:accessibilityLiveRegion="polite" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="Số điện thoại, số tài khoản trong tin được che trước khi gửi." />
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
             <Button android:id="@+id/nutBao" style="@style/Nut.Chinh" android:layout_width="0dp" android:layout_weight="2" android:text="Báo cho cộng đồng" />
             <Space android:layout_width="12dp" android:layout_height="1dp" />

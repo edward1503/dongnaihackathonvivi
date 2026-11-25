@@ -74,38 +74,12 @@ class AdvancedSettingsActivity : Activity() {
         }
 
         // ----- Giả lập: đi thẳng vào từng lớp, dùng đúng mã của luồng thật -----
-        val soMau = "0912345678"
-        v<Button>(R.id.thuDoChuong).setOnClickListener {
-            Luong.nen {
-                val kq = TraCuu.tra(c, soMau)
-                TheCanhBao.hien(c, soMau, kq)
-                Luong.sau(8000) { TheCanhBao.an(c) }
-            }
-        }
-        v<Button>(R.id.thuSauGoi).setOnClickListener {
-            Luong.nen { SauCuocGoi.xuLy(c, soMau, 252, TraCuu.tra(c, soMau), quen = false, batDau = System.currentTimeMillis() - 252_000, den = true, thu = true) }
-        }
-        v<Button>(R.id.thuDungLai).setOnClickListener { DungLai.hien(c, dangGoi = false, phut = 4) }
-        v<Button>(R.id.thuTinNhan).setOnClickListener {
-            Luong.nen {
-                XuLyTinNhan.xuLy(
-                    c, "0934 567 890",
-                    "Chào em, bên chị đang tuyển cộng tác viên đặt đơn online, việc nhẹ lương cao 500k/ngày, không cần kinh nghiệm. " +
-                        "Chỉ cần nạp trước 200k để kích hoạt tài khoản, hoàn tiền kèm hoa hồng 20% ngay. " +
-                        "Số lượng có hạn, đăng ký trong hôm nay tại bit.ly/viec-nhe-xyz (thử lúc ${System.currentTimeMillis() % 100000})",
-                )
-            }
-        }
-        v<Button>(R.id.thuNhan).setOnClickListener {
-            Luong.nen {
-                TheCanhBao.hienNhan(c, TraCuu.tra(c, "0909000111"))
-                Luong.sau(8000) { TheCanhBao.an(c) }
-            }
-        }
-        v<Button>(R.id.thuCuaSo).setOnClickListener {
-            RuiRo.mo(c, soMau)
-            Toast.makeText(c, "Giờ mở app ngân hàng (hoặc app thử) để xem màn Dừng lại", Toast.LENGTH_LONG).show()
-        }
+        v<Button>(R.id.thuDoChuong).setOnClickListener { DemoActions.run(c, "ring") }
+        v<Button>(R.id.thuNhan).setOnClickListener { DemoActions.run(c, "ringKnown") }
+        v<Button>(R.id.thuSauGoi).setOnClickListener { DemoActions.run(c, "afterCall") }
+        v<Button>(R.id.thuDungLai).setOnClickListener { DemoActions.run(c, "stop") }
+        v<Button>(R.id.thuTinNhan).setOnClickListener { DemoActions.run(c, "message") }
+        v<Button>(R.id.thuCuaSo).setOnClickListener { DemoActions.run(c, "bankWatch") }
         v<Button>(R.id.thuGoiVideo).setOnClickListener { startActivity(Intent(c, GoiVideoActivity::class.java)) }
         // Bài học và các cảnh gọi video khác mở trong cùng màn WebView, bằng đường dẫn thường như trang bài học sẽ dùng (không kèm ?goc=1).
         fun moTrang(trang: String) {

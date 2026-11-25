@@ -2,6 +2,10 @@ package vn.doi18.lachanso
 
 import android.Manifest
 import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.IntentFilter
+import androidx.core.content.ContextCompat
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -61,6 +65,93 @@ class HoiSauCuocGoiActivity : Activity() {
     private val loiKe = StringBuilder()
     private var keTu = 0L
 
+    private var eventId = ""
+    private var selfAnswer: String? = null
+    private var reportRequested = false
+    private var requestVersion = 0
+    private var sending = false
+    private var analysisRunning = false
+    private var audioRisk: KetQuaAI? = null
+    private var lastSpokenReport = ""
+    private val reportUpdates = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if (intent.getStringExtra("eventId") == eventId) showReport(intent.getStringExtra("message").orEmpty())
+        }
+    }
+
+    private fun showReport(text: String = "", speak: Boolean = true) {
+        if (eventId.isBlank()) {
+            if (den) {
+                v<Button>(R.id.reportCall).apply { visibility = View.VISIBLE; isEnabled = false }
+                v<TextView>(R.id.reportMessage).apply {
+                    visibility = View.VISIBLE
+                    this.text = if (thu) "Đây là cuộc gọi thử. Bà có thể báo khi máy nhận cuộc gọi thật nha."
+                        else "Bé Nai chưa đối chiếu được cuộc gọi này với nhật ký trên máy ạ."
+                }
+            }
+            return
+        }
+        val reportId = EventReports.reportId(this, eventId)
+        val withdrawn = EventReports.isWithdrawn(this, eventId)
+        v<Button>(R.id.reportCall).apply {
+            val retryAlert = EventReports.needsAlert(this@HoiSauCuocGoiActivity, eventId)
+            this.text = if (retryAlert) "Gửi lại tóm tắt cho $ten" else "Báo cuộc vừa nhận"
+            visibility = if ((reportId == null || retryAlert) && !withdrawn) View.VISIBLE else View.GONE
+            isEnabled = !sending && !analysisRunning
+        }
+        v<Button>(R.id.withdrawReport).apply {
+            visibility = if (reportId != null) View.VISIBLE else View.GONE
+            isEnabled = !sending
+        }
+        if (text.isNotBlank()) {
+            v<TextView>(R.id.reportMessage).apply { this.text = text; visibility = View.VISIBLE }
+            if (speak && docDuoc()) {
+                lastSpokenReport = text
+                dungNghe()
+                val resumeQuestion = khung == R.id.khungHoi && !daTraLoi
+                luotGiong = Giong.phat(this, null, text) {
+                    if (resumeQuestion && khung == R.id.khungHoi && song() && !daTraLoi) hoi()
+                }
+            }
+        }
+    }
+
+    private fun submitReport() {
+        if (eventId.isBlank()) return
+        reportRequested = true
+        val version = ++requestVersion
+        if (sending) return
+        sending = true
+        val answer = selfAnswer
+        showReport()
+        Luong.nen {
+            val reply = EventReports.report(this, eventId, answer = answer)
+            Luong.chinh {
+                if (isFinishing || isDestroyed) return@chinh
+                sending = false
+                if (version != requestVersion) submitReport()
+                else showReport(EventReports.message(reply))
+            }
+        }
+    }
+
+    private fun chooseKnown() {
+        selfAnswer = ReceiptRules.selfAnswer("Tôi biết số này")
+        EventReports.rememberAnswer(this, eventId, selfAnswer)
+        daTraLoi = true
+        dungNghe()
+        CaiDat.themSoQuen(this, so)
+        if (audioRisk == null) RuiRo.dong(this)
+        if (eventId.isBlank()) { finish(); return }
+        if (audioRisk != null) showAudioRisk() else on()
+        if (reportRequested || EventReports.reportId(this, eventId) != null) submitReport()
+    }
+
+    private fun showAudioRisk() {
+        val risk = audioRisk ?: return
+        ketQuaXau(risk.muc, risk.giaiThich, risk.dauHieu)
+    }
+
     private fun <T : View> v(id: Int): T = findViewById(id)
     private val ten get() = CaiDat.tenNguoiThan(this)
     private val x get() = xung()
@@ -90,12 +181,33 @@ class HoiSauCuocGoiActivity : Activity() {
         v<Button>(R.id.nutKe).setOnClickListener { batDauKe() }
         v<Button>(R.id.nutKeXong).setOnClickListener { keXong() }
         v<Button>(R.id.nutKeThoi).setOnClickListener { dangKe = false; dungNghe(); hoi(docTo = false) }
-        v<Button>(R.id.nutBietSo).setOnClickListener {
-            CaiDat.themSoQuen(this, so)
-            RuiRo.dong(this)
-            NhatKy.ghi(this, "Người dùng bấm Tôi biết số này")
-            finish()
+        eventId = if (!thu && den) intent.getStringExtra("eventId").orEmpty() else ""
+        val saved = b?.takeIf { it.getString("eventId") == eventId && it.getLong("ma") == ma }
+        reportRequested = saved?.getBoolean("reportRequested") ?: intent.getBooleanExtra("requested", false)
+        selfAnswer = saved?.getString("selfAnswer")
+        v<Button>(R.id.nutBietSo).setOnClickListener { chooseKnown() }
+        v<Button>(R.id.reportCall).setOnClickListener {
+            submitReport()
+            if (selfAnswer == null && !khongHoi && khung != R.id.khungHoi) {
+                daTraLoi = false
+                hoi()
+            }
         }
+        v<Button>(R.id.withdrawReport).setOnClickListener {
+            val reportId = EventReports.reportId(this, eventId) ?: return@setOnClickListener
+            sending = true
+            showReport()
+            Luong.nen {
+                val reply = EventReports.withdraw(this, reportId)
+                Luong.chinh {
+                    if (isDestroyed || isFinishing) return@chinh
+                    sending = false
+                    reportRequested = !EventReports.isWithdrawn(this, eventId)
+                    showReport(EventReports.message(reply))
+                }
+            }
+        }
+        showReport(EventReports.lastMessage(this, eventId), speak = false)
         v<Button>(R.id.nutDong).setOnClickListener { finish() }
 
         val banGhi = intent.getStringExtra("banGhi")
@@ -112,9 +224,18 @@ class HoiSauCuocGoiActivity : Activity() {
         recreate()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("eventId", eventId)
+        outState.putLong("ma", ma)
+        outState.putBoolean("reportRequested", reportRequested)
+        outState.putString("selfAnswer", selfAnswer)
+    }
+
     override fun onStart() {
         super.onStart()
         dangHien = true
+        ContextCompat.registerReceiver(this, reportUpdates, IntentFilter(EventReports.UPDATED), ContextCompat.RECEIVER_NOT_EXPORTED)
         val cho = choHoi
         choHoi = null
         when {
@@ -124,9 +245,12 @@ class HoiSauCuocGoiActivity : Activity() {
             daDung && (khung == R.id.khungHoi || khung == R.id.khungKe) -> hoi(docTo = false)
         }
         daDung = false
+        val message = EventReports.lastMessage(this, eventId)
+        showReport(message, speak = reportRequested && message != lastSpokenReport)
     }
 
     override fun onStop() {
+        unregisterReceiver(reportUpdates)
         dangHien = false
         daDung = true
         dangKe = false
@@ -192,11 +316,15 @@ class HoiSauCuocGoiActivity : Activity() {
     // ---------- N2: phân tích bản ghi âm của máy ----------
 
     private fun phanTichBanGhi(uri: Uri, kieu: String) {
+        analysisRunning = true
+        showReport()
         hien(R.id.khungCho)
         v<TextView>(R.id.choPhu).text = "Bản ghi âm của máy · ${thoiLuong()}"
         Luong.nen {
             val kq = try {
-                contentResolver.openInputStream(uri)?.let {
+                if (eventId.isNotBlank()) ReceivedEvents.find(this, eventId)?.let { event ->
+                    EventReports.analyze(this, event)?.let { Api.phanTich(it, true) }
+                } else contentResolver.openInputStream(uri)?.use {
                     Api.analyzeRecording(this, it, kieu, soLa = !SoQuen.laQuen(this, so))
                 }
             } catch (e: Exception) {
@@ -204,6 +332,8 @@ class HoiSauCuocGoiActivity : Activity() {
             }
             Luong.chinh {
                 if (isFinishing || isDestroyed) return@chinh
+                analysisRunning = false
+                showReport()
                 if (kq == null) {
                     NhatKy.ghi(this, "Chưa phân tích được bản ghi âm, chuyển sang hỏi một câu")
                     hoi()
@@ -220,12 +350,14 @@ class HoiSauCuocGoiActivity : Activity() {
         val dauHieu = kq.dauHieu
         val chep = kq.chepLoi.joinToString("\n\n") { (ai, loi) -> if (ai.isBlank()) loi else "$ai: $loi" }
         NhatKy.ghi(this, "AI phân tích ${nguon.lowercase()}: ${muc.ten}, ${dauHieu.size} dấu hiệu")
+        if (nguon == "Bản ghi" && muc in setOf(Muc.NGUY_HIEM, Muc.NGHI_NGO)) audioRisk = kq
         when {
             muc == Muc.NGUY_HIEM || muc == Muc.NGHI_NGO -> ketQuaXau(muc, kq.giaiThich, dauHieu.map { "$nguon: $it" })
             // AI không thấy gì (hoặc trả lời thiếu mức): đó chưa phải là "an toàn". Bản ghi thì hỏi lại một câu, lời kể thì nói rõ "chưa thấy".
             nguon == "Bản ghi" -> { daTraLoi = false; hoi() }
             else -> on(chuaThay = true)
         }
+        if (reportRequested && selfAnswer == null && !khongHoi && audioRisk != null) hoi()
         if (chep.isNotBlank()) {
             v<View>(R.id.kqChepLoiKhung).visibility = View.VISIBLE
             v<TextView>(R.id.kqChepLoi).text = chep
@@ -238,7 +370,12 @@ class HoiSauCuocGoiActivity : Activity() {
         if (khongHoi) {
             // Hôm nay đã hỏi một câu rồi. Bản ghi không cho kết luận gì thì im lặng, không hỏi thêm.
             NhatKy.ghi(this, "Hôm nay đã hỏi một câu rồi: không hỏi nữa")
-            finish()
+            if (eventId.isBlank()) finish() else {
+                hien(R.id.khungKetQua)
+                v<TextView>(R.id.kqMuc).text = "Bé Nai đã ghi nhận cuộc gọi"
+                v<TextView>(R.id.kqLoi).text = "Bà có thể báo cuộc gọi này nếu cần ạ."
+                v<View>(R.id.kqNguoiThan).visibility = View.GONE
+            }
             return
         }
         hien(R.id.khungHoi)
@@ -270,6 +407,10 @@ class HoiSauCuocGoiActivity : Activity() {
         v<TextView>(R.id.trangThai).text = "Bé Nai đang nghe…"
         ngheMotLuot { cacCau ->
             if (daTraLoi || dangKe || !song()) return@ngheMotLuot
+            if (ReceiptRules.selfAnswer(cacCau.firstOrNull().orEmpty()) == "known") {
+                chooseKnown()
+                return@ngheMotLuot
+            }
             when (LocTinNhan.hieuCoKhong(cacCau)) {
                 true -> traLoi(true)
                 false -> traLoi(false)
@@ -285,7 +426,10 @@ class HoiSauCuocGoiActivity : Activity() {
         dangKe = false
         dungNghe()
         NhatKy.ghi(this, "Trả lời câu hỏi sau cuộc gọi: " + if (co) "Có" else "Không")
-        if (co) ketQuaXau(Muc.NGUY_HIEM, "", listOf("${x.Ban} cho biết người gọi bảo chuyển tiền")) else on()
+        selfAnswer = ReceiptRules.selfAnswer(if (co) "Có" else "Không")
+        EventReports.rememberAnswer(this, eventId, selfAnswer)
+        if (eventId.isNotBlank() && (reportRequested || EventReports.reportId(this, eventId) != null)) submitReport()
+        if (audioRisk != null) showAudioRisk() else if (co) ketQuaXau(Muc.NGUY_HIEM, "", listOf("${x.Ban} cho biết người gọi bảo chuyển tiền")) else on()
     }
 
     // ---------- A04c: kể lại bằng giọng nói ----------
@@ -361,7 +505,7 @@ class HoiSauCuocGoiActivity : Activity() {
         v<TextView>(R.id.kqMuc).apply { text = muc.ten; setTextColor(getColor(if (nguyHiem) R.color.danger else R.color.warn)) }
         v<TextView>(R.id.kqLoi).text = giaiThich.ifBlank { if (nguyHiem) "${x.Ban} đừng chuyển tiền nhé." else "${x.Ban} khoan chuyển tiền, hỏi $ten trước đã." }
         val bangChung = buildList {
-            if (soNguoiBao > 0) add("$soNguoiBao người đã báo số này" + if (nhan.isNotBlank()) " $nhan" else "")
+            if (soNguoiBao > 0) add("Cuộc gọi hiển thị số này đã bị báo cáo từ $soNguoiBao máy.")
             add("Số chưa quen với máy này")
             addAll(bangChungThem)
         }
@@ -377,6 +521,11 @@ class HoiSauCuocGoiActivity : Activity() {
             setOnClickListener { if (soNt.isBlank()) startActivity(Intent(this@HoiSauCuocGoiActivity, MainActivity::class.java).putExtra("route", "#/nguoi-than/them")) else goiDien(soNt) }
         }
         val chuaBao = if (soNt.isBlank()) "Chưa có số của $ten. Bấm nút dưới để thêm." else "${x.Ban} bấm nút dưới để gọi $ten ngay."
+        if (reportRequested && eventId.isNotBlank() && audioRisk != null) {
+            tt.text = "Tóm tắt cuộc gọi cho $ten"
+            phu.text = "Bé Nai gửi tóm tắt cùng báo cáo để $ten xem giúp bà ạ."
+            return
+        }
         if (!nguyHiem) {
             tt.text = "Hỏi $ten cho chắc"
             phu.text = chuaBao
@@ -444,7 +593,7 @@ class HoiSauCuocGoiActivity : Activity() {
         v<TextView>(R.id.kqLoi).text = "Nếu họ gọi lại đòi tiền, ${x.ban} cứ cúp máy nha."
         v<View>(R.id.kqNguoiThan).visibility = View.GONE
         if (soNguoiBao > 0) {
-            v<TextView>(R.id.kqBangChung).text = "Số này vẫn bị $soNguoiBao người báo. Lá chắn sẽ nhắc nếu ${x.ban} mở ứng dụng ngân hàng."
+            v<TextView>(R.id.kqBangChung).text = "Cuộc gọi hiển thị số này đã bị báo cáo từ $soNguoiBao máy. Lá chắn sẽ nhắc nếu ${x.ban} mở ứng dụng ngân hàng."
         } else {
             v<TextView>(R.id.kqBangChung).visibility = View.GONE
             RuiRo.dong(this)

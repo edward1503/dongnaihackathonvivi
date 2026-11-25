@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { APP, Art, Bar, Btn, Circle, Group, I, Logo, Progress, Row, Screen, Speak, StateView, Switch, Tag } from '../ui.jsx'
 import { LAYERS, useLayers } from '../../lib/layers.js'
+import { memberRole, saveTeam } from '../../lib/api.js'
 import { native } from '../../lib/native.js'
 import { useApp } from '../../lib/state.jsx'
 import bieuTrung from '../art/bieu-trung-dong-nai.webp'
@@ -11,7 +12,7 @@ export const WARDS = ['Trấn Biên', 'Biên Hòa', 'Tam Hiệp', 'Long Bình', 
 export const ROLES = [
   { mode: 'simple', icon: 'user', title: 'Người lớn tuổi', sub: 'Chữ to, đọc to, hỏi con cháu một chạm' },
   { mode: 'full', icon: 'grad', title: 'Học sinh', sub: 'Kiểm tra tin nhắn, học qua truyện 1 phút' },
-  { mode: 'volunteer', icon: 'mega', title: 'Đội tình nguyện', sub: 'Duyệt báo cáo, cảnh báo khu phố' },
+  { mode: 'volunteer', icon: 'mega', title: 'Đăng nhập đội', sub: 'Xem thống kê và xét hồ sơ của khu phố' },
 ]
 
 // ---------- 00 Màn chào ----------
@@ -44,8 +45,9 @@ export function RolePick() {
   const nav = useNavigate()
   const { mode, setMode, onboarded } = useApp()
   const pick = (m) => {
+    if (m !== 'volunteer') saveTeam(null)
     setMode(m)
-    nav(onboarded ? (m === 'volunteer' ? '/ma-doi' : '/') : '/rieng-tu', { replace: onboarded })
+    nav(m === 'volunteer' ? '/ma-doi' : onboarded ? '/' : '/rieng-tu', { replace: onboarded })
   }
   return (
     <Screen name="0-chon-vai" bar={onboarded ? <Bar title="Đổi vai" /> : null}>
@@ -125,10 +127,19 @@ export function WardPick() {
   )
 }
 
+const demos = [
+  ['ring', 'phonein', 'Số lạ gọi đến', 'Xem thẻ cảnh báo lúc điện thoại đổ chuông.'],
+  ['ringKnown', 'phone', 'Số quen gọi đến', 'Xem thẻ cuộc gọi từ một số đã lưu.'],
+  ['afterCall', 'mic', 'Bé Nai hỏi thăm', 'Nghe Bé Nai hỏi sau khi cúp máy.'],
+  ['stop', 'shield', 'Dừng lại', 'Xem lời nhắc trước khi chuyển tiền.'],
+  ['message', 'msg', 'Tin nhắn lạ', 'Xem Lá chắn cảnh báo khi có tin nhắn đáng ngờ.'],
+  ['bankWatch', 'cardi', 'Mở ứng dụng ngân hàng', 'Thử lời nhắc khi mở ngân hàng sau cuộc gọi lạ.'],
+]
+
 // ---------- 0d Cá nhân ----------
 export function Profile() {
   const nav = useNavigate()
-  const { persona, relatives, ward, points } = useApp()
+  const { persona, relatives, ward, points, team, toast } = useApp()
   const { on, asleep } = useLayers()
   const [auto, setAuto] = useState(() => localStorage.getItem('lcs.autoSpeak') !== '0')
   const [voice, setVoice] = useState(() => localStorage.getItem('lcs.voiceAsk') !== '0')
@@ -138,12 +149,13 @@ export function Profile() {
     <Screen name="0d-ca-nhan" nav="/ca-nhan">
       <div className="row jb" style={{ paddingTop: 10 }}>
         <div className="h-xl">Cá nhân</div>
-        {persona === 'student' && <Tag kind="new" icon="award">{points} điểm</Tag>}
+        {persona === 'student' && Number.isFinite(points) && <Tag kind="new" icon="award">{points} điểm</Tag>}
       </div>
       <Group>
-        <Row icon="users" title="Người thân" value={relatives[0]?.name || 'Chưa có'} onClick={() => nav('/nguoi-than')} />
-        <Row icon="pin" title="Phường" value={ward} onClick={() => nav('/phuong')} />
-        <Row icon="swap" title="Vai trò" value={role?.title} onClick={() => nav('/vai')} />
+        {persona === 'volunteer' && team && <Row icon="user" title={team.member.name} sub={memberRole(team.member)} />}
+        {persona !== 'volunteer' && <Row icon="users" title="Người thân" value={relatives[0]?.name || 'Chưa có'} onClick={() => nav('/nguoi-than')} />}
+        <Row icon="pin" title="Phường" value={persona === 'volunteer' ? team?.member.ward : ward} onClick={persona === 'volunteer' ? undefined : () => nav('/phuong')} />
+        <Row icon="swap" title="Đổi vai" value={persona === 'volunteer' ? undefined : role?.title} onClick={() => nav('/vai')} />
       </Group>
       {persona !== 'volunteer' && (
         <Group>
@@ -152,6 +164,12 @@ export function Profile() {
           <Row icon="mic" title="Hỏi bằng giọng nói" right={<Switch on={voice} onChange={toggle('lcs.voiceAsk', setVoice)} label="Hỏi bằng giọng nói" />} />
         </Group>
       )}
+      {persona === 'volunteer' && <Btn kind="o" onClick={() => { saveTeam(null); nav('/ma-doi', { replace: true }) }}>Đăng xuất đội</Btn>}
+      {persona !== 'volunteer' && native.available() && <>
+        <h2 className="sec">Thử Lá chắn</h2>
+        <Group>{demos.map(([key, icon, title, sub]) => <Row key={key} icon={icon} title={title} sub={sub}
+          onClick={() => window.LCSNative.demo ? window.LCSNative.demo(key) : toast('Bạn cập nhật app để thử màn này nhé.')} />)}</Group>
+      </>}
       <Group>
         <Row icon="vol" title="Tự đọc to" right={<Switch on={auto} onChange={toggle('lcs.autoSpeak', setAuto)} label="Tự đọc to" />} />
         <Row icon="lock" title="Quyền riêng tư" onClick={() => nav('/rieng-tu')} />

@@ -58,7 +58,7 @@ function PersonHome({ student }) {
 
   return (
     <Screen name={asleep ? 'E01a-la-chan-dang-ngu' : student ? 'B1-trang-chu-hoc-sinh' : 'A1-trang-chu-lon-tuoi'} nav="/">
-      <TopRow right={<button type="button" className="pill tap" onClick={() => nav('/bao-cao')}><I n="flag" z={20} />Báo cáo</button>} />
+      <TopRow right={<button type="button" className="pill report-entry tap" onClick={() => nav('/bao-cao')}><I n="flag" z={20} /> {student ? 'Báo cáo' : 'Báo cuộc vừa nhận'}</button>} />
       {!asleep && (
         <button type="button" className="row g8 tap" style={{ padding: '0 6px' }} onClick={() => nav('/thiet-lap')}>
           <I n="shieldok" z={20} c="safe" /><span className="t-sub c-ink" style={{ fontWeight: 600 }}>Lá chắn đang bật · {on}/3 lớp</span>
@@ -72,7 +72,7 @@ function PersonHome({ student }) {
       <Group>
         {alert && (
           <Row tall lead={<Circle z={52} bg="pri-t" c="pri" icon="pin" />} title={`Cảnh báo ${ward}`} sub={`Mới: ${alert.label.toLowerCase()}`}
-            onClick={() => nav('/kieu-moi')} chev={false} />
+            onClick={() => nav('/canh-bao-khu-pho')} chev={false} />
         )}
         {recent.slice(0, 4).map((x) => {
           const [icon, c, label] = LV[x.level] || LV.unknown

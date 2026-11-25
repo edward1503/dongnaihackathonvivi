@@ -18,10 +18,13 @@
   const bridge = {
     listen: () => request('startListen'),
     analyzeRecording: phone => request('startAnalyzeRecording', phone),
+    recentEvents: () => request('startRecentEvents'),
+    reportEvent: (eventId, story) => request('startReportEvent', eventId, story ?? ''),
+    withdrawReport: reportId => request('startWithdrawReport', reportId),
     recentCalls: () => request('startRecentCalls'),
   }
   for (const name of ['speak', 'stopSpeaking', 'call', 'blockNumber', 'endCall', 'dismissStop',
-    'layers', 'enableLayer', 'setVoiceAsk', 'openStory', 'weekStats', 'saveRelative', 'openAdvanced']) {
+    'deviceId', 'demo', 'openCall', 'layers', 'enableLayer', 'setVoiceAsk', 'openStory', 'weekStats', 'saveRelative', 'openAdvanced']) {
     bridge[name] = (...args) => android[name](...args)
   }
   window.LCSNative = bridge

@@ -1,52 +1,47 @@
 # Hợp đồng dữ liệu giữa app Android và máy chủ
 
-App Android dùng **hợp đồng chung của đội**: máy chủ FastAPI ở [`../server/`](../server/README.md) (mảng 2), đường dẫn và tên trường bằng tiếng Anh, kết quả phân tích luôn có dạng `AnalysisResult` ([`../KE-HOACH-MANG-2-3.md`](../KE-HOACH-MANG-2-3.md) mục 2).
+Các trường và quy tắc báo cáo theo mục 3–5 của [Vai, tính năng và kiểm duyệt báo cáo](../VAI-VA-KIEM-DUYET.md). `ReceiptRules.kt` chuẩn hóa và ký. `ReceivedEvents.kt` đối chiếu nguồn nhận. `EventReports.kt` nối sự kiện với bản phân tích, báo cáo và cảnh báo gia đình.
 
-Trong app, tệp [`Api.kt`](app/src/main/java/vn/doi18/lachanso/Api.kt) là chỗ duy nhất biết tên trên đường truyền; phần còn lại dùng kiểu dữ liệu riêng (`Muc`, `KetQuaSo`, `KetQuaAI`). Đổi hợp đồng thì sửa `Api.kt`, `ApiTest.kt` và `may-chu-gia.py`.
+## Máy nhận và biên nhận
 
-Quy ước của phía app:
-
-- Địa chỉ gốc nhập trong app, ô "Máy chủ của đội". Để trống thì app chỉ dùng dữ liệu trên máy.
-- Mọi lời gọi đều có đường dự phòng: lỗi mạng, quá giờ hay trả lời thiếu `level` thì app tự xử lý trên máy và không báo sai là đã gửi.
-- Số điện thoại gửi đi đã chuẩn hóa (chỉ chữ số, đầu `0`) và chỉ gửi ở ba chỗ cần: tra số, báo người thân, đối tượng của một báo cáo.
-- Trước khi gửi nội dung tin nhắn hay lời kể, app thay mọi dãy từ 4 chữ số bằng `•••`. Tin có mã xác thực không bao giờ rời máy.
-- **Kết quả của máy chủ không được làm nhẹ đi cảnh báo app đã tự thấy trên máy.** Bộ lọc trên máy báo nghi ngờ mà AI trả `unknown` thì app giữ kết quả trên máy.
-
-## Đổi mức
-
-| `level` của máy chủ | Mức trong app |
+| Thao tác | Dữ liệu |
 |---|---|
-| `danger` | Nguy hiểm |
-| `suspicious` | Nghi ngờ |
-| `safe` | An toàn (máy chủ chỉ trả khi khớp danh bạ tổng đài) |
-| `unknown`, thiếu, giá trị lạ | Chưa có dữ liệu. App không bao giờ suy ra "an toàn" |
+| Đăng ký | `POST /api/devices {}` cấp `deviceId` và `deviceSecret`. Android lưu trong SharedPreferences riêng tư cho địa chỉ máy chủ đã chọn. Chỉ mã máy đi qua cầu React. |
+| Gọi API | Android gửi `X-LCS-Device: <deviceId>` khi phân tích, báo cáo, rút báo cáo và tạo cảnh báo. Lỗi máy chủ có trường `detail`. |
+| Cuộc gọi | Đọc `CallLog.Calls`, lấy cuộc đến đã hiển thị số và có thời lượng dương. Ngày là thời điểm bắt đầu do nhật ký ghi, thời lượng tính bằng giây. |
+| SMS | Dùng thông báo đến của ứng dụng SMS. Android trích đối tượng từ tin gốc trước khi che, giữ tối đa 100 tin đáng ngờ trong danh sách. Các ứng dụng trò chuyện khác vẫn có cảnh báo an toàn riêng. |
+| Thời gian | `recentEvents` xét 7 ngày, mới nhất trước. `eventId` là SHA-256 hex của UTF-8 `type\|numberOrSender\|timestampMillis`. Trên đường truyền, `at` dùng UTC tới giây, ví dụ `2026-11-25T04:05:06Z`. |
 
-## Các lời gọi
+Chuỗi ký gồm các trường sau, nối bằng dấu gạch đứng, không thêm khoảng trắng hay xuống dòng.
 
-| Việc | Lời gọi | App gửi | App đọc | Chờ tối đa |
-|---|---|---|---|---|
-| Tra số lúc đổ chuông (N1) | `GET /api/lookup/phone/{số}` | số trong đường dẫn | `level`, `scamLabel`, `reports.count`, `reports.lastWhen` | 1,5 giây |
-| Phân tích tin nhắn (N4) | `POST /api/analyze/message` | `{"text"}` đã che số | `level`, `scamLabel`, `scamType`, `todo[]`, `headline`, `signs[].text` | 8 giây |
-| Phân tích bản ghi âm (N2) | `POST /api/analyze/call`, multipart | `audio` (tệp gốc, gửi kiểu chunked), `unknownNumber`; **không gửi số** | như trên, thêm `why[]`, `maskedText` (mỗi dòng "Người nói: lời"), `source` | 60 giây |
-| Phân tích lời kể lại | `POST /api/analyze/call`, multipart | `transcript` đã che số | `level`, `scamLabel`, `todo[]`, `signs[].text` | 8 giây |
-| Báo người thân (N3) | `POST /api/alerts` | `{"room", "from": "android", "level", "phone", "callSeconds", "summary"}` | `id` | 4 giây |
-| Báo cáo cho cộng đồng | `POST /api/reports` | `{"kind": "message", "target", "story"}` | `report.id` | 8 giây |
+```text
+eventId|deviceId|type|incoming|targetKey|at|durationSec
+```
 
-Ghi chú từng dòng:
+Khóa HMAC là các byte UTF-8 của nguyên chuỗi `deviceSecret`. Kết quả HMAC-SHA256 viết hex thường. SMS để trống trường thời lượng và giữ dấu gạch đứng cuối. Khóa đối tượng theo `server/lcs/text.py`, gồm số đã chuẩn hóa hoặc tên miền. Với miền rút gọn trong danh sách máy chủ, giữ cả đường dẫn, bỏ truy vấn và phần sau dấu thăng.
 
-- **Tra số.** `scamLabel` nối sau câu "14 người đã báo số này …" nên app đổi chữ đầu thành chữ thường. Máy chủ trả `unknown` mà máy đang có nhãn nhẹ của cộng đồng cho số đó (màn A03b, ví dụ "giao hàng") thì app hiện nhãn nhẹ.
-- **Bản ghi âm.** Máy chủ ở chế độ trình diễn (`LCS_DEMO_FALLBACK=1`) trả một bản chép lời mẫu khi không chép lời được, kèm `source: "fallback"`. Với cuộc gọi thật thì kết quả đó là giả, nên app bỏ, coi như chưa phân tích được và chuyển sang hỏi một câu. `why[]` chỉ dùng cho bản ghi âm.
-- **Báo người thân.** Chỉ khi máy chủ trả về cảnh báo có `id` app mới hiện và đọc "Đã báo cho Minh". Lời báo từ nút giả lập có `summary` bắt đầu bằng `[Thử]`. `summary` đã che mọi dãy từ 4 chữ số. `room` đang là phòng mẫu `gia-dinh-hoa`.
-- **Báo cáo.** `target` là số gửi tin; không có thì đường dẫn đầu tiên trong tin; không có nữa thì tên người gửi. `story` là nội dung tin đã che số. Kiểu lừa đảo do máy chủ tự phân loại lại.
+## Từ sự kiện đến báo cáo
 
-## Còn thiếu, cần chốt với mảng 2
+- **Tra cứu** gọi `GET /api/lookup/phone/{số}`. Phản hồi có mức cộng đồng và số máy đóng góp. App hiển thị `unknown` là “Chưa rõ”.
+- **Phân tích tin và lời kể** gọi `POST /api/analyze/message` với `text`, hoặc multipart `POST /api/analyze/call` với `transcript`. Máy che các dãy số riêng tư trước khi gửi và bỏ qua tin có mã xác thực.
+- **Phân tích bản ghi** dùng multipart `POST /api/analyze/call` với `audio, unknownNumber, eventId, type, direction, at, durationSec, targetKey, receipt`. Ở bước này, `targetKey` là SHA-256 hex của khóa chuẩn hóa. Biên nhận ký chính giá trị băm ấy. App dùng tệp do trình gọi điện lưu mà `GhiAm.timMoi` đối chiếu được cho cuộc gọi. App dùng nhãn nội dung `aiLevel, aiScamType, aiConfidence` và giữ `analysisId` theo sự kiện khi máy chủ phân tích được âm thanh thật.
+- **Báo cáo** gọi `POST /api/reports` với `kind, target, relation="self", eventId, receipt, evidence` và lời kể đã che nếu có. Android tra lại sự kiện trên máy trước khi ký trên khóa đối tượng chuẩn hóa. `evidence` có `type, direction, at`, thêm `durationSec` cho cuộc gọi và `recording` khi đã phân tích. Trả lời câu hỏi của Bé Nai gửi `selfAnswer` bằng `yes, no, known` và `selfAnswerSignature` ký `eventId|selfAnswer`. Máy chủ quyết định kết quả. Cùng sự kiện dùng lại mã báo cáo đã cấp.
+- **Báo người thân** gọi `POST /api/alerts`. Cảnh báo dùng để xác nhận có `eventId, reportId, analysisId, summary` đã che, dùng phòng ghép sẵn `gia-dinh-hoa`. Android giữ `id` trả về làm `alertId`. Cảnh báo gia đình thông thường vẫn có thể gửi độc lập. Máy chủ đối chiếu câu trả lời của Minh với đúng báo cáo.
+- **Rút báo cáo** gọi `POST /api/reports/{id}/withdraw` với `at, signature`. Android ký `withdraw|reportId|deviceId|at`. Báo cáo và lần rút trả `report, case, message`. Màn gốc hiện thông báo và đọc khi bật giọng.
+- **Trình diễn** dùng `DemoActions` của màn Cài đặt nâng cao. Chỉ nhận biên nhận từ nhật ký cuộc gọi hoặc thông báo SMS thật của máy. Máy chủ giả Android chỉ phục vụ các màn thử.
 
-- **Chống gửi trùng cảnh báo.** `POST /api/alerts` chưa nhận mã sự kiện, nên gửi hai lần là người thân nhận hai cảnh báo. App đang tự nhớ cuộc gọi nào đã báo trong lúc còn chạy.
-- **Ghép đôi.** Chưa có mã ghép giữa máy bà và máy người thân, mọi máy dùng chung phòng mẫu.
-- **Chiều ngược lại.** App Android chưa nghe sự kiện (`/ws`, `GET /api/events`), nên lời nhắn của Minh chưa hiện trên lớp gốc; phần này đang nằm ở app React (màn A08c).
-- **Số trong đường dẫn tra số.** Máy chủ không được ghi số người gọi vào nhật ký truy cập.
-- **Định dạng bản ghi.** Máy ghi âm của điện thoại có thể ra `m4a` hoặc `amr`; máy chủ ghi là nhận mp3, wav, aac, ogg, flac.
-- **Mã kiểu lừa đảo.** Máy chủ có 7 mã gạch dưới (`gia_danh_cong_an`…), bài học có 10 mã gạch ngang (`gia-danh-co-quan`…). Trang bài học nhận cả hai qua bảng bí danh; nên chốt một danh sách.
+## Cầu window.LCSNative
+
+| Hàm | Kết quả |
+|---|---|
+| `deviceId()` | Chuỗi mã máy, rỗng khi chưa đăng ký được |
+| `recentEvents()` | Promise trả mảng `eventId, type, target, display, at, hasRecording` cùng các trường hiện có `durationSec, analysisId, reportId, reportStatus` |
+| `reportEvent(eventId, story?)` | Promise trả `{report, case, message}` hoặc `{detail}`. Android chỉ dùng đối tượng đã đối chiếu cho sự kiện. |
+| `withdrawReport(reportId)` | Promise trả phản hồi rút báo cáo từ máy chủ hoặc `{detail}` |
+| `demo(key)` | Mở `ring, ringKnown, afterCall, stop, message, bankWatch` |
+| `openCall(scene)` | Mở `minh-1, minh-3, lan-2, tu-9` trong GoiVideoActivity |
+
+`reportStatus` phản ánh lần trả lời gần nhất mà Android nhận cho báo cáo. Máy chủ tiếp tục xử lý lời xác nhận của Minh khi máy bà ngoại tuyến.
 
 ## Cuộc gọi video (mảng 4)
 

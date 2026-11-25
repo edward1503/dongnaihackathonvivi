@@ -60,5 +60,8 @@
             </LinearLayout>
             <Button android:id="@+id/nutDong" style="@style/Nut.Vien" android:layout_marginTop="16dp" android:text="Đóng" />
         </LinearLayout>
+        <TextView android:id="@+id/reportMessage" style="@style/Chu" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:accessibilityLiveRegion="polite" android:visibility="gone" />
+        <Button android:id="@+id/reportCall" style="@style/Nut.Chinh" android:layout_marginTop="12dp" android:text="Báo cuộc vừa nhận" android:visibility="gone" />
+        <Button android:id="@+id/withdrawReport" style="@style/Nut.Vien" android:layout_marginTop="8dp" android:text="Rút báo cáo" android:visibility="gone" />
     </LinearLayout>
 </ScrollView>

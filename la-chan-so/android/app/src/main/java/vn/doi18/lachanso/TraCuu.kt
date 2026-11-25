@@ -14,7 +14,7 @@ enum class Muc(val ma: String, val ten: String) {
     NGUY_HIEM("nguy-hiem", "Nguy hiểm"),
     NGHI_NGO("nghi-ngo", "Nghi ngờ"),
     AN_TOAN("an-toan", "An toàn"),
-    CHUA_CO_DU_LIEU("chua-co-du-lieu", "Chưa có dữ liệu");
+    CHUA_CO_DU_LIEU("chua-co-du-lieu", "Chưa rõ");
 
     companion object {
         fun tu(ma: String?) = entries.firstOrNull { it.ma == ma } ?: CHUA_CO_DU_LIEU
@@ -37,7 +37,10 @@ object MayChu {
     private fun mo(c: Context, duong: String, choMs: Int): HttpURLConnection? {
         val goc = CaiDat.mayChu(c)
         if (goc.isBlank()) return null
+        val needsDevice = duong.startsWith("/api/analyze/") || duong.startsWith("/api/reports") || duong == "/api/alerts"
+        val device = if (needsDevice) DeviceRegistration.get(c) ?: return null else null
         return (URL(goc + duong).openConnection() as HttpURLConnection).apply {
+            device?.let { setRequestProperty("X-LCS-Device", it.id) }
             connectTimeout = choMs
             readTimeout = choMs
             setRequestProperty("Accept", "application/json")
@@ -45,7 +48,10 @@ object MayChu {
     }
 
     private fun doc(k: HttpURLConnection, onResponse: ((Int) -> Unit)? = null): JSONObject? = try {
-        if (k.responseCode !in 200..299) null
+        if (k.responseCode !in 200..299) {
+            val detail = k.errorStream?.bufferedReader()?.use { JSONObject(it.readText()).optString("detail") }
+            detail?.let { JSONObject().put("detail", it) }
+        }
         else if (onResponse == null) JSONObject(k.inputStream.bufferedReader().readText())
         else {
             val body = k.inputStream.use { it.readBytes() }
@@ -126,10 +132,8 @@ object MayChu {
 object TraCuu {
     /** Dữ liệu giả lập, trùng với prototype/mock-data.js. Dùng khi chưa có máy chủ hoặc mất mạng. */
     private val SO_BI_BAO = mapOf(
-        "0912345678" to KetQuaSo(Muc.NGUY_HIEM, 14, "giả danh công an", "hôm qua"),
-        "02899991234" to KetQuaSo(Muc.NGUY_HIEM, 9, "giả danh ngân hàng", "3 ngày trước"),
-        "0934567890" to KetQuaSo(Muc.NGUY_HIEM, 6, "tuyển cộng tác viên, đòi nạp tiền", "tuần này"),
-        "0987111222" to KetQuaSo(Muc.NGUY_HIEM, 5, "báo trúng thưởng", "tuần này"),
+        "0912345678" to KetQuaSo(Muc.NGUY_HIEM, 14, "đã bị báo cáo"),
+        "02899991234" to KetQuaSo(Muc.NGUY_HIEM, 7, "đã bị báo cáo"),
     )
     /** Nhãn nhẹ do cộng đồng gắn, không phải cảnh báo (màn A03b). */
     private val NHAN_NHE = mapOf(
@@ -155,7 +159,7 @@ object TraCuu {
     fun tra(c: Context, so: String): KetQuaSo {
         val s = chuanHoa(so)
         if (s.isBlank()) return KetQuaSo(Muc.CHUA_CO_DU_LIEU)
-        if (s == chuanHoa(CaiDat.soThu(c))) return KetQuaSo(Muc.NGUY_HIEM, 14, "giả danh công an (số thử)", "hôm qua")
+        if (CaiDat.trinhDien(c) && s == chuanHoa(CaiDat.soThu(c))) return KetQuaSo(Muc.NGUY_HIEM, nhan = "cuộc gọi thử")
         Api.lookupPhone(c, s)?.let { kq ->
             // Máy chủ chưa có báo cáo nào về số này: vẫn cho hiện nhãn nhẹ của cộng đồng nếu máy đang có (màn A03b).
             return if (kq.muc == Muc.CHUA_CO_DU_LIEU) NHAN_NHE[s] ?: kq else kq
@@ -227,10 +231,11 @@ data class CuocGoiCuoi(val so: String, val giay: Long, val den: Boolean, val luc
  * Chỉ xét dòng bắt đầu trong vòng [saiSo] quanh [tu] (1,5 giây khi [tu] là mốc chính xác của dịch vụ sàng lọc) và lấy dòng gần [tu] nhất: gọi đi, hủy rồi gọi lại ngay thì
  * dòng 0 giây của lần trước không bị lấy nhầm. Chưa phân biệt được hai SIM.
  */
-fun cuocGoiCuaPhien(c: Context, so: String, tu: Long, den: Boolean, saiSo: Long = 6000): CuocGoiCuoi? = try {
+fun cuocGoiCuaPhien(c: Context, so: String, tu: Long, den: Boolean, saiSo: Long = 6000, requireUnique: Boolean = false): CuocGoiCuoi? = try {
     val s = TraCuu.chuanHoa(so)
     val loaiCan = if (den) CallLog.Calls.INCOMING_TYPE else CallLog.Calls.OUTGOING_TYPE   // bỏ cuộc nhỡ, bị từ chối, bị chặn
     var tot: CuocGoiCuoi? = null
+    var candidates = 0
     c.contentResolver.query(
         CallLog.Calls.CONTENT_URI,
         arrayOf(CallLog.Calls.NUMBER, CallLog.Calls.DURATION, CallLog.Calls.TYPE, CallLog.Calls.DATE),
@@ -240,11 +245,12 @@ fun cuocGoiCuaPhien(c: Context, so: String, tu: Long, den: Boolean, saiSo: Long 
         while (k.moveToNext()) {
             val soDong = k.getString(0).orEmpty()
             if (s.isNotBlank() && TraCuu.chuanHoa(soDong) != s) continue
+            candidates++
             val dong = CuocGoiCuoi(soDong, k.getLong(1), den, k.getLong(3))
             if (tot == null || kotlin.math.abs(dong.luc - tu) < kotlin.math.abs(tot!!.luc - tu)) tot = dong
         }
     }
-    tot
+    tot.takeIf { !requireUnique || candidates == 1 }
 } catch (e: Exception) {
     null
 }

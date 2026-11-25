@@ -4,6 +4,7 @@ Cần: máy chủ đang chạy và phục vụ bản build (python server/chay-d
 Chạy:  python app/tools/chup-man.py [thư-mục-ảnh] [địa-chỉ]
 Máy Minh: dùng trang Zalo của Mảng 5 (/zalo) nếu máy chủ có, không thì gọi thẳng API trả lời.
 """
+from http.cookiejar import CookieJar
 import json
 import os
 import sys
@@ -22,15 +23,16 @@ OUT = Path(sys.argv[1] if len(sys.argv) > 1 else "chup")
 BASE = (sys.argv[2] if len(sys.argv) > 2 else "http://127.0.0.1:8000").rstrip("/")
 OUT.mkdir(parents=True, exist_ok=True)
 errors: list[str] = []
+family = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(CookieJar()))
 
 
 def post(path, body=None):
     req = urllib.request.Request(BASE + path, data=json.dumps(body or {}).encode(), method="POST", headers={"Content-Type": "application/json"})
-    return json.loads(urllib.request.urlopen(req, timeout=10).read())
+    return json.loads(family.open(req, timeout=10).read())
 
 
 def get(path):
-    return json.loads(urllib.request.urlopen(BASE + path, timeout=10).read())
+    return json.loads(family.open(BASE + path, timeout=10).read())
 
 
 opts = Options()
@@ -84,6 +86,7 @@ def text_of_phone():
     return d.find_element(By.CSS_SELECTOR, ".phone").text
 
 
+family.open(BASE + "/zalo", timeout=10).close()
 post("/api/demo/reset")
 d.get(BASE + "/")
 d.execute_script("localStorage.clear()")
@@ -219,14 +222,11 @@ if "Ứng dụng nhắn tin" not in text_of_phone():
     errors.append("B3 mở từ thông báo mà không ghi nguồn 'Ứng dụng nhắn tin'")
 click("Báo cáo")
 screen("B4-bao-cao")
-click("Gửi báo cáo")
-screen("B4b-da-gui")
-hash_("/bao-cao")
-screen("B4-bao-cao", "B4-trong")
-d.execute_script("document.querySelector('.phone input.field').value=''")
+if "Báo cáo cần app Lá chắn số" not in text_of_phone() or d.find_elements(By.CSS_SELECTOR, ".phone input, .phone textarea"):
+    errors.append("B4 trên trình duyệt phải hướng dẫn báo trên máy Android")
 hash_("/bai-hoc")
 screen("B5-bai-hoc")
-click("Việc nhẹ lương cao")
+d.find_element(By.XPATH, "//button[.//*[text()='Việc nhẹ lương cao'] and .//*[text()='Bài học 1 phút']]").click()
 screen("B6-bai-hoc-the-1")
 click("Xem dấu hiệu")
 screen("B6-bai-hoc-the-2")
@@ -245,26 +245,36 @@ if "5/5" not in text_of_phone():
 # ---------- Đội tình nguyện: mã đội -> thống kê -> duyệt -> chia sẻ ----------
 d.get(BASE + "/?mode=volunteer#/ma-doi")
 screen("C0-ma-doi")
-key_in("482915")
-click("Vào")
+def login(code):
+    field = d.find_element(By.CSS_SELECTOR, ".phone input[type=password]")
+    field.clear()
+    field.send_keys(code)
+    click("Đăng nhập")
+
+
+login("invalid")
 screen("C0b-ma-doi-sai")
-key_in("")
-for _ in range(6):
-    d.find_element(By.CSS_SELECTOR, '.key[aria-label="Xóa"]').click()
-key_in("246810")
-click("Vào")
+login(os.environ.get("LCS_TEST_VOLUNTEER_CODE", "246810"))
 screen("C1-trang-chu-tinh-nguyen")
 click("Điểm nóng theo khu phố")
 screen("C2-thong-ke")
 hash_("/kieu-moi")
 screen("C3-kieu-moi")
-before = get("/api/stats")["needsReview"]
 hash_("/duyet")
 screen("C4-duyet-bao-cao")
-click("Xác nhận")
-time.sleep(1.2)
-if get("/api/stats")["needsReview"] != before - 1:
-    errors.append("C4 bấm Xác nhận mà máy chủ không giảm số chờ duyệt")
+card = wait.until(EC.presence_of_element_located((By.XPATH, "//article[.//textarea]")))
+target = card.find_element(By.TAG_NAME, "h2").text
+card.find_element(By.TAG_NAME, "textarea").send_keys("Đã xem tóm tắt và đối chiếu bằng chứng.")
+card.find_element(By.XPATH, ".//button[normalize-space(.)='Xác nhận']").click()
+wait.until(lambda driver: "Phiếu của bạn" in text_of_phone() or
+           all(row.text != target for row in driver.find_elements(By.CSS_SELECTOR, "article h2")))
+hash_("/chia-se")
+screen("C4-duyet-bao-cao", "C4-thanh-vien")
+hash_("/ca-nhan")
+click("Đăng xuất đội")
+screen("C0-ma-doi")
+login(os.environ.get("LCS_TEST_LEAD_CODE", "999111"))
+screen("C1-trang-chu-tinh-nguyen")
 hash_("/chia-se")
 screen("C5-chia-se-canh-bao")
 click("Gửi cảnh báo")

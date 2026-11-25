@@ -88,7 +88,14 @@ object PhienGoi {
         if (trangThai == RANH) datLai()
         datSo(soMoi)
         den = laDen
-        if (taoLuc > 0) { batDauLuc = taoLuc; mocChinhXac = true }
+        if (taoLuc > 0) {
+            val pending = c.getSharedPreferences("ring-report", Context.MODE_PRIVATE)
+            if (batDauLuc > 0 && pending.getLong("start", -1) == batDauLuc && laDen && pending.getString("number", "") == soMoi) {
+                pending.edit().putLong("start", taoLuc).apply()
+            }
+            batDauLuc = taoLuc
+            mocChinhXac = true
+        }
         if (batDauLuc == 0L) batDauLuc = System.currentTimeMillis()
         traSo(c)
     }
@@ -104,6 +111,7 @@ object PhienGoi {
                 datSo(soMoi.orEmpty())
                 if (daNghe && so.isNotBlank()) CaiDat.datPhienDangNghe(c, batDauLuc, so, den)   // số tới muộn: cập nhật phiên đã lưu
             }
+            if (moi == DO_CHUONG && batDauLuc == 0L) batDauLuc = System.currentTimeMillis()
             traSo(c)
         }
         // Tiến trình mới (máy đã tắt app giữa cuộc gọi) chỉ thấy lúc cúp máy, khi trạng thái trong bộ nhớ vẫn là "rảnh".
@@ -197,6 +205,7 @@ object PhienGoi {
      * hai lần (hai bản tin, hai SIM). Phiên đã lưu chỉ được xóa sau khi đã quyết định xong, để app bị tắt giữa chừng vẫn làm lại được.
      */
     private fun sauKhiCup(c: Context, soTam: String, batDau: Long, giayTam: Long, kqTam: KetQuaSo?, laDen: Boolean, khoiPhuc: Boolean = false, saiSo: Long = 6000) {
+        val endedAt = System.currentTimeMillis()
         synchronized(dangXuLy) {
             if (CaiDat.cuocDaXuLy(c) == batDau || !dangXuLy.add(batDau)) return
         }
@@ -206,7 +215,10 @@ object PhienGoi {
             try {
                 Thread.sleep(1500)   // chờ máy ghi xong nhật ký cuộc gọi
                 var cg = cuocGoiCuaPhien(c, soTam, batDau, laDen, saiSo)
-                if (cg == null && Quyen.co(c, android.Manifest.permission.READ_CALL_LOG)) {
+                val pending = c.getSharedPreferences("ring-report", Context.MODE_PRIVATE)
+                val requested = pending.getLong("start", -1) == batDau && laDen && pending.getString("number", "") == soTam
+                var attempts = if (requested) 8 else 1
+                while ((cg == null || requested && cg.giay == 0L) && attempts-- > 0 && Quyen.co(c, android.Manifest.permission.READ_CALL_LOG)) {
                     Thread.sleep(1500)   // có máy ghi nhật ký chậm
                     cg = cuocGoiCuaPhien(c, soTam, batDau, laDen, saiSo)
                 }
@@ -217,6 +229,10 @@ object PhienGoi {
                     NhatKy.ghi(c, "Không xác nhận được cuộc gọi đi đã kết nối, không hỏi gì")
                     return@nen
                 }
+                if (requested && (cg == null || cg.giay == 0L)) {
+                    ThongBao.canhBao(c, ThongBao.ID_DO_CHUONG, "Chưa gửi báo cáo",
+                        "Bé Nai chưa tìm thấy cuộc gọi đến đã nghe máy. Bà có thể xem lại ở mục Báo cáo nha.")
+                }
                 if (cg != null && cg.giay == 0L) {
                     NhatKy.ghi(c, "Cuộc gọi chưa kết nối, không hỏi gì")
                     return@nen
@@ -226,7 +242,11 @@ object PhienGoi {
                 val kq = kqTam ?: TraCuu.tra(c, soThat)
                 val quen = SoQuen.laQuen(c, soThat, batDau, biBao = kq.muc == Muc.NGUY_HIEM)
                 NhatKy.ghi(c, "Kết thúc cuộc gọi ${giay}s" + (if (quen) ", số quen" else ", số chưa quen"))
-                SauCuocGoi.xuLy(c, soThat, giay, kq, quen, batDau, laDen)
+                val matched = cg?.takeIf { it.den && soTam.isNotBlank() }?.let { row ->
+                    if (row.luc == batDau) row else cuocGoiCuaPhien(c, soTam, batDau, true, saiSo, requireUnique = true)
+                }
+                val event = matched?.let { ReceivedEvents.call(it.so, it.luc, it.giay) }
+                SauCuocGoi.xuLy(c, soThat, giay, kq, quen, batDau, laDen, event = event, requested = requested, endedAt = endedAt)
             } finally {
                 CaiDat.datCuocDaXuLy(c, batDau)
                 CaiDat.xoaPhienDangNghe(c, batDau)
@@ -239,29 +259,39 @@ object PhienGoi {
 /** Quyết định sau cuộc gọi: im lặng, hay hỏi một câu (N3), hay phân tích bản ghi âm (N2). */
 object SauCuocGoi {
     /** [thu]: gọi từ nút giả lập. Khi đó không đụng tới thư mục ghi âm thật, và lời báo người thân được đánh dấu là thử. */
-    fun xuLy(c: Context, so: String, giay: Long, kq: KetQuaSo, quen: Boolean, batDau: Long, den: Boolean, thu: Boolean = false) {
-        // Mặc định im lặng: số quen và tổng đài đã xác thực thì không hỏi gì.
-        if (quen || kq.muc == Muc.AN_TOAN) return
+    internal fun xuLy(c: Context, so: String, giay: Long, kq: KetQuaSo, quen: Boolean, batDau: Long, den: Boolean, thu: Boolean = false, event: ReceivedEvent? = null, requested: Boolean = false, endedAt: Long = System.currentTimeMillis()) {
         val biBao = kq.muc == Muc.NGUY_HIEM
-        // Cuộc gọi do chính chủ máy gọi đi chỉ hỏi khi số ấy đang bị báo.
-        if (!den && !biBao) return
-        val ngheLau = giay >= CaiDat.nguongGiay(c)
-        if (!biBao && !ngheLau) return
-        RuiRo.mo(c, so)
-        val banGhi = if (thu) null else GhiAm.timMoi(c, batDau, so)
+        val showScreen = requested || !quen && kq.muc != Muc.AN_TOAN && (den || biBao) && (biBao || giay >= CaiDat.nguongGiay(c))
+        if (showScreen) RuiRo.mo(c, so)
+        val banGhi = if (thu || !showScreen && event == null) null else GhiAm.timMoi(
+            c, batDau, so, earliestModified = event?.let { it.time + giay * 1000 - 999 },
+            latestModified = endedAt + 5000,
+        )
+        if (event != null && banGhi != null) ReceivedEvents.bindRecording(c, event, banGhi)
+        if (!showScreen) return
+        if (requested && event != null) Luong.nen {
+            val reply = EventReports.report(c, event.id)
+            val message = EventReports.message(reply)
+            ThongBao.canhBao(c, ThongBao.ID_DO_CHUONG, "Báo cuộc vừa nhận", message)
+            Luong.chinh {
+                c.sendBroadcast(Intent(EventReports.UPDATED).setPackage(c.packageName)
+                    .putExtra("eventId", event.id).putExtra("message", message))
+            }
+        }
         // D05: số lạ nghe lâu thì mỗi ngày hỏi tối đa một câu. Giới hạn chỉ áp cho CÂU HỎI: vẫn canh ứng dụng ngân hàng,
         // vẫn phân tích bản ghi nếu có. Số đang bị báo thì lần nào cũng hỏi. Lượt hỏi được ghi lúc câu hỏi thật sự hiện ra.
         val gio = System.currentTimeMillis()
         val mui = java.util.TimeZone.getDefault()
         fun ngay(t: Long) = (t + mui.getOffset(t)) / 86_400_000L
         val hetLuotHoi = !biBao && !thu && !CaiDat.trinhDien(c) && ngay(CaiDat.hoiGanNhat(c)) == ngay(gio)
-        if (hetLuotHoi && (banGhi == null || CaiDat.mayChu(c).isBlank())) {
+        if (!requested && hetLuotHoi && (banGhi == null || CaiDat.mayChu(c).isBlank())) {
             NhatKy.ghi(c, "Hôm nay đã hỏi một câu rồi: không hỏi nữa, vẫn canh ứng dụng ngân hàng")
             return
         }
         NhatKy.ghi(c, "Hỏi sau cuộc gọi" + (if (banGhi != null) ", có bản ghi âm của máy" else ", không thấy bản ghi âm"))
         val i = Intent(c, HoiSauCuocGoiActivity::class.java)
             .putExtra("so", so).putExtra("giay", giay).putExtra("den", den).putExtra("ma", batDau)
+            .putExtra("eventId", event?.id).putExtra("requested", requested && event != null)
             .putExtra("khongHoi", hetLuotHoi).putExtra("tinhLuotHoi", !biBao && !thu && !CaiDat.trinhDien(c)).putExtra("thu", thu)
             // Chỉ số lượt báo lừa đảo mới là bằng chứng. Nhãn cộng đồng kiểu "giao hàng" thì không.
             .putExtra("soNguoiBao", if (kq.muc == Muc.NGUY_HIEM || kq.muc == Muc.NGHI_NGO) kq.soNguoiBao else 0)
@@ -348,11 +378,8 @@ object TheCanhBao {
         go(c)
         val nguyHiem = kq.muc == Muc.NGUY_HIEM
         val tieuDe = if (nguyHiem) "Nghi lừa đảo" else "Cần cẩn thận"
-        val dong1 = when {
-            kq.soNguoiBao > 0 && kq.nhan.isNotBlank() -> "${kq.soNguoiBao} người đã báo số này ${kq.nhan}."
-            kq.soNguoiBao > 0 -> "${kq.soNguoiBao} người đã báo số này lừa đảo."
-            else -> "Số này có dấu hiệu đáng ngờ."
-        }
+        val dong1 = if (kq.soNguoiBao > 0) "Cuộc gọi hiển thị số này đã bị báo cáo từ ${kq.soNguoiBao} máy."
+            else "Bà cẩn thận khi nghe cuộc gọi này nha."
         val dong2 = if (kq.baoGanNhat.isNotBlank()) "Báo cáo gần nhất: ${kq.baoGanNhat}" else ""
         ThongBao.canhBao(c, ThongBao.ID_DO_CHUONG, "$tieuDe · ${TraCuu.dinhDang(so)}", "$dong1 $dong2".trim())
         NhatKy.ghi(c, "Cảnh báo khi đổ chuông: ${kq.muc.ten}, ${kq.soNguoiBao} người báo")
@@ -367,6 +394,18 @@ object TheCanhBao {
             v.findViewById<TextView>(R.id.noiDung).text = dong1
             v.findViewById<TextView>(R.id.phu).apply { text = dong2; visibility = if (dong2.isBlank()) View.GONE else View.VISIBLE }
             v.findViewById<View>(R.id.dong).setOnClickListener { go(c) }
+            val start = PhienGoi.batDauLuc
+            v.findViewById<android.widget.Button>(R.id.reportCall).apply {
+                visibility = if (!cuaPhien || PhienGoi.den) View.VISIBLE else View.GONE
+                isEnabled = cuaPhien && PhienGoi.den && start > 0
+                if (!cuaPhien) contentDescription = "Báo cuộc vừa nhận. Đây là cuộc gọi thử."
+                setOnClickListener {
+                    if (PhienGoi.batDauLuc != start || !PhienGoi.den || PhienGoi.so != so) return@setOnClickListener
+                    c.getSharedPreferences("ring-report", Context.MODE_PRIVATE).edit().putLong("start", start).putString("number", so).apply()
+                    isEnabled = false
+                    text = "Bé Nai sẽ đối chiếu khi bà cúp máy"
+                }
+            }
             v.findViewById<View>(R.id.chan).setOnClickListener {
                 CaiDat.themSoChan(c, so)
                 NhatKy.ghi(c, "Chủ máy bấm Chặn số này")
@@ -442,7 +481,8 @@ object GhiAm {
      * Chỉ trả về khi chắc đó là bản ghi của cuộc gọi vừa xong (xem [chon]) và máy đã ghi xong tệp:
      * kích thước đứng yên qua hai lần quét. Còn mơ hồ thì không gửi tệp nào, app chuyển sang hỏi một câu.
      */
-    fun timMoi(c: Context, sauLuc: Long, so: String = "", latestNamed: Boolean = false): BanGhi? {
+    fun timMoi(c: Context, sauLuc: Long, so: String = "", latestNamed: Boolean = false,
+               earliestModified: Long? = null, latestModified: Long = Long.MAX_VALUE): BanGhi? {
         val goc = CaiDat.thuMucGhiAm(c)
         if (goc.isBlank()) return null
         val cay = Uri.parse(goc)
@@ -450,7 +490,7 @@ object GhiAm {
         // Bản ghi của cuộc vừa xong được máy ghi xong quanh lúc cúp máy (hàm này chạy vài giây sau đó).
         // Tệp sửa lần cuối sớm hơn thế là của cuộc gọi trước, không lấy.
         if (latestNamed && s.length < 9) return null
-        val tu = if (latestNamed) 0L else maxOf(sauLuc - 3000, System.currentTimeMillis() - 20_000)
+        val tu = if (latestNamed) 0L else maxOf(earliestModified ?: (sauLuc - 3000), System.currentTimeMillis() - 20_000)
         var truoc: Pair<String, Long>? = null   // (tên, kích thước) của tệp được chọn ở lần quét trước
         repeat(5) { lan ->
             try {
@@ -468,7 +508,7 @@ object GhiAm {
                 )?.use { k ->
                     while (k.moveToNext()) {
                         val ten = k.getString(1).orEmpty()
-                        if (k.getLong(2) < tu || k.getLong(4) <= 0) continue
+                        if (k.getLong(2) !in tu..latestModified || k.getLong(4) <= 0) continue
                         if (DUOI.none { ten.lowercase().endsWith(it) }) continue
                         if (latestNamed) {
                             val modified = k.getLong(2)

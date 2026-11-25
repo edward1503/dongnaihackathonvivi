@@ -32,7 +32,7 @@ export function useCheckRunner() {
     try {
       const k = kind === 'text' ? undefined : kind
       const r = kind === 'text' && /\s/.test(v) && v.length > 30 ? await api.analyzeMessage(v) : await api.check(v, k)
-      setResult(r)
+      setResult(r.kind === 'account' ? { ...r, lookupValue: v } : r)
       addRecent(r, v)
       nav(routeFor(r))
     } catch (e) {
@@ -174,9 +174,57 @@ const sayElder = (level, headline, ten) => ({
 }[level] || `Con chưa đủ thông tin về cái này. Nếu ai giục chuyển tiền, bà gọi ${ten} hỏi trước cho chắc nha.`)
 const SELF = ['Tôi biết người nhận ngoài đời thật', 'Không ai giục tôi chuyển gấp', 'Không ai bảo tôi giữ bí mật']
 
+function CommunityStatus({ result }) {
+  const nav = useNavigate()
+  const count = result.count ?? result.reports?.count
+  return (
+    <div className="col g6">
+      {Number.isFinite(count) && <p className="t-sm">{count} máy đã báo</p>}
+      {result.appealOpen ? <p className="t-sub">Đang xét báo nhầm</p> :
+        result.canAppeal && <button type="button" className="quiet-link" onClick={() => nav('/bao-nham')}>Số của tôi bị báo nhầm</button>}
+    </div>
+  )
+}
+
+// Refresh a public lookup while it is on screen, including after an appeal.
+// Call and message analysis describe a particular conversation and must be preserved.
+function useLiveLookup(result, setResult) {
+  const kind = result?.kind
+  const value = result?.lookupValue || result?.display
+  useEffect(() => {
+    if (!value || !['phone', 'link', 'account'].includes(kind)) return
+    let active = true
+    let pending = false
+    async function refresh() {
+      if (pending || document.hidden) return
+      pending = true
+      try {
+        const next = await api.check(value, kind)
+        if (active) setResult((old) => {
+          if ((old?.lookupValue || old?.display) !== value || old?.kind !== kind) return old
+          const updated = { ...next, id: old.id, lookupValue: old.lookupValue }
+          return JSON.stringify(updated) === JSON.stringify(old) ? old : updated
+        })
+      } catch { /* A lookup already on screen remains readable offline. */ }
+      finally { pending = false }
+    }
+    refresh()
+    const timer = setInterval(refresh, 10000)
+    window.addEventListener('lcs-community-update', refresh)
+    document.addEventListener('visibilitychange', refresh)
+    return () => {
+      active = false
+      clearInterval(timer)
+      window.removeEventListener('lcs-community-update', refresh)
+      document.removeEventListener('visibilitychange', refresh)
+    }
+  }, [kind, value, setResult])
+}
+
 export function Result() {
   const nav = useNavigate()
-  const { result: r, setReport, persona, relatives } = useApp()
+  const { result: r, setResult, persona, relatives } = useApp()
+  useLiveLookup(r, setResult)
   const ten = (relatives.find((x) => x.paired) || relatives[0])?.name || 'con cháu'
   const [ticks, setTicks] = useState([])
   const L = LOOK[r?.level] || LOOK.unknown
@@ -185,21 +233,20 @@ export function Result() {
   useEffect(() => {
     if (r && persona === 'elder' && localStorage.getItem('lcs.autoSpeak') !== '0') native.speak(spoken)
     return () => native.stopSpeaking()
-  }, [r]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [spoken, persona])
   if (!r) return <Navigate to="/kiem-tra" replace />
-  const isNum = ['phone', 'account', 'call'].includes(r.kind)
-  const report = () => { setReport({ draft: { kind: r.kind === 'phone' ? 'call' : r.kind, target: r.display } }); nav('/bao-cao') }
+  const isNum = ['phone', 'call'].includes(r.kind)
   // Lý do ngắn gọn: bỏ dòng trùng với tiêu đề, tối đa 3 dòng
   const head = (r.headline || '').toLowerCase()
   const reasons = [
     ...(r.scamLabel && r.level !== 'safe' && r.level !== 'unknown' && !head.includes(r.scamLabel.toLowerCase()) ? [{ icon: 'users', text: r.scamLabel }] : []),
-    ...(r.why || []).map((t) => ({ icon: /báo cáo/.test(t) ? 'flag' : /xác nhận|xác thực|danh bạ/.test(t) ? 'shieldok' : 'tri', text: t })),
+    ...(r.why || []).filter((text) => !(r.appealOpen && text.replace(/\.$/, '') === 'Đang xét báo nhầm')).map((t) => ({ icon: /báo cáo/.test(t) ? 'flag' : /xác nhận|xác thực|danh bạ/.test(t) ? 'shieldok' : 'tri', text: t })),
   ].slice(0, 3)
   return (
     <Screen name={`A3-ket-qua-${r.level}`} tone={L.tone} bar={<Bar title="Kết quả" right={<Speak text={spoken} />} />}
       foot={r.level === 'safe'
         ? <><Btn icon="search" onClick={() => nav('/kiem-tra', { replace: true })}>Kiểm tra số khác</Btn><Btn kind="o" icon="users" onClick={() => nav('/hoi-nguoi-than')}>Hỏi người thân</Btn></>
-        : <><Btn icon="users" onClick={() => nav('/hoi-nguoi-than')}>Hỏi người thân</Btn><Btn kind="o" icon="flag" onClick={report}>Báo cáo</Btn></>}>
+        : <><Btn icon="users" onClick={() => nav('/hoi-nguoi-than')}>Hỏi người thân</Btn><Btn kind="o" icon="flag" onClick={() => nav('/bao-cao')}>{persona === 'elder' ? 'Báo cuộc vừa nhận' : 'Báo cáo'}</Btn></>}>
       <div className="hero">
         <div className="ring pop" style={{ background: L.tone ? '#fff' : 'var(--pri-t)' }}>
           <Circle z={108} bg={L.tone ? L.c : 'mute'} c="w" icon={L.icon} iz={54} />
@@ -210,9 +257,11 @@ export function Result() {
       <div className="card col g12 rise" style={{ animationDelay: '.06s' }}>
         <div className="h-m">{L.say || r.headline}</div>
         {L.say && <div className="t-sub">{r.headline}</div>}
+        <CommunityStatus result={r} />
         {reasons.map((x) => <div key={x.text} className="why"><I n={x.icon} z={22} c={L.tone ? L.c : 'ink2'} /><span>{x.text}</span></div>)}
         {r.note && <div className="why t-sub"><I n="info" z={20} /><span>{r.note}</span></div>}
       </div>
+      {r.level === 'safe' && <Group><Row icon="flag" title="Báo cuộc vừa nhận" onClick={() => nav('/bao-cao')} /></Group>}
       {r.level === 'unknown' && (
         <Group>
           <div className="sec" style={{ padding: '10px 20px 2px' }}>Trước khi chuyển, tự hỏi 3 câu</div>
@@ -262,24 +311,16 @@ export function highlight(text, quotes) {
   return out
 }
 
-export function reportTarget(r) {
-  const quotes = (r.signs || []).flatMap((s) => s.quotes)
-  const link = quotes.find(isLink) || (r.maskedText || '').match(LINK_RE)?.[0]
-  if (link) return { kind: 'link', target: link }
-  return { kind: 'message', target: (r.maskedText || '').slice(0, 120) }
-}
-
 export function MessageResult() {
   const nav = useNavigate()
-  const { result: r, setReport } = useApp()
+  const { result: r } = useApp()
   if (!r || r.kind !== 'message') return <Navigate to="/kiem-tra?loai=text" replace />
   const L = LOOK[r.level] || LOOK.unknown
   const quotes = (r.signs || []).flatMap((s) => s.quotes)
   const fromNotif = r.from === 'notification'
-  const report = () => { setReport({ draft: { ...reportTarget(r), story: r.maskedText } }); nav('/bao-cao') }
   return (
     <Screen name="B3-phan-tich-tin-nhan" bar={<Bar title="Tin nhắn lạ" right={<Speak text={`Tin nhắn này được đánh giá là ${L.word.toLowerCase()}. ${r.headline}`} />} />}
-      foot={<><Btn icon="flag" onClick={report}>Báo cáo</Btn>{r.lesson ? <Btn kind="o" icon="book" onClick={() => openLesson(nav, r.scamType, r.lesson)}>Xem bài học</Btn> : <Btn kind="o" icon="users" onClick={() => nav('/hoi-nguoi-than')}>Hỏi người thân</Btn>}</>}>
+      foot={<><Btn icon="flag" onClick={() => nav('/bao-cao')}>Báo cáo</Btn>{r.lesson ? <Btn kind="o" icon="book" onClick={() => openLesson(nav, r.scamType, r.lesson)}>Xem bài học</Btn> : <Btn kind="o" icon="users" onClick={() => nav('/hoi-nguoi-than')}>Hỏi người thân</Btn>}</>}>
       <div className="row g8"><Tag kind="no" icon="msg">{fromNotif ? 'Ứng dụng nhắn tin · Người lạ' : 'Tin dán vào'}</Tag></div>
       <div className="sms rise">{highlight(r.maskedText || '', quotes)}</div>
       <div className="card row g12 rise" style={{ background: L.tone ? `var(--${L.tone}-t)` : '#fff', animationDelay: '.05s' }}>
@@ -289,6 +330,7 @@ export function MessageResult() {
           <div className="t-sub">{r.signs?.length ? `${r.signs.length} dấu hiệu` : 'Chưa thấy dấu hiệu rõ'}{r.scamLabel && r.level !== 'unknown' ? ` · ${r.scamLabel}` : ''}</div>
         </div>
       </div>
+      <div className="col g6"><p className="t-sub">{r.headline}</p><CommunityStatus result={r} /></div>
       {r.signs?.length > 0 && (
         <Group>
           {r.signs.map((s, i) => (

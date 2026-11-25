@@ -8,6 +8,7 @@ Hai trình duyệt:
 - "laptop": khổ 1300x900, mở http://127.0.0.1:8000/?demo=1, chọn "Điện thoại" rồi bấm "Có cuộc gọi lạ".
 Điện thoại phải tự đổ chuông, đi hết luồng cuộc gọi, nhận lời Minh (giả lập bằng API) và không tràn ngang ở màn nào.
 """
+from http.cookiejar import CookieJar
 import json
 import os
 import sys
@@ -27,6 +28,7 @@ PHONE_BASE = (sys.argv[2] if len(sys.argv) > 2 else "https://127.0.0.1:8443").rs
 LAPTOP_BASE = "http://127.0.0.1:8000"
 OUT.mkdir(parents=True, exist_ok=True)
 errors: list[str] = []
+family = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(CookieJar()))
 UA = "Mozilla/5.0 (Linux; Android 13; M2012K10C) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Mobile Safari/537.36"
 
 
@@ -34,7 +36,7 @@ def api(path, body=None):
     req = urllib.request.Request(LAPTOP_BASE + path, method="POST" if body is not None else "GET",
                                  data=json.dumps(body).encode() if body is not None else None,
                                  headers={"Content-Type": "application/json"})
-    return json.loads(urllib.request.urlopen(req, timeout=10).read())
+    return json.loads(family.open(req, timeout=10).read())
 
 
 def browser(width, height, mobile=False):
@@ -87,6 +89,7 @@ def click_text(d, text, css="button"):
 
 
 try:
+    family.open(LAPTOP_BASE + "/zalo", timeout=10).close()
     api("/api/demo/reset", {})
     # 1. Điện thoại mở máy bà Hoa bằng HTTPS và chạm một lần (mở khóa tiếng như người thật)
     phone.get(PHONE_BASE + "/?mode=simple")
@@ -141,6 +144,9 @@ try:
     phone.get(PHONE_BASE + "/?mode=full")
     screen("B1-trang-chu-hoc-sinh")
     phone.get(PHONE_BASE + "/?mode=volunteer")
+    screen("C0-ma-doi")
+    phone.find_element(By.CSS_SELECTOR, "input[type=password]").send_keys(os.environ.get("LCS_TEST_VOLUNTEER_CODE", "246810"))
+    click_text(phone, "Đăng nhập")
     screen("C1-trang-chu-tinh-nguyen")
     phone.get(PHONE_BASE + "/?mode=volunteer#/thong-ke")
     screen("C2-thong-ke")

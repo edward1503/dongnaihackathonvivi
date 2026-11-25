@@ -43,6 +43,12 @@ ANALYSIS_SCHEMA = {
     "required": ["enoughInfo", "level", "scamType", "scamLabel", "headline", "signs", "todo", "confidence"],
 }
 
+CALL_ANALYSIS_SCHEMA = {
+    **ANALYSIS_SCHEMA,
+    "properties": {**ANALYSIS_SCHEMA["properties"], "transferRequested": {"type": "BOOLEAN"}},
+    "required": [*ANALYSIS_SCHEMA["required"], "transferRequested"],
+}
+
 TRANSCRIPT_SCHEMA = {
     "type": "OBJECT",
     "properties": {
@@ -131,7 +137,13 @@ async def generate_json(parts: list[dict], schema: dict, system: str | None = No
 
 
 async def analyze_text(masked_text: str, mode: str) -> dict:
-    return await generate_json([{"text": masked_text}], ANALYSIS_SCHEMA, analysis_system(mode))
+    system = analysis_system(mode)
+    schema = ANALYSIS_SCHEMA
+    if mode == "call":
+        schema = CALL_ANALYSIS_SCHEMA
+        system += ("\ntransferRequested chỉ là true nếu người gọi thực sự yêu cầu người nghe chuyển hoặc nạp tiền. "
+                   "Lời khuyên đừng chuyển, lời phủ nhận và yêu cầu cung cấp OTP riêng lẻ đều là false.")
+    return await generate_json([{"text": masked_text}], schema, system)
 
 
 async def transcribe_plain(audio: bytes, mime: str) -> str:

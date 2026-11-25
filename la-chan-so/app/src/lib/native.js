@@ -8,8 +8,21 @@ function parse(v) {
   try { return JSON.parse(v) } catch { return v }
 }
 
+async function bridgeJson(method, ...args) {
+  const bridge = N()
+  if (!bridge?.[method]) throw new Error('Bạn cập nhật app Lá chắn số rồi thử lại nhé.')
+  const result = parse(await bridge[method](...args))
+  if (!result || typeof result !== 'object') throw new Error('Chưa nhận được phản hồi từ app. Bạn thử lại nhé.')
+  if (result.detail) throw new Error(result.detail)
+  return result
+}
+
 export const native = {
   available: () => Boolean(N()),
+
+  recentEvents: () => bridgeJson('recentEvents'),
+  reportEvent: (id, story) => bridgeJson('reportEvent', id, story),
+  withdrawReport: (id) => bridgeJson('withdrawReport', id),
 
   speak(text) {
     if (N()?.speak) return N().speak(text)

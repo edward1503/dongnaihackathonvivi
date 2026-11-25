@@ -48,3 +48,25 @@ async def prepare(audio: bytes, mime: str | None, filename: str | None = None) -
     if flac:
         return flac, "audio/flac"
     return audio, m or "audio/mpeg"
+
+
+async def has_audio_stream(data: bytes) -> bool:
+    """Verify that a signed upload contains audio before creating recording evidence."""
+    probe = shutil.which("ffprobe")
+    if probe:
+        try:
+            result = await asyncio.to_thread(
+                subprocess.run,
+                [probe, "-v", "error", "-protocol_whitelist", "pipe", "-select_streams", "a:0",
+                 "-show_entries", "stream=codec_type", "-of", "csv=p=0", "-i", "pipe:0"],
+                input=data, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, timeout=10,
+            )
+            return result.returncode == 0 and result.stdout.strip() == b"audio"
+        except (OSError, subprocess.TimeoutExpired):
+            return False
+    # Minimal installations can still submit common Android audio containers.
+    # A successful server transcription is independently required before issuing an analysis id.
+    return (data.startswith((b"fLaC", b"OggS", b"#!AMR", b"ID3", b"\x1a\x45\xdf\xa3"))
+            or data[:4] in (b"RIFF", b"FORM") and data[8:12] in (b"WAVE", b"AIFF", b"AIFC")
+            or data[4:8] == b"ftyp"
+            or len(data) >= 4 and data[0] == 255 and data[1] & 224 == 224)

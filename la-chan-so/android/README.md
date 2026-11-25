@@ -41,13 +41,16 @@ Mã đã qua ba vòng review của Astra (`gpt-6.2-astra`); các lỗi đã sử
 
 ## Nối với mảng 2
 
-App gọi máy chủ theo [`HOP-DONG-DU-LIEU.md`](HOP-DONG-DU-LIEU.md) (bản đề xuất, mảng 2 chưa xác nhận). Chưa có máy chủ thật thì chạy máy chủ giả:
+Để thử báo cáo cộng đồng, nhập địa chỉ máy chủ ở `../server/` trong **Cá nhân → Cài đặt nâng cao → Máy chủ của đội**. Máy đăng ký khi cần, kể cả khi React gọi `deviceId()`. Dữ liệu và khóa của mỗi máy chủ được lưu riêng trong vùng riêng của bản cài. Máy chủ giả `python3 may-chu-gia.py 8787` dùng để thử tra số, phân tích, báo gia đình và giọng đọc. Giao kèo chi tiết ở [HOP-DONG-DU-LIEU.md](HOP-DONG-DU-LIEU.md).
 
-```bash
-python3 may-chu-gia.py 8787      # rồi nhập http://<IP máy tính>:8787 vào ô "Máy chủ của đội" trong app
-```
+### Thử báo cáo từ máy nhận
 
-Không có máy chủ, app vẫn chạy bằng dữ liệu trên máy (trùng `prototype/mock-data.js`), và khi đó không báo được cho người thân: màn kết quả ghi rõ "Chưa báo được" và đưa nút gọi thẳng.
+1. Bật quyền sàng lọc và đọc nhật ký cuộc gọi. Nếu trình gọi điện có ghi âm, chọn thư mục ghi âm của máy trong Thiết lập. Dùng máy khác gọi tới, nghe máy rồi cúp.
+2. Bấm **Báo cuộc vừa nhận** khi thẻ cảnh báo đang hiện hoặc ở màn Bé Nai sau cuộc gọi. Nếu bấm lúc đổ chuông, Lá chắn đợi nhật ký xác nhận máy đã nghe cuộc gọi. Cũng có thể mở mục **Báo cáo** và chọn sự kiện trong 7 ngày gần đây.
+3. Bà có thể trả lời “Có”, “Không”, “Tôi biết số này”, hoặc bỏ qua. Nếu có kết quả AI cho đúng bản ghi, máy gửi tóm tắt đã che sang phòng gia đình mẫu. Minh có thể trả lời trên cảnh báo này kể cả khi bà đóng app. Bấm **Rút báo cáo** trên máy đã gửi để rút.
+4. Với SMS, bật quyền đọc thông báo rồi gửi một SMS có dấu hiệu đáng ngờ từ máy khác. Mở **Xem phân tích → Báo tin này cho cộng đồng**. Nếu tin chứa nhiều đối tượng, chọn người gửi, số, tài khoản hoặc đường dẫn có trong tin. Số ẩn, cuộc gọi đi, cuộc nhỡ, thông báo tin có OTP và các màn mở từ **Thử Lá chắn** không tạo biên nhận.
+
+Đỏ ngoại tuyến có hai số mẫu, 028 9999 1234 (7 máy) và 0912 345 678 (14 máy). Cảnh báo nói về cuộc gọi hiển thị số đó. Bấm “Chặn số này” chỉ cập nhật danh sách chặn trên máy.
 
 ## Thử trên máy Xiaomi
 
@@ -64,7 +67,7 @@ Mở app, bấm "Thiết lập lá chắn", bật hết các dòng (kể cả ba
 
 **App ngân hàng và gỡ lỗi USB.** Nhiều app ngân hàng tự chặn khi máy bật gỡ lỗi USB. N5 chỉ cần biết app ngân hàng vừa được đưa lên màn hình, nên màn "Dừng lại" vẫn phải hiện dù app ngân hàng đang hiện thông báo chặn. Nếu cần thử trọn vẹn: nhập tên gói của một app bất kỳ (ví dụ máy tính bỏ túi) vào ô "Gói ứng dụng thử", hoặc tắt gỡ lỗi USB rồi xem mục Nhật ký ngay trong app.
 
-## Đã thử tới đâu
+## Kết quả thử của các phiên bản trước
 
 Thử trên máy ảo Android 14 (Pixel 6, ảnh hệ thống Google APIs), quyền cấp bằng `adb`, cuộc gọi và SMS giả bằng `adb emu gsm call|accept|cancel` và `adb emu sms send`:
 
@@ -236,4 +239,4 @@ Còn thiếu: sáu câu thu mà người kiểm thử đề nghị thêm (hỏi 
 - **N2 chỉ gửi bản ghi khi chắc là của đúng cuộc gọi:** tên tệp mang số vừa gọi, hoặc chỉ có một tệp mới và tên không mang số nào khác. Mơ hồ thì chuyển sang hỏi một câu.
 - **Nút "Chặn số này" chỉ chặn trên máy này**, chưa gửi báo cáo cho cộng đồng.
 - **Nhận dạng "có/không"** dùng dịch vụ giọng nói của máy, cần mạng trên phần lớn máy. Không nghe được thì vẫn còn hai nút.
-- **Chưa có ghép đôi với người thân** và chưa nhận lời nhắn ngược lại từ máy Minh (cần mảng 2, 3, 5).
+- Bản hackathon dùng phòng gia đình ghép sẵn. Máy chủ xử lý câu trả lời của Minh. Phần giao diện React nhận các cập nhật từ máy chủ.

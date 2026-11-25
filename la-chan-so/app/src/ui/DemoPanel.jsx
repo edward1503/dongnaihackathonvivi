@@ -49,7 +49,7 @@ const GROUPS = [
   ['Đổi vai', [
     { label: 'Người lớn tuổi (bà Hoa)', mode: 'simple', path: '/' },
     { label: 'Học sinh (Vy)', mode: 'full', path: '/' },
-    { label: 'Đội tình nguyện (Khoa)', mode: 'volunteer', path: '/' },
+    { label: 'Đăng nhập đội', mode: 'volunteer', path: '/' },
   ]],
 ]
 
@@ -83,7 +83,7 @@ export default function DemoPanel() {
   }
   const reset = async () => {
     try { await api.reset() } catch { /* máy chủ tắt: vẫn xóa phía app */ }
-    ;['lcs.recent', 'lcs.points', 'lcs.known'].forEach((k) => localStorage.removeItem(k))
+    ;['lcs.recent', 'lcs.points', 'lcs.awardedTotal', 'lcs.known'].forEach((k) => localStorage.removeItem(k))
     setLayersForDemo(null)
     toast('Đã đặt lại kịch bản demo')
     if (remote) await api.demoGo({ path: '/', mode: 'simple', client: CLIENT_ID }).catch(() => {})

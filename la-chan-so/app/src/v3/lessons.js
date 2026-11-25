@@ -41,19 +41,45 @@ export const QUIZ = [
     why: 'Quà thật không bắt đóng phí trước.' },
 ]
 
-let hocPage = null
-async function hasHocPage() {
-  if (hocPage !== null) return hocPage
-  try { hocPage = (await fetch('/prototype/hoc.html', { method: 'HEAD', cache: 'no-store' })).ok } catch { hocPage = false }
-  return hocPage
+export const COMICS = {
+  elder: [
+    ['gia-danh-co-quan', 'Bài 1', 'Cuộc gọi tự xưng cơ quan chức năng'],
+    ['nguoi-than-gap-nan', 'Bài 3', 'Người thân gặp nạn, cần tiền gấp'],
+  ],
+  student: [
+    ['viec-nhe-luong-cao', 'Bài 2', 'Việc nhẹ lương cao'],
+    ['dau-tu-lai-cao', 'Bài 4', 'Đầu tư lãi cao, nhóm kín'],
+  ],
 }
 
-// Mở đúng bài theo kiểu lừa đảo vừa gặp: Android (LCSNative.openStory) → trang bài học Mảng 4 → bài ngắn trong app
+export const PRACTICE_CALLS = {
+  elder: [
+    ['minh-1', 'Gọi anh Minh', 'Có người tự xưng là cán bộ'],
+    ['minh-3', 'Gọi anh Minh', 'Hỏi lại chuyện bé Vy gặp nạn'],
+  ],
+  student: [
+    ['lan-2', 'Gọi chị Lan', 'Khuyên chị trước khi nạp tiền nhận việc'],
+    ['tu-9', 'Gọi chú Tư', 'Cùng chú xem lời mời đầu tư'],
+  ],
+}
+
+export function openComic(slug) {
+  if (window.LCSNative?.openStory) return window.LCSNative.openStory(slug)
+  window.location.assign('/prototype/hoc.html' + (slug ? '?kieu=' + encodeURIComponent(slug) : ''))
+}
+
+export function openPracticeCall(scene) {
+  if (window.LCSNative?.openCall) return window.LCSNative.openCall(scene)
+  window.location.assign('/prototype/video-call.html?canh=' + encodeURIComponent(scene))
+}
+
 export async function openLesson(nav, scamType, lesson) {
-  if (window.LCSNative?.openStory) return window.LCSNative.openStory(scamType || '')
-  if (lesson && await hasHocPage()) { window.location.href = `/prototype/hoc.html?kieu=${encodeURIComponent(lesson)}`; return }
-  const found = LESSONS.find((l) => l.scamType === scamType)
+  if (window.LCSNative?.openStory) return window.LCSNative.openStory(lesson || scamType || '')
+  if (lesson) {
+    try {
+      if ((await fetch('/prototype/hoc.html', { method: 'HEAD' })).ok) return openComic(lesson)
+    } catch { /* The short lessons are also available offline. */ }
+  }
+  const found = LESSONS.find((item) => item.scamType === scamType)
   nav(found ? `/bai-hoc/${found.id}` : '/bai-hoc')
 }
-
-export { hasHocPage }
