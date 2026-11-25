@@ -241,7 +241,7 @@ Về máy nghe: hạn mức NGÀY (gói miễn phí, theo project, theo mô hìn
 - **17** (thẻ "dặn bà đừng kể cho con cháu" gắn nhãn lừa): Bài 1 dùng hai nút nên "Lừa" và "Cần kiểm tra" đều là "Khoan đã"; kịch bản coi "dặn giấu con cháu" là dấu hiệu lừa.
 
 ### Lệch cần người dùng quyết
-- **Tranh ông Tư trong Bài 4** (`assets/comic9-*`, `ong-tu-bang-nhan-vat.png`) vẽ ông lão hoạt hình ngoài sáu mươi, còn **avatar 117 trong cuộc gọi** là người đàn ông ngoài bốn mươi mặc vest. Chưa vẽ lại (theo lời dặn); người dùng quyết sửa bên nào.
+- ~~Tranh ông Tư trong Bài 4 lệch avatar 117~~: **đã xử lý**, agent vẽ đã vẽ lại cả bộ chú Tư (`comic9-*`, `chan-dung-ong-tu.png`, `ong-tu-bang-nhan-vat.png`) thành người đàn ông khoảng 45, vest xanh đen, sơ mi trắng, cà vạt xanh.
 - Điểm rẽ và khung ngõ cụt cho Bài 1, Bài 3: người dùng đã duyệt rồi TẠM DỪNG (có thể sửa cốt truyện hai bài trước vì bị lặp). Phiên này chưa làm gì cho phần đó.
 
 ### Tệp đã sửa trong phiên này
@@ -258,4 +258,59 @@ Về máy nghe: hạn mức NGÀY (gói miễn phí, theo project, theo mô hìn
 3. Đưa bước "chép nguyên văn cả lượt, so số tiếng, cảnh báo đọc lẫn lời dặn ở đầu" vào `tools/thu-bai-hoc.py` ngay sau khi thu.
 4. Thử trên WebView thật bản có tự sang khung (APK cần dựng lại với `hoc.js` mới): tự phát tiếng, nút Back, Gợi ý, đi từ bài học sang cuộc gọi và về.
 5. Nếu người dùng chốt cốt truyện mới cho Bài 1, Bài 3: làm điểm rẽ + ngõ cụt (lời, tranh Codex, thu lại cả lượt Bé Nai và bà Hoa của bài đó), sửa `bai-01.json`, `bai-03.json`, mục 1 kịch bản, `kiem-bai-hoc.mjs`.
-6. Người dùng quyết lệch tranh ông Tư và avatar 117.
+6. ~~Người dùng quyết lệch tranh ông Tư và avatar 117~~: đã vẽ lại (xem mục "Phiên Opus 3").
+
+---
+
+## Phiên Opus 3 (25/11/2026, khoảng 16:50–17:50): điểm rẽ cho Bài 1, cốt truyện mới cho Bài 3
+
+Không còn tiến trình nền nào của phiên. Chưa commit. Không dùng Gradle, máy ảo, điện thoại. Không đụng `prototype/canh/**`, `loi-minh.json`, `prototype/audio/minh/**`, và các tranh agent vẽ đã làm (`comic9-*`, `chan-dung-ong-tu.png`, `ong-tu-bang-nhan-vat.png`, `avatar-chi-lan.png`, `chan-dung-minh.png`).
+
+### Gia đình chung (người dùng chốt)
+Bà Hoa; con trai anh Minh (khoảng 30, khớp avatar 125: tóc đen ngắn, vest đen, sơ mi trắng hở cổ, không cà vạt); Vy là cháu ngoại, anh Minh là cậu của Vy.
+
+### Lời từng nhánh
+**Bài 1** (truyện giữ nguyên, thêm điểm rẽ ở khung 3 ngay lúc Lá chắn hiện "Khoan đã"):
+- Khung 1 thêm câu mở: Bé Nai "Con kể bà nghe chuyện bà Hoa nha. Tới đoạn gay cấn, bà chọn giúp bà Hoa nha."
+- Khung 3 (`comic1-3`) thêm Bé Nai "Nếu là bà Hoa, bà làm gì ạ?"; hai nút to, Bé Nai đọc to từng nút: **Chuyển tiền cho xong** → ngõ cụt; **Cúp máy, gọi cho con** → khung 4 cũ (nay là `an_toan`).
+- Ngõ cụt (`comic1-5`): Bé Nai "Bà bỏ qua lời nhắc, chuyển hết tiền. Lát sau gọi lại số kia thì không ai nghe máy nữa." · bà Hoa "Tiền dành dụm bao lâu nay, mất hết rồi." · Bé Nai "Không sao đâu bà, đây chỉ là truyện thôi. Mình quay lại chọn lại nha." Về lại điểm rẽ: Bé Nai hỏi lại và đọc lại hai lựa chọn.
+- Thử thách: **Anh Minh hoảng hốt gọi** (`minh-1`). Ý: "Cúp máy, không chuyển tiền"; "Hỏi lại công an phường hoặc người nhà, đừng giấu". Bé Nai mở đầu "Tới thử thách rồi bà ơi. Anh Minh đang gọi, giọng hoảng lắm. Bà bình tĩnh khuyên con nha."; đủ ý "Bà trấn an anh Minh giỏi ghê. Anh Minh hết sợ rồi ạ."; thiếu ý "Bà khuyên được một phần rồi ạ. Lúc nào rảnh, bà gọi lại anh Minh tập thêm nha."; bỏ dở, không được ý nào như cũ.
+
+**Bài 3** (đổi truyện: kẻ gian giả làm cháu Vy):
+- Khung 1 (`comic3-5`): Bé Nai câu mở như Bài 1 · "Sáng đó, bà Hoa đang tưới kiểng ngoài hiên. Bỗng điện thoại reo, đầu dây bên kia có tiếng con gái khóc." · người gọi giả làm cháu "Bà ngoại ơi, con Vy nè! Con bị xe tông, đang nằm bệnh viện. Con mượn máy bạn gọi bà."
+- Khung 2 (`comic3-2` dùng lại): bà Hoa "Trời đất, con Vy! Con có sao không con?" · người gọi "Bà chuyển giùm con năm triệu tiền viện phí liền nha. Bà đừng nói với ai, con sợ mẹ la." · Bé Nai "Bà cuống hết cả lên, tay run run đi tìm cái ví."
+- Khung 3 (`comic3-6`, điểm rẽ, nút thắt mới): Bé Nai "Bà gọi số của Vy mà bà lưu sẵn, nhưng máy Vy tắt, gọi hoài không được." · bà Hoa "Sao con nhỏ không bắt máy vậy nè? Hay là bị nặng lắm rồi?" · Bé Nai "Bà Hoa sốt ruột quá, chỉ muốn chuyển tiền liền cho xong. Nếu là bà Hoa, bà làm gì ạ?" · **Chuyển tiền liền cho kịp** → ngõ cụt; **Gọi anh Minh hỏi trước** → an toàn.
+- Ngõ cụt (`comic3-7`): Bé Nai "Bà chuyển năm triệu. Lát sau gọi lại số kia thì không ai nghe máy nữa. Còn Vy thì vẫn ngồi học trong lớp." · bà Hoa "Trời ơi, tiền đi mất rồi, mà con Vy có sao đâu." · Bé Nai câu an ủi như Bài 1.
+- An toàn (`comic3-8`): Bé Nai "Bà gọi anh Minh. Anh Minh gọi ngay cho cô giáo của Vy." · Minh "Mẹ ơi, cô giáo nói Vy đang ngồi học bình thường nè. Người gọi hồi nãy là kẻ gian đó mẹ." · bà Hoa "Vậy là con Vy không sao. Mẹ mừng quá." · Bé Nai "Rồi bà bấm báo cáo số lạ, để người khác biết mà dè chừng."
+- Dấu hiệu: xưng là cháu, gọi bằng máy lạ; khóc lóc, đòi tiền gấp; dặn đừng nói với ai. Nhớ một câu: "Gọi cháu không được thì bà hỏi người nhà khác, khoan chuyển tiền nha." Việc ở nhà: lưu sẵn số cô giáo của cháu và số người nhà.
+- Luyện: B5 hỏi "Người lạ xưng là cháu, khóc đòi tiền viện phí. Bà gọi số cháu thì không được. Bà làm việc nào trước ạ?", đúng là **Gọi người nhà khác hỏi lại** (hai việc kia: gọi lại số vừa gọi tới; chuyển tiền trước cho kịp). B2: thẻ mẫu 2 đổi thành "Bà gọi anh Minh, anh Minh hỏi cô giáo, Vy vẫn đang đi học."; lời giải thẻ "người lạ khóc, xưng là cháu", gợi ý 1 và lời khen cuối theo bài học mới.
+- Thử thách: **Anh Minh hỏi mẹ về bé Vy** (`minh-3`). Ý: "Chưa chuyển tiền khi chưa hỏi lại được"; "Gọi người nhà khác hoặc cô giáo bằng số đã lưu". Bé Nai mở đầu "Tới thử thách rồi bà ơi. Anh Minh gọi hỏi bà chuyện bé Vy. Bà cứ trả lời như ở nhà nha."; đủ ý "Bà trả lời anh Minh rành rọt ghê. Bé Vy mà nghe chắc mừng lắm ạ."
+- Lời Minh trong hai thử thách: agent gọi video viết trong `prototype/canh/minh-1.json`, `minh-3.json`; kịch bản để chỗ cho phiên chính chép vào.
+
+### Tranh mới (Codex `gpt-6.1-sol`, cách làm như Bài 4; lời nhờ `$S/ve13/prompt-13.txt`, bản gốc `$S/ve13/out/`)
+`assets/comic1-4.png` (vẽ lại, cùng bố cục, Minh mặc vest), `comic1-5.png` (ngõ cụt Bài 1), `comic3-5.png` (bà tưới kiểng nghe máy), `comic3-6.png` (gọi Vy không được), `comic3-7.png` (ngõ cụt Bài 3, Vy vẫn ngồi học), `comic3-8.png` (Minh và cô giáo, Vy ngồi học). Bảng nhân vật Minh vẽ trước để giữ cho giống (`$S/ve13/out/minh-bang-nhan-vat.png`, không đưa vào app). Tôi đã xem từng tấm: không chữ, không số, không logo, Minh mặc vest đen, sơ mi trắng hở cổ, không cà vạt, kẻ gian là hạt đậu xám. Chữ thập đỏ trên xe cấp cứu (`comic3-6` và tranh cũ `comic3-1`, là biểu tượng được pháp luật bảo hộ) **đã bỏ**, thay bằng trái tim hồng: sửa đúng vùng đó bằng ImageMagick (tô lại thân xe trắng rồi vẽ trái tim), mọi chỗ khác giữ nguyên từng điểm ảnh; bản cũ ở `$S/ve13/cu/`, tờ so sánh `$S/ve13/so-sanh-chu-thap.png`. Đã xem hết tranh trong `assets/`: không còn tấm nào có chữ thập đỏ. `tools/ve-tranh/STYLE.txt` và `prompt-c1/c2/c3.txt` từng gợi ý vẽ "red cross" trong bóng nói, đã bỏ và thêm luật không vẽ chữ thập đỏ, lưỡi liềm đỏ. Tranh cũ `comic3-1`, `comic3-3`, `comic3-4` không còn dùng trong bài (vẫn còn trong `screens/`). Sửa mô tả Minh trong `tools/ve-tranh/STYLE.txt`, `prompt-c1.txt`, `prompt-c3.txt`, `prompt-comic1.txt`, `prompt-comic3.txt`; mô tả chú Tư mới trong `prompt-comic9.txt` và kịch bản Bài 4.
+
+### Giọng (chỉ gemini-3.8-flash-tts)
+| Bài · giọng | Lượt | Trạng thái |
+|---|---|---|
+| b01 Bé Nai (52 câu) | thu lại lúc 17:14 với `--it-loi-dan`, 235,4 s | Chép cả lượt (OpenAI, phiên chính chạy) 796/796, sạch; cắt lại bằng mốc whisper (`$S/moc-tu-whisper.py`, mốc ở `$S/nghe/moc-b01.txt`); chép từng câu sau cắt lại: đúng chỗ |
+| b03 Bé Nai (48 câu) | thu lại lúc 17:12 với `--it-loi-dan`, 240,8 s | 762/762, sạch; sửa ranh giới bn-14, 15, 16 bằng `--moc`; chép từng câu: đúng chỗ |
+| b01 bà Hoa (4), b03 bà Hoa (4) | thu mới | Chép khớp; bh-04 (b01), bh-03, bh-04 (b03) người dùng đã nghe: đạt |
+| b03 Minh (1) | thu mới (Achird, theo `nhan-vat.json`) | Khớp |
+| b03 người gọi giả làm cháu (2) | giọng mới `nguoi-goi-chau`, Gemini Achernar | Khớp (trừ "Vy"); giọng chưa ai duyệt |
+| b01 người gọi nam, b01 Minh | không đụng | Mốc `luc` B6 còn đúng |
+
+- **Lỗi đã gặp:** hai lượt Bé Nai đầu (17:02, 17:05) đọc cả lời dặn ở đầu rồi **bịa hẳn lời khác** (chuyện đi bộ, nấu cơm, Trạng Quỳnh…), dài 444 và 515 giây. Đã bỏ (lưu ở `audio-goc/hoc/b0N/bn-take-doc-loi-dan.wav`). Thu lại với `--it-loi-dan` (tùy chọn mới của `tools/thu-bai-hoc.py`: bỏ danh sách cảm xúc từng đoạn khỏi lời dặn) thì sạch ngay lần đầu. `thu-bai-hoc.py` nay cũng tự cảnh báo khi lượt dài bất thường so với số tiếng ("NGHI ĐỌC LẪN LỜI DẶN"). Khuyên: lượt Bé Nai dài từ nay dùng `--it-loi-dan`.
+- **Máy nghe:** hạn mức ngày của mọi mô hình Gemini nghe tốt đã hết; gemini-3-flash-preview còn lượt nhưng **bịa cả đoạn hội thoại** khi chép câu ngắn (quảng cáo ví điện tử, phỏng vấn xin việc…), không dùng được. Việc chép OpenAI gpt-4o-transcribe do phiên chính chạy (người dùng cho phép dùng để kiểm giọng; bộ kiểm quyền chặn lệnh tôi gọi OpenAI). Bảng chép ở `/tmp/claude-1000/lcs-chep/` (thư mục tạm, có thể mất); bảng đối chiếu tệp → lời gốc ở `$S/chep-danh-sach/*.tsv`.
+
+### Mã và kiểm
+- `prototype/hoc/hoc.js`: điểm rẽ đọc to từng lựa chọn có `giong` (sáng nút đang đọc), quay về từ ngõ cụt thì hỏi lại rồi đọc lại; "Tới lượt bà/bạn quyết định" theo bài; vai `nguoi-goi-chau` (hình hạt đậu, nhãn mô phỏng). `hoc.css`: nút lựa chọn chữ lớn (cao 68px, chữ 20px), viền sáng khi đang đọc.
+- Dữ liệu: `prototype/hoc/bai-01.json`, `bai-03.json` (sinh bằng `$S/sua-cot-truyen-13.py` từ bản sao lưu `$S/sao-luu/opus3-dau/`, đánh số lại tệp giọng theo thứ tự xuất hiện), `danh-sach.json` (tên thử thách, bìa Bài 3 là `comic3-5`), `tools/giong-bai-hoc.json` (giọng mới).
+- `tools/kiem-bai-hoc.mjs`: điểm rẽ phải có đúng hai lựa chọn; bài ông bà thì Bé Nai phải đọc lựa chọn.
+- **Kiểm tự động hai cỡ (`$S/kiem-12.log`, ảnh `$S/anh7`): đạt 1386, lỗi 0**, 218 lượt soát bố cục, 186 ảnh. Đã xem tờ ghép các màn truyện mới hai cỡ (`$S/to4/anh6-*-truyen-moi.png`) và màn luyện Bài 3 (`$S/to4/anh7-b3-luyen.png`): không tràn, không đè.
+- **`khu-hoi.mjs` (đi thật sang `video-call.html` rồi về) với cảnh `minh-1`, `minh-3` mới: ĐẠT HẾT 6 lượt** (`$S/khu-hoi-5.log`). Đã sửa `khu-hoi.mjs` cho cảnh có bộ nút riêng từng lượt (bấm nút đầu tới khi nhân vật tự kết thúc). Lượt chạy trước đó (`khu-hoi-4.log`) có một tệp 404 `/screens/A11-truyen-tranh.html` từ trang gọi video (lượt sau không còn).
+
+### Việc còn lại
+1. Người dùng nghe mục F của `bai-hoc/nghe-thu/CAN-NGHE-BAI-HOC.md` (F4–F14: các câu máy nghe lệch giống nhau hai lần, câu ngắn, giọng người gọi giả làm cháu). Sai câu nào thì thu lại cả lượt của giọng đó trong bài đó, dùng `--it-loi-dan`.
+2. Phiên chính chép lời Minh của hai thử thách mới vào kịch bản.
+3. Dựng lại APK (đổi: `prototype/hoc/*`, giọng b01, b03, tranh `comic1-4`, `comic1-5`, `comic3-5…8`) và thử trên máy thật: điểm rẽ chữ lớn, đọc lựa chọn, ngõ cụt rồi quay về.

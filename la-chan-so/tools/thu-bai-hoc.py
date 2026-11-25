@@ -217,7 +217,9 @@ for ai, cau, ma, ghi_luot in viec:
     else:
         giong = cfg['giong']; dan = cfg['loi_dan']; dan = dan[bai['che_do']] if isinstance(dan, dict) else dan
     cx = '; '.join(f'đoạn {i + 1} {x["cam_xuc"]}' for i, x in enumerate(cau) if x.get('cam_xuc'))
-    if cx: dan += ' Cảm xúc của từng đoạn, chỉ để diễn, tuyệt đối không đọc thành tiếng: ' + cx + '.'
+    # --it-loi-dan: bỏ danh sách cảm xúc từng đoạn. Lượt dài (40–50 câu) với danh sách đó, gemini-3.8-flash-tts hay ĐỌC CẢ LỜI DẶN ở đầu lượt
+    # rồi bịa thêm lời (gặp ở b01, b09, b03 ngày 25/11); chỉ giữ lời dặn chung về giọng thì hết.
+    if cx and '--it-loi-dan' not in co: dan += ' Cảm xúc của từng đoạn, chỉ để diễn, tuyệt đối không đọc thành tiếng: ' + cx + '.'
     lam = GOC / f'audio-goc/hoc/b{so:02d}'; tho = lam / f'{ma}-cat'; lam.mkdir(parents=True, exist_ok=True)
     take = lam / f'{ma}-take.wav'; sach = lam / f'{ma}-take-sach.wav'
     print(f'== Bài {so} · {ai}{ghi_luot} · giọng {giong} · {len(cau)} câu', flush=True)
@@ -236,6 +238,9 @@ for ai, cau, ma, ghi_luot in viec:
     _r, _a = doc_wav(take); _giay = len(_a) / _r; _tieng = sum(len(x['chu'].split()) for x in cau)
     if _giay < 0.17 * _tieng:          # máy đôi khi trả về lượt bị đứt giữa chừng: ngắn hơn hẳn mức đọc nhanh nhất thì bỏ, thu lại
         print(f'!! lượt thu chỉ dài {_giay:.0f} giây cho {_tieng} tiếng: bị đứt giữa chừng, bỏ'); take.rename(take.with_suffix('.dut.wav')); loi += 1; continue
+    _du = _tieng / 3.0 + 0.3 * len(cau)          # nhịp của các lượt sạch đã đo (3,0–3,4 tiếng mỗi giây kể cả quãng nghỉ)
+    if _giay > 1.25 * _du:              # dài bất thường: gần như chắc là đọc lẫn lời dặn (và bịa thêm lời); phải chép nguyên văn cả lượt trước khi dùng
+        print(f'!! lượt thu dài {_giay:.0f} giây, dự kiến khoảng {_du:.0f} giây cho {_tieng} tiếng: NGHI ĐỌC LẪN LỜI DẶN hoặc đọc thêm lời, chép nguyên văn cả lượt rồi mới dùng'); loi += 1
     print('  ' + cat_nhieu_duoi(take, sach) + f'; xóa {khu_dao(sach)} tiếng click giữa các câu')
     if thamso.get('--bo-dau'):         # lượt thu đọc lẫn lời dặn ở ĐẦU lượt (đã nghe và chép ra): bỏ đoạn đó, giữ phần lời phía sau (vẫn là một lượt)
         _r, _a = doc_wav(sach); _t = float(thamso['--bo-dau']); ghi_wav(sach, _r, _a[int(_t * _r):])

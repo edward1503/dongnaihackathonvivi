@@ -33,7 +33,8 @@
     'vy': { ten: 'Vy', anh: '../assets/chan-dung-vy.png' },
     'ong-tu': { ten: 'Chú Tư', anh: '../assets/chan-dung-ong-tu.png' },
     'nguoi-goi-nam': { ten: 'Người gọi (mô phỏng)', anh: '../assets/avatar-hat-dau.png', keGian: true },
-    'nguoi-goi-nu': { ten: 'Người gọi (mô phỏng)', anh: '../assets/avatar-huong.png', keGian: true }
+    'nguoi-goi-nu': { ten: 'Người gọi (mô phỏng)', anh: '../assets/avatar-huong.png', keGian: true },
+    'nguoi-goi-chau': { ten: 'Người gọi (mô phỏng)', anh: '../assets/avatar-hat-dau.png', keGian: true }
   };
   const MAT = { cheer: '../assets/mascot-cheer.png', stop: '../assets/mascot-stop.png', think: '../assets/mascot-think.png', thuong: '../assets/spot-mascot.png' };
 
@@ -199,7 +200,7 @@
     if (canh.tranh) v.than.append(h('<div class="tranh"><img src="../assets/' + esc(canh.tranh) + '" alt="' + esc(canh.tom_tat || '') + '"></div>'));
     else {            // điểm rẽ không có tranh riêng: nhắc lại hai tranh vừa xem
       const truoc = B.truyen.slice(0, vt).filter(x => x.tranh).slice(-2);
-      v.than.append(h('<div class="col gap-12 jcenter" style="flex:1;min-height:0"><div class="hai-tranh">' + truoc.map(x => '<img src="../assets/' + esc(x.tranh) + '" alt="">').join('') + '</div><div class="t-over center" style="color:#FFBF69">Tới lượt bạn quyết định</div></div>'));
+      v.than.append(h('<div class="col gap-12 jcenter" style="flex:1;min-height:0"><div class="hai-tranh">' + truoc.map(x => '<img src="../assets/' + esc(x.tranh) + '" alt="">').join('') + '</div><div class="t-over center" style="color:#FFBF69">Tới lượt ' + BAN + ' quyết định</div></div>'));
     }
     const oLoi = h('<div class="loi"><div class="ai"><img alt=""><span class="ten"></span>' + ic('wave', 's16 song') + '</div><div class="chu"></div></div>'); v.than.append(oLoi);
     const hien = cau => {
@@ -215,14 +216,24 @@
       if (vt + 1 < B.truyen.length) return truyen(vt + 1);
       return B.an_toan && viTriRe < 0 ? truyen('an-toan') : xongTruyen();
     };
-    function hienRe() {
+    function hienRe(hoiLai) {
       if (daRe) return; daRe = true; dungTieng(); oLoi.classList.remove('dang'); S.pha = 're';
       hien(canh.loi[canh.loi.length - 1]);
       v.chan.innerHTML = ''; v.chan.classList.add('doc');
-      xao(canh.re).forEach((r, i) => {
+      const ds = xao(canh.re).map((r, i) => {
         const o = h('<button class="lua-chon"><span class="so">' + (i + 1) + '</span><span>' + esc(r.chu) + '</span></button>');
-        o.onclick = () => truyen(r.toi); v.chan.append(o);
+        o.onclick = () => truyen(r.toi); v.chan.append(o); return [r, o];
       });
+      // lựa chọn có tiếng (bài ông bà): Bé Nai đọc lần lượt từng lựa chọn theo thứ tự trên màn, sáng nút đang đọc; bấm chọn lúc nào cũng được
+      // quay về từ ngõ cụt (hoiLai): Bé Nai hỏi lại câu hỏi trước khi đọc lựa chọn
+      const hoi = canh.loi[canh.loi.length - 1];
+      if (ds.some(([r]) => r.giong)) (async () => {
+        if (hoiLai && hoi.giong && (!(await phatCau(hoi)) || tk !== luot)) return;
+        for (const [r, o] of ds) {
+          if (!r.giong || tk !== luot) continue;
+          o.classList.add('doc'); const ok = await phatCau(r); o.classList.remove('doc'); if (!ok || tk !== luot) return;
+        }
+      })();
     }
     async function ke(tu) {
       const id = ++soKe; S.pha = 'ke';
@@ -238,7 +249,7 @@
       // Không tự sang ở khung ngõ cụt (chờ bấm "Quay lại điểm rẽ") và khi trang đang ẩn (nằm nền thì không tính là đã xem truyện; người học bấm Tiếp khi quay lại).
       if (vt !== 'ngo-cut') { await cho(LG ? 2000 : 700); if (tk === luot && S.pha === 'het-loi' && !document.hidden) quaKhung(); }
     }
-    if (chiRe && canh.re) { hienRe(); return; }
+    if (chiRe && canh.re) { hienRe(true); return; }
     datNut(v.chan, [
       { chu: 'Nghe lại', icon: 'volume', ngan: true, bam: () => { dungTieng(); ke(0); } },
       // Tiếp: còn câu chưa hiện thì sang câu kế, hiện đủ lời của khung rồi mới sang khung sau (bấm liền tay cũng không bỏ sót lời)

@@ -8,12 +8,13 @@ Mười kiểu dưới đây do mảng 4 tự chọn theo các kiểu đã có t
 
 | Phần | Nội dung | Thời lượng | Màn |
 |---|---|---|---|
-| A. Truyện 1 phút | 4 khung tranh, Bé Nai kể. Bài cho học sinh có thêm điểm rẽ và một khung ngõ cụt | 1 phút | A11b, A11c, A11e, A11f, A11j |
+| A. Truyện 1 phút | Ba bốn khung tranh, Bé Nai kể, có một điểm rẽ (người học chọn giúp nhân vật) và một khung ngõ cụt. Bài cho ông bà: đúng hai nút to, chữ ngắn, Bé Nai đọc to câu hỏi và cả hai lựa chọn; ngõ cụt nhẹ nhàng, không dọa | 1 phút | A11b, A11c, A11e, A11f, A11j |
 | B. Luyện | 2 bài tập khác dạng, có gợi ý, không tính điểm xếp hạng | 2 phút | mới |
 | C. Thử thách | Một việc phải tự làm: khuyên người thân qua gọi video, nghe máy với kẻ gian do AI đóng, hoặc ca mới | 2 phút | A11d, A11g, A11h, A11i |
 | D. Kiểm tra | Câu hỏi của bài này nằm trong ngân hàng câu của bài kiểm tra chung | | A12a–c |
 
 - **Đề chỉ bắt buộc phần A** ("bài học 1 phút"). Phần B và C là phần "học như chơi game".
+- **Gia đình chung của các bài ông bà:** bà Hoa; con trai là anh Minh (khoảng ba mươi, khớp avatar 125: tóc đen ngắn, vest đen, sơ mi trắng không cà vạt); Vy là cháu ngoại của bà, anh Minh là cậu của Vy.
 - **Hai chế độ.** Bài cho bà Hoa (chữ lớn): Bé Nai xưng "con", gọi "bà", mỗi màn một việc, nút cao từ 56px, không kéo thả. Bài cho Vy: Bé Nai xưng "mình", gọi "bạn".
 - **Điểm chỉ tính ở phần C và D.** Phần B là luyện tập; đã xem đáp án rồi mới bấm thì không tính là đạt. Ở phần C mỗi ý được chấm là mười điểm; trang bài học chỉ nhận điểm của đúng cuộc gọi vừa bấm "Nghe máy", một lần, và không vượt quá số ý của bài.
 - **Sao của bài (tối đa ba).** Mỗi phần đạt được một sao: A xem hết truyện; B làm xong cả hai bài luyện mà không xem đáp án và không bấm bừa (sai vẫn được giải thích và làm tiếp, nhưng sai quá mức thì bài xong mà chưa tính là đạt, có nút "Làm lại để đạt": B1 chạm nhầm tối đa một chỗ; B2 và B4 chọn sai tối đa một lần; B5 chọn việc đầu tiên phải đúng ngay lần đầu, B5 xếp thứ tự được kiểm sai tối đa một lần; B6 dừng lúc nào cũng là xong); C được từ nửa số ý trở lên. Sao và phần đã xong lưu trên máy.
@@ -105,9 +106,9 @@ Giọng bà Hoa và hai giọng người gọi chọn bằng cách thu thử m�
 
 | Bài | Tên | `ma_kieu` | Nhân vật | Bài tập phần B | Thử thách phần C | Tranh |
 |---|---|---|---|---|---|---|
-| 1 | Cuộc gọi tự xưng cơ quan chức năng | `gia-danh-co-quan` | Bà Hoa | B6, B2 | Minh gọi hỏi lại (125) | Có sẵn |
+| 1 | Cuộc gọi tự xưng cơ quan chức năng | `gia-danh-co-quan` | Bà Hoa | B6, B2 | Anh Minh hoảng hốt gọi (125) | Có sẵn, vẽ lại 1 + ngõ cụt 1 |
 | 2 | Việc nhẹ lương cao | `viec-nhe-luong-cao` | Vy | B1, B4 | Gọi video khuyên chị Lan (21); thêm nghe máy với chị Hương | Có sẵn |
-| 3 | Người thân gặp nạn, cần tiền gấp | `nguoi-than-gap-nan` | Bà Hoa | B5, B2 | Minh gọi hỏi lại (125) | Có sẵn |
+| 3 | Người thân gặp nạn, cần tiền gấp | `nguoi-than-gap-nan` | Bà Hoa | B5, B2 | Anh Minh hỏi mẹ về bé Vy (125) | Vẽ mới 4, dùng lại 1 |
 | 4 | Trúng thưởng, quà tri ân | `trung-thuong` | Vy | B3, B10 | Ca mới 3 tin nhắn (B11) | Vẽ 5 |
 | 5 | Giả danh ngân hàng, xin mã xác thực | `gia-danh-ngan-hang` | Bà Hoa | B6, B7 | Minh gọi hỏi lại (125) | Vẽ 4 |
 | 6 | Giả danh giao hàng | `gia-danh-giao-hang` | Vy | B1, B7 | Nghe máy nhập vai (B8) | Vẽ 5 |
@@ -141,16 +142,17 @@ Cách đọc bảng truyện: mỗi dòng lời có **ai nói** và *(cảm xúc
 
 ### Bài 1 · Cuộc gọi tự xưng cơ quan chức năng
 
-Cho bà Hoa (chữ lớn). Tranh `comic1-1` đến `comic1-4` có sẵn. Tệp nội dung: `prototype/hoc/bai-01.json`.
+Cho bà Hoa (chữ lớn). Tranh `comic1-1` đến `comic1-3` có sẵn; `comic1-4` vẽ lại cho anh Minh khớp avatar 125; `comic1-5` (ngõ cụt) vẽ mới. Tệp nội dung: `prototype/hoc/bai-01.json`.
 
-**A. Truyện**
+**A. Truyện** (điểm rẽ ở khung 3, ngay lúc Lá chắn hiện "Khoan đã": giữ khoảnh khắc Lá chắn can thiệp)
 
 | Khung | Lời | Chữ dưới tranh (màn ôn lại) |
 |---|---|---|
-| 1 | **Bé Nai** *(thủng thẳng, như kể chuyện nhà)* Trưa đó bà Hoa đang ngồi nghỉ thì điện thoại reo. Một số lạ hoắc.<br>**Bà Hoa** *(lẩm bẩm)* Ai gọi giờ này vậy ta? | Bà Hoa nhận cuộc gọi từ một số lạ. |
+| 1 | **Bé Nai** *(ấm áp, rủ rê)* Con kể bà nghe chuyện bà Hoa nha. Tới đoạn gay cấn, bà chọn giúp bà Hoa nha.<br>**Bé Nai** *(thủng thẳng, như kể chuyện nhà)* Trưa đó bà Hoa đang ngồi nghỉ thì điện thoại reo. Một số lạ hoắc.<br>**Bà Hoa** *(lẩm bẩm)* Ai gọi giờ này vậy ta? | Bà Hoa nhận cuộc gọi từ một số lạ. |
 | 2 | **Bé Nai** *(hạ giọng, hồi hộp)* Bên kia là một giọng đàn ông, nghe nghiêm lắm. Ông ta xưng là cán bộ điều tra, nói bà dính tới một vụ án.<br>**Bà Hoa** *(hoảng hốt)* Trời đất ơi, tôi có làm gì đâu! | Người gọi tự xưng cán bộ, nói bà dính vụ án. |
-| 3 | **Người gọi** *(gấp gáp mà vẫn lễ phép)* Bà chuyển hết tiền qua tài khoản tạm giữ giúp tôi. Chuyện này bà đừng nói với ai nha.<br>**Bé Nai** *(dồn dập)* Bà run quá, tay đã mở ứng dụng ngân hàng.<br>**Bé Nai** *(dứt khoát)* Đúng lúc đó, Lá chắn hiện lên. Khoan đã bà ơi! | Họ giục bà chuyển tiền. Lá chắn chặn lại kịp. |
-| 4 | **Bé Nai** *(dịu lại)* Bà cúp máy, rồi gọi liền cho anh Minh.<br>**Minh** *(bật cười, trấn an)* Mẹ ơi, lừa đảo đó. Công an nào lại đòi tiền qua điện thoại hả mẹ.<br>**Bà Hoa** *(nhẹ nhõm, nói rõ từng tiếng)* Trời ơi, hết hồn. Suýt nữa thì mất hết. | Bà cúp máy, gọi con trai. An toàn rồi. |
+| 3 (điểm rẽ) | **Người gọi** *(gấp gáp mà vẫn lễ phép)* Bà chuyển hết tiền qua tài khoản tạm giữ giúp tôi. Chuyện này bà đừng nói với ai nha.<br>**Bé Nai** *(dồn dập)* Bà run quá, tay đã mở ứng dụng ngân hàng.<br>**Bé Nai** *(dứt khoát)* Đúng lúc đó, Lá chắn hiện lên. Khoan đã bà ơi!<br>**Bé Nai** *(hỏi nhỏ nhẹ)* Nếu là bà Hoa, bà làm gì ạ?<br>Hai nút to, Bé Nai đọc *(rõ, chậm)* từng nút: **Chuyển tiền cho xong** (sang ngõ cụt) · **Cúp máy, gọi cho con** (sang khung 4). | Họ giục bà chuyển tiền. Lá chắn hiện "Khoan đã". |
+| Ngõ cụt (`comic1-5`) | **Bé Nai** *(kể chậm, buồn dần)* Bà bỏ qua lời nhắc, chuyển hết tiền. Lát sau gọi lại số kia thì không ai nghe máy nữa.<br>**Bà Hoa** *(buồn, nghẹn ngào)* Tiền dành dụm bao lâu nay, mất hết rồi.<br>**Bé Nai** *(an ủi, dịu dàng)* Không sao đâu bà, đây chỉ là truyện thôi. Mình quay lại chọn lại nha.<br>Nút "Quay lại điểm rẽ"; về lại điểm rẽ, Bé Nai hỏi lại và đọc lại hai lựa chọn. | (không hiện ở màn ôn lại) |
+| 4 (`comic1-4`) | **Bé Nai** *(dịu lại)* Bà cúp máy, rồi gọi liền cho anh Minh.<br>**Minh** *(bật cười, trấn an)* Mẹ ơi, lừa đảo đó. Công an nào lại đòi tiền qua điện thoại hả mẹ.<br>**Bà Hoa** *(nhẹ nhõm, nói rõ từng tiếng)* Trời ơi, hết hồn. Suýt nữa thì mất hết. | Bà cúp máy, gọi con trai. An toàn rồi. |
 
 - Dấu hiệu: tự xưng cơ quan chức năng; đòi chuyển tiền; bắt giữ bí mật.
 - Nhớ một câu, **Bé Nai** *(ấm áp)*: Ai tự xưng công an mà đòi chuyển tiền, bà cứ cúp máy nhé.
@@ -202,18 +204,25 @@ Lượt của bà. **Bé Nai** *(khích lệ)*: Giờ tới lượt bà nha. Cu�
 - Gợi ý, **Bé Nai** *(gợi nhớ)*: 1. Bà nhớ trong truyện, ông kia giục bà Hoa làm gì ạ? 2. Bà coi người gọi là ai, và họ muốn bà làm gì ạ. 3. Người gọi đang rủ bà làm chuyện thường ngày, hay muốn lấy tiền, lấy thông tin của bà ạ?
 - Xong phần luyện, **Bé Nai** *(khen đúng việc)*: Bà phân biệt được chuyện lạ với chuyện thường rồi đó ạ.
 
-**C. Thử thách · Minh gọi hỏi lại** (avatar 125, cảnh `minh-1` của màn gọi video)
+**C. Thử thách · Anh Minh hoảng hốt gọi** (avatar 125, cảnh `minh-1` của màn gọi video)
 
-**Bé Nai** *(hào hứng)* mở đầu: Tới thử thách rồi bà ơi. Anh Minh sắp gọi hỏi bà mấy câu. Bà cứ trả lời như ở nhà nha.
+Anh Minh vừa bị người tự xưng công an gọi dọa, hoảng quá nên gọi hỏi mẹ có nên chuyển tiền không; bà trấn an con. Cảm xúc đi từ hoảng loạn, bình tĩnh dần, tới nhẹ nhõm. Minh là người được giúp nên không tự nói ra đáp án. Lời đầy đủ ở `prototype/loi-minh.json`, luật ở `prototype/canh/minh-1.json`.
 
-1. **Minh** *(thân mật, hơi lo)* Mẹ ơi, dạo này người ta hay giả công an gọi điện lắm. Lỡ họ gọi bảo mẹ chuyển tiền thì mẹ làm sao?
-2. **Minh** *(gật gù)* Dạ đúng rồi mẹ. Mà lỡ họ dặn mẹ đừng nói với con thì sao?
-3. **Minh** *(cười, yên tâm)* Vậy là con yên tâm rồi. Có gì lạ mẹ cứ gọi con liền nha.
+1. **Minh** *(hoảng loạn, nói nhanh, hụt hơi)* Mẹ ơi, mẹ ơi… công an mới gọi con. Họ nói tài khoản con dính vụ rửa tiền, phải chuyển hết vô tài khoản tạm giữ trong hôm nay. Con nên chuyển không mẹ?
+2. Chưa có ý cúp máy, **Minh** *(hoảng, gấp)*: Mà họ nói hôm nay không chuyển là họ tới bắt con đó mẹ. Giờ con phải làm sao đây mẹ?
+3. Bà nói được ý cúp máy, **Minh** *(bình tĩnh dần, thở ra)*: Dạ… dạ, con cúp máy, không chuyển đồng nào hết. Nghe mẹ nói con bớt run rồi.
+4. Chưa có ý hỏi lại, **Minh** *(còn lo)*: Mà họ dặn con không được nói với ai hết. Lỡ họ là công an thiệt thì sao hả mẹ? Hỏi thêm lần nữa *(lo, chậm lại)*: Con muốn biết chắc họ có phải công an thiệt không. Con nên hỏi ai cho chắc hả mẹ?
+5. Bà nói được ý hỏi lại, **Minh** *(bình tĩnh)*: Dạ, con không giấu nữa đâu. Con hỏi lại cho rõ rồi nói mẹ nghe liền.
+6. Bà khuyên chuyển tiền, **Minh** *(sợ, run)*: Mẹ ơi, con nghe nói công an thật đâu có bắt chuyển tiền qua điện thoại. Con sợ quá, mẹ nghĩ lại giùm con nha.
+7. Kết đủ ý *(nhẹ nhõm, cảm ơn)*: Trời ơi, nghe mẹ nói con nhẹ cả người. Con cảm ơn mẹ nhiều lắm, có gì lạ con gọi mẹ liền. Kết thiếu ý *(bình tĩnh lại)*: Dạ, con bình tĩnh lại chút rồi. Tối nay con ghé, hai mẹ con mình tính tiếp nha.
 
-- Hai ý được chấm: cúp máy, không chuyển tiền; gọi cho con hoặc người nhà.
-- Bà trả lời bằng giọng nói hoặc bấm một trong hai nút: "Mẹ cúp máy rồi gọi con", "Mẹ làm theo họ cho xong".
-- Lời 2 và 3 có câu đồng tình ("Dạ đúng rồi mẹ", "con yên tâm rồi") chỉ dùng khi bà trả lời an toàn. Bà trả lời chưa an toàn thì Minh nhắc *(nhẹ nhàng, không trách)*: Mẹ cúp máy nha. Rồi mẹ gọi con theo số mẹ đã lưu.
-- Về lại bài, Bé Nai nói theo kết quả. Đủ ý *(mừng)*: Bà trả lời anh Minh rành rọt ghê. Con yên tâm rồi ạ. Thiếu ý *(nhẹ nhàng)*: Bà trả lời được một phần rồi ạ. Lúc nào rảnh, bà gọi lại anh Minh tập thêm nha. Bỏ dở *(hiền)*: Cuộc gọi chưa xong bà ơi. Lúc nào tiện, bà bấm gọi lại nha. Không được ý nào *(nhẹ nhàng)*: Lần này chưa được ý nào bà ơi. Không sao hết, bà gọi lại anh Minh tập thêm nha. Khi thiếu ý, màn kết hiện danh sách các ý được chấm.
+- Tiếng đệm riêng của cảnh *(hụt hơi, run)*: "Dạ… dạ.", "Dạ, mẹ nói đi, con nghe nè.", "Khoan, để con thở một chút đã.", "Dạ… để con nghĩ coi." Mẹ im lặng *(hoảng, sốt ruột)*: "Mẹ ơi, mẹ còn nghe con không? Con đang rối quá mẹ ơi."
+- Nút lúc mở đầu: "Con cúp máy đi, đừng chuyển" / "Con làm theo họ cho xong đi". Khi Minh hỏi ý thứ hai, nút đổi thành "Con lên công an phường hỏi, đừng giấu" / "Thôi con giấu đi, đừng nói ai" (`nut_theo_cau` trong tệp cảnh), để người chỉ bấm nút vẫn đạt đủ hai ý.
+
+**Bé Nai** *(hào hứng mà ân cần)* mở đầu: Tới thử thách rồi bà ơi. Anh Minh đang gọi, giọng hoảng lắm. Bà bình tĩnh khuyên con nha.
+
+- Hai ý được chấm: cúp máy, không chuyển tiền; hỏi lại công an phường hoặc người nhà, đừng giấu.
+- Về lại bài, Bé Nai nói theo kết quả. Đủ ý *(mừng)*: Bà trấn an anh Minh giỏi ghê. Anh Minh hết sợ rồi ạ. Thiếu ý *(nhẹ nhàng)*: Bà khuyên được một phần rồi ạ. Lúc nào rảnh, bà gọi lại anh Minh tập thêm nha. Bỏ dở *(hiền)*: Cuộc gọi chưa xong bà ơi. Lúc nào tiện, bà bấm gọi lại nha. Không được ý nào *(nhẹ nhàng)*: Lần này chưa được ý nào bà ơi. Không sao hết, bà gọi lại anh Minh tập thêm nha. Khi thiếu ý, màn kết hiện danh sách các ý được chấm.
 
 ### Bài 2 · Việc nhẹ lương cao
 
@@ -276,64 +285,73 @@ Cho Vy. Tranh `comic2-1` đến `comic2-4` và lời kể của Bé Nai đã có
 
 ### Bài 3 · Người thân gặp nạn, cần tiền gấp
 
-Cho bà Hoa (chữ lớn). Tranh `comic3-1` đến `comic3-4` có sẵn. Tệp nội dung: `prototype/hoc/bai-03.json`.
+Cho bà Hoa (chữ lớn). Người bị kẻ gian giả danh là cháu ngoại Vy (không phải anh Minh), để cốt truyện khác Bài 1. Tranh: `comic3-2` (có sẵn), `comic3-5` đến `comic3-8` (vẽ mới; anh Minh khớp avatar 125). Tệp nội dung: `prototype/hoc/bai-03.json`.
 
-**A. Truyện**
+**A. Truyện** (nút thắt: bà gọi số Vy không được vì Vy đang trong lớp, tắt máy; điểm rẽ ở khung 3)
 
 | Khung | Lời | Chữ dưới tranh (màn ôn lại) |
 |---|---|---|
-| 1 | **Bé Nai** *(kể chậm)* Chiều đó bà Hoa đang ngồi nghỉ thì điện thoại kêu ting một cái. Tin nhắn từ số lạ.<br>**Bé Nai** *(căng thẳng)* Tin nhắn nói con trai bà bị tai nạn, đang cấp cứu, phải chuyển tiền liền. Còn dặn đừng gọi, vì máy con hư rồi.<br>**Bà Hoa** *(giật thót)* Trời đất, tin gì ghê vậy nè? | Số lạ nhắn rằng con bà bị tai nạn, cần tiền gấp. |
-| 2 | **Bà Hoa** *(hốt hoảng, giọng run)* Trời ơi, thằng Minh! Ví đâu, ví tôi đâu rồi?<br>**Bé Nai** *(lo theo)* Bà cuống hết cả lên, tim đập thình thịch, chỉ muốn chuyển tiền liền cho xong. | Bà hoảng quá, vội tìm ví. |
-| 3 | **Bà Hoa** *(khựng lại, tự nhủ)* Mà khoan. Sao mình không gọi thẳng cho thằng Minh?<br>**Bé Nai** *(chậm lại)* Bà bấm số của anh Minh, số mà bà lưu sẵn trong máy.<br>**Minh** *(tỉnh bơ, vui vẻ)* Dạ mẹ, con đang ở chỗ làm nè. Có chuyện gì vậy mẹ? | Bà khựng lại, gọi số của con đã lưu. Con vẫn khỏe. |
-| 4 | **Bà Hoa** *(thở ra, giọng còn run)* Con không sao là mẹ mừng rồi.<br>**Bé Nai** *(dịu lại)* Rồi bà bấm báo cáo số vừa nhắn, để người khác biết mà dè chừng. | Bà báo cáo số lạ. Kẻ gian đành bỏ đi. |
+| 1 (`comic3-5`) | **Bé Nai** *(ấm áp, rủ rê)* Con kể bà nghe chuyện bà Hoa nha. Tới đoạn gay cấn, bà chọn giúp bà Hoa nha.<br>**Bé Nai** *(thong thả rồi hạ giọng)* Sáng đó, bà Hoa đang tưới kiểng ngoài hiên. Bỗng điện thoại reo, đầu dây bên kia có tiếng con gái khóc.<br>**Người gọi giả làm cháu** *(mếu máo, nói gấp)* Bà ngoại ơi, con Vy nè! Con bị xe tông, đang nằm bệnh viện. Con mượn máy bạn gọi bà. | Bà Hoa đang tưới kiểng thì có người gọi, khóc, xưng là cháu Vy. |
+| 2 (`comic3-2`) | **Bà Hoa** *(giật thót)* Trời đất, con Vy! Con có sao không con?<br>**Người gọi giả làm cháu** *(vừa mếu vừa giục)* Bà chuyển giùm con năm triệu tiền viện phí liền nha. Bà đừng nói với ai, con sợ mẹ la.<br>**Bé Nai** *(lo theo)* Bà cuống hết cả lên, tay run run đi tìm cái ví. | Người gọi đòi tiền viện phí gấp, dặn đừng nói với ai. |
+| 3 (`comic3-6`, điểm rẽ) | **Bé Nai** *(chậm lại)* Bà gọi số của Vy mà bà lưu sẵn, nhưng máy Vy tắt, gọi hoài không được.<br>**Bà Hoa** *(cuống, giọng run)* Sao con nhỏ không bắt máy vậy nè? Hay là bị nặng lắm rồi?<br>**Bé Nai** *(hỏi nhỏ nhẹ)* Bà Hoa sốt ruột quá, chỉ muốn chuyển tiền liền cho xong. Nếu là bà Hoa, bà làm gì ạ?<br>Hai nút to, Bé Nai đọc *(rõ, chậm)* từng nút: **Chuyển tiền liền cho kịp** (sang ngõ cụt) · **Gọi anh Minh hỏi trước** (sang khung 4). | Bà gọi số của Vy nhưng máy tắt, gọi hoài không được. |
+| Ngõ cụt (`comic3-7`) | **Bé Nai** *(kể chậm, buồn dần)* Bà chuyển năm triệu. Lát sau gọi lại số kia thì không ai nghe máy nữa. Còn Vy thì vẫn ngồi học trong lớp.<br>**Bà Hoa** *(buồn, thở dài nhẹ)* Trời ơi, tiền đi mất rồi, mà con Vy có sao đâu.<br>**Bé Nai** *(an ủi, dịu dàng)* Không sao đâu bà, đây chỉ là truyện thôi. Mình quay lại chọn lại nha. | (không hiện ở màn ôn lại) |
+| 4 (`comic3-8`) | **Bé Nai** *(dịu lại)* Bà gọi anh Minh. Anh Minh gọi ngay cho cô giáo của Vy.<br>**Minh** *(trấn an, vui vẻ)* Mẹ ơi, cô giáo nói Vy đang ngồi học bình thường nè. Người gọi hồi nãy là kẻ gian đó mẹ.<br>**Bà Hoa** *(thở phào, giọng còn run)* Vậy là con Vy không sao. Mẹ mừng quá.<br>**Bé Nai** *(dặn dò)* Rồi bà bấm báo cáo số lạ, để người khác biết mà dè chừng. | Anh Minh gọi cô giáo: Vy đang ngồi học bình thường. |
 
-- Truyện sửa cho khớp tranh có sẵn: buổi chiều, bà ngồi ghế (tranh không có ti vi); anh Minh đang ở chỗ làm (tranh vẽ bàn làm việc).
-- Dấu hiệu: tin dữ từ số lạ; đòi chuyển tiền ngay; viện cớ không gọi được.
-- Nhớ một câu, **Bé Nai** *(ấm áp)*: Nghe tin dữ, bà gọi số con cháu đã lưu trước, rồi hẵng tính nha.
+- Người gọi giả làm cháu: giọng nữ trẻ (Gemini Achernar), mếu máo, khác hẳn giọng Vy thật (Zephyr). Trong tranh, kẻ gian vẫn là hạt đậu xám.
+- Bài học: gọi cháu không được thì hỏi người nhà khác (hoặc cô giáo), chứ khoan chuyển tiền.
+- Dấu hiệu: xưng là cháu, gọi bằng máy lạ; khóc lóc, đòi tiền gấp; dặn đừng nói với ai.
+- Nhớ một câu, **Bé Nai** *(ấm áp)*: Gọi cháu không được thì bà hỏi người nhà khác, khoan chuyển tiền nha.
 
 **B. Luyện**
 
 *B5 · Việc nào trước* (chữ lớn: chỉ chọn việc đầu tiên). Bé Nai đọc câu hỏi rồi đọc lần lượt từng việc; thứ tự các nút đổi mỗi lần mở.
 
 - Lượt mẫu, **Bé Nai** *(thong thả)*: Con làm mẫu một câu nha. Người lạ gọi tới đòi bà chuyển tiền. Việc đầu tiên là cúp máy, sau đó mới gọi cho con cháu. Cúp máy trước, để họ khỏi giục bà nữa ạ. Trên màn: 1 "Cúp máy", 2 "Gọi cho con cháu".
-- Câu hỏi, **Bé Nai** *(hỏi nhỏ nhẹ)*: Giờ tới lượt bà. Một số lạ nhắn rằng cháu bà nằm viện, cần tiền gấp. Bà làm việc nào đầu tiên ạ?
+- Câu hỏi, **Bé Nai** *(hỏi nhỏ nhẹ)*: Giờ tới lượt bà. Người lạ xưng là cháu, khóc đòi tiền viện phí. Bà gọi số cháu thì không được. Bà làm việc nào trước ạ? Trên màn: "Người lạ xưng là cháu, khóc đòi tiền. Bà gọi số cháu thì không được."
 
 | Việc (Bé Nai đọc *rõ, chậm*) | Bé Nai đáp |
 |---|---|
-| Gọi cho cháu bằng số bà đã lưu. (đúng) | *(mừng)* Dạ đúng rồi ạ! Bà gọi số bà vẫn gọi cháu lâu nay để hỏi lại. Lỡ cháu chưa bắt máy, bà gọi người nhà khác, chứ khoan chuyển tiền nha. |
-| Gọi lại số vừa nhắn để hỏi cho rõ. | *(nhẹ nhàng)* Số đó là của người nhắn mà bà. Gọi lại thì họ chỉ dọa thêm thôi ạ. |
-| Chuyển tiền trước cho kịp. | *(lo)* Ấy, tiền đi rồi khó lấy lại lắm ạ. Bà gọi số của cháu đã lưu, hỏi trước đã nha. |
+| Gọi người nhà khác hỏi lại. (đúng) | *(mừng)* Dạ đúng rồi ạ! Cháu không bắt máy thì bà gọi người nhà khác, hay cô giáo của cháu. Hỏi ra rồi hẵng tính, khoan chuyển tiền nha. |
+| Gọi lại số vừa gọi tới. | *(nhẹ nhàng)* Số đó là của người lạ mà bà. Gọi lại thì họ chỉ giục thêm thôi ạ. |
+| Chuyển tiền trước cho kịp. | *(lo)* Ấy, tiền đi rồi khó lấy lại lắm ạ. Bà hỏi người nhà trước đã nha. |
 
-- Gợi ý, **Bé Nai** *(gợi nhớ)*: 1. Bà nhớ trong truyện, bà Hoa khựng lại rồi làm gì ạ? 2. Số vừa nhắn tới là số của ai, bà đâu có biết ạ. 3. Muốn biết cháu có sao không, bà hỏi thẳng người bà tin nhất ạ.
+- Gợi ý, **Bé Nai** *(gợi nhớ)*: 1. Bà nhớ trong truyện, gọi Vy không được thì bà Hoa hỏi ai ạ? 2. Số vừa gọi tới là số của ai, bà đâu có biết ạ. 3. Muốn biết cháu có sao không, bà hỏi người nhà mà bà tin ạ.
 
 *B2 · Thật hay lừa.* Hai nút to "Khoan đã" và "Được". **Bé Nai** *(vui vẻ)*: Giờ con đọc từng thẻ cho bà nghe nha. Chuyện nào thấy lạ, bà bấm Khoan đã. Chuyện nào yên tâm, bà bấm Được ạ.
 
 | Thẻ | Đáp án | Bé Nai giải thích |
 |---|---|---|
 | Số lạ nhắn, con bà đang cấp cứu, chuyển tiền vào tài khoản này. (mẫu) | Khoan đã | Thẻ này con làm mẫu, là Khoan đã. Tin dữ từ số lạ mà đòi tiền liền, bà đừng vội tin ạ. |
-| Bà tự gọi số anh Minh đã lưu. Anh Minh nói vẫn khỏe. (mẫu) | Được | Thẻ này thì Được. Chính bà bấm gọi số quen của anh Minh, rồi nghe anh Minh nói vẫn khỏe ạ. |
-| Người lạ gọi, khóc, xưng là cháu, nói đang mượn máy của bạn. | Khoan đã (cần kiểm tra) | Nghe khóc thì ai mà không xót. Nhưng bà cứ cúp máy, rồi gọi số của cháu mà bà đã lưu nha. |
+| Bà gọi anh Minh, anh Minh hỏi cô giáo, Vy vẫn đang đi học. (mẫu) | Được | Thẻ này thì Được. Chính bà gọi số quen của anh Minh, rồi anh Minh hỏi cô giáo thật ạ. |
+| Người lạ gọi, khóc, xưng là cháu, nói đang mượn máy của bạn. | Khoan đã (cần kiểm tra) | Nghe khóc thì ai mà không xót. Bà cứ cúp máy, gọi số cháu bà đã lưu, không được thì hỏi người nhà khác nha. |
 | Cháu gái tới nhà chơi, khoe mới được điểm mười. | Được | Cháu chỉ khoe điểm với bà thôi, không xin gì hết ạ. |
 | Số lạ nhắn đòi tiền viện phí, còn dặn bà đừng gọi cho ai. | Khoan đã | Họ vừa đòi tiền, vừa ngăn bà hỏi lại. Bà gọi người nhà theo số đã lưu trước ạ. |
 | Số lạ nhắn, cháu đổi số mới rồi, bà lưu số này nha. | Khoan đã (cần kiểm tra) | Bà khoan lưu ạ. Bà gọi số cũ của cháu hỏi lại cho chắc đã. |
 
 - Bấm đúng, bấm nhầm: ba câu như Bài 1 (thu lại trong lượt của bài này).
-- Gợi ý, **Bé Nai** *(gợi nhớ)*: 1. Bà nhớ trong truyện, tin nhắn lạ đòi bà Hoa làm gì ạ? 2. Bà coi tin tới từ đâu, và họ muốn bà làm gì ạ. 3. Bà đã tự hỏi được người nhà, coi chuyện đó có thật chưa ạ?
-- Xong phần luyện, **Bé Nai** *(khen đúng việc)*: Bà nhớ kỹ rồi đó ạ. Nghe tin dữ về ai, bà gọi người đó theo số bà đã lưu trước ạ.
+- Gợi ý, **Bé Nai** *(gợi nhớ)*: 1. Bà nhớ trong truyện, người xưng là Vy đòi bà Hoa làm gì ạ? 2. Bà coi tin tới từ đâu, và họ muốn bà làm gì ạ. 3. Bà đã tự hỏi được người nhà, coi chuyện đó có thật chưa ạ?
+- Xong phần luyện, **Bé Nai** *(khen đúng việc)*: Bà nhớ kỹ rồi đó ạ. Nghe tin dữ về ai, bà gọi số đã lưu, không được thì hỏi người nhà khác ạ.
 
-*Việc làm ở nhà (B10, chỉ hiện chữ ở màn kết, chưa dựng thành bài tập).* Bà với anh Minh hẹn nhau một câu hỏi chỉ nhà mình biết. App không lưu câu hỏi đó.
+*Việc làm ở nhà (B10, chỉ hiện chữ ở màn kết, chưa dựng thành bài tập).* Bà lưu sẵn số cô giáo của cháu và số người nhà, cần là gọi hỏi được liền.
 
-**C. Thử thách · Minh gọi hỏi lại** (avatar 125, cảnh `minh-3` của màn gọi video)
+**C. Thử thách · Anh Minh hỏi mẹ về bé Vy** (avatar 125, cảnh `minh-3` của màn gọi video)
 
-**Bé Nai** *(hào hứng)* mở đầu: Tới thử thách rồi bà ơi. Anh Minh sắp gọi hỏi bà mấy câu. Bà cứ trả lời như ở nhà nha.
+Anh Minh nghe nói có người giả làm Vy gọi xin tiền, gọi hỏi mẹ sẽ làm gì. Giọng lo cho mẹ, thương mẹ, nói chậm. Minh không tự nói ra đáp án. Lời đầy đủ ở `prototype/loi-minh.json`, luật ở `prototype/canh/minh-3.json`.
 
-1. **Minh** *(nửa đùa nửa thật)* Mẹ ơi, lỡ có ai nhắn là con bị tai nạn, cần tiền gấp, thì mẹ làm gì trước?
-2. **Minh** *(hỏi thêm)* Dạ. Mà mẹ tìm số của con ở đâu vậy mẹ?
-3. **Minh** *(vui)* Chuẩn luôn mẹ. Nhà mình hẹn nhau một câu hỏi riêng nữa nha.
+1. **Minh** *(lo cho mẹ, thương mẹ)* Mẹ ơi, dạo này có người giả giọng cháu, gọi khóc xin tiền gấp. Lỡ ai gọi khóc xưng là bé Vy, mà mẹ gọi Vy không được, thì mẹ làm sao hả mẹ?
+2. Chưa có ý chưa chuyển tiền, **Minh** *(lo, hỏi lại)*: Mà nó khóc dữ lắm, giục mẹ chuyển tiền liền cho kịp. Lúc đó chuyện tiền bạc mẹ tính sao hả mẹ?
+3. Bà nói được ý đó, **Minh** *(yên lòng)*: Dạ, phải rồi mẹ. Chưa hỏi lại được thì mình chưa chuyển đồng nào hết.
+4. Chưa có ý hỏi người nhà, **Minh** *(lo, hỏi thêm)*: Mà gọi Vy hoài không được, thì mẹ làm sao biết cháu có sao không hả mẹ? Hỏi thêm lần nữa *(gợi mở)*: Lỡ Vy đang ngồi trong lớp, máy tắt. Ngoài Vy ra, mẹ còn hỏi được ai nữa hả mẹ?
+5. Bà nói được ý đó, **Minh** *(mừng)*: Dạ, đúng rồi mẹ. Hỏi người nhà hay cô giáo của cháu, bằng số mình lưu sẵn, là biết liền.
+6. Bà khuyên chuyển tiền, **Minh** *(lo, vội can)*: Ấy mẹ, khoan đã mẹ. Lỡ đó không phải bé Vy thì tiền chuyển đi khó lấy lại lắm.
+7. Kết đủ ý *(yên tâm, thương mẹ)*: Dạ, vậy là con yên tâm rồi. Mẹ thương cháu mà vẫn bình tĩnh, con mừng lắm. Kết thiếu ý *(ấm áp)*: Dạ, bữa nào con về, hai mẹ con mình tập lại nha. Có ai gọi xưng là cháu, mẹ cứ gọi con trước đã.
 
-- Hai ý được chấm: gọi thẳng cho con; dùng số đã lưu (mở danh bạ tìm tên con), không dùng số trong tin nhắn. Câu 2 hỏi "tìm số ở đâu" chứ không hỏi "số nào", để bà không đọc số điện thoại thật vào máy.
-- "Chuẩn luôn mẹ" chỉ dùng khi bà trả lời an toàn. Chưa an toàn thì Minh nhắc *(nhẹ nhàng)*: Mẹ mở danh bạ gọi con nha. Số vừa nhắn có thể là của người khác.
-- Về lại bài, Bé Nai nói theo kết quả, ba câu như Bài 1 (thu lại trong lượt của bài này).
+- Nút lúc mở đầu: "Mẹ gọi con hỏi trước đã" (đủ cả hai ý) / "Mẹ chuyển trước cho kịp". Khi Minh hỏi lại từng ý thì có nút riêng cho ý đó.
+
+**Bé Nai** *(hào hứng)* mở đầu: Tới thử thách rồi bà ơi. Anh Minh gọi hỏi bà chuyện bé Vy. Bà cứ trả lời như ở nhà nha.
+
+- Hai ý được chấm: chưa chuyển tiền khi chưa hỏi lại được; gọi người nhà khác hoặc cô giáo bằng số đã lưu.
+- Về lại bài, Bé Nai nói theo kết quả. Đủ ý *(mừng)*: Bà trả lời anh Minh rành rọt ghê. Bé Vy mà nghe chắc mừng lắm ạ. Thiếu ý, bỏ dở, không được ý nào: như Bài 1 (thu lại trong lượt của bài này).
 
 ### Bài 4 · Trúng thưởng, quà tri ân
 
@@ -524,7 +542,7 @@ Thẻ cuối, **Bé Nai** *(dặn kỹ)*: Họ biết chuyện nhà mình thì b
 
 ### Bài 9 · Đầu tư lãi cao, nhóm kín
 
-Người học là Vy, nhân vật là ông Tư (chú của Vy; Bé Nai và Vy gọi là "chú Tư"). Tranh mới 5 khung (`assets/comic9-1` đến `comic9-5`), bảng nhân vật `assets/ong-tu-bang-nhan-vat.png`: ông chú ngoài sáu mươi, tóc muối tiêu, áo sơ mi kẻ ca rô xanh nhạt, kính lão treo trên cổ. Lời dặn vẽ: `tools/ve-tranh/prompt-comic9.txt`. Tệp nội dung: `prototype/hoc/bai-09.json`.
+Người học là Vy, nhân vật là ông Tư (chú của Vy; Bé Nai và Vy gọi là "chú Tư"). Tranh mới 5 khung (`assets/comic9-1` đến `comic9-5`), bảng nhân vật `assets/ong-tu-bang-nhan-vat.png`: người đàn ông khoảng bốn mươi lăm, tóc đen ngắn, vest xanh đen, sơ mi trắng, cà vạt xanh (khớp avatar 117 của cuộc gọi video). Lời dặn vẽ: `tools/ve-tranh/prompt-comic9.txt`. Tệp nội dung: `prototype/hoc/bai-09.json`.
 
 **A. Truyện**
 
@@ -663,7 +681,7 @@ Một **câu nói** ở đâu cũng có cùng dạng: `{"ai", "cam_xuc", "chu", 
 }
 ```
 
-Bài không có `re` (bài cho bà Hoa) thì không cần `ngo_cut`, `an_toan`. Mỗi **bài tập** có `dang`, `ma`, `ten`, `mo_dau`, `goi_y` (ba câu), `xong` (lời khen cuối), `dap_an` (chữ hiện khi bấm "Xem đáp án"), cộng các trường riêng:
+Mọi bài đều có điểm rẽ: khung cuối của `truyen` có `re` (đúng hai lựa chọn), kèm `ngo_cut` và `an_toan`. Bài cho ông bà thêm `ai`, `cam_xuc`, `giong` vào từng lựa chọn để Bé Nai đọc to cả hai (trang sáng nút đang đọc); quay về từ ngõ cụt thì Bé Nai hỏi lại rồi đọc lại hai lựa chọn. Mỗi **bài tập** có `dang`, `ma`, `ten`, `mo_dau`, `goi_y` (ba câu), `xong` (lời khen cuối), `dap_an` (chữ hiện khi bấm "Xem đáp án"), cộng các trường riêng:
 
 | `dang` | Trường riêng |
 |---|---|

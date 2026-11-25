@@ -243,7 +243,10 @@ async function choiBai(B, w, h, o) {
     await choMan('truyen:' + k); const cuoi = B.truyen[k].loi[B.truyen[k].loi.length - 1].chu;
     if (k === 0) { await cho(`window.__hoc.dangNoi===true`, 4000, 'giọng kể tự phát'); await kiem('truyen-1', true); }
     if (B.truyen[k].re) {
-      await cho(`window.__hoc.pha==='re'`, 60000, 'tới điểm rẽ sau khi kể xong'); await kiem('diem-re', true);
+      await cho(`window.__hoc.pha==='re'`, 60000, 'tới điểm rẽ sau khi kể xong');
+      ghi(await ev(`document.querySelectorAll('#app .lua-chon').length`) === 2, 'điểm rẽ có đúng hai lựa chọn');
+      if (B.truyen[k].re.some(r => r.giong)) ghi(await cho(`!!document.querySelector('#app .lua-chon.doc')`, 8000, 'Bé Nai đọc lựa chọn'), 'điểm rẽ: Bé Nai đọc to từng lựa chọn');
+      await kiem('diem-re', true);
       const sai = B.truyen[k].re.find(r => r.toi === 'ngo-cut'), dung = B.truyen[k].re.find(r => r.toi === 'an-toan');
       await bam(sai.chu); await choMan('truyen:ngo-cut'); await kiem('ngo-cut', true); await cho(`window.__hoc.pha==='het-loi'`, 60000, 'kể xong ngõ cụt'); await bam('Quay lại điểm rẽ');
       await choMan('truyen:' + k); await choPha('re'); await bam(dung.chu); await choMan('truyen:an-toan'); await kiem('an-toan', true); await quaKhung('truyen:an-toan');

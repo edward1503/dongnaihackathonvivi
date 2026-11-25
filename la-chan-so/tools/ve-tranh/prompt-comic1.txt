@@ -4,7 +4,7 @@ Shared style for all panels: flat vector comic illustration, clean bold dark-nav
 Hard rules for every panel: absolutely NO text, letters, numbers or writing anywhere (no speech bubbles with writing, no signs, no captions); no logos; no national emblems; no flags; no maps; no police or military uniforms or insignia; no realistic human faces (simple friendly cartoon faces only).
 
 Recurring character "Ba Hoa": a 65-year-old Vietnamese grandmother, grey hair in a low bun, round glasses, lilac blouse.
-Recurring character "son": a Vietnamese man around 30, short black hair, green polo shirt.
+Recurring character "son" (Minh): a Vietnamese man around 30, short neat black hair, black suit jacket over a white open-collar dress shirt, no tie (matches the video-call avatar 125).
 The scammer is always a faceless dark-grey silhouette wearing a phone headset, in a dim room.
 
 Panel 1 (comic1-1.png): Ba Hoa at home in a cozy living room, her smartphone on the table is ringing with vibration lines and a question-mark caller icon; she looks surprised.

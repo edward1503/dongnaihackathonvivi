@@ -1,0 +1,14 @@
+Use your image generation tool (built-in image_gen, edit mode with the attached images) to make ONE square (1:1) illustration and save it as a PNG file at EXACTLY the path given below inside the current working directory (overwrite if it exists). After saving, list the file to confirm it exists. Do not create any other files.
+
+ATTACHED IMAGES AND THEIR ROLES:
+- in/cu-comic9-5.png: EDIT TARGET. A finished comic panel. Keep EVERYTHING in it exactly as it is: the layout, camera angle, the tiled porch, house, roof tiles, door, wooden chair, tea table, teapot and cups, potted plants, the phone and what its screen shows, coins, savings booklet, wallet, speech bubble and its icon, the girl Vy, the grey bean figure, the baby deer Bé Nai (same pose, expression, size, place), line weight, colours and the warm off-white background. The ONLY change: the man in the panel (old grey-haired man in a light-blue plaid shirt, glasses on a cord, sandals) must be redrawn as the new "Chú Tư" from the character sheet, in the SAME position, same pose, same gesture, same expression and same size.
+- in/moi-ong-tu-bang-nhan-vat.png: the NEW character sheet of Chú Tư. Copy his face, hair and clothes exactly from it.
+- in/ref-tu-trang-phuc.jpg: a photo whose face is deliberately blurred; only for his hair and clothing colours. Never copy or invent a realistic face; his face stays a simple chibi face exactly like on the sheet.
+- in/spot-mascot.png: how Bé Nai looks (it is already in the panel; keep it unchanged).
+
+THE NEW "Chú Tư": chibi Vietnamese man in his mid-forties (about 45, not elderly): neat short BLACK hair with no grey, styled up and slightly back on top with short tidy sides, black eyebrows, clean-shaven (no beard, no moustache), NO glasses and no glasses cord, no old-age wrinkles; dark navy-blue business suit (jacket and matching trousers), white collared shirt, medium-blue necktie, black leather shoes. Same chibi proportions and drawing hand as the rest of the panel (big round head, simple dot eyes, rosy cheeks).
+
+HARD RULES: absolutely NO text, letters, numbers or writing anywhere (none on phone screens, booklet or bubbles); no logos; no national emblems; no flags; no maps; no uniforms or insignia. Every hand has a normal number of fingers (simple mitten-like chibi hands are fine). Chú Tư appears exactly once, Bé Nai exactly once. Do not add or remove any other people or objects.
+
+THIS PANEL:
+out/comic9-5.png: edit of in/cu-comic9-5.png. Chú Tư and Vy stand together smiling with relief, both holding up one smartphone between them showing a blue shield with a white check mark; the closed blue savings booklet lies safely on the small tea table in front; Bé Nai jumps happily at the right.

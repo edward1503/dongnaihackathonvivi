@@ -108,6 +108,8 @@ img{-webkit-user-drag:none;user-select:none}
 #app:not(.toi) .lua-chon{background:#fff;color:var(--ink);border-color:var(--outline)}
 #app:not(.toi) .lua-chon .so{background:var(--brand-c);color:var(--brand-ink)}
 .lua-chon .so{width:32px;height:32px;border-radius:16px;background:#2B3A8C;display:flex;align-items:center;justify-content:center;flex:none;font-size:14px}
+.lg .lua-chon{min-height:68px;font-size:20px;line-height:26px;border-radius:16px}.lg .lua-chon .so{width:40px;height:40px;border-radius:20px;font-size:18px}      /* điểm rẽ của bài ông bà: hai nút to */
+.lua-chon.doc{border-color:var(--brand);box-shadow:0 0 0 3px rgba(59,130,246,.25)}      /* Bé Nai đang đọc lựa chọn này */
 
 /* ---------- Ôn lại ---------- */
 .bon-tranh{display:flex;gap:8px;flex:none}

@@ -5,12 +5,12 @@ STYLE: match the attached style reference images exactly in line weight, colour 
 PEOPLE (cute chibi doodle people drawn in the same hand as the reference figures: big round heads, simple dot eyes, rosy cheeks, small smiles, short bodies):
 - Bà Hoa: chibi Vietnamese grandmother, grey hair in a low bun, round glasses, lilac blouse, dark trousers, cosy living room with a blue sofa and orange curtains.
 - Vy: chibi high-school girl, black ponytail with a blue hair tie, white school shirt, navy skirt, small blue backpack, bedroom with a bookshelf and small lamp.
-- Minh: chibi young man, short black hair, green polo shirt.
+- Minh: chibi Vietnamese man about thirty, short neat black hair, clean-shaven, black suit jacket over a plain white dress shirt with an open collar and no tie, black trousers, black shoes (matches the video-call avatar 125 and assets/chan-dung-minh.png; never a green polo shirt).
 - the scammer: a plain grey bean-shaped doodle figure (like the white bean figure in the reference, but grey) wearing a phone headset and dark sunglasses, with a sly grin. Never a real-looking person, never a uniform.
 
 MASCOT "Bé Nai" (the attached assets/spot-mascot.png shows exactly how to draw it, copy it faithfully): a chibi baby deer with caramel-brown fur, cream fawn spots, cream face and belly, big round ears, tiny antler nubs, huge round glossy sparkly eyes, rosy cheeks, a small royal-blue scarf with an amber shield charm. Exactly ONE Bé Nai per panel, fully inside the frame, small to medium size, acting as a friendly guide (pointing, cheering, holding up a stop hand, giving a thumbs up). Keep its eyes big, round and sparkly in every panel.
 
-HARD RULES: absolutely NO text, letters, numbers or writing anywhere (no headline banners, no words in speech bubbles; a speech bubble may contain only one simple icon such as a coin, a gift box, an exclamation mark, a question mark shape drawn as a curl, an ambulance, a banknote or a red cross); no logos; no national emblems; no flags; no maps; no police or military uniforms or insignia; any phone showing something is turned toward the viewer and shows only simple icons.
+HARD RULES: absolutely NO text, letters, numbers or writing anywhere (no headline banners, no words in speech bubbles; a speech bubble may contain only one simple icon such as a coin, a gift box, an exclamation mark, a question mark shape drawn as a curl, an ambulance (with only a siren light, or a heart on its side) or a banknote); never a red cross or red crescent (protected emblems); no logos; no national emblems; no flags; no maps; no police or military uniforms or insignia; any phone showing something is turned toward the viewer and shows only simple icons.
 
 PANELS:
 assets/comic3-1.png: Bà Hoa reading a message on her phone, surprised; the phone screen faces the viewer and shows a chat bubble with an ambulance icon and a banknote icon. Bé Nai stands alert beside her, ears perked.
