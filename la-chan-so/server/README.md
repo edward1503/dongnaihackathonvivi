@@ -8,8 +8,18 @@ FastAPI. Làm S1 đến S6 trong [`../KE-HOACH-MANG-2-3.md`](../KE-HOACH-MANG-2-
 cd la-chan-so/server
 pip install -r requirements.txt
 uvicorn lcs.main:app --host 0.0.0.0 --port 8000     # điện thoại trong cùng mạng gọi http://<ip-máy>:8000
-python -m pytest -q                                 # 34 bài kiểm thử theo bảng mục 6 của kế hoạch
+python -m pytest -q                                 # 51 bài kiểm thử
 ```
+
+Khóa AI: tạo tệp `server/.env` (không đưa lên kho) có một dòng `GEMINI_API_KEYS=khóa1,khóa2`. Không có khóa thì mọi thứ vẫn chạy bằng bộ luật và kịch bản dự phòng.
+
+Một địa chỉ cho cả demo:
+
+| Địa chỉ | Gì |
+|---|---|
+| `/` | App React của bà Hoa, Vy. Thêm `?demo=1` để có bảng mô phỏng cuộc gọi bên trái |
+| `/zalo`, `/web` | Trang của Mảng 5, 6 (khi `mvp/` đã gộp vào): chạy thẳng trên máy chủ này, không cần `mvp/server.mjs` |
+| `/prototype/video-call.html` | Gọi video khuyên chị Lan, AI thật (có tiêu đề COOP/COEP cho avatar) |
 
 Nếu đã build app (`cd ../app && npm run build`), máy chủ phục vụ luôn app ở `/`. Cả demo chỉ cần một địa chỉ.
 
@@ -49,6 +59,14 @@ Kết quả phân tích luôn có dạng `AnalysisResult` (mục 2.1 của kế 
 - `POST /api/check` `{value, kind?}`: kiểm tra nhanh. `kind` là `phone`, `link`, `account` hoặc `message`.
 - `POST /api/analyze/message`: phân tích tin nhắn.
 - `POST /api/asks`: bà Hoa hỏi người thân.
+
+**Gọi video chị Lan (Hoàng, Mảng 4):**
+- `POST /api/roleplay/start`: câu mở đầu của chị Lan và 4 ý cần đạt.
+- `POST /api/roleplay/turn` `{sessionId, text}` hoặc multipart `{sessionId, audio}`: chấm 4 ý; chị Lan đáp đúng vai, gợi về ý còn thiếu; `line.audio` là tệp thu sẵn hoặc giọng Gemini (data URL).
+- `POST /api/roleplay/finish`: điểm và câu tổng kết cho màn A11i.
+- Người học đọc ra dãy số dài thì dừng vai ngay (an toàn, theo KICH-BAN-THOAI.md).
+
+**Lớp tương thích cho Mảng 5, 6** (`lcs/compat.py`): đủ các đường dẫn của `mvp/HOP-DONG-DU-LIEU.md` (SSE `/api/events`, `/api/alerts/:id/reply|call`, `/api/reports/:id/decision`, `/api/lookup?v=`, `/api/broadcasts`, `/api/reset`). Câu hỏi của bà Hoa hiện ở trang Zalo như một cảnh báo; Minh trả lời ở đó thì máy bà Hoa nhận ngay (A08c).
 
 **Cả đội:** gọi `POST /api/demo/reset` trước mỗi lần diễn. Lệnh này đưa dữ liệu về đầu kịch bản và báo mọi máy đang mở bằng sự kiện `demo.reset`.
 

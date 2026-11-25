@@ -20,7 +20,7 @@ Tham số trên địa chỉ trang, dùng khi trình diễn:
 | `?mode=simple` · `?mode=full` | Máy bà Hoa (A01a) · máy Vy (A01b) |
 | `?api=http://192.168.1.10:8000` | Trỏ tới máy chủ khác (lưu lại cho lần sau) |
 | `?nguoithan=0` | Xóa người thân để xem màn E01b |
-| `?demo=1` | Hiện hàng số mẫu bấm nhanh ở màn A06a |
+| `?demo=1` | Hiện hàng số mẫu ở A06a và bảng mô phỏng bên trái (có cuộc gọi lạ, mở app ngân hàng, đặt lại demo) |
 
 ## Màn và đường dẫn
 
@@ -33,6 +33,18 @@ Tham số trên địa chỉ trang, dùng khi trình diễn:
 | `#/hoi-nguoi-than` · `/cho` · `/tra-loi` | A08a · A08b · A08c | `screens/Ask.jsx` |
 | `#/bao-cao` · `/cong-dong` · `/xong` | A09a · A09b · A09c | `screens/Report.jsx` |
 | `#/chua-co-nguoi-than` · `#/mat-mang` · `#/chua-du-thong-tin` | E01b · E01c · E01d | `screens/States.jsx` |
+| `#/cuoc-goi?so=…` | A03a (số bị báo) · A03b (số chưa rõ) | `screens/Call.jsx` |
+| `#/sau-cuoc-goi?so=…&giay=252&ghiam=1` | điều phối khi cúp máy, mở A04a | `screens/Call.jsx` |
+| `#/hoi-nhanh` · `#/phan-tich-cuoc-goi` · `#/khong-ghi-am` | A04a · A04b · A04c | `screens/Call.jsx` |
+| `#/dung-lai?phut=4` | A10a | `screens/Call.jsx` |
+
+**Luồng cuộc gọi:**
+1. Đổ chuông (A03a), bà bấm Nghe.
+2. Cúp máy, Bé Nai hỏi (A04a), phát giọng thu sẵn.
+3. Bà bấm "Có", mở A04b: AI chép lời và phân tích, tự báo Minh (`POST /api/alerts`).
+4. Minh trả lời, trong app hoặc trên trang Zalo, thì máy bà tự chuyển sang A08c.
+
+Trên trình duyệt, A04b gửi bản chép lời mẫu; có khóa Gemini thì AI phân tích thật.
 
 ## Cầu nối với Android (cho Hoàng)
 
@@ -48,6 +60,8 @@ App tự tìm `window.LCSNative`. Chưa có thì dùng cách thay thế để v�
 | `weekStats()` | chuỗi JSON `{calls, messages, layersOn}` | A01a, A01b |
 | `openStory(scamType)` | | Mở đúng truyện (Mảng 4) |
 | `openSettings()` | | Tab "Tôi", thiết lập (A02) |
+| `analyzeRecording(phone)` | chuỗi JSON `AnalysisResult` | A04b: Android đọc tệp ghi âm của máy, gửi `POST /api/analyze/call`, trả kết quả |
+| `dismissStop()` | | A10a "Đóng cảnh báo": tắt lớp phủ |
 
 Ngoài ra có thể gán `window.LCS_API_BASE` (địa chỉ máy chủ) và `window.LCS_LEARN_URL` trước khi nạp trang. Đóng gói `dist/` vào `assets` của ứng dụng thì app vẫn mở được khi mất mạng (màn E01c).
 
@@ -64,7 +78,7 @@ Ngoài ra có thể gán `window.LCS_API_BASE` (địa chỉ máy chủ) và `wi
 ## Kiểm tra
 
 ```bash
-python tools/chup-man.py chup/      # Selenium + Firefox: bấm qua cả 18 màn như người dùng, chụp từng khung để so với ../export/png/
+python tools/chup-man.py chup/      # Selenium + Firefox: bấm qua 24 màn như người dùng (cả bước Minh trả lời trên trang Zalo), chụp để so với ../export/png/
 ```
 
 ## Khác thiết kế có chủ đích

@@ -134,6 +134,20 @@ async def analyze_text(masked_text: str, mode: str) -> dict:
     return await generate_json([{"text": masked_text}], ANALYSIS_SCHEMA, analysis_system(mode))
 
 
+async def transcribe_plain(audio: bytes, mime: str) -> str:
+    """Chép một câu nói ngắn (lời người học khuyên chị Lan)."""
+    parts = [
+        {"inlineData": {"mimeType": mime, "data": base64.b64encode(audio).decode()}},
+        {"text": "Chép lại nguyên văn tiếng Việt lời nói trong đoạn âm thanh này. Chỉ trả về lời nói."},
+    ]
+    out = await generate_json(parts, {"type": "OBJECT", "properties": {"text": {"type": "STRING"}}, "required": ["text"]},
+                              timeout=max(config.ai_timeout(), 20))
+    text = str(out.get("text") or "").strip()
+    if not text:
+        raise AIUnavailable("không nghe được lời nói")
+    return text
+
+
 async def transcribe(audio: bytes, mime: str) -> list[dict]:
     parts = [
         {"inlineData": {"mimeType": mime, "data": base64.b64encode(audio).decode()}},

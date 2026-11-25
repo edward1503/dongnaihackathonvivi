@@ -15,7 +15,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import ValidationError
 
-from . import ai, compat, config
+from . import ai, compat, config, roleplay
 from .analyze import NeedInput, analyze_call, analyze_text
 from .checker import check_target
 from .contract import (AlertIn, AnalysisResult, AppealIn, AskIn, AskReplyIn, BroadcastIn, CheckIn, DecisionIn,
@@ -396,6 +396,50 @@ def stats(month: str | None = None):
     return store.stats(month)
 
 
+# ---------------- Gọi video khuyên chị Lan (A11h): AI đóng vai và chấm ----------------
+
+@app.post("/api/roleplay/start")
+def roleplay_start():
+    return roleplay.start()
+
+
+@app.post("/api/roleplay/turn")
+async def roleplay_turn(request: Request):
+    """Nhận {sessionId, text}, hoặc multipart {sessionId, audio} để AI chép lời người học trước."""
+    if request.headers.get("content-type", "").startswith("multipart/"):
+        form = await request.form()
+        sid, text, audio = form.get("sessionId"), form.get("text"), form.get("audio")
+        if audio is not None and not text:
+            data = await audio.read(MAX_AUDIO + 1)
+            if len(data) > MAX_AUDIO:
+                bad("Đoạn ghi âm dài quá", 413)
+            if not ai.available():
+                bad("Máy chủ chưa có AI để nghe giọng nói. Bạn bấm Gõ chữ nhé")
+            try:
+                text = await ai.transcribe_plain(data, audio.content_type or "audio/webm")
+            except ai.AIUnavailable:
+                bad("Mình chưa nghe rõ. Bạn nói lại hoặc bấm Gõ chữ nhé")
+    else:
+        body = await request.json()
+        sid, text = body.get("sessionId"), body.get("text")
+    if not sid:
+        bad("Thiếu sessionId")
+    if not text or not str(text).strip():
+        bad("Mình chưa nghe rõ. Bạn nói lại hoặc bấm Gõ chữ nhé")
+    try:
+        return await roleplay.turn(str(sid), str(text))
+    except KeyError:
+        bad("Cuộc gọi đã hết hạn, bạn gọi lại từ đầu nhé", 404)
+
+
+@app.post("/api/roleplay/finish")
+async def roleplay_finish(body: dict = Body(...)):
+    try:
+        return roleplay.finish(str(body.get("sessionId")))
+    except KeyError:
+        bad("Không thấy cuộc gọi này", 404)
+
+
 @app.get("/api/broadcasts")
 def list_broadcasts():
     return alerts.broadcasts
@@ -425,6 +469,22 @@ for _route, _file in (("/zalo", "mvp/zalo.html"), ("/web", "mvp/web.html"),
 
 if (LCS_ROOT / "assets" / "fonts").is_dir():
     app.mount("/assets/fonts", StaticFiles(directory=LCS_ROOT / "assets" / "fonts"), name="fonts")
+
+# Trang gọi video chị Lan và bộ avatar khớp miệng: cần COOP/COEP như may-chu.py để chạy đa luồng
+ISOLATED = ("/prototype/", "/vendor/", "/screens/")
+for _dir in ("prototype", "vendor", "screens"):
+    if (LCS_ROOT / _dir).is_dir():
+        app.mount(f"/{_dir}", StaticFiles(directory=LCS_ROOT / _dir), name=_dir)
+
+
+@app.middleware("http")
+async def cross_origin_isolation(request: Request, call_next):
+    resp = await call_next(request)
+    if request.url.path.startswith(ISOLATED):
+        resp.headers["Cross-Origin-Opener-Policy"] = "same-origin"
+        resp.headers["Cross-Origin-Embedder-Policy"] = "require-corp"
+        resp.headers["Cross-Origin-Resource-Policy"] = "same-origin"
+    return resp
 
 _static = config.env("LCS_STATIC") or str(LCS_ROOT / "app" / "dist")
 if os.path.isdir(_static):
