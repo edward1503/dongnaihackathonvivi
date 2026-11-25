@@ -36,7 +36,7 @@ const VS = "attribute vec2 p; void main(){ gl_Position = vec4(p, 0., 1.); }";
 const FS = `precision highp float;
 uniform sampler2D uVid, uMouth, uPrev; uniform float uFade, uPack;
 uniform vec2 uSrc; uniform vec3 uView; uniform vec4 uBox, uFace, uPiv; uniform vec3 uPose; uniform vec2 uShift; uniform float uMouthOn;
-uniform sampler2D uBlink; uniform float uBlinkA; uniform vec4 uEye; // la-chan-so 25/11: chớp mắt khi đang nói (khung chớp hoà vào dải mắt)
+uniform sampler2D uBlink; uniform float uBlinkA, uBlinkN; uniform vec4 uEye; uniform vec2 uBlinkOff; // la-chan-so 25/11: chớp mắt khi đang nói bằng chuỗi khung thật; uBlinkA = số thứ tự khung trong chuỗi (từ 1), 0 = không chớp
 // uPack: miếng miệng dựng sẵn (tools/dung-mieng.py) nằm trong một khung video, nửa trái là màu, nửa phải là trọng số dán
 vec4 M(vec2 m){
   if (uPack > 0.5) { float x = clamp(m.x, 0.003, 0.997) * 0.5; return vec4(texture2D(uMouth, vec2(x, m.y)).rgb, texture2D(uMouth, vec2(0.5 + x, m.y)).g); }
@@ -56,7 +56,8 @@ void main(){
   float a = texture2D(uVid, vec2(0.5 + hx, uv.y)).g;
   if (uBlinkA > 0.0) { float fe = 0.25 * (uEye.w - uEye.y);
     float em = smoothstep(uEye.x, uEye.x + fe, q.x) * (1.0 - smoothstep(uEye.z - fe, uEye.z, q.x)) * smoothstep(uEye.y, uEye.y + fe, q.y) * (1.0 - smoothstep(uEye.w - fe, uEye.w, q.y));
-    col = mix(col, texture2D(uBlink, vec2(hx, uv.y)).rgb, uBlinkA * em); }
+    vec2 l = clamp((q - uBlinkOff - uEye.xy) / (uEye.zw - uEye.xy), 0.002, 0.998);   // toạ độ trong dải mắt; uBlinkOff: khung chớp lệch so với dáng chuẩn bao nhiêu (meta.lech_chuoi)
+    col = mix(col, texture2D(uBlink, vec2(l.x, (uBlinkA - 1.0 + l.y) / uBlinkN)).rgb, em); }
   vec2 m = (q - uBox.xy) / (uBox.zw - uBox.xy);
   if (uMouthOn > 0.5 && m.x > 0.0 && m.y > 0.0 && m.x < 1.0 && m.y < 1.0) {
     vec4 t = M(m); float d = 1.0 / ${N}.0;
@@ -209,6 +210,7 @@ export async function mountLiteAvatar(host, id, audioCtx) {
   // la-chan-so 25/11 (người dùng: đứng im thì hơi giả, mắt cũng phải cử động): lấy sẵn khung chớp mắt (meta.khung_chop, tools/khung-chuan.py)
   // vào một texture; khi đang nói và video nhân vật đứng yên ở dáng chuẩn thì vài giây hoà khung này vào dải mắt một lần
   gl.uniform1i(U("uBlink"), 4); gl.uniform1f(uBlinkA, 0);
+  const CHUOI = meta.chuoi_chop || []; gl.uniform1f(U("uBlinkN"), Math.max(1, CHUOI.length)); const uBlinkOff = U("uBlinkOff"), LECH = meta.lech_chuoi || []; gl.uniform2f(uBlinkOff, 0, 0);
   let chopSan = false, chopLuc = 0, chopTiep = 0;
   if (meta.khung_chop != null && meta.mat) gl.uniform4f(U("uEye"), ...meta.mat);
 
@@ -290,9 +292,10 @@ export async function mountLiteAvatar(host, id, audioCtx) {
     { const bay = performance.now(); let b = 0;
       if (chopSan && clip?.dung) {
         if (!chopTiep) chopTiep = bay + 1200 + Math.random() * 1800;
-        if (bay >= chopTiep) { chopLuc = bay; chopTiep = bay + 2500 + Math.random() * 3000; }
-        const d = bay - chopLuc;   // một lần chớp khoảng 0,2 giây: nhắm dần, giữ, mở dần
-        b = d < 70 ? d / 70 : d < 120 ? 1 : d < 210 ? 1 - (d - 120) / 90 : 0;
+        if (bay >= chopTiep) { chopLuc = bay; chopTiep = bay + (Math.random() < 0.15 ? 450 : 2200 + Math.random() * 3300); }   // thỉnh thoảng chớp đôi
+        const i = Math.floor((bay - chopLuc) / (1000 / meta.fps));   // phát lại chuỗi khung thật đúng nhịp video
+        b = i < CHUOI.length ? i + 1 : 0;
+        if (b) gl.uniform2f(uBlinkOff, ...(LECH[i] || [0, 0]));   // dời từng khung cho mắt nằm đúng chỗ mắt của dáng chuẩn (không nhảy)
       } else chopTiep = 0;
       gl.uniform1f(uBlinkA, b); }
     const t = performance.now() / 1000; // lắc lư chậm + gật nhẹ theo giọng (cùng đường cong tools/lipcal/idle_motion.py)
@@ -305,16 +308,23 @@ export async function mountLiteAvatar(host, id, audioCtx) {
   }
   await vid.play().catch(() => {});
   // lấy khung chớp mắt từ chính video nhân vật trước khi vẽ (video ẩn thứ hai không nạp được trong WebView Android khi chưa phát)
-  if (meta.khung_chop != null && meta.mat) {
+  if (meta.chuoi_chop?.length && meta.mat) {
     try {
       vid.pause();
-      await new Promise((ok) => { let xong = false; const het = () => { if (!xong) { xong = true; vid.removeEventListener("seeked", het); ok(); } };
-        vid.addEventListener("seeked", het); vid.currentTime = (meta.khung_chop % meta.frames) / meta.fps; setTimeout(het, 1500); });
-      if (vid.readyState >= 2) {
-        gl.activeTexture(gl.TEXTURE4); gl.bindTexture(gl.TEXTURE_2D, tBlink); gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, vid); chopSan = true;
+      // cắt dải mắt của từng khung trong chuỗi chớp thật (meta.chuoi_chop) xếp dọc vào một ảnh nhỏ, đưa lên GPU một lần
+      const [mx0, my0, mx1, my1] = meta.mat.map(Math.round), bw = mx1 - mx0, bh = my1 - my0;
+      const atlas = Object.assign(document.createElement("canvas"), { width: bw, height: bh * CHUOI.length }), ac = atlas.getContext("2d");
+      let du = CHUOI.length > 0;
+      for (let i = 0; i < CHUOI.length && du; i++) {
+        await new Promise((ok) => { let xong = false; const het = () => { if (!xong) { xong = true; vid.removeEventListener("seeked", het); ok(); } };
+          vid.addEventListener("seeked", het); vid.currentTime = (CHUOI[i] % meta.frames) / meta.fps; setTimeout(het, 1500); });
+        if (vid.readyState < 2) du = false; else ac.drawImage(vid, mx0, my0, bw, bh, 0, i * bh, bw, bh);
       }
-      console.info("chớp mắt:", chopSan ? "sẵn sàng, khung " + meta.khung_chop : "không lấy được khung");
+      if (du) {
+        gl.activeTexture(gl.TEXTURE4); gl.bindTexture(gl.TEXTURE_2D, tBlink); gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, atlas); chopSan = true;
+      }
+      console.info("chớp mắt:", chopSan ? "sẵn sàng, chuỗi " + CHUOI[0] + "–" + CHUOI[CHUOI.length - 1] : "không lấy được khung");
     } catch (e) { console.warn("chớp mắt:", e); }
     vid.currentTime = 0; await vid.play().catch(() => {});
   }
