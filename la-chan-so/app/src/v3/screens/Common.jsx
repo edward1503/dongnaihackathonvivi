@@ -13,7 +13,6 @@ export const ROLES = [
   { mode: 'simple', icon: 'user', title: 'Người lớn tuổi', sub: 'Chữ to, đọc to, hỏi con cháu một chạm' },
   { mode: 'full', icon: 'grad', title: 'Học sinh', sub: 'Kiểm tra tin nhắn, học qua truyện 1 phút' },
   { mode: 'relative', icon: 'users', title: 'Người thân', sub: 'Nhận cảnh báo khi bố mẹ gặp cuộc gọi lạ' },
-  { mode: 'volunteer', icon: 'mega', title: 'Đăng nhập đội', sub: 'Xem thống kê và xét hồ sơ của khu phố' },
 ]
 
 // ---------- 00 Màn chào ----------

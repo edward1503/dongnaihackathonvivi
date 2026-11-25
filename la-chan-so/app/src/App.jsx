@@ -13,14 +13,23 @@ import { Report, ReportDone } from './v3/screens/Report.jsx'
 import { Appeal } from './v3/screens/Appeal.jsx'
 import { useApp } from './lib/state.jsx'
 import { native } from './lib/native.js'
-import { NewType, Review, Share, Stats, TeamCode } from './v3/screens/Volunteer.jsx'
+import { NewType } from './v3/screens/Volunteer.jsx'
+import { API_BASE } from './lib/api.js'
 import DemoPanel from './ui/DemoPanel.jsx'
 
-function TeamRoute({ lead = false }) {
-  const { team, persona } = useApp()
-  if (!team || persona !== 'volunteer') return <Navigate to="/ma-doi" replace />
-  if (lead && team.member.role !== 'lead') return <Navigate to="/duyet" replace />
-  return <Outlet />
+// Đội tình nguyện duyệt trên trang web /web (bảng thống kê, hàng chờ, khiếu nại), không duyệt trong app.
+// Quyền duyệt do máy chủ kiểm bằng phiên đội; app chỉ chỉ đường sang web.
+function TeamOnWeb() {
+  const { setMode } = useApp()
+  const url = (API_BASE || location.origin) + '/web'
+  return (
+    <div className="shell"><div className="phone" data-name="C0w-doi-dung-web"><div className="col g16" style={{ padding: 24, marginTop: 48 }}>
+      <h1 className="h-l">Đội tình nguyện làm việc trên trang web</h1>
+      <div className="t-body c-ink2">Xét hồ sơ, xử lý báo nhầm và phát cảnh báo khu phố trên trang web của đội, có bảng thống kê đầy đủ. Đăng nhập bằng mã đội được cấp.</div>
+      <div className="t-body" style={{ wordBreak: 'break-all' }}><b>{url}</b></div>
+      <button type="button" className="btn" onClick={() => { setMode('simple'); location.hash = '#/vai' }}>Chọn vai khác</button>
+    </div></div></div>
+  )
 }
 
 function BrowserDemoRoute() {
@@ -30,7 +39,7 @@ function BrowserDemoRoute() {
 export default function App() {
   const { persona, team, familyCode } = useApp()
   const { pathname } = useLocation()
-  if (persona === 'volunteer' && !team && !['/ma-doi', '/vai', '/chao', '/ma-gia-dinh'].includes(pathname)) return <Navigate to="/ma-doi" replace />
+  if (persona === 'volunteer' && !['/vai', '/chao'].includes(pathname)) return <TeamOnWeb />
 
   const relative = persona === 'relative'
   if (relative && !familyCode && !['/ma-gia-dinh', '/vai'].includes(pathname)) return <Navigate to="/ma-gia-dinh" replace />
@@ -93,17 +102,9 @@ export default function App() {
         {/* Học sinh */}
         <Route path="/bao-cao" element={<Report />} />                     {/* B4, B4a */}
         <Route path="/bao-cao/xong" element={<ReportDone />} />            {/* B4b */}
-        {/* Đội tình nguyện */}
-        <Route path="/ma-doi" element={<TeamCode />} />                    {/* C0 */}
+        {/* Cảnh báo khu phố cho mọi người; việc của đội tình nguyện nằm trên trang web /web */}
         <Route path="/canh-bao-khu-pho" element={<NewType />} />
-        <Route element={<TeamRoute />}>
-          <Route path="/thong-ke" element={<Stats />} />
-          <Route path="/kieu-moi" element={<NewType />} />
-          <Route path="/duyet" element={<Review />} />
-        </Route>
-        <Route element={<TeamRoute lead />}>
-          <Route path="/chia-se" element={<Share />} />
-        </Route>
+        {['/ma-doi', '/thong-ke', '/kieu-moi', '/duyet', '/chia-se'].map((p) => <Route key={p} path={p} element={<TeamOnWeb />} />)}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
