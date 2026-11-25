@@ -95,7 +95,7 @@ AI đóng vai "chị Hương", người tự xưng tuyển dụng. Người họ
 > Giờ mình chơi thử nghe máy nha. Người gọi do AI đóng, không phải người thật. Bạn cứ trả lời như ngoài đời, mình chấm giúp.
 
 **Câu 1 · Mời chào**
-- Chị Hương: Alo em ơi, chị bên tuyển dụng nè. Bên chị đang cần cộng tác viên làm tại nhà, mỗi ngày năm trăm nghìn. Em quan tâm không?
+- Chị Hương: Alo em, bên chị đang tuyển cộng tác viên làm ở nhà, mỗi ngày năm trăm nghìn. Em muốn nghe thử không?
 - Mức 3: hỏi lại công ty tên gì, ở đâu, lấy số ở đâu, và chưa đồng ý.
 - Mức 2: từ chối nhưng không hỏi gì.
 - Mức 1: tò mò hỏi thêm về lương.

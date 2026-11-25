@@ -8,15 +8,21 @@ base=(os.environ.get('GEMINI_BASE_URL') or 'https://generativelanguage.googleapi
 notes=style+' Mỗi đoạn dưới đây là một câu riêng. Đọc hết từng đoạn theo đúng thứ tự, ngắt hẳn khoảng hai giây giữa các đoạn, không đọc số thứ tự, không thêm lời nào.'
 prompt="# DIRECTOR'S NOTES (không đọc phần này)\n"+notes+"\n\n# TRANSCRIPT (chỉ đọc phần dưới đây)\n"+"\n\n".join(lines)
 pcm=None
-for m in ['gemini-3.8-flash-tts','gemini-3.1-flash-tts-preview']:
+# GEMINI_TTS_MO_HINH=<mô hình,…>: chỉ thu bằng các mô hình này (vd chỉ 3.8, không tụt xuống 3.1-preview vốn không thu nổi lượt dài); GEMINI_TTS_CHO=<giây>: thời gian chờ mỗi lần gọi
+for m in [x for x in os.environ.get('GEMINI_TTS_MO_HINH','').split(',') if x] or ['gemini-3.8-flash-tts','gemini-3.1-flash-tts-preview']:
     for k in keys:
         body={'contents':[{'parts':[{'text':prompt}]}],'generationConfig':{'responseModalities':['AUDIO'],'speechConfig':{'voiceConfig':{'prebuiltVoiceConfig':{'voiceName':voice}}}}}
         req=urllib.request.Request(f"{base}/models/{m}:generateContent",data=json.dumps(body).encode(),headers={'Content-Type':'application/json','x-goog-api-key':k})
         try:
-            r=json.loads(urllib.request.urlopen(req,timeout=180).read()); d=r['candidates'][0]['content']['parts'][0]['inlineData']
+            r=json.loads(urllib.request.urlopen(req,timeout=float(os.environ.get('GEMINI_TTS_CHO') or 180)).read()); d=r['candidates'][0]['content']['parts'][0]['inlineData']
             pcm=base64.b64decode(d['data']); mt=d.get('mimeType',''); rate=int(mt.split('rate=')[1].split(';')[0]) if 'rate=' in mt else 24000
             print('take OK', m, '%.1fs'%(len(pcm)/2/rate)); break
-        except Exception as e: print('fail', m, type(e).__name__, getattr(e,'code','')); continue
+        except Exception as e:
+            ly=''
+            if isinstance(e,KeyError):
+                try: ly=' finishReason='+str(r['candidates'][0].get('finishReason'))
+                except Exception: ly=''
+            print('fail', m, type(e).__name__, getattr(e,'code',''), ly); continue
     if pcm: break
 if not pcm: sys.exit('không thu được')
 out=pathlib.Path(prefix).parent; out.mkdir(parents=True, exist_ok=True)

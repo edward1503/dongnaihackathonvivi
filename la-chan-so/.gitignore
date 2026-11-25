@@ -20,3 +20,11 @@ video/thao-tac/ban/
 export/*.pdf
 audio-goc/
 video/*.mp4
+
+# Khóa API: chỉ nằm trên máy từng người
+.env
+.env.*
+!.env.example
+
+# Tệp tạm của bàn giao (lượt thu, ảnh chụp, bản sao lưu): giữ trên máy, không đưa lên kho
+ban-giao/tam-*/
