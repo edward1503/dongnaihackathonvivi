@@ -10,7 +10,7 @@
    "chu": "Ờ, ờ.",
    "tep": "audio/tu/dem-o.m4a",
    "giay": 1.7,
-   "kiem": "ngan"
+   "kiem": "lech-nhe"
   },
   {
    "id": "dem-vay",
@@ -64,7 +64,7 @@
    "chu": "Ờ, sao ta.",
    "tep": "audio/tu/dem-sao.m4a",
    "giay": 1.95,
-   "kiem": "ngan"
+   "kiem": "lech-nhe"
   },
   {
    "id": "dem-cho",
@@ -73,7 +73,7 @@
    "chu": "Con chờ chú chút nghen.",
    "tep": "audio/tu/dem-cho.m4a",
    "giay": 1.22,
-   "kiem": "lech-nhe"
+   "kiem": "ngan"
   },
   {
    "id": "im-mot",
@@ -82,7 +82,7 @@
    "chu": "A lô, con còn nghe chú không con?",
    "tep": "audio/tu/im-mot.m4a",
    "giay": 2.5,
-   "kiem": "khop"
+   "kiem": "lech-nhe"
   },
   {
    "id": "im-hai",
@@ -91,7 +91,7 @@
    "chu": "Chú còn đây nè. Con nói một câu thôi cũng được.",
    "tep": "audio/tu/im-hai.m4a",
    "giay": 3.23,
-   "kiem": "can-nghe"
+   "kiem": "khop"
   },
   {
    "id": "im-ba",
@@ -100,7 +100,7 @@
    "chu": "Chắc con đang bận học. Thôi để bữa khác chú gọi lại nghen.",
    "tep": "audio/tu/im-ba.m4a",
    "giay": 3.99,
-   "kiem": "lech-nhe"
+   "kiem": "khop"
   },
   {
    "id": "nghe-mot",
@@ -154,7 +154,7 @@
    "chu": "Ý chú hỏi là vầy nè con.",
    "tep": "audio/tu/chua-ro-hai.m4a",
    "giay": 1.55,
-   "kiem": "lech-nhe"
+   "kiem": "khop"
   },
   {
    "id": "lo-so",
@@ -163,7 +163,7 @@
    "chu": "Ấy con, đừng đọc số ra. Số điện thoại hay số tài khoản thì mình không đọc cho ai hết.",
    "tep": "audio/tu/lo-so.m4a",
    "giay": 4.81,
-   "kiem": "lech-nhe"
+   "kiem": "khop"
   },
   {
    "id": "ai-la",
@@ -172,7 +172,7 @@
    "chu": "Chú là trí tuệ nhân tạo đóng vai chú Tư để con tập thôi.",
    "tep": "audio/tu/ai-la.m4a",
    "giay": 3.76,
-   "kiem": "can-nghe"
+   "kiem": "khop"
   },
   {
    "id": "b9-mo-dau",
@@ -190,7 +190,7 @@
    "chu": "Ờ, con nói vậy thì chú khoan nạp đã.",
    "tep": "audio/tu/b9-nhan-nap.m4a",
    "giay": 2.72,
-   "kiem": "lech-nhe"
+   "kiem": "khop"
   },
   {
    "id": "b9-goi-nap",
@@ -217,7 +217,7 @@
    "chu": "Chú vẫn chưa hiểu. Họ cho chú lời trước mấy đồng đó để làm chi hả con?",
    "tep": "audio/tu/b9-goi-moinhu.m4a",
    "giay": 4.53,
-   "kiem": "can-nghe"
+   "kiem": "lech-nhe"
   },
   {
    "id": "b9-nhan-moinhu",
@@ -235,7 +235,7 @@
    "chu": "Mà ngoài chuyện đó ra, con thấy cái nhóm này còn chỗ nào đáng ngờ nữa không?",
    "tep": "audio/tu/b9-hoi-dauhieu.m4a",
    "giay": 4.37,
-   "kiem": "can-nghe"
+   "kiem": "khop"
   },
   {
    "id": "b9-goi-dauhieu",
@@ -244,7 +244,7 @@
    "chu": "Ông thầy trong nhóm nói chắc ăn lắm, không bao giờ lỗ. Con nghe vậy thấy sao?",
    "tep": "audio/tu/b9-goi-dauhieu.m4a",
    "giay": 4.51,
-   "kiem": "can-nghe"
+   "kiem": "lech-nhe"
   },
   {
    "id": "b9-nhan-dauhieu",
@@ -253,7 +253,7 @@
    "chu": "Ờ ha, con nói chú mới thấy kỳ thiệt.",
    "tep": "audio/tu/b9-nhan-dauhieu.m4a",
    "giay": 3.15,
-   "kiem": "khop"
+   "kiem": "lech-nhe"
   },
   {
    "id": "b9-hoi-baocao",
@@ -262,7 +262,7 @@
    "chu": "Mà trong nhóm còn nhiều người lắm con. Giờ chú làm gì với cái nhóm đó đây?",
    "tep": "audio/tu/b9-hoi-baocao.m4a",
    "giay": 5.72,
-   "kiem": "khop"
+   "kiem": "lech-nhe"
   },
   {
    "id": "b9-goi-baocao",
@@ -271,7 +271,7 @@
    "chu": "Làm sao cho mấy người khác khỏi mất tiền như chú suýt mất hả con?",
    "tep": "audio/tu/b9-goi-baocao.m4a",
    "giay": 3.35,
-   "kiem": "khop"
+   "kiem": "lech-nhe"
   },
   {
    "id": "b9-nhan-baocao",
@@ -298,7 +298,7 @@
    "chu": "May mà chú hỏi con. Để chú lưu tin nhắn, báo cáo rồi rời nhóm nha con.",
    "tep": "audio/tu/b9-ket-du.m4a",
    "giay": 5.13,
-   "kiem": "cho-nghe"
+   "kiem": "khop"
   },
   {
    "id": "b9-ket-thieu",
@@ -310,5 +310,5 @@
    "kiem": "lech-nhe"
   }
  ],
- "_kiem": "Trường kiem của từng câu = kết quả nghe lại bằng máy ngày 25/11/2026 (hai mô hình độc lập): khop = cả hai chép đúng câu; lech-nhe = chỉ lệch tiếng đệm hoặc chữ gần âm; can-nghe = hai máy chép khác nhau hoặc cùng chép sai một chữ, CẦN NGƯỜI NGHE trước khi dùng; ngan = câu dưới khoảng 1,5 giây, máy không kiểm được. Chưa có người nghe câu nào."
+ "_kiem": "Trường kiem của từng câu = kết quả nghe lại bằng máy ngày 25/11/2026 cho lượt thu hiện tại (OpenAI gpt-4o-transcribe nghe từng câu; Gemini 3.5 Flash nghe cả lượt thu hai lần (một lần hỏi đích danh về lời dặn giọng), có mốc thời gian. Gemini chưa nghe từng câu của chú Tư (hết hạn mức trong ngày)). khop = OpenAI chép đúng và ít nhất một lượt Gemini chép đúng; lech-nhe = chỉ lệch tiếng đệm, chữ cuối câu (nghen, nha) hoặc chữ gần âm, có lượt chép đúng; can-nghe = các lượt chép khác nhau ở chữ mang nghĩa, CẦN NGƯỜI NGHE trước khi dùng; ngan = tệp dưới khoảng 1,5 giây, máy không kiểm được. Không lượt nào nghe thấy lời dặn giọng bị đọc lẫn. Chưa có người nghe câu nào; danh sách cần nghe ở bai-hoc/nghe-thu/CAN-NGHE.md."
 }

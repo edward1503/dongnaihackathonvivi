@@ -119,6 +119,8 @@
   body.dang-go .lower{padding-bottom:84px}
   #goBox button.tron{width:42px;padding:0;display:flex;align-items:center;justify-content:center;flex:none}
   #goBox button.do{background:#DC2626}
+  /* ngoài app (trình duyệt máy tính): khung điện thoại 800 điểm thường cao hơn cửa sổ, thanh gõ neo theo đáy khung chứ không theo đáy cửa sổ, kẻo che giữa bảng dưới */
+  body:not(.app) #goBox{position:absolute}
   /* trong app: bỏ khung điện thoại giả, màn cuộc gọi phủ kín màn hình thật */
   body.app{padding:0;display:block;overflow:hidden;background:#0B0B14;min-height:0}
   body.app .call{border-radius:0;box-shadow:none;transform-origin:0 0}
@@ -393,7 +395,7 @@ if (APP) {   // phủ kín màn hình thật: phóng khung 360 điểm cho vừa
   document.body.classList.add('app');
   const f = document.querySelector('.call'), k = innerWidth / 360;
   f.style.transform = 'scale(' + k + ')'; f.style.height = Math.round(innerHeight / k) + 'px';
-}
+} else document.querySelector('.call').append($('#goBox'));   // ngoài app: thanh gõ nằm trong khung điện thoại (xem CSS body:not(.app) #goBox)
 // Chữ ở dòng trạng thái khi tới lượt người học. Cảnh có nút trả lời sẵn thì nhắc tới các nút, vì với người cao tuổi đó là cách trả lời chính.
 const CO_NUT = !!(C.nut || []).length;
 const CHU_NGHE = CO_NUT ? 'Tới lượt ' + NH + ' · ' + NH + ' nói, hoặc bấm một câu bên dưới' : 'Tới lượt ' + NH + ' · micro đang nghe';
