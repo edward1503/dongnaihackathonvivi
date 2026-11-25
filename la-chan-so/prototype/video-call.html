@@ -159,6 +159,18 @@ if (q.get('audio')) LINES[0] = { audio: q.get('audio'), lip: q.get('lip') || nul
 else if (q.get('caption')) LINES[0].caption = q.get('caption');
 const FORCE_DEMO = q.get('demo') === '1', AUTO_URL = q.get('auto') === '1';
 
+// ===== AI THẬT (Mảng 2): máy chủ Lá chắn số nghe lời khuyên, chấm 4 ý và đóng vai chị Lan (/api/roleplay).
+// Không gọi được máy chủ thì chạy kịch bản cố định như cũ. ?api=http://may-chu:8000 nếu máy chủ ở địa chỉ khác; ?ai=0 để tắt.
+const API = (q.get('api') || '').replace(/\/$/, '');
+const KEY_LABEL = { nap: 'Đừng nạp tiền', dauhieu: 'Chỉ ra dấu hiệu', xacminh: 'Cách xác minh', baocao: 'Rủ báo cáo' };
+let RP = null;
+async function rpPost(path, body, form) {
+  const r = await fetch(API + path, { method: 'POST', headers: form ? undefined : { 'Content-Type': 'application/json' }, body: form || JSON.stringify(body || {}) });
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(typeof data.detail === 'string' ? data.detail : 'máy chủ lỗi ' + r.status);
+  return data;
+}
+
 const $ = (s) => document.querySelector(s);
 const S = window.__call = { state: 'idle', line: -1, lip: null, demo: false, errors: [] };   // trạng thái (để kiểm thử tự động)
 let call = null, model = null, timer = 0, t0 = 0, idx = -1, busy = false, ended = false, fallbackAudio = null, gen = 0, auto = false, vyCtx = null, vySrc = null;
@@ -204,10 +216,17 @@ async function exists(url) {
 
 // phát một câu: file của chị Lan nếu có, không thì đoạn mẫu tạm. Trả về false nếu bị ngắt.
 async function speakLan(i) {
-  idx = i; S.line = i; busy = true; S.state = 'loading';
-  const g = gen;
+  idx = i; S.line = i;
   let L = LINES[i];
   if (FORCE_DEMO || !(await exists(L.audio))) L = DEMO;
+  return speakLine(L, LINES[i]);
+}
+
+// phát một câu bất kỳ {audio, lip, caption}; audio rỗng thì chỉ hiện phụ đề (câu AI khi máy chủ chưa có giọng đọc).
+// orig: câu gốc, để lỗi thì thử đoạn mẫu tạm rồi hiện phụ đề của câu gốc.
+async function speakLine(L, orig = null) {
+  busy = true; S.state = 'loading';
+  const g = gen;
   const show = (l, dur, lip) => { subtitles(l.caption, dur, lip, g); $('#demoTag').classList.toggle('on', !!l.demo); S.demo = !!l.demo; };
   const speak = async (l) => {
     if (call) {
@@ -220,10 +239,16 @@ async function speakLan(i) {
       await new Promise((ok, no) => { fallbackAudio.onended = ok; fallbackAudio.onerror = () => no(new Error('không phát được ' + l.audio)); fallbackAudio.play().catch(no); });
     }
   };
-  try { await speak(L); }
-  catch (e) {
-    console.warn('Không phát được câu', L.audio, e); S.errors.push(String(e));
-    if (!L.demo && !ended && g === gen) { try { await speak(DEMO); } catch (e2) { console.warn('Đoạn mẫu cũng lỗi', e2); S.errors.push(String(e2)); show(LINES[i]); } }
+  if (!L.audio) {
+    const sec = Math.max(2, L.caption.split(/\s+/).length * 0.33);
+    show(L, sec, null); S.state = 'speaking'; await sleep(sec * 1000);
+  } else {
+    try { await speak(L); }
+    catch (e) {
+      console.warn('Không phát được câu', L.audio, e); S.errors.push(String(e));
+      if (orig && !L.demo && !ended && g === gen) { try { await speak(DEMO); } catch (e2) { console.warn('Đoạn mẫu cũng lỗi', e2); S.errors.push(String(e2)); show(orig); } }
+      else if (!ended && g === gen) show(L);
+    }
   }
   if (ended || g !== gen) return false;   // bị ngắt (Kết thúc, hoặc trả lời khi chị Lan đang nói)
   busy = false;
@@ -286,7 +311,79 @@ async function start(autoMode) {
   off?.();
   $('#start').classList.add('off');
   t0 = Date.now(); timer = setInterval(() => { $('#clock').textContent = fmt(Math.floor((Date.now() - t0) / 1000)); }, 500);
+  if (!autoMode && q.get('ai') !== '0') {
+    try { RP = await rpPost('/api/roleplay/start'); S.ai = true; } catch (e) { RP = null; S.ai = false; console.warn('Không có máy chủ AI, chạy kịch bản', e); }
+  }
   if (autoMode) autoRun(); else playLine(0);
+}
+
+// ===== Nghe lời người học: Android (LCSNative.listen) → nhận giọng nói của trình duyệt → ghi âm gửi máy chủ chép lời =====
+let rec = null, recText = '', mediaRec = null, chunks = [];
+function showMine(text) { $('#caption').classList.remove('hide'); $('#caption').classList.add('me'); $('#capText').textContent = text || '…'; }
+function beginListen() {
+  recText = ''; showMine('Đang nghe…');
+  if (window.LCSNative?.listen) { rec = { native: true }; return; }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (SR) {
+    rec = new SR(); rec.lang = 'vi-VN'; rec.interimResults = true; rec.continuous = true;
+    rec.onresult = (e) => { recText = [...e.results].map((r) => r[0].transcript).join(' '); showMine(recText); };
+    rec.onerror = () => {}; try { rec.start(); } catch { rec = null; }
+    return;
+  }
+  if (navigator.mediaDevices?.getUserMedia && window.MediaRecorder) {
+    navigator.mediaDevices.getUserMedia({ audio: true }).then((st) => {
+      chunks = []; mediaRec = new MediaRecorder(st); mediaRec.ondataavailable = (e) => chunks.push(e.data); mediaRec.start();
+    }).catch(() => toast('Máy chưa cho dùng micro. Bạn bấm “Gõ chữ” nhé.'));
+  }
+}
+async function endListen() {
+  if (rec?.native) { rec = null; return { text: await window.LCSNative.listen() }; }
+  if (rec) { const r = rec; rec = null; await new Promise((ok) => { r.onend = ok; try { r.stop(); } catch { ok(); } setTimeout(ok, 1500); }); return { text: recText }; }
+  if (mediaRec) {
+    const m = mediaRec; mediaRec = null;
+    await new Promise((ok) => { m.onstop = ok; m.stop(); });
+    m.stream.getTracks().forEach((t) => t.stop());
+    return { blob: new Blob(chunks, { type: m.mimeType || 'audio/webm' }) };
+  }
+  return {};
+}
+function typeAnswer() {
+  if (talk.disabled) return;
+  const t = prompt('Bạn khuyên chị Lan thế nào?');
+  if (t && t.trim()) aiAnswer({ text: t.trim() });
+}
+function controls(on) { talk.disabled = !on; $('#type').disabled = !on; }
+
+// Một lượt: gửi lời người học → tô các ý đạt → chị Lan (AI) đáp bằng giọng và khẩu hình
+async function aiAnswer(cap) {
+  if (auto || ended || idx < 0 || !RP) return;
+  gen++; busy = false; subT.forEach(clearTimeout); call?.stop(); fallbackAudio?.pause();
+  controls(false); S.state = 'scoring';
+  let res;
+  try {
+    if (cap.blob) {
+      const f = new FormData(); f.append('sessionId', RP.sessionId); f.append('audio', cap.blob, 'loi-khuyen.webm');
+      toast('Lá chắn đang nghe…', 1500); res = await rpPost('/api/roleplay/turn', null, f);
+    } else if (cap.text && cap.text.trim()) {
+      toast('Lá chắn đang chấm lời khuyên…', 1200); res = await rpPost('/api/roleplay/turn', { sessionId: RP.sessionId, text: cap.text });
+    } else { toast('Mình chưa nghe rõ. Bạn giữ nút rồi nói lại, hoặc bấm “Gõ chữ” nhé.', 2600); controls(true); S.state = 'listening'; return; }
+  } catch (e) { toast(e.message, 2600); controls(true); S.state = 'listening'; return; }
+  if (ended) return;
+  S.lastTurn = res;
+  showMine(res.heard);
+  res.keys.forEach((k) => document.querySelector(`#keys .k[data-k="${k.key}"]`)?.classList.toggle('ok', k.ok)); countScore();
+  if (res.gained.length) toast('Đạt ý: ' + res.gained.map((k) => KEY_LABEL[k]).join(', '), 1800);
+  await sleep(1400); if (ended) return;
+  if (res.line && !(await speakLine({ audio: res.line.audio, lip: null, caption: res.line.text }))) return;
+  if (res.end) { await rpFinish(); finish(); }
+  else { S.state = 'listening'; controls(true); }
+}
+async function rpFinish() {
+  try {
+    const f = await rpPost('/api/roleplay/finish', { sessionId: RP.sessionId });
+    S.result = f; setTimeout(() => toast(f.summary, 4000), 300);
+    $('#finish a').href = SCORE_URL + '&diem=' + f.score;
+  } catch { /* bảng điểm vẫn mở được */ }
 }
 
 // "Giữ để nói": bản thử không nghe thật, giữ rồi thả = một lượt trả lời; Lá chắn chấm rồi chị Lan nói câu kế
@@ -300,11 +397,11 @@ function answer() {
   setTimeout(() => { setScore(n); playLine(next); }, 900);
 }
 const talk = $('#talk');
-talk.addEventListener('pointerdown', (e) => { if (talk.disabled) return; talk.setPointerCapture?.(e.pointerId); talk.classList.add('hold'); $('#talkLbl').textContent = 'Đang nghe…'; });
-const release = () => { if (!talk.classList.contains('hold')) return; talk.classList.remove('hold'); $('#talkLbl').textContent = 'Giữ để nói'; answer(); };
+talk.addEventListener('pointerdown', (e) => { if (talk.disabled) return; talk.setPointerCapture?.(e.pointerId); talk.classList.add('hold'); $('#talkLbl').textContent = 'Đang nghe…'; if (RP) beginListen(); });
+const release = () => { if (!talk.classList.contains('hold')) return; talk.classList.remove('hold'); $('#talkLbl').textContent = 'Giữ để nói'; if (RP) endListen().then(aiAnswer); else answer(); };
 talk.addEventListener('pointerup', release); talk.addEventListener('pointercancel', release);
-talk.addEventListener('keydown', (e) => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); answer(); } });
-$('#type').addEventListener('click', () => toast('Bản thử: bấm và giữ nút “Giữ để nói” để trả lời chị Lan.'));
+talk.addEventListener('keydown', (e) => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); RP ? typeAnswer() : answer(); } });
+$('#type').addEventListener('click', () => (RP ? typeAnswer() : toast('Bản thử: bấm và giữ nút “Giữ để nói” để trả lời chị Lan.')));
 $('#end').addEventListener('click', () => {
   ended = true; subT.forEach(clearTimeout); call?.stop(); fallbackAudio?.pause(); try { vySrc?.stop(); } catch { /* đã dừng */ }
   $('#self').classList.remove('talking'); $('#caption').classList.remove('me'); clearInterval(timer); S.state = 'ended';

@@ -12,12 +12,14 @@ Danh sách chia thành 6 mảng độc lập, mỗi mảng một người cầm 
 
 | Mảng | Người nhận |
 |---|---|
-| 1. Android chạy nền | |
-| 2. Máy chủ và AI | |
-| 3. Giao diện app | |
-| 4. Học như chơi game | |
-| 5. Người thân trên Zalo | |
-| 6. Web đội tình nguyện | |
+| 1. Android chạy nền | Hoàng |
+| 2. Máy chủ và AI | Tún |
+| 3. Giao diện app | Tún |
+| 4. Học như chơi game | Hoàng |
+| 5. Người thân trên Zalo | Đức |
+| 6. Web đội tình nguyện | Đức |
+
+Kế hoạch chi tiết Mảng 2 và 3 (hợp đồng dữ liệu, API, thứ tự làm theo giờ): [`KE-HOACH-MANG-2-3.md`](KE-HOACH-MANG-2-3.md)
 
 Nếu đội ít hơn 6 người: gộp mảng 3 với 5 (cùng React, cùng luồng Hỏi người thân) và mảng 4 với 6 (đều chạy từ tệp nội dung và dữ liệu mẫu).
 
