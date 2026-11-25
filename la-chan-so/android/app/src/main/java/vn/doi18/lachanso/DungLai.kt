@@ -292,7 +292,7 @@ object DungLai {
             text = "Hỏi $ten trước"
             setOnClickListener {
                 val so = CaiDat.soNguoiThan(c)
-                if (so.isBlank()) c.startActivity(Intent(c, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                if (so.isBlank()) c.startActivity(Intent(c, MainActivity::class.java).putExtra("route", "#/nguoi-than/them").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
                 else c.goiDien(so)
                 dongLai()
             }

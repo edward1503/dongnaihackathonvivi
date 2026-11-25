@@ -291,7 +291,7 @@ class GoiVideoActivity : Activity() {
                     when {
                         path == "/__mieng" -> mieng(u.getQueryParameter("id") ?: "21", u.getQueryParameter("k")!!.toInt(), u.getQueryParameter("p")!!)
                         path.startsWith("/__song/") -> serveLiveFile(path)
-                        else -> taiSan(path)
+                        else -> LocalWebAssets.open(assets, path)
                     }
                 } catch (e: Throwable) {
                     Log.w("GoiVideo", "không trả được ${u.path}: $e")
@@ -330,20 +330,6 @@ class GoiVideoActivity : Activity() {
         val file = File(cacheDir, "song/$id.$extension")
         return WebResourceResponse(mime, if (extension == "lip.json") "utf-8" else null, 200, "OK",
             mapOf("Cache-Control" to "no-store", "Content-Length" to file.length().toString()), file.inputStream())
-    }
-
-    /** Tệp của trang nằm trong assets/web (Gradle chép từ thư mục prototype lúc build). */
-    private fun taiSan(duong: String): WebResourceResponse {
-        require(!duong.contains(".."))
-        val kieu = when (duong.substringAfterLast('.', "").lowercase()) {
-            "html" -> "text/html"; "js", "mjs" -> "text/javascript"; "css" -> "text/css"; "json" -> "application/json"
-            "png" -> "image/png"; "jpg", "jpeg" -> "image/jpeg"; "mp4" -> "video/mp4"; "m4a" -> "audio/mp4"
-            "woff2" -> "font/woff2"; "ttf" -> "font/ttf"; "svg" -> "image/svg+xml"; "webp" -> "image/webp"; "gif" -> "image/gif"
-            "mp3" -> "audio/mpeg"; "wav" -> "audio/wav"; "txt" -> "text/plain"
-            else -> "application/octet-stream"
-        }
-        val chu = kieu.startsWith("text/") || kieu == "application/json"
-        return WebResourceResponse(kieu, if (chu) "utf-8" else null, 200, "OK", mapOf("Cache-Control" to "max-age=3600"), assets.open("web$duong"))
     }
 
     override fun onPause() { dungNghe(); super.onPause(); web.onPause() }

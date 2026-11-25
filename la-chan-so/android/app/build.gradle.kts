@@ -44,8 +44,28 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
 }
 
+val reactDir = file("../../app")
+val reactDist = reactDir.resolve("dist")
+val skipReactBuild = providers.gradleProperty("skipReactBuild").isPresent
+val buildReactApp by tasks.registering(Exec::class) {
+    workingDir(reactDir)
+    inputs.files(listOf("src", "public", "index.html", "package.json", "package-lock.json", "vite.config.js").map { reactDir.resolve(it) })
+    inputs.files("../../ds.css", "../../icons.js", "../../assets/fonts")
+    inputs.files((10..13).map { file("../../prototype/audio/benai-$it.m4a") })
+    outputs.dir(reactDist)
+    onlyIf {
+        check(!skipReactBuild || reactDist.resolve("index.html").isFile) {
+            "-PskipReactBuild requires app/dist/index.html. Run npm run build in app/ first."
+        }
+        !skipReactBuild
+    }
+    commandLine("sh", "-ec", "if [ ! -d node_modules ]; then npm ci; fi; npm run build")
+}
+
 // Sync (không phải Copy): tệp đã xóa hay đổi tên ở nguồn cũng bị xóa khỏi build/tai-san, nếu không APK chở theo bản cũ (từng thừa 102 tệp tiếng chị Lan cũ).
 val chepWeb by tasks.registering(Sync::class) {
+    dependsOn(buildReactApp)
+    from(reactDist) { into("app") }
     from("../..") {
         include("ds.css", "icons.js", "assets/fonts/**", "prototype/video-call.html", "prototype/loi-chi-lan.json", "prototype/hoi-thoai.js", "prototype/hieu-y-loi-nhac.txt", "prototype/tra-loi-loi-nhac.txt", "prototype/hoi-thoai-song-loi-nhac.txt", "prototype/audio/**")
         // các cảnh gọi video (anh Minh, ông Tư): tệp cảnh, lời nhắc, ảnh tĩnh, bảng nhân vật, bộ lời, máy hội thoại chung

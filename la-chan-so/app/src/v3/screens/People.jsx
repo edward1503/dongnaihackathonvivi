@@ -33,7 +33,7 @@ export function Relatives() {
         {relatives.map((r) => (
           <div key={r.id} className="li tall">
             <div className="avatar">{r.name[0]}</div>
-            <div className="col grow g2"><div className="t-row">{r.name}</div><div className="t-sub">{r.relation[0].toUpperCase() + r.relation.slice(1)}{r.paired ? ' · đã ghép' : ''}</div></div>
+            <button type="button" className="col grow g2 tap" style={{ textAlign: 'left' }} aria-label={`Sửa ${r.name}`} onClick={() => nav(`/nguoi-than/them?id=${encodeURIComponent(r.id)}`)}><div className="t-row">{r.name}</div><div className="t-sub">{r.relation[0].toUpperCase() + r.relation.slice(1)}{r.paired ? ' · đã ghép' : ''}</div></button>
             <button type="button" className="tap" aria-label={`Gọi ${r.name}`} onClick={() => call(r.name, r.phone)}><Circle z={46} bg="pg" c="ink" icon="phone" iz={22} /></button>
             <button type="button" className="tap" aria-label={`Nhắn ${r.name}`} onClick={() => nav(`/hoi-nguoi-than?to=${r.id}`)}><Circle z={46} bg="pri" c="w" icon="msg" iz={22} /></button>
           </div>
@@ -58,15 +58,22 @@ export function Relatives() {
 export function AddRelative() {
   const nav = useNavigate()
   const { relatives, setRelatives, toast } = useApp()
-  const [name, setName] = useState('')
-  const [phone, setPhone] = useState('')
-  const [rel, setRel] = useState('Con')
+  const [params] = useSearchParams()
+  const existing = relatives.find((r) => r.id === params.get('id'))
+  const [name, setName] = useState(existing?.name || '')
+  const [phone, setPhone] = useState(existing?.phone || '')
+  const [rel, setRel] = useState(RELATIONS.find((r) => r.toLowerCase() === existing?.relation) || existing?.relation || 'Con')
   const save = () => {
     if (!name.trim()) return toast('Bạn nhập tên người thân nhé')
     const id = name.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/\W+/g, '-') + '-' + Date.now().toString(36).slice(-3)
-    setRelatives([...relatives, { id, name: name.trim(), relation: rel.toLowerCase(), phone: phone.replace(/\D/g, ''), channel: 'Gọi điện, nhắn tin', paired: false }])
+    const relative = { id, channel: 'Gọi điện, nhắn tin', paired: false, ...existing, name: name.trim(), relation: rel.toLowerCase(), phone: phone.replace(/\D/g, '') }
+    const next = existing ? relatives.map((r) => r.id === existing.id ? relative : r) : [...relatives, relative]
+    setRelatives(next)
+    const main = next.find((r) => r.phone)
+    if (main || existing?.phone) window.LCSNative?.saveRelative?.(main?.name || '', main?.phone || '')
     toast(`Đã lưu ${name.trim()}`)
-    nav(-1)
+    if (window.history.state?.idx > 0) nav(-1)
+    else nav('/nguoi-than', { replace: true })
   }
   return (
     <Screen name="A4c-them-nguoi-than" bar={<Bar title="Người thân" />} foot={<Btn onClick={save}>Lưu</Btn>}>

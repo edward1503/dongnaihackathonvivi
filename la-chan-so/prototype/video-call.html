@@ -542,7 +542,7 @@ async function noiSong(tl, laTiengCho = false) {
 let cauMa = 0; const cauCho = new Map();
 window.__ls = window.__doc = (ma, kq) => { const f = cauCho.get(ma); cauCho.delete(ma); f?.(kq); };
 const cau = (ten, ...thamSo) => new Promise((ok) => {
-  const ma = PHIEN + ++cauMa, h = setTimeout(() => { cauCho.delete(ma); ok(null); }, 30000);   // quá 30 giây thì lượt này dùng câu thu sẵn, cuộc gọi không đứng lâu
+  const ma = PHIEN + ++cauMa, h = setTimeout(() => { cauCho.delete(ma); ok(null); }, 45000);   // quá 45 giây (máy chủ có thể phải đọc lại một lần) thì lượt này dùng câu thu sẵn, cuộc gọi không đứng lâu
   cauCho.set(ma, (kq) => { clearTimeout(h); ok(kq && kq.pcm ? kq : null); });
   try { window.LaChan[ten](ma, ...thamSo); } catch { clearTimeout(h); cauCho.delete(ma); ok(null); }
 });

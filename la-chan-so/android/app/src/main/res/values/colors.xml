@@ -3,6 +3,7 @@
     <color name="brand">#1D4ED8</color>
     <color name="brand_ink">#1E3A8A</color>
     <color name="brand_c">#DBEAFE</color>
+    <color name="icon_bg">#FFFFFF</color>
     <color name="danger">#DC2626</color>
     <color name="danger_ink">#7F1D1D</color>
     <color name="danger_c">#FEE2E2</color>

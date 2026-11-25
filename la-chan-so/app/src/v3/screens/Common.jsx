@@ -155,6 +155,7 @@ export function Profile() {
       <Group>
         <Row icon="vol" title="Tự đọc to" right={<Switch on={auto} onChange={toggle('lcs.autoSpeak', setAuto)} label="Tự đọc to" />} />
         <Row icon="lock" title="Quyền riêng tư" onClick={() => nav('/rieng-tu')} />
+        {window.LCSNative?.openAdvanced && <Row icon="settings" title="Cài đặt nâng cao" onClick={() => window.LCSNative.openAdvanced()} />}
       </Group>
       <div className="t-sm center" style={{ padding: '4px 20px' }}>{APP} · dữ liệu trong bản thử là dữ liệu giả lập</div>
     </Screen>

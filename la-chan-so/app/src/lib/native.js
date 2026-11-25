@@ -28,7 +28,7 @@ export const native = {
 
   // Trả về chữ nghe được, hoặc null nếu máy không hỗ trợ
   async listen() {
-    if (N()?.listen) return parse(await N().listen())
+    if (N()?.listen) return await N().listen()
     return null
   },
 

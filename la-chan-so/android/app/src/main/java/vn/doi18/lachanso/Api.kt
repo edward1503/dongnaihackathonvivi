@@ -114,11 +114,14 @@ object Api {
      * Máy chủ chạy ở chế độ trình diễn sẽ trả một bản chép lời MẪU khi không chép lời được (source = "fallback"):
      * với cuộc gọi thật, kết quả đó là giả nên app bỏ, coi như chưa phân tích được và chuyển sang hỏi một câu.
      */
-    fun analyzeRecording(c: Context, tep: InputStream, mime: String, soLa: Boolean): KetQuaAI? {
+    fun analyzeRecording(c: Context, tep: InputStream, mime: String, soLa: Boolean): KetQuaAI? =
+        recordingResult(c, tep, mime, soLa)?.let { phanTich(it, true) }
+
+    fun recordingResult(c: Context, audio: InputStream, mime: String, unknownNumber: Boolean): JSONObject? {
         val duoi = when { "mpeg" in mime || "mp3" in mime -> "mp3"; "wav" in mime -> "wav"; "ogg" in mime -> "ogg"; "amr" in mime -> "amr"; "flac" in mime -> "flac"; "aac" in mime -> "aac"; else -> "m4a" }
-        val j = MayChu.guiNhieuPhan(c, "/api/analyze/call", mapOf("unknownNumber" to soLa.toString()), "audio", "ghi-am.$duoi", mime, tep, 60000) ?: return null
+        val j = MayChu.guiNhieuPhan(c, "/api/analyze/call", mapOf("unknownNumber" to unknownNumber.toString()), "audio", "ghi-am.$duoi", mime, audio, 60000) ?: return null
         if (chu(j, "source") == "fallback") return null
-        return phanTich(j, true)
+        return j.takeUnless { it.isNull("level") }
     }
 
     /** POST /api/analyze/call (trường transcript): chủ máy kể lại cuộc gọi, lời kể đã che số. Không gửi số điện thoại. */
@@ -189,7 +192,7 @@ object Api {
         val start = SystemClock.elapsedRealtime()
         var size = 0
         val response = try {
-            MayChu.gui(c, "/api/roleplay/live", request, 25000, roleplayHeaders) { size = it }
+            MayChu.gui(c, "/api/roleplay/live", request, 40000, roleplayHeaders) { size = it }
         } finally {
             Log.i("LcsTiming", "server live ms=${SystemClock.elapsedRealtime() - start} bytes=$size")
         } ?: return null

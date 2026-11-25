@@ -374,7 +374,7 @@ class HoiSauCuocGoiActivity : Activity() {
         val soNt = CaiDat.soNguoiThan(this)
         v<Button>(R.id.nutGoi).apply {
             text = "Gọi $ten ngay"
-            setOnClickListener { if (soNt.isBlank()) startActivity(Intent(this@HoiSauCuocGoiActivity, MainActivity::class.java)) else goiDien(soNt) }
+            setOnClickListener { if (soNt.isBlank()) startActivity(Intent(this@HoiSauCuocGoiActivity, MainActivity::class.java).putExtra("route", "#/nguoi-than/them")) else goiDien(soNt) }
         }
         val chuaBao = if (soNt.isBlank()) "Chưa có số của $ten. Bấm nút dưới để thêm." else "${x.Ban} bấm nút dưới để gọi $ten ngay."
         if (!nguyHiem) {

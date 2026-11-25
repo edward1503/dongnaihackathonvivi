@@ -1,5 +1,5 @@
 <resources>
-    <style name="GiaoDien" parent="android:Theme.Material.Light.NoActionBar">
+    <style name="AppThemeBase" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:colorPrimary">@color/brand</item>
         <item name="android:colorAccent">@color/brand</item>
         <item name="android:windowBackground">@color/bg</item>
@@ -9,6 +9,7 @@
         <item name="android:fontFamily">@font/bvp_regular</item>
         <item name="android:textColor">@color/ink</item>
     </style>
+    <style name="GiaoDien" parent="AppThemeBase" />
     <style name="GiaoDien.Do">
         <item name="android:windowBackground">@color/danger</item>
         <item name="android:statusBarColor">@color/danger</item>

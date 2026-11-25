@@ -172,6 +172,7 @@ export function CallAnalysis() {
       let res
       if (native.available() && window.LCSNative.analyzeRecording && c.hasRecording) {
         res = JSON.parse(await window.LCSNative.analyzeRecording(String(c.phone || '')))
+        if (!res) throw new Error("Chưa tìm thấy bản ghi phù hợp để phân tích.")
       } else {
         const form = new FormData()
         form.append('phone', c.phone || '')

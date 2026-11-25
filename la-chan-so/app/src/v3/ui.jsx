@@ -10,7 +10,7 @@ import dung from './art/dung.webp'
 import nghi from './art/nghi.webp'
 import anToan from './art/an-toan.webp'
 import giaDinh from './art/gia-dinh.webp'
-import bieuTrung from './art/bieu-trung-dong-nai.webp'
+import logo from './art/logo.webp'
 
 export { I }
 const ART = { chao, mung, dung, nghi, 'an-toan': anToan, 'gia-dinh': giaDinh }
@@ -56,21 +56,20 @@ export function Speak({ text, dark }) {
 }
 
 // ---------- Logo: khiên của đội (không dùng biểu trưng cơ quan nào) ----------
+// Logo của app (khiên gạc nai, cùng hình với biểu tượng trên màn hình chính), đặt trong ô trắng bo góc
 export function Logo({ z = 30 }) {
   return (
-    <svg width={z} height={z} viewBox="0 0 40 40" aria-hidden="true" style={{ flex: 'none' }}>
-      <rect width="40" height="40" rx="12" fill="#344D9C" />
-      <path d="M20 31.5s9-4.5 9-11.25V12.4L20 9l-9 3.4v7.85C11 27 20 31.5 20 31.5z" fill="#fff" />
-      <path d="m15.8 20.2 3 3 5.6-5.8" fill="none" stroke="#FFCE02" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+    <span aria-hidden="true" style={{ width: z, height: z, flex: 'none', display: 'inline-grid', placeItems: 'center', background: '#fff', borderRadius: Math.round(z * 0.3), boxShadow: '0 0 0 1px rgba(30,58,138,.12)' }}>
+      <img src={logo} alt="" width={Math.round(z * 0.82)} height={Math.round(z * 0.82)} />
+    </span>
   )
 }
 
-// Ô tên app ở đầu trang chủ: biểu trưng Đồng Nai cạnh tên app (theo bản V3)
+// Ô tên app ở đầu trang chủ: logo cạnh tên app. Biểu trưng Đồng Nai chỉ đặt nhỏ ở màn chào để ghi cuộc thi.
 export function AppPill() {
   return (
-    <div className="pill" style={{ paddingLeft: 10, gap: 8 }}>
-      <img src={bieuTrung} alt="Biểu trưng Đồng Nai" width={28} height={32} style={{ flex: 'none' }} />
+    <div className="pill" style={{ paddingLeft: 8, gap: 8 }}>
+      <Logo z={30} />
       <span style={{ fontSize: 18, fontWeight: 700 }}>{APP}</span>
     </div>
   )

@@ -1,0 +1,7 @@
+<resources>
+    <!-- Android 12+: màn chờ lúc mở app = logo trên nền trắng -->
+    <style name="GiaoDien" parent="AppThemeBase">
+        <item name="android:windowSplashScreenBackground">@color/icon_bg</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
+    </style>
+</resources>

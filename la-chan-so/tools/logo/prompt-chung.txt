@@ -1,0 +1,10 @@
+Brand: "Lá chắn số" ("Digital Shield"), a free anti-scam app made by a student team for Đồng Nai city, Vietnam. Users are grandparents (they need it calm and trustworthy) and students. In Vietnamese "lá chắn" = shield, and "lá" alone also means leaf. "Đồng Nai" means "plain of deer"; the app mascot is Bé Nai, a chibi fawn (attached image in/spot-mascot.png).
+Brand colours: royal blue #1D4ED8 (main), deep navy #1E3A8A (outlines and shading), soft blue #DBEAFE, warm amber #F59E0B as a small accent, white.
+The old placeholder icon (attached in/logo-cu-cua-tuan.png) is a generic white shield with a check mark on blue: it looks like a stock icon. The new logo must feel like a real, ownable brand mark, and still read clearly at 48 px on a phone home screen.
+
+Rules:
+- A single bold symbol, flat vector style with at most one soft gradient, clean geometric shapes, crisp edges.
+- Generous padding: the whole symbol fits inside the central 60% of the canvas (it becomes an Android adaptive-icon foreground that is cropped to a circle).
+- TRANSPARENT background (alpha channel): no backdrop, no frame, no drop shadow outside the symbol.
+- Absolutely NO text, letters, numbers, flags, government emblems or real-world logos.
+- Friendly and trustworthy, not aggressive: no padlocks with chains, no skulls, no police badges, no red crosses.

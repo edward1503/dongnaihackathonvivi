@@ -4,7 +4,7 @@ React 19, Vite. Chạy trong WebView của ứng dụng Android, hoặc trên tr
 
 **Giao diện V3:** gọn, chia theo 3 đối tượng (người lớn tuổi, học sinh, đội tình nguyện). Màu, cỡ chữ và bố cục theo bản `review/mockup/v3.html`. Linh vật Bé Nai lấy từ bộ tranh của Mảng 4.
 
-**Logo:** biểu trưng Đồng Nai đặt ở ô tên app đầu trang chủ và nhỏ ở màn chào (theo bản V3). Biểu tượng app khi cài ra màn hình chính là khiên của đội. Đội cần ban tổ chức đồng ý cho dùng biểu trưng.
+**Logo:** khiên gạc nai (`src/v3/art/logo.webp`, gốc ở `../tools/logo/logo-c.png`) ở ô tên app đầu trang chủ, màn chào và thẻ cảnh báo; cùng hình với biểu tượng app Android. Biểu trưng Đồng Nai chỉ đặt nhỏ ở chân màn chào để ghi cuộc thi; đội cần ban tổ chức đồng ý cho dùng biểu trưng.
 
 ## Chạy
 
@@ -83,6 +83,8 @@ App tự tìm `window.LCSNative`. Chưa có thì dùng cách thay thế để v�
 | `setVoiceAsk(on)` | | Cá nhân: "Hỏi bằng giọng nói" |
 | `openStory(scamType)` | | Mở đúng bài học (Mảng 4) |
 | `weekStats()` | chuỗi JSON `{calls, messages, layersOn}` | Thống kê tuần (nếu có) |
+| `saveRelative(name, phone)` | | Lưu người thân đầu tiên có số cho luồng hỏi sau cuộc gọi của Android |
+| `openAdvanced()` | | Cá nhân → "Cài đặt nâng cao" (chỉ hiện khi chạy trong app Android) |
 
 Gán `window.LCS_API_BASE` (địa chỉ máy chủ) trước khi nạp trang. Đóng gói `dist/` vào `assets` thì app vẫn mở được khi mất mạng (màn A2b).
 

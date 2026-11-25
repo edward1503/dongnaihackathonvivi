@@ -442,20 +442,22 @@ object GhiAm {
      * Chỉ trả về khi chắc đó là bản ghi của cuộc gọi vừa xong (xem [chon]) và máy đã ghi xong tệp:
      * kích thước đứng yên qua hai lần quét. Còn mơ hồ thì không gửi tệp nào, app chuyển sang hỏi một câu.
      */
-    fun timMoi(c: Context, sauLuc: Long, so: String = ""): BanGhi? {
+    fun timMoi(c: Context, sauLuc: Long, so: String = "", latestNamed: Boolean = false): BanGhi? {
         val goc = CaiDat.thuMucGhiAm(c)
         if (goc.isBlank()) return null
         val cay = Uri.parse(goc)
         val s = TraCuu.chuanHoa(so)
         // Bản ghi của cuộc vừa xong được máy ghi xong quanh lúc cúp máy (hàm này chạy vài giây sau đó).
         // Tệp sửa lần cuối sớm hơn thế là của cuộc gọi trước, không lấy.
-        val tu = maxOf(sauLuc - 3000, System.currentTimeMillis() - 20_000)
+        if (latestNamed && s.length < 9) return null
+        val tu = if (latestNamed) 0L else maxOf(sauLuc - 3000, System.currentTimeMillis() - 20_000)
         var truoc: Pair<String, Long>? = null   // (tên, kích thước) của tệp được chọn ở lần quét trước
         repeat(5) { lan ->
             try {
                 val con = DocumentsContract.buildChildDocumentsUriUsingTree(cay, DocumentsContract.getTreeDocumentId(cay))
                 val ung = ArrayList<BanGhi>()
-                val kichThuoc = HashMap<String, Long>()
+                var newest = Long.MIN_VALUE
+            val kichThuoc = HashMap<String, Long>()
                 c.contentResolver.query(
                     con,
                     arrayOf(
@@ -468,6 +470,12 @@ object GhiAm {
                         val ten = k.getString(1).orEmpty()
                         if (k.getLong(2) < tu || k.getLong(4) <= 0) continue
                         if (DUOI.none { ten.lowercase().endsWith(it) }) continue
+                        if (latestNamed) {
+                            val modified = k.getLong(2)
+                            if (s !in soTrongTen(ten) || modified < newest) continue
+                            if (modified > newest) ung.clear()
+                            newest = modified
+                        }
                         ung += BanGhi(DocumentsContract.buildDocumentUriUsingTree(cay, k.getString(0)), ten, k.getString(3) ?: "audio/mpeg")
                         kichThuoc[ten] = k.getLong(4)
                     }

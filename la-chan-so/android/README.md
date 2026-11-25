@@ -1,6 +1,13 @@
 # Lá chắn số · phần chạy nền trên Android (mảng 1)
 
-Ứng dụng Kotlin thuần, không Compose, một thư viện ngoài (`androidx.core`). Gồm sáu tính năng N1–N6 trong [`../PHAN-CONG-TINH-NANG.md`](../PHAN-CONG-TINH-NANG.md). Màn chính hiện tại chỉ là bảng điều khiển để thử; giao diện đầy đủ của app (mảng 3) sẽ thay nó.
+Ứng dụng Kotlin thuần, không Compose, một thư viện ngoài (`androidx.core`). Gồm sáu tính năng N1–N6 trong [`../PHAN-CONG-TINH-NANG.md`](../PHAN-CONG-TINH-NANG.md).
+
+**Mở app là vào giao diện V3 của mảng 3** (`../app`, React):
+- Gradle tự build `app/dist` (task `buildReactApp`, cần Node; `-PskipReactBuild` để dùng bản đã build) và chép vào `assets/web/app`.
+- `MainActivity` hiện trang đó trong WebView ở `https://lachan.app/app/index.html` và gán `window.LCS_API_BASE` = ô "Máy chủ của đội".
+- Cầu `window.LCSNative` (`AppBridge.kt` + `res/raw/app_bridge.js`) nối app với phần chạy nền theo bảng trong `../app/README.md`, thêm `saveRelative(name, phone)` và `openAdvanced()`.
+- Bảng điều khiển cũ (khóa AI, máy chủ, công tắc trình diễn, nút thử) chuyển sang `AdvancedSettingsActivity`, mở từ Cá nhân → Cài đặt nâng cao.
+- Biểu tượng app và màn chờ dùng logo khiên gạc nai (`../tools/logo/logo-c.png`).
 
 ## Build và cài
 
@@ -25,7 +32,8 @@ Cài bằng `adb install` thì Android không coi là app "cài từ nguồn l�
 | `ThietLap.kt` | N6 kiểm tra và xin từng quyền, riêng phần cho máy Xiaomi |
 | `TraCuu.kt` | Tra số (máy chủ trước, dữ liệu trên máy sau), quy tắc "số quen", lớp gọi máy chủ |
 | `NenTang.kt` | Cài đặt, xưng hô, nhật ký, thông báo, giọng Bé Nai |
-| `MainActivity.kt` | Trạng thái ba lớp, cài đặt, nút giả lập, nhật ký |
+| `MainActivity.kt` | Màn chính: app React trong WebView, cầu `LCSNative` (`AppBridge.kt`) |
+| `AdvancedSettingsActivity.kt` | Cài đặt nâng cao: trạng thái ba lớp, khóa AI, máy chủ, nút giả lập, nhật ký |
 
 Quy tắc "khi nào lên tiếng" (màn D05) nằm ở hai chỗ: `SauCuocGoi.xuLy` và `DichVuLaChan.kiemTra`. Quy tắc "số quen" ở `SoQuen` trong `TraCuu.kt`, theo đúng D05: hai cuộc gọi đi từ 30 giây vào hai ngày khác nhau trong 60 ngày, hoặc có trong danh bạ, hoặc chủ máy bấm "Tôi biết số này". Số lạ nghe lâu thì mỗi ngày hỏi tối đa một câu. Ngưỡng 5 phút và khoảng canh 10 phút ở `CaiDat.nguongGiay`, `CaiDat.cuaSoGiay`; "Chế độ trình diễn" (mặc định tắt) rút xuống 15 giây và 2 phút, và bỏ giới hạn một câu mỗi ngày.
 
