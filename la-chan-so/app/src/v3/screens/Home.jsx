@@ -50,13 +50,22 @@ function FamilyReplies() {
       document.removeEventListener('visibilitychange', refresh)
     }
   }, [])
+  const open = ({ askId, reply }) => {
+    setAsk({ askId, fromInbox: true, to: relatives.find(r => r.id === 'minh') || { name: 'Minh' },
+      reply: { ...reply, id: reply.id || reply.at, text: reply.text.replace(/^Minh: /, ''), preset: reply.choice === 'nguoi-quen' ? 'nguoi_quen' : 'dung_chuyen' } })
+    nav('/hoi-nguoi-than/tra-loi')
+  }
+  // Lời nhắn mới của người thân: tự mở to và đọc thành tiếng một lần, không chờ bà tìm dòng trên màn chính.
+  useEffect(() => {
+    const latest = unread[unread.length - 1]
+    if (!latest) return
+    const key = 'lcs.replyShown.' + (latest.reply.id || latest.reply.at)
+    try { if (sessionStorage.getItem(key)) return; sessionStorage.setItem(key, '1') } catch { return }
+    open(latest)
+  }, [unread]) // eslint-disable-line react-hooks/exhaustive-deps
   if (!unread.length) return null
-  return <Group>{unread.map(({ askId, reply }) => <Row key={askId} icon="msg" title="Minh gửi lời nhắn cho mẹ" sub={new Date(reply.at).toLocaleString('vi-VN')}
-    onClick={() => {
-      setAsk({ askId, fromInbox: true, to: relatives.find(r => r.id === 'minh') || { name: 'Minh' },
-        reply: { ...reply, id: reply.id || reply.at, text: reply.text.replace(/^Minh: /, ''), preset: reply.choice === 'nguoi-quen' ? 'nguoi_quen' : 'dung_chuyen' } })
-      nav('/hoi-nguoi-than/tra-loi')
-    }} />)}</Group>
+  return <Group>{unread.map((r) => <Row key={r.askId} icon="msg" title="Minh gửi lời nhắn cho mẹ" sub={new Date(r.reply.at).toLocaleString('vi-VN')}
+    onClick={() => open(r)} />)}</Group>
 }
 
 // Short descriptions of the three protection layers, as in the submitted A01b

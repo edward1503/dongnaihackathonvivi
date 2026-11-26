@@ -89,7 +89,13 @@ export const CLIENT_ID = (() => {
 
 export function AppProvider({ children }) {
   const [mode, setModeState] = useState(initialMode)
-  const [familyCode, setFamilyCodeState] = useState(() => load('lcs.familyCode', ''))
+  // Mở bằng ?mode=relative (máy Minh trong demo): tự ghép mã gia đình demo, khỏi phải gõ.
+  const [familyCode, setFamilyCodeState] = useState(() => {
+    const saved = load('lcs.familyCode', '')
+    if (saved || MODE_PARAM !== 'relative') return saved
+    save('lcs.familyCode', FAMILY_ROOM)
+    return FAMILY_ROOM
+  })
   const setFamilyCode = useCallback((code) => {
     save('lcs.familyCode', code)
     setFamilyCodeState(code)

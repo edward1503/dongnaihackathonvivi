@@ -27,6 +27,8 @@ data class KetQuaSo(
     val nhan: String = "",
     val baoGanNhat: String = "",
     val tuMayChu: Boolean = false,
+    /** Quản trị viên Lá chắn số đã xác minh số này (máy chủ trả adminVerified). */
+    val daXacMinh: Boolean = false,
 )
 
 /**

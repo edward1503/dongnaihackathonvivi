@@ -9,6 +9,7 @@ case:
   danger      10 máy báo, Khoa và Lan Anh xác nhận  -> Nguy hiểm
   suspicious  5 máy báo, Khoa xác nhận              -> Nghi ngờ
   pending     5 máy báo, chưa ai duyệt              -> Chưa rõ (có hồ sơ chờ đội xét)
+  pending10   10 máy báo, chưa ai duyệt             -> Chưa rõ; 1 phiếu xác nhận ra Nghi ngờ, 2 phiếu ra Nguy hiểm
   appeal      như danger, rồi chủ số khiếu nại đã xác minh -> tạm hạ xuống Nghi ngờ, "Đang xét báo nhầm"
   reset       đặt lại toàn bộ dữ liệu mẫu (xóa mọi cờ đã gắn)
 
@@ -30,7 +31,7 @@ BASE = os.environ.get("LCS_BASE", "https://supplychain-system-product-name.tailb
 VN = timezone(timedelta(hours=7))
 STORY = "Người gọi xưng cán bộ công an, nói tài khoản liên quan vụ án, giục chuyển tiền vào tài khoản an toàn."
 TEAM = {"Khoa": "246810", "Lan Anh": "135790"}
-PLAN = {"danger": (10, ["Khoa", "Lan Anh"]), "suspicious": (5, ["Khoa"]), "pending": (5, []), "appeal": (10, ["Khoa", "Lan Anh"])}
+PLAN = {"danger": (10, ["Khoa", "Lan Anh"]), "suspicious": (5, ["Khoa"]), "pending": (5, []), "pending10": (10, []), "appeal": (10, ["Khoa", "Lan Anh"])}
 
 
 def call(method, path, body=None, headers=None):

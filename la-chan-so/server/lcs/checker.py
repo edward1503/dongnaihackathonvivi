@@ -66,6 +66,21 @@ def check_target(kind: str, value: str, store: Store, found: dict | None = None)
             note="Lá chắn chưa xác minh người đang gọi." if kind == "phone" else None,
             why=[f"{name} đã xác thực"], todo=TODO[("safe", kind)])
     count = found["count"]
+    if found.get("verified") and found["level"] in ("danger", "suspicious"):
+        level = found["level"]
+        headline = ("Lá chắn số đã xác minh số này dùng để lừa đảo." if kind == "phone"
+                    else f"Lá chắn số đã xác minh {noun} này dùng để lừa đảo.")
+        if count:
+            headline += f" Có {count} máy đã báo."
+        why = [f"Gần nhất {when(found['lastAt'])}."] if found["lastAt"] else []
+        if found["appealOpen"]:
+            why.append("Đang xét báo nhầm.")
+        return AnalysisResult(
+            **base, level=level, source="community", confidence=0.97, adminVerified=True,
+            scamType=found["scamType"], scamLabel=SCAM_TYPES.get(found["scamType"]) if found["scamType"] else None,
+            headline=headline, why=why, todo=TODO.get((level, kind), TODO[("danger", kind)]),
+            reports=ReportSummary(count=count, last7d=found["last7d"], lastAt=found["lastAt"],
+                                  lastWhen=when(found["lastAt"]) if found["lastAt"] else None, verified=True))
     if count:
         label = SCAM_TYPES.get(found["scamType"])
         # Every counted device was confirmed as a money or OTP lure (W1 by the recipient, W2/W3 by team votes), so say exactly that.

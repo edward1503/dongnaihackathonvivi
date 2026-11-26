@@ -59,20 +59,27 @@
   .rv-body p{margin-top:3px;font-size:14px;line-height:1.4;color:var(--ink-2);overflow-wrap:anywhere}
   .rv-body .ans{display:inline-block;margin:6px 6px 0 0;padding:2px 8px;border-radius:8px;background:var(--surface-2);font-size:12px;color:var(--ink-2)}
   .rv-note{padding:10px 12px;border-radius:12px;background:var(--surface-2);font-size:14px;color:var(--ink-2)}
-  @media(max-width:760px){body{flex-direction:column}.sidebar{position:static;width:100%;height:auto;gap:6px}.main{padding:16px}.grid-3,.grid-4{grid-template-columns:1fr!important}}
+  .qf-row{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) auto;gap:8px;align-items:center}
+  .qf-row .btn{height:44px;white-space:nowrap}
+  .qf-list{display:flex;flex-direction:column;gap:6px}
+  .qf-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--outline-2);border-radius:12px;background:var(--surface)}
+  .qf-item .rv-ic{background:var(--danger-c);color:var(--danger)}
+  .qf-item strong{font-size:16px;letter-spacing:.2px}
+  .rv-admin{padding:10px 12px;border-radius:12px;background:var(--brand-c);color:var(--brand-ink);font-size:14px;display:flex;gap:8px;align-items:center}
+  @media(max-width:760px){.qf-row{grid-template-columns:1fr}body{flex-direction:column}.sidebar{position:static;width:100%;height:auto;gap:6px}.main{padding:16px}.grid-3,.grid-4{grid-template-columns:1fr!important}}
 </style>
 </head>
 <body>
 
 <form id="login" class="card col gap-12">
-  <h1 class="t-h1">Đăng nhập đội tình nguyện</h1>
+  <h1 class="t-h1">Đăng nhập Lá chắn số</h1>
   <label for="code">Mã thành viên</label><input id="code" class="field" type="password" inputmode="numeric" autocomplete="one-time-code" required>
   <button class="btn primary">Đăng nhập</button><p role="alert" id="login-error"></p>
 </form>
 <div class="sidebar" hidden>
   <div class="row gap-12" style="padding:0 10px">
     <div class="icon-box solid-brand" style="width:36px;height:36px;border-radius:10px"><i class="ic s20" data-i="shield-check"></i></div>
-    <div class="col"><div class="w-brand">Lá chắn số</div><div class="w-sub">Đội tình nguyện</div></div>
+    <div class="col"><div class="w-brand">Lá chắn số</div><div class="w-sub" id="team-sub">Đội tình nguyện</div></div>
   </div>
   <button class="btn outline sm" id="logout">Đăng xuất</button>
   <div class="none" style="height:16px"></div>
@@ -108,6 +115,15 @@
 <!-- ===================== W2: Kiểm duyệt ===================== -->
 <div class="page" id="p-mod">
   <div class="col gap-2"><div class="t-h1">Kiểm duyệt báo cáo</div><div class="t-label muted" id="md-sub"></div></div>
+  <div class="card col gap-12" id="qf" hidden>
+    <div class="row between wrap gap-8"><div class="t-h2">Gắn cờ nhanh số lừa đảo</div><span class="t-cap muted">Có hiệu lực ngay: máy nào cài Lá chắn số nhận cuộc gọi từ số này đều thấy thẻ đỏ</span></div>
+    <form class="qf-row" id="qf-form">
+      <input class="field" id="qf-phone" inputmode="tel" autocomplete="off" placeholder="Số điện thoại, ví dụ 0912 345 678" aria-label="Số điện thoại" required>
+      <select class="field" id="qf-type" aria-label="Kiểu lừa đảo"></select>
+      <button class="btn danger"><i class="ic s18" data-i="flag"></i>Gắn cờ lừa đảo</button>
+    </form>
+    <div class="qf-list" id="qf-list"></div>
+  </div>
   
   <div class="split">
     <div class="card" style="padding:0;overflow:hidden">
@@ -168,7 +184,9 @@ const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '
 const toast = t => { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('on'), 2400); };
 let session = JSON.parse(sessionStorage.getItem('lcs.web.team') || 'null');
 let S, cases = [], appeals = [], sel, previous = '', loading = false;
-const isLead = () => session?.member.role === 'lead';
+const isAdmin = () => session?.member.role === 'admin';
+const isLead = () => ['lead', 'admin'].includes(session?.member.role);
+let flags = [];
 async function api(path, body) {
   const headers = {'Content-Type':'application/json', 'X-LCS-Team':session?.token || ''};
   const device = localStorage.getItem('lcs.device.' + location.origin);
@@ -185,7 +203,8 @@ const post = api;
 function setSession(value) {
   session = value;
   sessionStorage.setItem('lcs.web.team',JSON.stringify(value));
-  previous = ''; sel = null; cases = []; appeals = [];
+  previous = ''; sel = null; cases = []; appeals = []; flags = [];
+  $('#qf').hidden = !isAdmin(); $('#qf-list').replaceChildren();
   $('#md-appeals').replaceChildren(); $('#md-appeals').hidden = !isLead();
   $('#md-detail').replaceChildren(); $('#md-list').replaceChildren(); $('#c-sent').replaceChildren();
   $('#login').hidden = !!value;
@@ -193,7 +212,8 @@ function setSession(value) {
   if (!value) { $('#code').focus(); return; }
   $('.w-user').textContent = value.member.name;
   $('.avatar').textContent = value.member.name.charAt(0);
-  $('#role').textContent = isLead() ? 'Trưởng đội' : 'Tình nguyện viên';
+  $('#role').textContent = isAdmin() ? 'Toàn quyền duyệt và gắn cờ' : isLead() ? 'Trưởng đội' : 'Tình nguyện viên';
+  $('#team-sub').textContent = isAdmin() ? 'Quản trị' : 'Đội tình nguyện';
   $('[data-go="camp"]').hidden = !isLead();
   go(location.hash.slice(1) || 'stats');
 }
@@ -298,9 +318,10 @@ function renderReview(c) {
       <div><b>${c.votes.confirm}/2</b><span>phiếu xác nhận${c.votes.reject ? ' · ' + c.votes.reject + ' bác' : ''}${c.votes.spam ? ' · ' + c.votes.spam + ' rác' : ''}</span></div></div>
     <details open class="rv-ev"><summary>Bằng chứng trong đợt này <span class="n">${c.reports.length}</span></summary><ul class="rv-list">${reports}</ul></details>
     ${c.notes.filter(v => v.note).map(v => '<p class="rv-note"><strong>' + esc(v.member) + '</strong> · ' + esc(v.note) + '</p>').join('')}
-    ${c.canVote ? `<label for="vote-note">${required ? 'Lý do xử lý ý kiến trái nhau (bắt buộc)' : 'Nhận xét (nếu có)'}</label>
+    ${c.canVote ? `${isAdmin() ? '<div class="rv-admin"><i class="ic s18" data-i="shield-check"></i>Quyết định của quản trị viên có hiệu lực ngay, không cần phiếu thứ hai.</div>' : ''}
+    <label for="vote-note">${required ? 'Lý do xử lý ý kiến trái nhau (bắt buộc)' : 'Nhận xét (nếu có)'}</label>
     <textarea class="field" id="vote-note" rows="2"></textarea><div class="row wrap gap-8">
-    <button class="btn primary sm" data-vote="confirm">Xác nhận dấu hiệu</button>
+    <button class="btn ${isAdmin() ? 'danger' : 'primary'} sm" data-vote="confirm">${isAdmin() ? 'Xác minh lừa đảo' : 'Xác nhận dấu hiệu'}</button>
     <button class="btn outline sm" data-vote="reject">Bác báo cáo</button>
     <button class="btn outline sm" data-vote="spam">Báo rác</button></div>` : '<p class="rv-note">' + esc(c.reasonCannotVote) + '</p>'}</div>`;
   paintIcons(el);
@@ -308,7 +329,8 @@ function renderReview(c) {
     const note = $('#vote-note').value.trim();
     if (required && !note) { toast('Bạn ghi lý do trước khi bỏ phiếu nhé.'); $('#vote-note').focus(); return; }
     await post('/api/cases/' + encodeURIComponent(c.key) + '/vote', {reviewId:c.reviewId, decision:b.dataset.vote, note});
-    toast('Đã ghi nhận phiếu.'); await refresh(true);
+    toast(isAdmin() ? (b.dataset.vote === 'confirm' ? 'Đã xác minh. Số này giờ hiện cảnh báo Nguy hiểm.' : 'Đã bác hồ sơ.') : 'Đã ghi nhận phiếu.');
+    await refresh(true);
   });
 }
 function renderAppeals() {
@@ -325,6 +347,39 @@ function renderAppeals() {
     toast('Đã ghi nhận quyết định.'); await refresh(true);
   });
 }
+
+/* ---------- Quản trị: gắn cờ nhanh ---------- */
+const SCAMS = {gia_danh_cong_an:'Giả danh công an', nguoi_than_tai_nan:'Người thân gặp tai nạn', gia_dien_luc:'Giả nhân viên điện lực',
+  viec_nhe_luong_cao:'Việc nhẹ lương cao', dau_tu_lai_cao:'Đầu tư lãi cao', qua_tri_an:'Quà tri ân', khac:'Kiểu khác'};
+$('#qf-type').innerHTML = Object.entries(SCAMS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
+function renderFlags() {
+  const el = $('#qf-list');
+  if (!isAdmin()) { el.replaceChildren(); return; }
+  const at = t => new Date(t).toLocaleString('vi-VN', {hour:'2-digit', minute:'2-digit', day:'2-digit', month:'2-digit'});
+  el.innerHTML = flags.length ? `<div class="t-cap muted">Đã gắn cờ (${flags.length})</div>` + flags.map(f => `<div class="qf-item">
+      <span class="rv-ic"><i class="ic s18" data-i="phone-off"></i></span>
+      <div class="col grow" style="min-width:0"><strong>${esc(f.target)}</strong><span class="t-cap muted">${esc(f.scamLabel || 'Lừa đảo')} · gắn lúc ${at(f.at)}${f.count ? ' · ' + f.count + ' máy đã báo' : ''}</span></div>
+      <span class="rv-level lv-${esc(f.level)}">${levels[f.level] || esc(f.level)}</span>
+      <button type="button" class="btn outline sm" data-unflag="${esc(f.key)}"><i class="ic s16" data-i="trash"></i>Gỡ cờ</button></div>`).join('')
+    : '<div class="t-cap muted">Chưa có số nào được gắn cờ nhanh.</div>';
+  paintIcons(el);
+  el.querySelectorAll('[data-unflag]').forEach(b => b.onclick = async () => {
+    b.classList.add('off');
+    try { await post('/api/admin/flags/remove', {key:b.dataset.unflag}); toast('Đã gỡ cờ. Số này không còn bị cảnh báo.'); }
+    finally { await refresh(true); }
+  });
+}
+$('#qf-form').onsubmit = async e => {
+  e.preventDefault();
+  const btn = $('#qf-form button'); btn.classList.add('off');
+  try {
+    const r = await post('/api/admin/flags', {target:$('#qf-phone').value.trim(), scamType:$('#qf-type').value});
+    $('#qf-phone').value = '';
+    toast(r.level === 'danger' ? 'Đã gắn cờ. Số này giờ hiện thẻ đỏ khi gọi tới.' : 'Đã gắn cờ.');
+    await refresh(true);
+  } catch (error) { toast(error.message); }
+  finally { btn.classList.remove('off'); }
+};
 
 /* ---------- W3: tuyên truyền ---------- */
 const TYPES = {
@@ -366,13 +421,14 @@ async function refresh(force = false) {
   loading = true;
   const token = session.token;
   try {
-    const [stats, queue, decisions] = await Promise.all([api('/api/stats'), api('/api/cases?status=open'), isLead() ? api('/api/appeals') : {items:[]}]);
+    const [stats, queue, decisions, flagged] = await Promise.all([api('/api/stats'), api('/api/cases?status=open'),
+      isLead() ? api('/api/appeals') : {items:[]}, isAdmin() ? api('/api/admin/flags') : {items:[]}]);
     if (session?.token !== token) return;
-    const signature = JSON.stringify([stats,queue,decisions]);
+    const signature = JSON.stringify([stats,queue,decisions,flagged]);
     if (previous === signature && !force) return;
     const note = $('#vote-note')?.value, selected = sel;
-    previous = signature; S = stats; cases = queue.items; appeals = decisions.items;
-    renderStats(); renderMod();
+    previous = signature; S = stats; cases = queue.items; appeals = decisions.items; flags = flagged.items;
+    renderStats(); renderMod(); renderFlags();
     if (selected === sel && note && $('#vote-note')) $('#vote-note').value = note;
     if (isLead()) await loadSent();
   } finally { loading = false; }

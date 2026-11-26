@@ -212,6 +212,7 @@ object ThongBao {
     const val ID_SAU_GOI = 3
     const val ID_DUNG_LAI = 4
     const val ID_NGU = 5
+    const val ID_LOI_NHAN = 6
     const val ID_TIN_NHAN = 100
 
     fun taoKenh(c: Context) {

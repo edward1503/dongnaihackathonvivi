@@ -730,6 +730,7 @@ class HoiSauCuocGoiActivity : Activity() {
                 if (ma != 0L) { if (daBao) baoNguoiThan[ma] = DA_BAO else baoNguoiThan.remove(ma) }
                 if (isFinishing || isDestroyed) return@chinh
                 if (daBao) {
+                    LoiNhanNguoiThan.canh(this)
                     theNguoiThan(daBao = true)
                     tt.text = "Đã báo cho $ten · ${SimpleDateFormat("HH:mm", Locale.US).format(Date())}"
                     phu.text = "$ten sẽ gọi cho ${x.ban}. ${x.Ban} không cần bấm gì."

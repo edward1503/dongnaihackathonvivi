@@ -138,7 +138,8 @@ def lookup_flagged():
     items = []
     with store.transaction():
         now = config.now()
-        for (key,) in store.db.execute("SELECT DISTINCT key FROM evidence_reports WHERE kind='phone'"):
+        for (key,) in store.db.execute("""SELECT DISTINCT key FROM evidence_reports WHERE kind='phone'
+                                          UNION SELECT key FROM admin_flags WHERE kind='phone'"""):
             found = store.target_level(key, now, "phone")
             if found["level"] in RISK:
                 items.append({
@@ -615,6 +616,35 @@ async def legacy_vote(report_id: str, body: LegacyVote, member=Depends(team.requ
         result = store.vote(key, review, decision, body.note, member, report_id)
     await changed(key)
     return result
+
+
+class AdminFlagIn(BaseModel):
+    target: str
+    scamType: str | None = None
+    note: str | None = None
+
+
+class AdminUnflagIn(BaseModel):
+    key: str
+
+
+@app.get("/api/admin/flags", dependencies=[Depends(team.require_admin)])
+def admin_flags():
+    return {"items": store.admin_flags()}
+
+
+@app.post("/api/admin/flags")
+async def admin_flag(body: AdminFlagIn, member=Depends(team.require_admin)):
+    level = store.admin_flag(body.target, body.scamType, body.note, member)
+    await changed(level["key"])
+    return level
+
+
+@app.post("/api/admin/flags/remove", dependencies=[Depends(team.require_admin)])
+async def admin_unflag(body: AdminUnflagIn):
+    level = store.admin_unflag(body.key)
+    await changed(level["key"])
+    return level
 
 
 @app.post("/api/appeals")

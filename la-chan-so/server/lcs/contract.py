@@ -53,6 +53,7 @@ class AnalysisResult(BaseModel):
     reports: ReportSummary = Field(default_factory=ReportSummary)
     source: Source
     confidence: float = 0.0
+    adminVerified: bool = False  # quản trị viên đã xác minh: app ghi rõ trên thẻ cảnh báo
     lesson: Optional[str] = None  # mã bài học của Mảng 4 (hoc.html?kieu=…); None: kiểu này chưa có bài
 
     @model_validator(mode="after")

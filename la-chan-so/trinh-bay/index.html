@@ -211,6 +211,19 @@ h2 em { font-style: normal; color: var(--primary); }
 .play-btn svg { width: 84px; height: 84px; margin-left: 12px; }
 .video-slide.playing .play-btn { opacity: 0; pointer-events: none; }
 
+/* Slide cuối: video demo có thanh điều khiển như trình phát thường */
+.demo-slide { background: #000; }
+.demo-slide video { position: absolute; inset: 0; width: 1920px; height: 1080px; max-width: none; max-height: none; object-fit: contain; background: #000; display: block; }
+.demo-slide .play-btn { top: 760px; }
+.demo-slide.started .play-btn { opacity: 0; pointer-events: none; }
+.demo-hint {
+    position: absolute; left: 50%; top: 880px; transform: translateX(-50%); white-space: nowrap;
+    font-size: 26px; font-weight: 500; color: #fff; background: rgba(15, 23, 42, 0.72); padding: 12px 26px; border-radius: 100px;
+    transition: opacity 0.25s ease;
+}
+.demo-hint b { font-weight: 700; }
+.demo-slide.started .demo-hint { opacity: 0; }
+
 /* Tranh nền kem trong khung bo góc */
 .art { display: block; max-height: none; border-radius: 24px; border: 2px solid var(--border); }
 
@@ -628,6 +641,20 @@ table.feat { width: 100%; border-collapse: collapse; }
     <div class="end-team reveal d5"><img src="anh/logo.png" alt="">Lá chắn số · Đội 18 · Vivi · Hackathon thành phố Đồng Nai 2026</div>
 </section>
 
+<!-- =========================================================
+     S11 · VIDEO DEMO (quay trên điện thoại thật)
+     Thay video: chép đè video/demo.mp4 (và demo-poster.jpg).
+     Có thanh điều khiển: phát/dừng, tua, âm lượng, tắt tiếng, toàn màn hình.
+     Space: phát/dừng · M: tắt/bật tiếng · J/L: lùi/tới 5 giây.
+     ========================================================= -->
+<section class="slide demo-slide" data-chrome="off" data-video="1" id="demoSlide">
+    <video id="demoVideo" src="video/demo.mp4" poster="video/demo-poster.jpg" preload="metadata" playsinline controls></video>
+    <button class="play-btn" id="demoPlay" type="button" aria-label="Phát video demo">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.52.85l12-7.5a1 1 0 0 0 0-1.7l-12-7.5A1 1 0 0 0 7 4.5z"/></svg>
+    </button>
+    <div class="demo-hint">Demo trên điện thoại thật · <b>Space</b> phát/dừng · <b>M</b> tắt tiếng · <b>J</b>/<b>L</b> lùi/tới 5 giây</div>
+</section>
+
 <!-- Persistent chrome nằm trong khung -->
 <div class="chrome-counter" id="chromeCounter"></div>
 <div class="chrome-progress" id="chromeProgress"></div>
@@ -640,6 +667,7 @@ table.feat { width: 100%; border-collapse: collapse; }
    Phím: → ↓ Space PageDown (tới), ← ↑ PageUp (lui), Home, End,
    F hoặc bấm đúp: toàn màn hình. #3 trên địa chỉ: mở slide 3.
    Slide 1 là video: Space/Enter/bấm chuột để phát, Space/bấm chuột để dừng.
+   Slide cuối là video demo có thanh điều khiển: Space phát/dừng, M tắt tiếng, J/L lùi/tới 5 giây.
    ?tinh=1: tắt chuyển động (dùng khi chụp ảnh).
    =========================================== */
 class SlidePresentation {
@@ -673,29 +701,42 @@ class SlidePresentation {
         window.addEventListener('resize', scale);
     }
     onVideo() { return !!this.slides[this.current]?.dataset.video; }
+    curVideo() { return this.slides[this.current]?.querySelector('video') || null; }
     setupVideo() {
+        this.demo = document.getElementById('demoVideo');
+        this.demoSlide = document.getElementById('demoSlide');
+        if (this.demo) {
+            // Nút phát lớn chỉ hiện trước lần phát đầu; tạm dừng để nói thì giữ nguyên khung hình và thanh điều khiển.
+            const started = () => this.demoSlide.classList.toggle('started', !this.demo.paused || this.demo.currentTime > 0);
+            ['play', 'pause', 'seeked', 'timeupdate', 'emptied'].forEach((ev) => this.demo.addEventListener(ev, started));
+            document.getElementById('demoPlay').addEventListener('click', (e) => { e.stopPropagation(); this.playVideo(this.demo); });
+        }
         this.video = document.getElementById('trailer');
         this.videoSlide = document.getElementById('videoSlide');
         if (!this.video) return;
         const sync = () => this.videoSlide.classList.toggle('playing', !this.video.paused && !this.video.ended);
         ['play', 'playing', 'pause', 'ended'].forEach((ev) => this.video.addEventListener(ev, sync));
         this.video.addEventListener('ended', () => { if (this.onVideo()) this.showSlide(this.current + 1); });
-        this.videoSlide.addEventListener('click', () => this.toggleVideo());
+        this.videoSlide.addEventListener('click', () => this.toggleVideo(this.video));
     }
-    playVideo() {
-        if (this.video.ended) this.video.currentTime = 0;
-        this.video.play().catch(() => {});
+    playVideo(v) {
+        if (v.ended) v.currentTime = 0;
+        v.play().catch(() => {});
     }
-    toggleVideo() {
-        if (this.video.paused || this.video.ended) this.playVideo();
-        else this.video.pause();
+    toggleVideo(v) {
+        if (v.paused || v.ended) this.playVideo(v);
+        else v.pause();
     }
     setupKeyboardNav() {
         document.addEventListener('keydown', (e) => {
             const k = e.key;
-            if (this.onVideo() && this.video) {
-                if (k === ' ') { e.preventDefault(); this.toggleVideo(); return; }
-                if (k === 'Enter') { e.preventDefault(); if (this.video.paused || this.video.ended) this.playVideo(); return; }
+            const v = this.curVideo();
+            if (v) {
+                if (k === ' ') { e.preventDefault(); this.toggleVideo(v); return; }
+                if (k === 'Enter') { e.preventDefault(); if (v.paused || v.ended) this.playVideo(v); return; }
+                if (k === 'm' || k === 'M') { e.preventDefault(); v.muted = !v.muted; return; }
+                if (v === this.demo && (k === 'j' || k === 'J')) { e.preventDefault(); v.currentTime = Math.max(0, v.currentTime - 5); return; }
+                if (v === this.demo && (k === 'l' || k === 'L')) { e.preventDefault(); v.currentTime = Math.min(v.duration || 0, v.currentTime + 5); return; }
             }
             if (['ArrowRight', 'ArrowDown', ' ', 'PageDown', 'Enter'].includes(k)) { e.preventDefault(); this.go(1); }
             else if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(k)) { e.preventDefault(); this.go(-1); }
@@ -732,9 +773,11 @@ class SlidePresentation {
         this.current = Math.max(0, Math.min(index, this.slides.length - 1));
         // Video: rời slide thì dừng; quay lại thì phát tiếp từ chỗ dừng (nếu đã phát dở)
         if (this.video) {
-            if (!this.onVideo()) this.video.pause();
+            if (this.curVideo() !== this.video) this.video.pause();
             else if (prev !== undefined && prev !== this.current && this.video.currentTime > 0 && !this.video.ended) this.video.play().catch(() => {});
         }
+        // Video demo: rời slide thì dừng, quay lại thì giữ nguyên chỗ đang dừng (không tự phát).
+        if (this.demo && this.curVideo() !== this.demo) this.demo.pause();
         this.slides.forEach((s, i) => {
             s.classList.toggle('active', i === this.current);
             s.classList.toggle('visible', i === this.current);

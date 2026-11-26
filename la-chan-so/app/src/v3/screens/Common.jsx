@@ -17,6 +17,37 @@ export const ROLES = [
 
 const ROLE_TONE = ['pri', 'safe', 'warn']
 
+// Đổi nhanh giữa 3 nhân vật demo: bà Hoa, Vy, Minh (Minh tự ghép mã gia đình demo, khỏi gõ).
+const QUICK = [
+  { mode: 'simple', name: 'Bà Hoa', sub: 'Người lớn tuổi', tone: 'pri' },
+  { mode: 'full', name: 'Vy', sub: 'Học sinh', tone: 'safe' },
+  { mode: 'relative', name: 'Minh', sub: 'Người thân', tone: 'warn' },
+]
+
+function QuickSwitch() {
+  const nav = useNavigate()
+  const { mode, setMode, setFamilyCode, setOnboarded, toast } = useApp()
+  const pick = (q) => {
+    if (q.mode === mode) return
+    if (q.mode === 'relative') setFamilyCode(FAMILY_ROOM)
+    saveTeam(null)
+    setMode(q.mode)
+    setOnboarded(true)
+    toast(`Đã chuyển sang ${q.name}`)
+    nav('/', { replace: true })
+  }
+  return (
+    <div className="qs" role="group" aria-label="Đổi nhanh vai">
+      {QUICK.map((q) => (
+        <button key={q.mode} type="button" className={`qs-b tap${q.mode === mode ? ' on' : ''}`} aria-pressed={q.mode === mode} onClick={() => pick(q)}>
+          <span className={`qs-av ${q.tone}`}>{q.name.split(' ').pop().charAt(0)}</span>
+          <span className="qs-n">{q.name}</span><span className="qs-s">{q.sub}</span>
+        </button>
+      ))}
+    </div>
+  )
+}
+
 // ---------- 00 Màn chào ----------
 export function Splash() {
   const nav = useNavigate()
@@ -158,6 +189,8 @@ export function Profile() {
   return (
     <Screen name="0d-ca-nhan" nav="/ca-nhan"
       bar={<Bar title="Cá nhân" left={null} right={persona === 'student' && Number.isFinite(points) ? <Tag kind="new" icon="award">{points} điểm</Tag> : null} />}>
+      <h2 className="t-head">Đổi nhanh vai</h2>
+      <QuickSwitch />
       <Group>
         {persona === 'volunteer' && team && <Row icon="user" title={team.member.name} sub={memberRole(team.member)} />}
         {protectedPhone && <Row icon="users" title="Người thân" value={relatives[0]?.name || 'Chưa có'} onClick={() => nav('/nguoi-than')} />}

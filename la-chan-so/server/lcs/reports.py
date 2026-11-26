@@ -11,7 +11,7 @@ from datetime import timedelta
 from . import config
 from .data import EMERGING_TITLES, SCAM_TYPES
 from .evidence import fail, key_hash, safe_text, timestamp, verify_receipt, verify_signature
-from .text import detect_kind, looks_like_link, target_display, target_key
+from .text import detect_kind, digits, is_phone, looks_like_link, target_display, target_key
 
 DAY = timedelta(days=1)
 WINDOW = timedelta(days=90)
@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS relative_replies(alert TEXT, report TEXT, analysis TE
 CREATE TABLE IF NOT EXISTS appeals(id TEXT PRIMARY KEY, key TEXT, device TEXT, contact TEXT, text TEXT,
  status TEXT, code TEXT, outcome TEXT, note TEXT);
 CREATE TABLE IF NOT EXISTS awards(device TEXT, key TEXT, PRIMARY KEY(device,key));
+CREATE TABLE IF NOT EXISTS admin_flags(key TEXT PRIMARY KEY, kind TEXT, scam TEXT, note TEXT, member TEXT, at TEXT);
 """
 REPORTS = """SELECT r.*, a.level, a.scam, a.confidence, a.summary, a.transfer
  FROM evidence_reports r LEFT JOIN analyses a ON a.id=r.analysis"""
@@ -147,6 +148,7 @@ class Store:
                 "linked_alerts",
                 "appeals",
                 "awards",
+                "admin_flags",
             ):
                 self.db.execute(f"DELETE FROM {name}")
             self._seed()
@@ -350,9 +352,17 @@ class Store:
         )
         name = official(kind, key)
         signs = link_signs(key) if kind == "link" else []
+        admin = self.db.execute("SELECT * FROM admin_flags WHERE key=?", (key,)).fetchone()
         counted = {}
         if name:
             level = "safe"
+        elif admin:
+            # Quản trị viên đã xác minh: cảnh báo ngay, không chờ đủ số máy báo.
+            level = "suspicious" if appeal else "danger"
+            counted = totals[1] or totals[0] or {
+                r["device"]: (1, r) for r in rows
+                if base_state(r, now) not in ("withdrawn", "removed", "rejected", "closed")
+            }
         elif s2 >= 10:
             level, counted = ("suspicious" if appeal else "danger"), totals[1]
         elif s1 >= 5:
@@ -374,7 +384,8 @@ class Store:
             last7d=sum(timestamp(r["at"]).date() >= now.date() - timedelta(days=7) for r in records),
             lastAt=latest["at"] if latest else None,
             until=(timestamp(latest["at"]) + WINDOW).isoformat() if latest else None,
-            scamType=latest["category"] if latest else None,
+            scamType=latest["category"] if latest else (admin["scam"] if admin else None),
+            verified=bool(admin) and not name,
             contributors=list(counted),
             teamChecked=any(weight < 5 for weight, _ in counted.values()),
             contributionIds=[r["id"] for r in records],
@@ -512,7 +523,7 @@ class Store:
     def public_level(level):
         return {
             k: level[k]
-            for k in ("key", "level", "count", "S1", "S2", "appealOpen", "canAppeal", "reportedCount")
+            for k in ("key", "level", "count", "S1", "S2", "appealOpen", "canAppeal", "reportedCount", "verified")
         }
 
     def tally(self, review):
@@ -583,7 +594,19 @@ class Store:
                 fail("Bạn ghi lý do khi xét hai ý kiến trái nhau nhé.")
             self.db.execute("INSERT INTO votes VALUES (?,?,?,?)", (review_id, member["id"], decision, note))
             votes = self.tally(review_id)
-            rejected = votes["reject"] + votes["spam"] >= 2
+            admin = member.get("role") == "admin"
+            rejected = votes["reject"] + votes["spam"] >= 2 or (admin and decision != "confirm")
+            if admin and decision == "confirm":
+                latest = self.db.execute(
+                    "SELECT kind, category FROM evidence_reports WHERE key=? ORDER BY at DESC LIMIT 1", (key,)
+                ).fetchone()
+                self.db.execute(
+                    "INSERT OR REPLACE INTO admin_flags VALUES (?,?,?,?,?,?)",
+                    (key, latest["kind"] if latest else "phone", latest["category"] if latest else None,
+                     note, member["id"], now.isoformat()),
+                )
+            elif admin:
+                self.db.execute("DELETE FROM admin_flags WHERE key=?", (key,))
             if rejected:
                 self.db.execute(
                     """UPDATE evidence_reports SET terminal='rejected' WHERE terminal IS NULL AND EXISTS
@@ -591,12 +614,48 @@ class Store:
                        AND s.review=?)""",
                     (review_id,),
                 )
-            if rejected or votes["confirm"] >= 2:
+            if rejected or votes["confirm"] >= 2 or admin:
                 self.db.execute("UPDATE reviews SET status='decided' WHERE id=?", (review_id,))
             self.refresh(key, now)
             return self.case(
                 self.db.execute("SELECT * FROM reviews WHERE id=?", (review_id,)).fetchone(), member, now
             )
+
+    def admin_flag(self, target, scam, note, member):
+        """Quản trị viên gắn cờ lừa đảo cho một số điện thoại ngay, không cần chờ báo cáo."""
+        if not is_phone(digits(target or "")):
+            fail("Số điện thoại chưa đúng. Bạn kiểm tra lại nhé.")
+        kind = "phone"
+        key = target_key(kind, target)
+        if scam and scam not in SCAM_TYPES:
+            fail("Kiểu lừa đảo chưa đúng.")
+        with self.transaction():
+            now = config.now()
+            self.db.execute(
+                "INSERT OR REPLACE INTO admin_flags VALUES (?,?,?,?,?,?)",
+                (key, kind, scam or None, safe_text(note), member["id"], now.isoformat()),
+            )
+            return self.public_level(self.target_level(key, now, kind))
+
+    def admin_unflag(self, key):
+        with self.transaction():
+            gone = self.db.execute("DELETE FROM admin_flags WHERE key=?", (key,)).rowcount
+            if not gone:
+                fail("Số này chưa được gắn cờ.", 404)
+            return self.public_level(self.target_level(key, config.now()))
+
+    def admin_flags(self):
+        with self.transaction():
+            now = config.now()
+            out = []
+            for a in self.db.execute("SELECT * FROM admin_flags ORDER BY at DESC").fetchall():
+                found = self.target_level(a["key"], now, a["kind"])
+                out.append({
+                    "key": a["key"], "target": target_display(a["kind"], a["key"]), "kind": a["kind"],
+                    "scamType": a["scam"], "scamLabel": SCAM_TYPES.get(a["scam"]) if a["scam"] else None,
+                    "note": a["note"], "at": a["at"], "level": found["level"], "count": found["count"],
+                })
+            return out
 
     def cases(self, status, limit, member):
         with self.transaction():

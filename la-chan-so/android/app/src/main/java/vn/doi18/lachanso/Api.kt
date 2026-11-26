@@ -113,6 +113,7 @@ object Api {
             // "khac" means no recognised scam type: no label rather than the word "khác" in a sentence
             if (m == Muc.AN_TOAN) "tổng đài đã xác thực" else if (chu(j, "scamType") == "khac") "" else nhan(chu(j, "scamLabel")),
             r?.let { chu(it, "lastWhen") }.orEmpty(), tuMayChu = true,
+            daXacMinh = j.optBoolean("adminVerified") && (m == Muc.NGUY_HIEM || m == Muc.NGHI_NGO),
         )
     }
 

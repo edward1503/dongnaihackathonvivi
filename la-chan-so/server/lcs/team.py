@@ -8,6 +8,8 @@ MEMBERS = {
     "246810": ("khoa", "Khoa", "volunteer"),
     "135790": ("lan-anh", "Lan Anh", "volunteer"),
     "999111": ("hung", "Hùng", "lead"),
+    # Quản trị: một phiếu là quyết định, được gắn hoặc gỡ cờ một số bất kỳ.
+    "868686": ("admin", "Quản trị viên", "admin"),
 }
 sessions = {}
 
@@ -34,6 +36,12 @@ def require_team(x_lcs_team: Annotated[str | None, Header()] = None):
 
 
 def require_lead(member=Depends(require_team)):
-    if member["role"] != "lead":
+    if member["role"] not in ("lead", "admin"):
         raise HTTPException(403, "Chỉ trưởng đội thực hiện được việc này.")
+    return member
+
+
+def require_admin(member=Depends(require_team)):
+    if member["role"] != "admin":
+        raise HTTPException(403, "Chỉ quản trị viên thực hiện được việc này.")
     return member

@@ -383,8 +383,12 @@ object TheCanhBao {
         go(c)
         val nguyHiem = kq.muc == Muc.NGUY_HIEM
         val tieuDe = if (nguyHiem) "Nghi lừa đảo" else "Cần cẩn thận"
-        val dong1 = if (kq.soNguoiBao > 0) "Cuộc gọi hiển thị số này đã bị báo cáo từ ${kq.soNguoiBao} máy."
-            else "Bà cẩn thận khi nghe cuộc gọi này nha."
+        val dong1 = when {
+            kq.daXacMinh && kq.soNguoiBao > 0 -> "Lá chắn số đã xác minh số này lừa đảo. Đã có ${kq.soNguoiBao} máy báo cáo."
+            kq.daXacMinh -> "Lá chắn số đã xác minh số này lừa đảo. ${c.xung().Ban} đừng nghe máy nha."
+            kq.soNguoiBao > 0 -> "Cuộc gọi hiển thị số này đã bị báo cáo từ ${kq.soNguoiBao} máy."
+            else -> "${c.xung().Ban} cẩn thận khi nghe cuộc gọi này nha."
+        }
         val dong2 = if (kq.baoGanNhat.isNotBlank()) "Báo cáo gần nhất: ${kq.baoGanNhat}" else ""
         ThongBao.canhBao(c, ThongBao.ID_DO_CHUONG, "$tieuDe · ${TraCuu.dinhDang(so)}", "$dong1 $dong2".trim())
         NhatKy.ghi(c, "Cảnh báo khi đổ chuông: ${kq.muc.ten}, ${kq.soNguoiBao} người báo")
