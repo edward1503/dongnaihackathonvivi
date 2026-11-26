@@ -1,0 +1,84 @@
+{
+ "loc_giong_buoc": [
+  "be-nai-hoi.wav trước: -4.15 [] [] | cắt đuôi 0.0 s, gain 0.0 dB | sau: -3.83 []",
+  "benai-11.wav trước: -3.82 [] [] | cắt đuôi 0.0 s, gain -0.18 dB | sau: -3.61 []",
+  "benai-13.wav trước: -2.7 [] [] | cắt đuôi 0.0 s, gain -1.3 dB | sau: -3.84 []",
+  "ghi-bh-02.wav trước: -3.33 [] [] | cắt đuôi 0.0 s, gain -0.67 dB | sau: -3.61 []",
+  "ghi-gn-04.wav trước: -3.24 [] [] | cắt đuôi 0.0 s, gain -0.76 dB | sau: -3.65 []",
+  "ghi-gn-05.wav trước: -2.31 [] [] | cắt đuôi 0.0 s, gain -1.69 dB | sau: -3.66 []",
+  "ghi-gn-06.wav trước: -2.24 [] [] | cắt đuôi 0.0 s, gain -1.76 dB | sau: -3.61 []",
+  "ghi-gn-07.wav trước: -2.77 [] [] | cắt đuôi 0.0 s, gain -1.23 dB | sau: -3.61 []",
+  "ke-gian-goc.wav trước: -2.24 [] [] | cắt đuôi 0.0 s, gain -1.76 dB | sau: -3.61 []"
+ ],
+ "do": [
+  "{'file': 'be-nai-hoi.wav', 'giay': 2.12, 'dinh_dB': -3.83, 'bien': [], 'cum_to': []}",
+  "{'file': 'benai-11.wav', 'giay': 4.81, 'dinh_dB': -3.61, 'bien': [], 'cum_to': []}",
+  "{'file': 'benai-13.wav', 'giay': 4.13, 'dinh_dB': -3.84, 'bien': [], 'cum_to': []}",
+  "{'file': 'ke-gian.wav', 'giay': 2.48, 'dinh_dB': -3.5, 'bien': [], 'cum_to': []}",
+  "{'file': 'ghi-am-mau.m4a', 'giay': 21.17, 'dinh_dB': -3.48, 'bien': [], 'cum_to': []}"
+ ],
+ "stats": {
+  "be-nai-hoi.wav": {
+   "duration_s": 2.12,
+   "peak_dbfs": -3.83,
+   "rms_dbfs": -16.2,
+   "share_300_3400_db": -3.39,
+   "share_above_4k_db": -28.75
+  },
+  "benai-11.wav": {
+   "duration_s": 4.81,
+   "peak_dbfs": -3.61,
+   "rms_dbfs": -18.8,
+   "share_300_3400_db": -3.79,
+   "share_above_4k_db": -20.04
+  },
+  "benai-13.wav": {
+   "duration_s": 4.135,
+   "peak_dbfs": -3.71,
+   "rms_dbfs": -17.0,
+   "share_300_3400_db": -2.04,
+   "share_above_4k_db": -26.0
+  },
+  "ke-gian.wav": {
+   "duration_s": 2.48,
+   "peak_dbfs": -3.5,
+   "rms_dbfs": -21.2,
+   "share_300_3400_db": -0.03,
+   "share_above_4k_db": -61.26
+  },
+  "ghi-am-mau.m4a": {
+   "duration_s": 21.17,
+   "peak_dbfs": -3.45,
+   "rms_dbfs": -22.3,
+   "share_300_3400_db": -0.02,
+   "share_above_4k_db": -52.01
+  }
+ },
+ "ghi_am_mau_timeline": [
+  {
+   "line": "gn-04",
+   "start": 0.7,
+   "end": 2.94
+  },
+  {
+   "line": "gn-05",
+   "start": 4.04,
+   "end": 7.49
+  },
+  {
+   "line": "bh-02",
+   "start": 8.29,
+   "end": 10.69
+  },
+  {
+   "line": "gn-06",
+   "start": 11.99,
+   "end": 15.52
+  },
+  {
+   "line": "gn-07",
+   "start": 16.92,
+   "end": 19.97
+  }
+ ]
+}

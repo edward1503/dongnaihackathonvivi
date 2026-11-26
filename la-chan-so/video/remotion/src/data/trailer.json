@@ -1,0 +1,1370 @@
+{
+ "version": 1,
+ "fps": 30,
+ "width": 1920,
+ "height": 1080,
+ "durationInFrames": 2757,
+ "seconds": 91.89,
+ "timing": "voice",
+ "beats": "T/nhac/phach.json",
+ "draft": false,
+ "music": {
+  "src": "trailer/nhac/nen.wav",
+  "credit": "Nhạc: “Aphelion” – Scott Buckley (scottbuckley.com.au) · CC BY 4.0 · đã cắt ghép",
+  "volume": 0.8,
+  "from": 82,
+  "duck": 0.22,
+  "bungAt": 61.3
+ },
+ "scenes": [
+  {
+   "id": "C0",
+   "title": "Mở · một cây",
+   "theme": "night",
+   "from": 0,
+   "duration": 377,
+   "enter": "fade",
+   "exit": "none",
+   "backdrop": {
+    "theme": "night",
+    "reveal": "cut",
+    "at": 0,
+    "dur": 0
+   },
+   "chip": null,
+   "tag": null,
+   "lines": [
+    {
+     "id": "L1",
+     "text": "Một cuộc gọi lạ.",
+     "from": 3,
+     "to": 57,
+     "subtitle": false
+    },
+    {
+     "id": "L2",
+     "text": "Người gọi xưng công an, giục bà Hoa chuyển tiền. Bà chỉ có một mình.",
+     "from": 138,
+     "to": 295,
+     "subtitle": true
+    },
+    {
+     "id": "L3",
+     "text": "Một cây làm chẳng nên non.",
+     "from": 295,
+     "to": 377,
+     "subtitle": false
+    }
+   ],
+   "subtitles": [
+    {
+     "text": "Người gọi xưng công an,",
+     "from": 138,
+     "to": 191
+    },
+    {
+     "text": "giục bà Hoa chuyển tiền. Bà chỉ có một mình.",
+     "from": 191,
+     "to": 292
+    }
+   ],
+   "marks": {
+    "title1": 3,
+    "scam": 57,
+    "scamEnd": 138,
+    "title2": 251,
+    "proverb": 287,
+    "ring": 8,
+    "ringEnd": 53
+   },
+   "clips": {},
+   "text": {
+    "title1": "Một cuộc gọi lạ.",
+    "title2": "Bà Hoa chỉ có *một mình.*",
+    "proverb": "Một cây làm chẳng nên non…",
+    "scam": "“Bà chuyển hết tiền vào tài khoản tạm giữ giúp tôi.”",
+    "simTag": "Mô phỏng · giọng AI đóng vai"
+   },
+   "images": {
+    "logo": "trailer/anh/logo.png",
+    "ba-hoa": "trailer/anh/ba-hoa.png",
+    "comic-1": "trailer/anh/comic-1.png",
+    "comic-2": "trailer/anh/comic-2.png",
+    "comic-3": "trailer/anh/comic-3.png",
+    "comic-4": "trailer/anh/comic-4.png",
+    "mo-dau": "trailer/anh/mo-dau.png",
+    "nguoi-than": "trailer/anh/nguoi-than.png",
+    "cong-dong": "trailer/anh/cong-dong.png",
+    "nui-khien": "trailer/anh/nui-khien.png"
+   },
+   "waves": {
+    "scam": [
+     0.006,
+     0.007,
+     0.007,
+     0.042,
+     0.569,
+     0.538,
+     0.269,
+     0.014,
+     0.006,
+     0.085,
+     0.151,
+     0.173,
+     0.142,
+     0.115,
+     0.03,
+     0.018,
+     0.032,
+     0.083,
+     0.662,
+     1.0,
+     0.052,
+     0.01,
+     0.007,
+     0.007,
+     0.372,
+     0.579,
+     0.239,
+     0.076,
+     0.052,
+     0.041,
+     0.196,
+     0.598,
+     0.332,
+     0.015,
+     0.195,
+     0.485,
+     0.428,
+     0.079,
+     0.079,
+     0.165,
+     0.476,
+     0.331,
+     0.283,
+     0.155,
+     0.008,
+     0.526,
+     0.367,
+     0.173,
+     0.06,
+     0.058,
+     0.026,
+     0.197,
+     0.176,
+     0.112,
+     0.037,
+     0.09,
+     0.412,
+     0.023,
+     0.007,
+     0.013,
+     0.527,
+     0.576,
+     0.464,
+     0.403,
+     0.137,
+     0.01,
+     0.029,
+     0.025,
+     0.009,
+     0.007,
+     0.006,
+     0.007,
+     0.006,
+     0.004,
+     0.0
+    ]
+   },
+   "sounds": [
+    {
+     "src": "trailer/giong/s01.wav",
+     "from": 3,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/am/ke-gian.wav",
+     "from": 57,
+     "frames": 81,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/giong/s02.wav",
+     "from": 138,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/giong/s03.wav",
+     "from": 295,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/am/chuong-lap.wav",
+     "from": 8,
+     "volume": 0.35,
+     "frames": 49
+    }
+   ]
+  },
+  {
+   "id": "C1",
+   "title": "Tên",
+   "theme": "brand",
+   "from": 377,
+   "duration": 105,
+   "enter": "none",
+   "exit": "depth",
+   "backdrop": {
+    "theme": "brand",
+    "reveal": "shield",
+    "at": 10,
+    "dur": 18,
+    "cx": 960,
+    "cy": 440
+   },
+   "chip": null,
+   "tag": null,
+   "lines": [
+    {
+     "id": "L4",
+     "text": "Lá chắn số.",
+     "from": 0,
+     "to": 50,
+     "subtitle": false
+    },
+    {
+     "id": "L5",
+     "text": "Để không ai phải một mình trước kẻ lừa đảo.",
+     "from": 50,
+     "to": 105,
+     "subtitle": true
+    }
+   ],
+   "subtitles": [
+    {
+     "text": "Để không ai phải một mình trước kẻ lừa đảo.",
+     "from": 50,
+     "to": 102
+    }
+   ],
+   "marks": {
+    "shield": 0,
+    "wipe": 10,
+    "name": 0,
+    "team": 56
+   },
+   "clips": {},
+   "text": {
+    "name": "LÁ CHẮN SỐ",
+    "team": "Đội 18 · Vivi · Hackathon thành phố Đồng Nai 2026"
+   },
+   "images": {
+    "logo": "trailer/anh/logo.png",
+    "ba-hoa": "trailer/anh/ba-hoa.png",
+    "comic-1": "trailer/anh/comic-1.png",
+    "comic-2": "trailer/anh/comic-2.png",
+    "comic-3": "trailer/anh/comic-3.png",
+    "comic-4": "trailer/anh/comic-4.png",
+    "mo-dau": "trailer/anh/mo-dau.png",
+    "nguoi-than": "trailer/anh/nguoi-than.png",
+    "cong-dong": "trailer/anh/cong-dong.png",
+    "nui-khien": "trailer/anh/nui-khien.png"
+   },
+   "waves": {},
+   "sounds": [
+    {
+     "src": "trailer/giong/s04.wav",
+     "from": 0,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/giong/s05.wav",
+     "from": 50,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/am/doi-tram.wav",
+     "from": 10,
+     "volume": 0.4
+    }
+   ]
+  },
+  {
+   "id": "C2",
+   "title": "Trụ 1 · Cảnh báo",
+   "theme": "light",
+   "from": 482,
+   "duration": 441,
+   "enter": "depth",
+   "exit": "depth",
+   "backdrop": {
+    "theme": "light",
+    "reveal": "fade",
+    "at": 0,
+    "dur": 10
+   },
+   "chip": {
+    "ring": 1,
+    "text": "1 · Cảnh báo"
+   },
+   "tag": "Dữ liệu minh họa · Quay trên điện thoại thật",
+   "lines": [
+    {
+     "id": "L6",
+     "text": "Chuông vừa đổ, Lá chắn tra số và hiện cảnh báo đỏ: số này đã bị nhiều người báo.",
+     "from": 0,
+     "to": 235,
+     "subtitle": true
+    },
+    {
+     "id": "L7",
+     "text": "Số lạ chưa ai báo thì Lá chắn im lặng.",
+     "from": 235,
+     "to": 336,
+     "subtitle": true
+    },
+    {
+     "id": "L8",
+     "text": "Tin nhắn, đường dẫn lạ cũng kiểm tra được ngay.",
+     "from": 336,
+     "to": 441,
+     "subtitle": true
+    }
+   ],
+   "subtitles": [
+    {
+     "text": "Chuông vừa đổ, Lá chắn tra số và hiện cảnh báo đỏ:",
+     "from": 0,
+     "to": 147
+    },
+    {
+     "text": "số này đã bị nhiều người báo.",
+     "from": 147,
+     "to": 232
+    },
+    {
+     "text": "Số lạ chưa ai báo thì Lá chắn im lặng.",
+     "from": 235,
+     "to": 333
+    },
+    {
+     "text": "Tin nhắn, đường dẫn lạ cũng kiểm tra được ngay.",
+     "from": 336,
+     "to": 438
+    }
+   ],
+   "marks": {
+    "redCard": 97,
+    "compare": 229,
+    "message": 330
+   },
+   "clips": {
+    "a2": {
+     "id": "a2",
+     "src": null,
+     "w": 1080,
+     "h": 2400,
+     "from": 0,
+     "trimBefore": 0,
+     "frames": 1,
+     "stills": [
+      {
+       "at": 0,
+       "image": "trailer/anh/a03a.png",
+       "masks": [
+        {
+         "x": 415,
+         "y": 150,
+         "w": 280,
+         "h": 70
+        }
+       ]
+      }
+     ],
+     "masks": [],
+     "placeholder": false
+    },
+    "a1": {
+     "id": "a1",
+     "src": null,
+     "w": 1080,
+     "h": 2400,
+     "from": 0,
+     "trimBefore": 0,
+     "frames": 1,
+     "stills": [
+      {
+       "at": 0,
+       "image": "trailer/anh/a03b.png",
+       "masks": []
+      }
+     ],
+     "masks": [],
+     "placeholder": false
+    },
+    "w2": {
+     "id": "w2",
+     "src": null,
+     "w": 1080,
+     "h": 2400,
+     "from": 0,
+     "trimBefore": 0,
+     "frames": 1,
+     "stills": [
+      {
+       "at": 0,
+       "image": "trailer/anh/a05b.png",
+       "masks": [
+        {
+         "x": 315,
+         "y": 278,
+         "w": 310,
+         "h": 76
+        }
+       ]
+      }
+     ],
+     "masks": [],
+     "placeholder": false
+    }
+   },
+   "text": {
+    "t1": "Cảnh báo ngay *khi chuông đổ*",
+    "t2": "Chưa ai báo: *im lặng*",
+    "silent": "Số lạ chưa ai báo",
+    "red": "Số đã bị báo",
+    "t3": "Tin nhắn · *Đường dẫn lạ*"
+   },
+   "images": {
+    "logo": "trailer/anh/logo.png",
+    "ba-hoa": "trailer/anh/ba-hoa.png",
+    "comic-1": "trailer/anh/comic-1.png",
+    "comic-2": "trailer/anh/comic-2.png",
+    "comic-3": "trailer/anh/comic-3.png",
+    "comic-4": "trailer/anh/comic-4.png",
+    "mo-dau": "trailer/anh/mo-dau.png",
+    "nguoi-than": "trailer/anh/nguoi-than.png",
+    "cong-dong": "trailer/anh/cong-dong.png",
+    "nui-khien": "trailer/anh/nui-khien.png"
+   },
+   "waves": {},
+   "sounds": [
+    {
+     "src": "trailer/giong/s06.wav",
+     "from": 0,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/giong/s07.wav",
+     "from": 235,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/giong/s08.wav",
+     "from": 336,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/am/chuong.wav",
+     "from": 2,
+     "volume": 0.3
+    },
+    {
+     "src": "trailer/am/tach.wav",
+     "from": 101,
+     "volume": 0.6
+    },
+    {
+     "src": "trailer/am/tach.wav",
+     "from": 233,
+     "volume": 0.4
+    },
+    {
+     "src": "trailer/am/luot.wav",
+     "from": 324,
+     "volume": 0.35
+    }
+   ]
+  },
+  {
+   "id": "C3",
+   "title": "Trụ 2 · Giọng nói",
+   "theme": "light",
+   "from": 923,
+   "duration": 249,
+   "enter": "depth",
+   "exit": "depth",
+   "backdrop": {
+    "theme": "light",
+    "reveal": "cut",
+    "at": 0,
+    "dur": 0
+   },
+   "chip": {
+    "ring": 1,
+    "text": "2 · Giọng nói"
+   },
+   "tag": "Dữ liệu minh họa · Quay trên điện thoại thật",
+   "lines": [
+    {
+     "id": "L9",
+     "text": "Cúp máy, Bé Nai hỏi lại bằng giọng nói.",
+     "from": 0,
+     "to": 93,
+     "subtitle": true
+    },
+    {
+     "id": "L10",
+     "text": "Bà chỉ cần nói: có.",
+     "from": 163,
+     "to": 234,
+     "subtitle": true
+    }
+   ],
+   "subtitles": [
+    {
+     "text": "Cúp máy, Bé Nai hỏi lại bằng giọng nói.",
+     "from": 0,
+     "to": 90
+    },
+    {
+     "text": "Bà chỉ cần nói: có.",
+     "from": 163,
+     "to": 231
+    }
+   ],
+   "marks": {
+    "ask": 93,
+    "askEnd": 163,
+    "listen": 163,
+    "yes": 208,
+    "result": 210
+   },
+   "clips": {
+    "a2-hoi": {
+     "id": "a2-hoi",
+     "src": null,
+     "w": 1080,
+     "h": 2400,
+     "from": 0,
+     "trimBefore": 0,
+     "frames": 1,
+     "stills": [
+      {
+       "at": 0,
+       "image": "trailer/anh/a04a.png",
+       "masks": [
+        {
+         "x": 120,
+         "y": 1322,
+         "w": 840,
+         "h": 106,
+         "fill": "#F4F6FB"
+        },
+        {
+         "x": 10,
+         "y": 1978,
+         "w": 1060,
+         "h": 172,
+         "fill": "#F4F6FB"
+        }
+       ]
+      },
+      {
+       "at": 210,
+       "image": "trailer/anh/a04b.png",
+       "masks": [
+        {
+         "x": 205,
+         "y": 325,
+         "w": 470,
+         "h": 90
+        },
+        {
+         "x": 10,
+         "y": 1978,
+         "w": 1060,
+         "h": 172,
+         "fill": "#F4F6FB"
+        }
+       ]
+      }
+     ],
+     "masks": [],
+     "placeholder": false
+    }
+   },
+   "text": {
+    "t1": "Bé Nai *hỏi bằng giọng nói*",
+    "question": "Người vừa gọi có bảo bà chuyển tiền không ạ?",
+    "answer": "Có.",
+    "result": "Nguy hiểm · Đã báo cho Minh"
+   },
+   "images": {
+    "logo": "trailer/anh/logo.png",
+    "ba-hoa": "trailer/anh/ba-hoa.png",
+    "comic-1": "trailer/anh/comic-1.png",
+    "comic-2": "trailer/anh/comic-2.png",
+    "comic-3": "trailer/anh/comic-3.png",
+    "comic-4": "trailer/anh/comic-4.png",
+    "mo-dau": "trailer/anh/mo-dau.png",
+    "nguoi-than": "trailer/anh/nguoi-than.png",
+    "cong-dong": "trailer/anh/cong-dong.png",
+    "nui-khien": "trailer/anh/nui-khien.png"
+   },
+   "waves": {
+    "benai": [
+     0.0,
+     0.0,
+     0.002,
+     0.019,
+     0.73,
+     0.641,
+     0.583,
+     0.623,
+     0.555,
+     0.41,
+     0.1,
+     0.267,
+     0.512,
+     0.384,
+     0.208,
+     0.343,
+     0.335,
+     0.24,
+     0.188,
+     0.229,
+     0.344,
+     0.404,
+     0.282,
+     0.018,
+     0.16,
+     0.496,
+     0.465,
+     0.261,
+     0.443,
+     0.345,
+     0.494,
+     0.378,
+     0.264,
+     0.698,
+     0.45,
+     0.245,
+     0.006,
+     0.026,
+     0.332,
+     0.418,
+     0.354,
+     0.743,
+     0.561,
+     0.236,
+     0.628,
+     0.433,
+     0.369,
+     0.365,
+     0.129,
+     0.141,
+     0.733,
+     0.677,
+     1.0,
+     0.537,
+     0.29,
+     0.239,
+     0.365,
+     0.45,
+     0.324,
+     0.01,
+     0.001,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "sounds": [
+    {
+     "src": "trailer/giong/s09.wav",
+     "from": 0,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/am/be-nai-hoi.wav",
+     "from": 93,
+     "frames": 70,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/giong/s10.wav",
+     "from": 163,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/am/tach.wav",
+     "from": 210,
+     "volume": 0.5
+    }
+   ]
+  },
+  {
+   "id": "C4",
+   "title": "Vòng 2 · Người thân",
+   "theme": "night",
+   "from": 1172,
+   "duration": 293,
+   "enter": "depth",
+   "exit": "depth",
+   "backdrop": {
+    "theme": "night",
+    "reveal": "cut",
+    "at": 0,
+    "dur": 0
+   },
+   "chip": {
+    "ring": 2,
+    "text": "Người thân"
+   },
+   "tag": "Dữ liệu minh họa · Quay trên điện thoại thật",
+   "lines": [
+    {
+     "id": "L11",
+     "text": "Điện thoại của Minh, con trai bà, báo ngay: mẹ vừa gặp cuộc gọi đáng ngờ.",
+     "from": 0,
+     "to": 163,
+     "subtitle": true
+    },
+    {
+     "id": "L12",
+     "text": "Nếu bà vẫn mở ứng dụng ngân hàng, màn hình nhắc: dừng lại.",
+     "from": 163,
+     "to": 293,
+     "subtitle": true
+    }
+   ],
+   "subtitles": [
+    {
+     "text": "Điện thoại của Minh, con trai bà,",
+     "from": 0,
+     "to": 73
+    },
+    {
+     "text": "báo ngay: mẹ vừa gặp cuộc gọi đáng ngờ.",
+     "from": 73,
+     "to": 160
+    },
+    {
+     "text": "Nếu bà vẫn mở ứng dụng ngân hàng,",
+     "from": 163,
+     "to": 237
+    },
+    {
+     "text": "màn hình nhắc: dừng lại.",
+     "from": 237,
+     "to": 290
+    }
+   ],
+   "marks": {
+    "notify": 76,
+    "stop": 157,
+    "stopRed": 273
+   },
+   "clips": {
+    "a5": {
+     "id": "a5",
+     "src": "trailer/quay/a5-dung-lai.mp4",
+     "w": 1080,
+     "h": 2400,
+     "from": 157,
+     "trimBefore": 45,
+     "frames": 300,
+     "marks": {
+      "dung-lai": 157
+     },
+     "focus": {},
+     "masks": [],
+     "placeholder": false
+    }
+   },
+   "text": {
+    "notifyApp": "Lá chắn số",
+    "notify": "Mẹ vừa gặp cuộc gọi đáng ngờ",
+    "t2a": "Mở app ngân hàng?",
+    "t2b": "*DỪNG LẠI*"
+   },
+   "images": {
+    "logo": "trailer/anh/logo.png",
+    "ba-hoa": "trailer/anh/ba-hoa.png",
+    "comic-1": "trailer/anh/comic-1.png",
+    "comic-2": "trailer/anh/comic-2.png",
+    "comic-3": "trailer/anh/comic-3.png",
+    "comic-4": "trailer/anh/comic-4.png",
+    "mo-dau": "trailer/anh/mo-dau.png",
+    "nguoi-than": "trailer/anh/nguoi-than.png",
+    "cong-dong": "trailer/anh/cong-dong.png",
+    "nui-khien": "trailer/anh/nui-khien.png"
+   },
+   "waves": {},
+   "sounds": [
+    {
+     "src": "trailer/giong/s11.wav",
+     "from": 0,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/giong/s12.wav",
+     "from": 163,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/am/thong-bao.wav",
+     "from": 76,
+     "volume": 0.7
+    },
+    {
+     "src": "trailer/am/luot.wav",
+     "from": 153,
+     "volume": 0.35
+    }
+   ]
+  },
+  {
+   "id": "C5",
+   "title": "Trụ 3 · Học tập",
+   "theme": "light",
+   "from": 1465,
+   "duration": 374,
+   "enter": "depth",
+   "exit": "depth",
+   "backdrop": {
+    "theme": "light",
+    "reveal": "cut",
+    "at": 0,
+    "dur": 0
+   },
+   "chip": {
+    "ring": 1,
+    "text": "3 · Học tập"
+   },
+   "tag": "Dữ liệu minh họa · Quay trên điện thoại thật",
+   "lines": [
+    {
+     "id": "L13",
+     "text": "Để lần sau tự nhận ra: truyện tranh có lối rẽ, gọi video nhập vai với nhân vật AI.",
+     "from": 0,
+     "to": 193,
+     "subtitle": true
+    },
+    {
+     "id": "L14",
+     "text": "Vy làm bài, lớp mình lên hạng. Các lớp, các trường, các phường cùng thi đua.",
+     "from": 193,
+     "to": 374,
+     "subtitle": true
+    }
+   ],
+   "subtitles": [
+    {
+     "text": "Để lần sau tự nhận ra: truyện tranh có lối rẽ,",
+     "from": 0,
+     "to": 108
+    },
+    {
+     "text": "gọi video nhập vai với nhân vật AI.",
+     "from": 108,
+     "to": 190
+    },
+    {
+     "text": "Vy làm bài, lớp mình lên hạng. Các lớp,",
+     "from": 193,
+     "to": 286
+    },
+    {
+     "text": "các trường, các phường cùng thi đua.",
+     "from": 286,
+     "to": 371
+    }
+   ],
+   "marks": {
+    "branch": 92,
+    "call": 107,
+    "rank": 187,
+    "rankUp": 243
+   },
+   "clips": {
+    "w5": {
+     "id": "w5",
+     "src": "trailer/quay/w5-truyen.mp4",
+     "w": 1080,
+     "h": 2400,
+     "from": 0,
+     "trimBefore": 1156,
+     "frames": 1639,
+     "marks": {
+      "mo-truyen": -1117,
+      "tiep-1": -538,
+      "tiep-2": -388,
+      "tiep-3": -238,
+      "tiep-4": -58,
+      "diem-re-chon-dung": 92,
+      "tiep-5": 242
+     },
+     "focus": {},
+     "masks": [],
+     "placeholder": false
+    },
+    "w6": {
+     "id": "w6",
+     "src": "trailer/quay/w6-goi-video.mp4",
+     "w": 1080,
+     "h": 2400,
+     "from": 107,
+     "trimBefore": 0,
+     "frames": 181,
+     "marks": {},
+     "focus": {},
+     "masks": [],
+     "placeholder": false
+    },
+    "w11": {
+     "id": "w11",
+     "src": "trailer/quay/w11-xep-hang.mp4",
+     "w": 1080,
+     "h": 2400,
+     "from": 187,
+     "trimBefore": 139,
+     "frames": 414,
+     "marks": {
+      "chon-truong": 99,
+      "vao-bang": 186,
+      "len-hang": 243,
+      "doi-pham-vi-truong": 372
+     },
+     "focus": {
+      "the-xep-hang": {
+       "x": 40,
+       "y": 850,
+       "w": 1000,
+       "h": 960
+      }
+     },
+     "masks": [],
+     "placeholder": false
+    }
+   },
+   "text": {
+    "t1": "Truyện có *lối rẽ*",
+    "t2": "Gọi video *nhập vai*",
+    "aiTag": "AI đóng vai · Tình huống nhập vai mẫu",
+    "t3": "Thi đua: *lớp · trường · phường*"
+   },
+   "images": {
+    "logo": "trailer/anh/logo.png",
+    "ba-hoa": "trailer/anh/ba-hoa.png",
+    "comic-1": "trailer/anh/comic-1.png",
+    "comic-2": "trailer/anh/comic-2.png",
+    "comic-3": "trailer/anh/comic-3.png",
+    "comic-4": "trailer/anh/comic-4.png",
+    "mo-dau": "trailer/anh/mo-dau.png",
+    "nguoi-than": "trailer/anh/nguoi-than.png",
+    "cong-dong": "trailer/anh/cong-dong.png",
+    "nui-khien": "trailer/anh/nui-khien.png"
+   },
+   "waves": {},
+   "sounds": [
+    {
+     "src": "trailer/giong/s13.wav",
+     "from": 0,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/giong/s14.wav",
+     "from": 193,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/am/luot.wav",
+     "from": 103,
+     "volume": 0.35
+    },
+    {
+     "src": "trailer/am/tinh.wav",
+     "from": 243,
+     "volume": 0.6
+    }
+   ]
+  },
+  {
+   "id": "C6",
+   "title": "Trụ 4 · Cộng đồng",
+   "theme": "warm",
+   "from": 1839,
+   "duration": 622,
+   "enter": "depth",
+   "exit": "hold",
+   "backdrop": {
+    "theme": "warm",
+    "reveal": "spread",
+    "at": 0,
+    "dur": 20,
+    "cx": 960,
+    "cy": 540
+   },
+   "chip": {
+    "ring": 3,
+    "text": "4 · Cộng đồng",
+    "strong": true
+   },
+   "tag": "Dữ liệu minh họa",
+   "lines": [
+    {
+     "id": "L15",
+     "text": "Nhưng lá chắn mạnh nhất, là cộng đồng.",
+     "from": 0,
+     "to": 85,
+     "subtitle": true
+    },
+    {
+     "id": "L16",
+     "text": "Thẻ đỏ của bà Hoa có được, là nhờ những người nhận cuộc gọi trước đã báo.",
+     "from": 85,
+     "to": 204,
+     "subtitle": true
+    },
+    {
+     "id": "L17",
+     "text": "Báo cáo phải gắn với một cuộc gọi đến có thật trong máy.",
+     "from": 204,
+     "to": 331,
+     "subtitle": true
+    },
+    {
+     "id": "L18",
+     "text": "Đội tình nguyện kiểm duyệt từng hồ sơ.",
+     "from": 331,
+     "to": 414,
+     "subtitle": true
+    },
+    {
+     "id": "L19",
+     "text": "Người bị báo nhầm có thể yêu cầu đội xem lại.",
+     "from": 429,
+     "to": 524,
+     "subtitle": true
+    },
+    {
+     "id": "L20",
+     "text": "Mọi máy tra chung danh sách cảnh báo của cộng đồng.",
+     "from": 524,
+     "to": 622,
+     "subtitle": true
+    }
+   ],
+   "subtitles": [
+    {
+     "text": "Nhưng lá chắn mạnh nhất, là cộng đồng.",
+     "from": 0,
+     "to": 82
+    },
+    {
+     "text": "Thẻ đỏ của bà Hoa có được,",
+     "from": 85,
+     "to": 127
+    },
+    {
+     "text": "là nhờ những người nhận cuộc gọi trước đã báo.",
+     "from": 127,
+     "to": 201
+    },
+    {
+     "text": "Báo cáo phải gắn với một cuộc",
+     "from": 204,
+     "to": 269
+    },
+    {
+     "text": "gọi đến có thật trong máy.",
+     "from": 269,
+     "to": 328
+    },
+    {
+     "text": "Đội tình nguyện kiểm duyệt từng hồ sơ.",
+     "from": 331,
+     "to": 411
+    },
+    {
+     "text": "Người bị báo nhầm có thể yêu cầu đội xem lại.",
+     "from": 429,
+     "to": 521
+    },
+    {
+     "text": "Mọi máy tra chung danh sách cảnh báo của cộng đồng.",
+     "from": 524,
+     "to": 619
+    }
+   ],
+   "marks": {
+    "title": 0,
+    "red": 81,
+    "report": 198,
+    "review": 325,
+    "freeze": 355,
+    "appeal": 423,
+    "list": 518
+   },
+   "clips": {
+    "a2": {
+     "id": "a2",
+     "src": null,
+     "w": 1080,
+     "h": 2400,
+     "from": 0,
+     "trimBefore": 0,
+     "frames": 1,
+     "stills": [
+      {
+       "at": 0,
+       "image": "trailer/anh/a03a.png",
+       "masks": [
+        {
+         "x": 415,
+         "y": 150,
+         "w": 280,
+         "h": 70
+        }
+       ]
+      }
+     ],
+     "masks": [],
+     "placeholder": false
+    },
+    "w9": {
+     "id": "w9",
+     "src": "trailer/quay/w9-kiem-duyet.mp4",
+     "w": 2880,
+     "h": 1620,
+     "from": 325,
+     "trimBefore": 480,
+     "frames": 586,
+     "marks": {
+      "dang-nhap": 325,
+      "tong-quan": 436,
+      "kiem-duyet": 526,
+      "mo-ho-so": 619,
+      "nhan-xet": 808,
+      "xac-nhan": 833,
+      "da-ghi-nhan": 908
+     },
+     "focus": {},
+     "masks": [],
+     "placeholder": false,
+     "holds": [
+      {
+       "at": 355,
+       "len": 60
+      }
+     ]
+    }
+   },
+   "text": {
+    "t1": "Lá chắn mạnh nhất: *cộng đồng*",
+    "t2": "Thẻ đỏ có được nhờ *người báo trước*",
+    "list": "Danh sách chung",
+    "t3": "Máy *nhận thật* mới báo được",
+    "t4": "Đội tình nguyện *kiểm duyệt*",
+    "t5": "Báo nhầm? *Được xem lại*",
+    "t6": "Một danh sách, *mọi máy cùng dùng*"
+   },
+   "images": {
+    "logo": "trailer/anh/logo.png",
+    "ba-hoa": "trailer/anh/ba-hoa.png",
+    "comic-1": "trailer/anh/comic-1.png",
+    "comic-2": "trailer/anh/comic-2.png",
+    "comic-3": "trailer/anh/comic-3.png",
+    "comic-4": "trailer/anh/comic-4.png",
+    "mo-dau": "trailer/anh/mo-dau.png",
+    "nguoi-than": "trailer/anh/nguoi-than.png",
+    "cong-dong": "trailer/anh/cong-dong.png",
+    "nui-khien": "trailer/anh/nui-khien.png"
+   },
+   "waves": {},
+   "sounds": [
+    {
+     "src": "trailer/giong/s15.wav",
+     "from": 0,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/giong/s16.wav",
+     "from": 85,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/giong/s17.wav",
+     "from": 204,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/giong/s18.wav",
+     "from": 331,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/giong/s19.wav",
+     "from": 429,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/giong/s20.wav",
+     "from": 524,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/am/luot.wav",
+     "from": 81,
+     "volume": 0.3
+    },
+    {
+     "src": "trailer/am/tach.wav",
+     "from": 204,
+     "volume": 0.4
+    },
+    {
+     "src": "trailer/am/tinh.wav",
+     "from": 457,
+     "volume": 0.4
+    }
+   ]
+  },
+  {
+   "id": "C7",
+   "title": "Kết",
+   "theme": "night",
+   "from": 2461,
+   "duration": 296,
+   "enter": "none",
+   "exit": "none",
+   "backdrop": {
+    "theme": "night",
+    "reveal": "cut",
+    "at": 0,
+    "dur": 0
+   },
+   "chip": null,
+   "tag": null,
+   "lines": [
+    {
+     "id": "L21",
+     "text": "Chính mình. Người thân. Cộng đồng.",
+     "from": 0,
+     "to": 93,
+     "subtitle": false
+    },
+    {
+     "id": "L22",
+     "text": "Ba cây chụm lại, nên hòn núi cao.",
+     "from": 93,
+     "to": 185,
+     "subtitle": false
+    },
+    {
+     "id": "L23",
+     "text": "Lá chắn số.",
+     "from": 185,
+     "to": 221,
+     "subtitle": false
+    }
+   ],
+   "subtitles": [],
+   "marks": {
+    "w1": 0,
+    "w2": 33,
+    "w3": 66,
+    "converge": 87,
+    "name": 181,
+    "final": 227
+   },
+   "clips": {},
+   "text": {
+    "w1": "Chính mình",
+    "w2": "Người thân",
+    "w3": "Cộng đồng",
+    "proverb1": "Một cây làm chẳng nên non,",
+    "proverb2": "ba cây chụm lại nên hòn núi cao.",
+    "name": "LÁ CHẮN SỐ",
+    "team": "Đội 18 · Vivi · Hackathon thành phố Đồng Nai 2026"
+   },
+   "images": {
+    "logo": "trailer/anh/logo.png",
+    "ba-hoa": "trailer/anh/ba-hoa.png",
+    "comic-1": "trailer/anh/comic-1.png",
+    "comic-2": "trailer/anh/comic-2.png",
+    "comic-3": "trailer/anh/comic-3.png",
+    "comic-4": "trailer/anh/comic-4.png",
+    "mo-dau": "trailer/anh/mo-dau.png",
+    "nguoi-than": "trailer/anh/nguoi-than.png",
+    "cong-dong": "trailer/anh/cong-dong.png",
+    "nui-khien": "trailer/anh/nui-khien.png"
+   },
+   "waves": {},
+   "sounds": [
+    {
+     "src": "trailer/giong/s21.wav",
+     "from": 0,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/giong/s22.wav",
+     "from": 93,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/giong/s23.wav",
+     "from": 185,
+     "volume": 1,
+     "duck": true
+    },
+    {
+     "src": "trailer/am/trong.wav",
+     "from": 0,
+     "volume": 0.45
+    },
+    {
+     "src": "trailer/am/trong.wav",
+     "from": 33,
+     "volume": 0.5
+    },
+    {
+     "src": "trailer/am/trong.wav",
+     "from": 66,
+     "volume": 0.55
+    },
+    {
+     "src": "trailer/am/doi-tram.wav",
+     "from": 181,
+     "volume": 0.35
+    }
+   ]
+  }
+ ]
+}
