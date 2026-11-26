@@ -8,10 +8,22 @@ import { getDeviceId, readTeam } from './api.js'
 const Ctx = createContext(null)
 export const FAMILY_ROOM = 'gia-dinh-hoa'
 
-const DEFAULT_RELATIVES = [
-  { id: 'minh', name: 'Minh', relation: 'con trai', channel: 'Nhận qua Lá chắn số', paired: true },
-  { id: 'lan', name: 'Lan', relation: 'con gái', channel: 'Dự phòng', paired: false },
-]
+// Người thân theo từng vai: bà Hoa có con trai Minh; Vy (học sinh lớp 11) có mẹ và ba; vai Người thân (Minh) có mẹ là bà Hoa.
+const DEFAULT_RELATIVES = {
+  elder: [
+    { id: 'minh', name: 'Minh', relation: 'con trai', channel: 'Nhận qua Lá chắn số', paired: true },
+    { id: 'hanh', name: 'Hạnh', relation: 'con gái', channel: 'Dự phòng', paired: false },
+  ],
+  student: [
+    { id: 'me', name: 'Mẹ', relation: 'mẹ', channel: 'Nhận qua Lá chắn số', paired: true },
+    { id: 'ba', name: 'Ba', relation: 'ba', channel: 'Dự phòng', paired: false },
+  ],
+  relative: [
+    { id: 'me-hoa', name: 'Mẹ', relation: 'mẹ (bà Hoa)', channel: 'Nhận qua Lá chắn số', paired: true },
+  ],
+  volunteer: [],
+}
+const relativesKey = (persona) => 'lcs.relatives.' + persona
 
 // Ba mục mẫu của màn A06a để lần mở đầu không trống
 const SAMPLE_RECENT = [
@@ -59,9 +71,11 @@ function initialMode() {
   return PERSONA[m] ? m : 'simple'
 }
 
-function initialRelatives() {
-  if (new URLSearchParams(location.search).get('nguoithan') === '0') save('lcs.relatives', [])
-  return load('lcs.relatives', DEFAULT_RELATIVES)
+// Danh sách người thân lưu riêng từng vai. Danh sách cũ (dùng chung) chỉ còn là của bà Hoa.
+function loadRelatives(persona) {
+  if (new URLSearchParams(location.search).get('nguoithan') === '0') save(relativesKey(persona), [])
+  const legacy = persona === 'elder' ? load('lcs.relatives', null) : null
+  return load(relativesKey(persona), legacy || DEFAULT_RELATIVES[persona] || [])
 }
 
 // Mã của tab này, để máy điều khiển không tự nhận lại lệnh demo.go của chính nó
@@ -94,7 +108,7 @@ export function AppProvider({ children }) {
   }, [])
   const [result, setResult] = useState(null)
   const [recent, setRecent] = useState(() => load('lcs.recent', SAMPLE_RECENT))
-  const [relatives, setRelativesState] = useState(initialRelatives)
+  const [relativesMap, setRelativesMap] = useState({})
   const [ask, setAsk] = useState(null)
   const [report, setReport] = useState(null)
   const [call, setCall] = useState(null) // cuộc gọi vừa rồi: {phone, display, seconds, hasRecording, answeredYes, story}
@@ -124,8 +138,9 @@ export function AppProvider({ children }) {
     const role = persona === 'volunteer' ? 'team' : persona
     window.LCSNative?.setRole?.(role, persona === 'relative' ? familyCode : FAMILY_ROOM)
   }, [persona, familyCode])
-  const setRelatives = useCallback((list) => { setRelativesState(list); save('lcs.relatives', list) }, [])
-  const addDefaultRelatives = useCallback(() => setRelatives(DEFAULT_RELATIVES), [setRelatives])
+  const relatives = useMemo(() => relativesMap[persona] ?? loadRelatives(persona), [relativesMap, persona])
+  const setRelatives = useCallback((list) => { setRelativesMap((m) => ({ ...m, [persona]: list })); save(relativesKey(persona), list) }, [persona])
+  const addDefaultRelatives = useCallback(() => setRelatives(DEFAULT_RELATIVES[persona] || []), [setRelatives, persona])
   const setPoints = useCallback((n) => {
     if (Number.isFinite(n)) {
       setPointsState(n)

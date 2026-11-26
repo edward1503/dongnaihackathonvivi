@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { APP, Art, Bar, Btn, I, IconBox, Progress, Screen, Tag } from '../ui.jsx'
 import { useApp } from '../../lib/state.jsx'
-import { LESSONS, QUIZ, COMICS, PRACTICE_CALLS, openComic, openPracticeCall } from '../lessons.js'
+import { LESSONS, COMICS, PRACTICE_CALLS, openComic, openPracticeCall, quizFor, lessonsFor } from '../lessons.js'
 import biaGiaDanh from '../art/bia-gia-danh-co-quan.webp'
 import biaViecNhe from '../art/bia-viec-nhe-luong-cao.webp'
 import biaNguoiThan from '../art/bia-nguoi-than-gap-nan.webp'
@@ -73,7 +73,7 @@ export function Lessons() {
       </div>
       <div className="t-head" style={{ marginTop: 4 }}>Ôn nhanh 1 phút</div>
       <div className="group">
-        {LESSONS.map((lesson) => (
+        {lessonsFor(persona).map((lesson) => (
           <button key={lesson.id} type="button" className="li" onClick={() => nav(`/bai-hoc/${lesson.id}`)}>
             <IconBox icon={lesson.icon} tone="dang" size="sm" z={20} />
             <span className="t-row grow">{lesson.title}</span>
@@ -136,6 +136,8 @@ export function LessonCards() {
 // Chọn một đáp án rồi bấm "Trả lời"; sau đó hiện đúng/sai và lời giải thích
 export function Quiz() {
   const nav = useNavigate()
+  const { persona } = useApp()
+  const QUIZ = quizFor(persona)
   const [i, setI] = useState(0)
   const [pick, setPick] = useState(null)
   const [answered, setAnswered] = useState(false)
@@ -207,6 +209,7 @@ export function Quiz() {
 export function QuizResult() {
   const nav = useNavigate()
   const { persona, toast } = useApp()
+  const QUIZ = quizFor(persona)
   const [params] = useSearchParams()
   const score = Number(params.get('diem') || 0)
   const wrong = (params.get('sai') || '').split(',').filter(Boolean).map(Number).filter((n) => QUIZ[n])

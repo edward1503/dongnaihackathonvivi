@@ -181,18 +181,26 @@
   /* ============================================================ THƯ VIỆN */
   /* Khung A11a: thanh "Luyện tập" + chuỗi ngày học liền, thẻ cấp, thẻ bài đang học dở, danh sách bài.
      Mọi con số lấy từ tiến độ đã lưu: sao, điểm thử thách, ngày có học. Không có thanh điều hướng dưới (trang mở riêng, nút Back của máy để về app). */
+  // Vai trong app (lưu chung nguồn với app React): "simple" = người lớn tuổi, "full" = học sinh. Không rõ vai thì hiện đủ.
+  const BAI_THEO_VAI = { simple: ['gia-danh-co-quan', 'nguoi-than-gap-nan'], full: ['viec-nhe-luong-cao', 'dau-tu-lai-cao'] };
+  function baiTheoVai(ds) {
+    let vai = null; try { vai = JSON.parse(localStorage.getItem('lcs.mode') || 'null'); } catch (e) { }
+    const chon = BAI_THEO_VAI[vai]; const loc = chon ? ds.filter(b => chon.indexOf(b.ma_kieu) >= 0) : ds;
+    return loc.length ? loc : ds;
+  }
   function thuVien(bao) {
+    const DSV = baiTheoVai(DS);   // thư viện chỉ hiện bài của vai đang dùng (bà Hoa: người lớn tuổi; Vy: học sinh)
     BAI = null; LG = false; man('thu-vien');
     const kho = docKho(), d = kho.bai || {}; let tongSao = 0, tongDiem = 0;
-    DS.forEach(b => { const t = d[b.so] || {}; tongSao += soSao(t, b.luyen.length); tongDiem += diemBai(t); });
+    DSV.forEach(b => { const t = d[b.so] || {}; tongSao += soSao(t, b.luyen.length); tongDiem += diemBai(t); });
     const lien = chuoiNgay(kho.ngay);
     const tv = h('<div class="thanh tv"><button class="ve" aria-label="Về màn chính">' + ic('x') + '</button><div class="tt"><b>Luyện tập</b></div>' + (lien >= 2 ? '<span class="chip warn lien">' + ic('zap', 's14') + lien + ' ngày liền</span>' : '') + '</div>');
     tv.querySelector('.ve').onclick = veApp; app.append(tv);
     const than = h('<div class="than cuon"></div>'); app.append(than);
-    const toiDa = DS.length * 3, cap = capDo(tongSao);
+    const toiDa = DSV.length * 3, cap = capDo(tongSao);
     than.append(h('<div class="card row gap-12 cap-do"><img src="' + MAT.cheer + '" alt=""><div class="col grow gap-6" style="min-width:0"><div class="row between gap-8"><div class="t-label bold">Cấp ' + cap + ' · ' + CAP[cap - 1] + '</div><div class="t-cap muted none">' + tongSao + '/' + toiDa + ' sao · ' + tongDiem + ' điểm</div></div><div class="progress"><div class="progress-bar warn" style="width:' + Math.round(100 * tongSao / toiDa) + '%"></div></div></div></div>'));
     // Thẻ "học tiếp": bài chưa xong được ghi gần nhất; chưa học bài nào thì gợi ý bài đầu chưa học; xong hết thì không hiện
-    const chuaXong = DS.filter(b => soSao(d[b.so] || {}, b.luyen.length) < 3);
+    const chuaXong = DSV.filter(b => soSao(d[b.so] || {}, b.luyen.length) < 3);
     const dangDo = chuaXong.filter(b => daHoc(d[b.so] || {})).sort((x, y) => ((d[y.so] || {}).moi || 0) - ((d[x.so] || {}).moi || 0))[0];
     const tiep = dangDo || chuaXong.find(b => !daHoc(d[b.so] || {}));
     if (tiep) {
@@ -204,7 +212,7 @@
     }
     than.append(h('<div class="t-label bold">Chọn bài</div>'));
     const ds = h('<div class="card ds-bai"></div>'); than.append(ds);
-    DS.forEach(b => {             // một danh sách liền, đúng thứ tự phát hành; số hiển thị là vị trí trong danh sách
+    DSV.forEach(b => {             // một danh sách liền, đúng thứ tự phát hành; số hiển thị là vị trí trong danh sách
       const t = d[b.so] || {}, n = soSao(t, b.luyen.length), hoc = daHoc(t);
       const nhan = n === 3 ? '<span class="chip safe">' + ic('check', 's14') + 'Xong</span>' : hoc ? '<span class="chip brand">Đang học</span>' : '<span class="chip outline">Mới</span>';
       const o = h('<button class="o-bai"><img src="../assets/' + esc(b.bia) + '" alt=""><span class="col grow gap-2" style="min-width:0"><span class="ten">Bài ' + b.stt + ' · ' + esc(b.ten) + '</span><span class="phu">' + (b.che_do === 'don-gian' ? 'Cho ông bà · chữ lớn' : 'Cho học sinh') + ' · ' + esc(b.luyen.join(', ')) + '</span></span><span class="col gap-6 acenter none">' + nhan + saoHtml(n) + '</span></button>');
