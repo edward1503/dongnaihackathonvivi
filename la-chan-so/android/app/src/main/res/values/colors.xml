@@ -25,4 +25,16 @@
     <color name="bg">#F4F6FB</color>
     <color name="navy">#0F172A</color>
     <color name="kem">#FFF7ED</color>
+    <!-- Thêm cho các màn gốc Android (A03, A04, A05, A10) -->
+    <color name="ai_ink">#4C1D95</color>
+    <color name="navy_2">#1E293B</color>
+    <color name="slate_300">#CBD5E1</color>
+    <color name="sky_300">#93C5FD</color>
+    <color name="safe_solid">#15803D</color>
+    <color name="danger_line">#FCA5A5</color>
+    <color name="warn_line">#FCD34D</color>
+    <color name="safe_line">#86EFAC</color>
+    <color name="brand_line">#93C5FD</color>
+    <color name="ai_line">#C4B5FD</color>
+    <color name="warn_card_dark">#B45309</color>
 </resources>

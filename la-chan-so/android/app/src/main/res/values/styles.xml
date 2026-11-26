@@ -43,4 +43,83 @@
     <style name="Nut.Trang"><item name="android:background">@drawable/nut_trang</item><item name="android:textColor">@color/danger_ink</item></style>
     <style name="Nut.VienTrang"><item name="android:background">@drawable/nut_vien_trang</item><item name="android:textColor">@color/surface</item></style>
     <style name="Nut.Nho"><item name="android:layout_width">wrap_content</item><item name="android:minHeight">40dp</item><item name="android:textSize">14sp</item><item name="android:background">@drawable/nut_chinh</item><item name="android:textColor">@color/surface</item><item name="android:minWidth">72dp</item></style>
+
+    <!-- ============ Thang chữ của ds.css cho các màn gốc Android (A03, A04, A05, A10) ============
+         Cỡ theo lớp .lg (chữ lớn cho người cao tuổi) của bản thiết kế; lineHeight như line-height trong ds.css. -->
+    <style name="Text">
+        <item name="android:fontFamily">@font/bvp_regular</item>
+        <item name="android:textColor">@color/ink</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:lineHeight">24sp</item>
+    </style>
+    <!-- t-body.lg: 20/28 -->
+    <style name="Text.Body"><item name="android:textSize">20sp</item><item name="android:lineHeight">28sp</item></style>
+    <!-- t-label.lg: 17/24 -->
+    <style name="Text.Label"><item name="android:textSize">17sp</item><item name="android:lineHeight">24sp</item></style>
+    <style name="Text.Label.Bold"><item name="android:fontFamily">@font/bvp_bold</item></style>
+    <!-- t-cap.lg: 14/20 -->
+    <style name="Text.Caption"><item name="android:textSize">14sp</item><item name="android:lineHeight">20sp</item></style>
+    <style name="Text.Caption.Bold"><item name="android:fontFamily">@font/bvp_bold</item></style>
+    <!-- t-h2.lg: 22/28, đậm vừa -->
+    <style name="Text.Heading"><item name="android:fontFamily">@font/bvp_semibold</item><item name="android:textSize">22sp</item><item name="android:lineHeight">28sp</item></style>
+    <!-- t-display: 28/34 -->
+    <style name="Text.Display"><item name="android:fontFamily">@font/bvp_bold</item><item name="android:textSize">28sp</item><item name="android:lineHeight">34sp</item></style>
+    <!-- Tiêu đề thanh trên cùng ở chế độ chữ lớn: 20/26 -->
+    <style name="Text.BarTitle"><item name="android:fontFamily">@font/bvp_semibold</item><item name="android:textSize">20sp</item><item name="android:lineHeight">26sp</item></style>
+    <!-- t-over: chữ in hoa nhỏ, giãn chữ -->
+    <style name="Text.Overline">
+        <item name="android:fontFamily">@font/bvp_bold</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:lineHeight">18sp</item>
+        <item name="android:letterSpacing">0.06</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/ink_2</item>
+    </style>
+    <!-- Nhãn (chip): cao 32, bo tròn, chữ đậm vừa -->
+    <style name="Text.Chip">
+        <item name="android:fontFamily">@font/bvp_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineHeight">20sp</item>
+        <item name="android:minHeight">32dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">14dp</item>
+        <item name="android:drawablePadding">6dp</item>
+    </style>
+
+    <!-- ============ Nút theo ds.css: cao từ 56dp, bo 14, chữ 17–19 đậm vừa ============ -->
+    <style name="Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">@font/bvp_semibold</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+    <style name="Button.Primary"><item name="android:background">@drawable/button_primary</item><item name="android:textColor">@color/text_on_primary</item></style>
+    <style name="Button.Outline"><item name="android:background">@drawable/button_outline</item><item name="android:textColor">@color/text_on_outline</item></style>
+    <style name="Button.White"><item name="android:background">@drawable/button_white</item><item name="android:textColor">@color/text_on_white</item></style>
+    <style name="Button.OnRed"><item name="android:background">@drawable/button_on_red</item><item name="android:textColor">@color/text_on_red</item></style>
+    <style name="Button.Ghost"><item name="android:background">@drawable/button_ghost</item><item name="android:textColor">@color/text_link</item><item name="android:fontFamily">@font/bvp_bold</item></style>
+    <!-- btn.xl ở chế độ chữ lớn: cao 64, bo 18, chữ 19 -->
+    <style name="Button.Primary.Large"><item name="android:background">@drawable/button_primary_xl</item><item name="android:minHeight">64dp</item><item name="android:textSize">19sp</item></style>
+    <style name="Button.White.Large"><item name="android:background">@drawable/button_white_xl</item><item name="android:minHeight">64dp</item><item name="android:textSize">19sp</item></style>
+    <style name="Button.OnRed.Large"><item name="android:background">@drawable/button_on_red_xl</item><item name="android:minHeight">64dp</item><item name="android:textSize">19sp</item></style>
+    <!-- Nút tròn có biểu tượng trên thanh tiêu đề (48dp) -->
+    <style name="IconButton">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:background">@drawable/button_icon</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:tint">@color/ink</item>
+    </style>
 </resources>

@@ -20,6 +20,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <queries>
@@ -105,5 +106,17 @@
             </intent-filter>
         </receiver>
         <receiver android:name=".NutThongBao" android:exported="false" />
+        <!-- Nhận bản ghi âm cuộc gọi được chia sẻ từ app gọi điện (máy dùng app Điện thoại của Google) -->
+        <activity
+            android:name=".ShareRecordingActivity"
+            android:exported="true"
+            android:label="Lá chắn số: nghe bản ghi"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="audio/*" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>

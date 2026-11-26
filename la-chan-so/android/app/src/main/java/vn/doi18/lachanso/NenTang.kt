@@ -114,6 +114,8 @@ object CaiDat {
 
     /** Số của máy dùng để gọi thử: Lá chắn coi như số này đang bị báo lừa đảo. Chỉ để thử, không gửi đi đâu. */
     fun soThu(c: Context) = chu(c, "so-thu")
+    /** Demo test numbers (comma separated in the "Số thử" field), normalized. */
+    fun testNumbers(c: Context) = soThu(c).split(Regex("[,;\\s]+")).map { TraCuu.chuanHoa(it) }.filter { it.isNotBlank() }
     fun datSoThu(c: Context, v: String) = dat(c, "so-thu", v.trim())
 
     /** Cách Bé Nai gọi chủ máy: bà, ông, cô, chú, bác, anh, chị, bạn. */

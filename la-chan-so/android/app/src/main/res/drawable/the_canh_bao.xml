@@ -1,2 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle"><solid android:color="@color/danger" /><stroke android:width="1.5dp" android:color="#FCA5A5" /><corners android:radius="22dp" /></shape>
+<!-- A03a: thẻ đỏ nổi trên màn đổ chuông (float-card của ds.css: bo 20, không viền) -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle"><solid android:color="@color/danger" /><corners android:radius="20dp" /></shape>

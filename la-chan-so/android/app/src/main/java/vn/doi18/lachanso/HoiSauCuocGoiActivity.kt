@@ -8,14 +8,22 @@ import android.content.IntentFilter
 import androidx.core.content.ContextCompat
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.AbsoluteSizeSpan
+import android.text.style.BackgroundColorSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.TypefaceSpan
 import android.view.View
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -149,7 +157,9 @@ class HoiSauCuocGoiActivity : Activity() {
 
     private fun showAudioRisk() {
         val risk = audioRisk ?: return
-        ketQuaXau(risk.muc, risk.giaiThich, risk.dauHieu)
+        ketQuaXau(risk.muc, risk.giaiThich, risk.dauHieu, dauHieuAI = risk.dauHieu)
+        v<TextView>(R.id.tieuDeMan).text = "Phân tích cuộc gọi"
+        hienTheCuocGoi(banGhi = true)
     }
 
     private fun <T : View> v(id: Int): T = findViewById(id)
@@ -209,6 +219,8 @@ class HoiSauCuocGoiActivity : Activity() {
         }
         showReport(EventReports.lastMessage(this, eventId), speak = false)
         v<Button>(R.id.nutDong).setOnClickListener { finish() }
+        v<View>(R.id.nutThoat).setOnClickListener { finish() }
+        hienTheCuocGoi()
 
         val banGhi = intent.getStringExtra("banGhi")
         if (banGhi != null && CaiDat.mayChu(this).isNotBlank()) phanTichBanGhi(Uri.parse(banGhi), intent.getStringExtra("banGhiKieu") ?: "audio/mpeg")
@@ -268,6 +280,126 @@ class HoiSauCuocGoiActivity : Activity() {
     private fun hien(khungMoi: Int) {
         khung = khungMoi
         for (id in listOf(R.id.khungHoi, R.id.khungKe, R.id.khungCho, R.id.khungKetQua)) v<View>(id).visibility = if (id == khungMoi) View.VISIBLE else View.GONE
+        // Tên màn trên thanh tiêu đề và thẻ cuộc gọi, theo bản thiết kế A04a, A04b, A04c
+        v<TextView>(R.id.tieuDeMan).text = when (khungMoi) {
+            R.id.khungHoi -> "Bé Nai hỏi thăm"
+            R.id.khungCho -> "Phân tích cuộc gọi"
+            R.id.khungKe -> "Kể lại cuộc gọi"
+            else -> "Cuộc gọi vừa rồi"
+        }
+        v<View>(R.id.theCuocGoi).visibility = if (khungMoi == R.id.khungKe || khungMoi == R.id.khungKetQua) View.VISIBLE else View.GONE
+        if (khungMoi != R.id.khungKetQua) hienTheCuocGoi()
+    }
+
+    /** Thẻ cuộc gọi trên đầu màn (A04c). [banGhi]: kết quả lấy từ bản ghi âm của máy, hiện như dòng đầu của A04b. */
+    private fun hienTheCuocGoi(banGhi: Boolean = false) {
+        val the = v<View>(R.id.theCuocGoi)
+        val icon = v<ImageView>(R.id.cgIcon)
+        val tieuDe = v<TextView>(R.id.cgTieuDe)
+        val phu = v<TextView>(R.id.cgPhu)
+        if (banGhi) {
+            the.background = null
+            the.setPadding(0, 0, 0, 0)
+            icon.setBackgroundResource(R.drawable.box_ai)
+            icon.setImageResource(R.drawable.ic_file_audio)
+            icon.imageTintList = ColorStateList.valueOf(getColor(R.color.ai))
+            tieuDe.text = "Bản ghi âm của máy · ${thoiLuong()}"
+            tieuDe.textSize = 17f
+            phu.visibility = View.GONE
+            v<View>(R.id.cgChip).visibility = View.VISIBLE
+            return
+        }
+        val dem = resources.displayMetrics.density
+        the.setBackgroundResource(R.drawable.card_surface)
+        the.setPadding((16 * dem).toInt(), (14 * dem).toInt(), (16 * dem).toInt(), (14 * dem).toInt())
+        icon.setBackgroundResource(R.drawable.box_brand)
+        icon.setImageResource(R.drawable.ic_phone_incoming)
+        icon.imageTintList = ColorStateList.valueOf(getColor(R.color.brand))
+        tieuDe.text = TraCuu.dinhDang(so)
+        tieuDe.textSize = 22f
+        val luc = if (ma > 0) " · " + SimpleDateFormat("HH:mm", Locale.US).format(Date(ma)) else ""
+        phu.text = (if (den) "Cuộc gọi đến" else "Cuộc gọi đi") + " · ${giay / 60} phút ${giay % 60} giây" + luc
+        phu.visibility = View.VISIBLE
+        v<View>(R.id.cgChip).visibility = View.GONE
+    }
+
+    /** Tô thẻ kết quả theo mức, như .card.danger / .warn / .safe của bản thiết kế. null: thẻ trung tính. */
+    private fun mauKetQua(muc: Muc?) {
+        val nen: Int; val o: Int; val bieuTuong: Int; val chu: Int
+        when (muc) {
+            Muc.NGUY_HIEM -> { nen = R.drawable.card_result_danger; o = R.drawable.box_danger_solid; bieuTuong = R.drawable.ic_alert_octagon; chu = R.color.danger_ink }
+            Muc.NGHI_NGO -> { nen = R.drawable.card_result_warn; o = R.drawable.box_warn_solid; bieuTuong = R.drawable.ic_alert_octagon; chu = R.color.warn_ink }
+            Muc.AN_TOAN -> { nen = R.drawable.card_result_safe; o = R.drawable.box_safe_solid; bieuTuong = R.drawable.ic_check; chu = R.color.safe_ink }
+            else -> { nen = R.drawable.card_surface; o = R.drawable.box_brand_large; bieuTuong = R.drawable.ic_info; chu = R.color.ink }
+        }
+        v<View>(R.id.kqThe).setBackgroundResource(nen)
+        v<ImageView>(R.id.kqIcon).apply {
+            setBackgroundResource(o)
+            setImageResource(bieuTuong)
+            imageTintList = ColorStateList.valueOf(getColor(if (muc == null || muc == Muc.CHUA_CO_DU_LIEU) R.color.brand else R.color.surface))
+        }
+        for (id in listOf(R.id.kqNhan, R.id.kqMuc, R.id.kqLoi, R.id.kqBangChungTieuDe, R.id.kqBangChung)) v<TextView>(id).setTextColor(getColor(chu))
+    }
+
+    /** Thẻ người thân: xanh có dấu tích khi đã báo xong, trắng có biểu tượng người thân ở các trạng thái khác. */
+    private fun theNguoiThan(daBao: Boolean) {
+        v<View>(R.id.ntThe).setBackgroundResource(if (daBao) R.drawable.card_safe_small else R.drawable.card_surface)
+        v<ImageView>(R.id.ntIcon).apply {
+            setBackgroundResource(if (daBao) R.drawable.circle_safe_solid else R.drawable.box_brand)
+            setImageResource(if (daBao) R.drawable.ic_check else R.drawable.ic_users)
+            imageTintList = ColorStateList.valueOf(getColor(if (daBao) R.color.surface else R.color.brand))
+        }
+        v<TextView>(R.id.ntTrangThai).setTextColor(getColor(if (daBao) R.color.safe_ink else R.color.ink))
+    }
+
+    /** Thẻ tím "AI nhận ra N dấu hiệu", mỗi dấu hiệu một dòng có dấu tích. Danh sách rỗng thì ẩn thẻ. */
+    private fun hienDauHieuAI(dauHieu: List<String>) {
+        val khungDs = v<android.widget.LinearLayout>(R.id.kqDauHieuDs)
+        khungDs.removeAllViews()
+        v<View>(R.id.kqDauHieuKhung).visibility = if (dauHieu.isEmpty()) View.GONE else View.VISIBLE
+        if (dauHieu.isEmpty()) return
+        v<TextView>(R.id.kqDauHieuTieuDe).text = "AI nhận ra ${dauHieu.size} dấu hiệu"
+        val dem = resources.displayMetrics.density
+        for (d in dauHieu) {
+            khungDs.addView(TextView(this, null, 0, R.style.Text_Label).apply {
+                text = d
+                setTextColor(getColor(R.color.ai_ink))
+                setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_check_20, 0, 0, 0)
+                compoundDrawablePadding = (8 * dem).toInt()
+                compoundDrawableTintList = ColorStateList.valueOf(getColor(R.color.ai))
+                setPadding(0, (8 * dem).toInt(), 0, 0)
+            })
+        }
+    }
+
+    /** Bản chép lời: tên người nói in đậm (người gọi màu đỏ), các cụm đáng ngờ được tô như .hl của bản thiết kế. */
+    private fun chepLoiDaTo(chepLoi: List<Pair<String, String>>): CharSequence {
+        val b = SpannableStringBuilder()
+        chepLoi.forEachIndexed { i, (ai, loi) ->
+            if (i > 0) {
+                // Dòng trống giữa hai lượt nói thấp hơn dòng chữ (khoảng cách 10dp như bản thiết kế)
+                val dau = b.length
+                b.append("\n\n")
+                b.setSpan(AbsoluteSizeSpan(6, true), dau, b.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            if (ai.isNotBlank()) {
+                val dau = b.length
+                b.append(ai)
+                b.setSpan(TypefaceSpan(resources.getFont(R.font.bvp_bold)), dau, b.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                b.setSpan(AbsoluteSizeSpan(14, true), dau, b.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                b.setSpan(ForegroundColorSpan(getColor(if ("gọi" in ai.lowercase()) R.color.danger else R.color.brand)), dau, b.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                b.append("\n")
+            }
+            val dau = b.length
+            b.append(loi)
+            for (d in LocTinNhan.phanTichLoiKe(loi).dauHieu) {
+                if (d.cuoi > loi.length) continue
+                b.setSpan(BackgroundColorSpan(getColor(R.color.danger_c)), dau + d.dau, dau + d.cuoi, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                b.setSpan(ForegroundColorSpan(getColor(R.color.danger_ink)), dau + d.dau, dau + d.cuoi, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                b.setSpan(TypefaceSpan(resources.getFont(R.font.bvp_semibold)), dau + d.dau, dau + d.cuoi, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+        }
+        return b
     }
 
     private fun thoiLuong() = "${giay / 60}:%02d".format(giay % 60)
@@ -278,35 +410,49 @@ class HoiSauCuocGoiActivity : Activity() {
         SpeechRecognizer.isRecognitionAvailable(this)
 
     private fun dungNghe() {
+        henNgat.removeCallbacksAndMessages(null)
         try { nghe?.destroy() } catch (_: Exception) {}
         nghe = null
     }
 
-    /** Nghe một lượt nói. [tungPhan] nhận chữ tạm trong lúc đang nói; [xong] nhận các phương án cuối (rỗng nếu lỗi). */
-    private fun ngheMotLuot(tungPhan: (String) -> Unit = {}, xong: (List<String>) -> Unit) {
+    private val henNgat = android.os.Handler(android.os.Looper.getMainLooper())
+
+    /**
+     * Nghe một lượt nói. [tungPhan] nhận chữ tạm trong lúc đang nói; [xong] nhận các phương án cuối (rỗng nếu lỗi).
+     * [ngatSom]: câu trả lời ngắn (có/không). Không chờ bộ nhận giọng nói tự dừng (máy thường chờ lâu): dừng mic ngay khi
+     * nó báo hết lời, hoặc 0,9 giây sau chữ cuối nghe được, và tối đa 5 giây cho cả lượt nói.
+     */
+    private fun ngheMotLuot(tungPhan: (String) -> Unit = {}, ngatSom: Boolean = false, xong: (List<String>) -> Unit) {
         try {
             dungNghe()
-            nghe = SpeechRecognizer.createSpeechRecognizer(this).apply {
+            henNgat.removeCallbacksAndMessages(null)
+            val boNghe = SpeechRecognizer.createSpeechRecognizer(this)
+            val dung = Runnable { try { if (nghe === boNghe) boNghe.stopListening() } catch (_: Exception) {} }
+            fun ngatSau(ms: Long) { if (ngatSom) { henNgat.removeCallbacks(dung); henNgat.postDelayed(dung, ms) } }
+            nghe = boNghe.apply {
                 setRecognitionListener(object : RecognitionListener {
-                    override fun onResults(r: Bundle?) = xong(r?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION).orEmpty())
-                    override fun onError(ma: Int) = xong(emptyList())
+                    override fun onResults(r: Bundle?) { henNgat.removeCallbacks(dung); xong(r?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION).orEmpty()) }
+                    override fun onError(ma: Int) { henNgat.removeCallbacks(dung); xong(emptyList()) }
                     override fun onPartialResults(p: Bundle?) {
-                        p?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull()?.let(tungPhan)
+                        val tam = p?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull()
+                        if (!tam.isNullOrBlank()) { tungPhan(tam); ngatSau(900) }
                     }
                     override fun onReadyForSpeech(p: Bundle?) {}
-                    override fun onBeginningOfSpeech() {}
+                    override fun onBeginningOfSpeech() { ngatSau(5000) }
                     override fun onRmsChanged(r: Float) {}
                     override fun onBufferReceived(b: ByteArray?) {}
-                    override fun onEndOfSpeech() {}
+                    override fun onEndOfSpeech() { if (ngatSom) { henNgat.removeCallbacks(dung); dung.run() } }
                     override fun onEvent(t: Int, p: Bundle?) {}
                 })
-                startListening(
-                    Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-                        .putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-                        .putExtra(RecognizerIntent.EXTRA_LANGUAGE, "vi-VN")
-                        .putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
-                        .putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5)
-                )
+                val yeuCau = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+                    .putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                    .putExtra(RecognizerIntent.EXTRA_LANGUAGE, "vi-VN")
+                    .putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
+                    .putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5)
+                if (ngatSom) yeuCau
+                    .putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 700L)
+                    .putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 500L)
+                startListening(yeuCau)
             }
         } catch (e: Exception) {
             xong(emptyList())
@@ -352,7 +498,11 @@ class HoiSauCuocGoiActivity : Activity() {
         NhatKy.ghi(this, "AI phân tích ${nguon.lowercase()}: ${muc.ten}, ${dauHieu.size} dấu hiệu")
         if (nguon == "Bản ghi" && muc in setOf(Muc.NGUY_HIEM, Muc.NGHI_NGO)) audioRisk = kq
         when {
-            muc == Muc.NGUY_HIEM || muc == Muc.NGHI_NGO -> ketQuaXau(muc, kq.giaiThich, dauHieu.map { "$nguon: $it" })
+            muc == Muc.NGUY_HIEM || muc == Muc.NGHI_NGO -> {
+                ketQuaXau(muc, kq.giaiThich, dauHieu.map { "$nguon: $it" }, dauHieuAI = dauHieu)
+                v<TextView>(R.id.tieuDeMan).text = "Phân tích cuộc gọi"
+                if (nguon == "Bản ghi") hienTheCuocGoi(banGhi = true)
+            }
             // AI không thấy gì (hoặc trả lời thiếu mức): đó chưa phải là "an toàn". Bản ghi thì hỏi lại một câu, lời kể thì nói rõ "chưa thấy".
             nguon == "Bản ghi" -> { daTraLoi = false; hoi() }
             else -> on(chuaThay = true)
@@ -360,7 +510,7 @@ class HoiSauCuocGoiActivity : Activity() {
         if (reportRequested && selfAnswer == null && !khongHoi && audioRisk != null) hoi()
         if (chep.isNotBlank()) {
             v<View>(R.id.kqChepLoiKhung).visibility = View.VISIBLE
-            v<TextView>(R.id.kqChepLoi).text = chep
+            v<TextView>(R.id.kqChepLoi).text = chepLoiDaTo(kq.chepLoi)
         }
     }
 
@@ -372,6 +522,9 @@ class HoiSauCuocGoiActivity : Activity() {
             NhatKy.ghi(this, "Hôm nay đã hỏi một câu rồi: không hỏi nữa")
             if (eventId.isBlank()) finish() else {
                 hien(R.id.khungKetQua)
+                mauKetQua(null)
+                v<View>(R.id.kqBangChungTieuDe).visibility = View.GONE
+                v<View>(R.id.kqBangChung).visibility = View.GONE
                 v<TextView>(R.id.kqMuc).text = "Bé Nai đã ghi nhận cuộc gọi"
                 v<TextView>(R.id.kqLoi).text = "Bà có thể báo cuộc gọi này nếu cần ạ."
                 v<View>(R.id.kqNguoiThan).visibility = View.GONE
@@ -405,7 +558,7 @@ class HoiSauCuocGoiActivity : Activity() {
         }
         v<TextView>(R.id.goiY).text = "${x.Ban} nói “có” hoặc “không”, hoặc bấm"
         v<TextView>(R.id.trangThai).text = "Bé Nai đang nghe…"
-        ngheMotLuot { cacCau ->
+        ngheMotLuot(ngatSom = true) { cacCau ->
             if (daTraLoi || dangKe || !song()) return@ngheMotLuot
             if (ReceiptRules.selfAnswer(cacCau.firstOrNull().orEmpty()) == "known") {
                 chooseKnown()
@@ -496,28 +649,35 @@ class HoiSauCuocGoiActivity : Activity() {
 
     // ---------- Kết quả ----------
 
-    /** Nguy hiểm: tự báo người thân. Nghi ngờ: không tự báo, chỉ đưa nút gọi. */
-    private fun ketQuaXau(muc: Muc, giaiThich: String, bangChungThem: List<String>) {
+    /**
+     * Nguy hiểm: tự báo người thân. Nghi ngờ: không tự báo, chỉ đưa nút gọi.
+     * [dauHieuAI]: dấu hiệu do AI nêu, hiện riêng trong thẻ tím thay vì lẫn vào dòng bằng chứng.
+     */
+    private fun ketQuaXau(muc: Muc, giaiThich: String, bangChungThem: List<String>, dauHieuAI: List<String> = emptyList()) {
         val nguyHiem = muc == Muc.NGUY_HIEM
         hien(R.id.khungKetQua)
-        v<TextView>(R.id.kqPhu).text = "${TraCuu.dinhDang(so)} · ${thoiLuong()}"
-        v<View>(R.id.kqThe).setBackgroundResource(if (nguyHiem) R.drawable.the_do else R.drawable.the_vang)
-        v<TextView>(R.id.kqMuc).apply { text = muc.ten; setTextColor(getColor(if (nguyHiem) R.color.danger else R.color.warn)) }
+        mauKetQua(if (nguyHiem) Muc.NGUY_HIEM else Muc.NGHI_NGO)
+        v<TextView>(R.id.kqMuc).apply { text = muc.ten; textSize = 28f }
         v<TextView>(R.id.kqLoi).text = giaiThich.ifBlank { if (nguyHiem) "${x.Ban} đừng chuyển tiền nhé." else "${x.Ban} khoan chuyển tiền, hỏi $ten trước đã." }
         val bangChung = buildList {
             if (soNguoiBao > 0) add("Cuộc gọi hiển thị số này đã bị báo cáo từ $soNguoiBao máy.")
             add("Số chưa quen với máy này")
             addAll(bangChungThem)
         }
-        v<TextView>(R.id.kqBangChung).text = bangChung.joinToString("\n") { "•  $it" }
+        // Như bản thiết kế: các bằng chứng nối bằng dấu chấm giữa dòng; dấu hiệu của AI nằm ở thẻ tím riêng.
+        val hienBangChung = if (dauHieuAI.isEmpty()) bangChung else bangChung.filterNot { it in bangChungThem }
+        v<TextView>(R.id.kqBangChungTieuDe).visibility = View.VISIBLE
+        v<TextView>(R.id.kqBangChung).apply { text = hienBangChung.joinToString(" · ") { it.trimEnd('.') }; visibility = View.VISIBLE }
+        hienDauHieuAI(dauHieuAI)
         RuiRo.mo(this, so)
 
         v<View>(R.id.kqNguoiThan).visibility = View.VISIBLE
         val tt = v<TextView>(R.id.ntTrangThai)
         val phu = v<TextView>(R.id.ntPhu)
         val soNt = CaiDat.soNguoiThan(this)
+        theNguoiThan(daBao = false)
         v<Button>(R.id.nutGoi).apply {
-            text = "Gọi $ten ngay"
+            setTextWithIcon(R.drawable.ic_phone, "Gọi $ten ngay", getColor(R.color.surface))
             setOnClickListener { if (soNt.isBlank()) startActivity(Intent(this@HoiSauCuocGoiActivity, MainActivity::class.java).putExtra("route", "#/nguoi-than/them")) else goiDien(soNt) }
         }
         val chuaBao = if (soNt.isBlank()) "Chưa có số của $ten. Bấm nút dưới để thêm." else "${x.Ban} bấm nút dưới để gọi $ten ngay."
@@ -533,6 +693,7 @@ class HoiSauCuocGoiActivity : Activity() {
             return
         }
         fun hienDaBao() {
+            theNguoiThan(daBao = true)
             tt.text = "Đã báo cho $ten"
             phu.text = "$ten sẽ gọi cho ${x.ban}. ${x.Ban} không cần bấm gì."
         }
@@ -569,6 +730,7 @@ class HoiSauCuocGoiActivity : Activity() {
                 if (ma != 0L) { if (daBao) baoNguoiThan[ma] = DA_BAO else baoNguoiThan.remove(ma) }
                 if (isFinishing || isDestroyed) return@chinh
                 if (daBao) {
+                    theNguoiThan(daBao = true)
                     tt.text = "Đã báo cho $ten · ${SimpleDateFormat("HH:mm", Locale.US).format(Date())}"
                     phu.text = "$ten sẽ gọi cho ${x.ban}. ${x.Ban} không cần bấm gì."
                     NhatKy.ghi(this, "Đã báo cho người thân qua máy chủ")
@@ -586,12 +748,13 @@ class HoiSauCuocGoiActivity : Activity() {
     /** Không thấy dấu hiệu. [chuaThay]: kết luận từ lời kể, nên nói rõ là "chưa thấy" chứ không phải "an toàn". */
     private fun on(chuaThay: Boolean = false) {
         hien(R.id.khungKetQua)
-        v<TextView>(R.id.kqPhu).text = "${TraCuu.dinhDang(so)} · ${thoiLuong()}"
-        v<View>(R.id.kqThe).setBackgroundResource(R.drawable.the_xanh)
+        mauKetQua(Muc.AN_TOAN)   // chỉ để lấy màu xanh của thẻ, không phải kết luận "an toàn"
         v<TextView>(R.id.kqMuc).apply {
             text = if (chuaThay) "Chưa thấy dấu hiệu lừa đảo" else "Dạ vậy thì tốt rồi ạ"
-            setTextColor(getColor(R.color.safe)); textSize = 26f
+            textSize = 26f
         }
+        v<TextView>(R.id.kqBangChungTieuDe).visibility = View.GONE
+        hienDauHieuAI(emptyList())
         v<TextView>(R.id.kqLoi).text = "Nếu họ gọi lại đòi tiền, ${x.ban} cứ cúp máy nha."
         v<View>(R.id.kqNguoiThan).visibility = View.GONE
         if (soNguoiBao > 0) {

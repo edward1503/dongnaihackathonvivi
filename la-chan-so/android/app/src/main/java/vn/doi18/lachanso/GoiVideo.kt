@@ -8,6 +8,7 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
@@ -183,6 +184,8 @@ class GoiVideoActivity : Activity() {
             .put("auto", intent.getBooleanExtra("auto", false)).toString()
         @JavascriptInterface fun nghe() { runOnUiThread { this@GoiVideoActivity.batDauNghe() } }
         @JavascriptInterface fun dungNghe() { runOnUiThread { this@GoiVideoActivity.dungNghe() } }
+        /** Nút ✕ ở thư viện bài học: đóng màn bài học, về màn chính của app. */
+        @JavascriptInterface fun dong() { runOnUiThread { this@GoiVideoActivity.dungNghe(); finish() } }
     }
 
     private fun canPlayLive(): Boolean = CaiDat.mayChu(this).isNotBlank() ||
@@ -310,7 +313,10 @@ class GoiVideoActivity : Activity() {
     /** Nút Quay lại: đang ở trang mở từ trang khác (cuộc gọi mở từ bài học) thì lùi về trang trước, hết thì đóng màn. */
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        if (web.canGoBack()) { dungNghe(); web.goBack() } else @Suppress("DEPRECATION") super.onBackPressed()
+        // Đang ở thư viện bài học thì vuốt lùi là về app luôn, không lần ngược qua các trang bài đã mở.
+        val u = Uri.parse(web.url ?: "")
+        val thuVien = u.path == "/prototype/hoc.html" && u.getQueryParameter("bai") == null && u.getQueryParameter("kieu") == null
+        if (thuVien || !web.canGoBack()) { dungNghe(); @Suppress("DEPRECATION") super.onBackPressed() } else { dungNghe(); web.goBack() }
     }
 
     private fun mieng(id: String, k: Int, p: String): WebResourceResponse {

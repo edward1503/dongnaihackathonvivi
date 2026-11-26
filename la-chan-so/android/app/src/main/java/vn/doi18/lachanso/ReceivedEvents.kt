@@ -102,6 +102,8 @@ internal object ReceivedEvents {
 
     // Keep the URI only when the dialer's finished file has a stable size and modification time.
     private fun fileStamp(c: Context, uri: Uri): String? = runCatching {
+        // A recording shared into the app is copied to its private files: stamp it from the file itself.
+        if (uri.scheme == "file") return@runCatching java.io.File(requireNotNull(uri.path)).takeIf { it.length() > 0 }?.let { "${it.length()}|${it.lastModified()}" }
         c.contentResolver.query(uri, arrayOf(Document.COLUMN_SIZE, Document.COLUMN_LAST_MODIFIED), null, null, null)?.use {
             if (it.moveToFirst() && it.getLong(0) > 0 && it.getLong(1) > 0) "${it.getLong(0)}|${it.getLong(1)}" else null
         }
@@ -114,6 +116,14 @@ internal object ReceivedEvents {
         if (owner != null && owner != event.id) return
         val data = JSONObject().put("uri", file.uri.toString()).put("mime", file.kieu).put("stamp", stamp)
         prefs(c).edit().putString(ownerKey, event.id).putString("file-${event.id}", data.toString()).apply()
+    }
+
+    /** A recording shared from another app (copied into our files) for the most recent incoming call. Replaces any earlier binding. */
+    @Synchronized fun bindSharedRecording(c: Context, event: ReceivedEvent, file: java.io.File, mime: String) {
+        val uri = Uri.fromFile(file)
+        val stamp = fileStamp(c, uri) ?: return
+        val data = JSONObject().put("uri", uri.toString()).put("mime", mime).put("stamp", stamp)
+        prefs(c).edit().putString("owner-" + ReceiptRules.hash("$uri|$stamp"), event.id).putString("file-${event.id}", data.toString()).apply()
     }
 
     fun recording(c: Context, id: String): Pair<Uri, String>? {

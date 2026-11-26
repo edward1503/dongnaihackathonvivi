@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Chữ đỏ trên nút trắng -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="false" android:color="#99DC2626" />
+    <item android:color="@color/danger" />
+</selector>

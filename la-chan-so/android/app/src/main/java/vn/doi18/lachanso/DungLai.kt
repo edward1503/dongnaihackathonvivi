@@ -12,6 +12,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.graphics.PixelFormat
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -77,8 +80,34 @@ class DichVuLaChan : Service() {
     private val settings by lazy { getSharedPreferences("cai-dat", MODE_PRIVATE) }
     private val settingsChanged = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
         if (key in setOf("app-role", "family-code", "may-chu") && dangChay) configureRole()
+        if (key == "may-chu" && dangChay) syncFlaggedNumbers()
     }
     private val h = Handler(Looper.getMainLooper())
+    private val connectivity by lazy { getSystemService(ConnectivityManager::class.java) }
+    private var readyNetwork: Network? = null
+    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
+        override fun onCapabilitiesChanged(network: Network, capabilities: NetworkCapabilities) {
+            val ready = network.takeIf { canSync(capabilities) }
+            if (ready != null && ready != readyNetwork) syncFlaggedNumbers()
+            readyNetwork = ready
+        }
+
+        override fun onLost(network: Network) {
+            if (readyNetwork == network) readyNetwork = null
+        }
+    }
+    private fun canSync(capabilities: NetworkCapabilities?) =
+        capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+            capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED)
+
+    private fun syncFlaggedNumbers() = Luong.nen { FlaggedNumbers.sync(applicationContext) }
+
+    private val periodicSync = object : Runnable {
+        override fun run() {
+            syncFlaggedNumbers()
+            h.postDelayed(this, 30 * 60_000L)
+        }
+    }
     private var appCuoi: String? = null
     private var docTu = 0L
     private val vong = object : Runnable {
@@ -94,6 +123,15 @@ class DichVuLaChan : Service() {
         super.onCreate()
         settings.registerOnSharedPreferenceChangeListener(settingsChanged)
         configureRole()
+        if (dangChay) {
+            try {
+                readyNetwork = connectivity.activeNetwork?.takeIf { canSync(connectivity.getNetworkCapabilities(it)) }
+                connectivity.registerDefaultNetworkCallback(networkCallback, h)
+            } catch (error: Exception) {
+                NhatKy.ghi(this, "Không theo dõi được kết nối (${error.javaClass.simpleName})")
+            }
+            periodicSync.run()
+        }
     }
 
     private fun configureRole() {
@@ -126,6 +164,8 @@ class DichVuLaChan : Service() {
     override fun onStartCommand(i: Intent?, flags: Int, startId: Int) = START_STICKY
 
     override fun onDestroy() {
+        h.removeCallbacks(periodicSync)
+        runCatching { connectivity.unregisterNetworkCallback(networkCallback) }
         settings.unregisterOnSharedPreferenceChangeListener(settingsChanged)
         familyWatcher.stop()
         h.removeCallbacks(vong)
@@ -281,12 +321,18 @@ object DungLai {
         val loi2 = v.findViewById<TextView>(R.id.loi2)
         val nutCup = v.findViewById<Button>(R.id.nutCup)
         if (dangGoi) {
-            v.findViewById<TextView>(R.id.dongTren).text = "Đang gọi với số chưa quen · %02d:%02d".format(giay / 60, giay % 60)
+            v.findViewById<TextView>(R.id.dongTren).apply {
+                text = "Đang gọi với số chưa quen · %02d:%02d".format(giay / 60, giay % 60)
+                setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_phone_16, 0, 0, 0)
+            }
             lyDo.text = "${x.Ban} đang nghe máy với số chưa quen và mở ứng dụng ngân hàng. Đây là dấu hiệu lừa đảo thường gặp nhất."
-            loi1.text = "Hãy cúp máy."
-            loi2.text = "Người thật sẽ không giận."
+            // A10b: câu hỏi làm tiêu đề thẻ, lời khuyên nằm dưới
+            loi1.text = "Người gọi đang giục ${x.ban} chuyển tiền?"
+            loi2.text = "Hãy cúp máy.\nNgười thật sẽ không giận."
+            loi2.setTextColor(c.getColor(R.color.ink_2))
             if (c.checkSelfPermission(Manifest.permission.ANSWER_PHONE_CALLS) == PackageManager.PERMISSION_GRANTED) {
                 nutCup.visibility = View.VISIBLE
+                nutCup.setTextWithIcon(R.drawable.ic_phone_off, "Cúp máy ngay", c.getColor(R.color.danger))
                 nutCup.setOnClickListener {
                     try {
                         @Suppress("DEPRECATION")
@@ -305,7 +351,13 @@ object DungLai {
             loi2.text = "Hãy gọi $ten để kiểm tra."
         }
         v.findViewById<Button>(R.id.nutHoi).apply {
-            text = "Hỏi $ten trước"
+            // Có nút "Cúp máy ngay" (A10b) thì nút này lùi xuống thành nút viền trắng, như bản thiết kế.
+            val phu = nutCup.visibility == View.VISIBLE
+            if (phu) {
+                setBackgroundResource(R.drawable.button_on_red_xl)
+                setTextColor(c.getColorStateList(R.color.text_on_red))
+            }
+            setTextWithIcon(R.drawable.ic_users, "Hỏi $ten trước", c.getColor(if (phu) R.color.surface else R.color.danger))
             setOnClickListener {
                 val so = CaiDat.soNguoiThan(c)
                 if (so.isBlank()) c.startActivity(Intent(c, MainActivity::class.java).putExtra("route", "#/nguoi-than/them").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
@@ -388,4 +440,20 @@ class DungLaiActivity : Activity() {
     private fun dongMotLan() {
         if (!daDong) { daDong = true; DungLai.dong(this) }
     }
+}
+
+/**
+ * Đặt chữ cho nút kèm biểu tượng đứng ngay trước chữ, cả cụm canh giữa như nút của bản thiết kế
+ * (Button thường đẩy drawableStart ra sát mép trái). Biểu tượng cao bằng khoảng 1,25 lần cỡ chữ.
+ */
+internal fun Button.setTextWithIcon(icon: Int, label: CharSequence, color: Int) {
+    val d = context.getDrawable(icon)?.mutate()
+    if (d == null) { text = label; return }
+    val size = (textSize * 1.25f).toInt()
+    d.setBounds(0, 0, size, size)
+    d.setTint(color)
+    text = android.text.SpannableStringBuilder("\uFFFC\u2002").append(label).apply {
+        setSpan(android.text.style.ImageSpan(d, android.text.style.DynamicDrawableSpan.ALIGN_CENTER), 0, 1, android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+    }
+    contentDescription = label
 }

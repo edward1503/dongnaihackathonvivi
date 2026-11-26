@@ -5,16 +5,17 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.SpannableStringBuilder
 import android.text.style.BackgroundColorSpan
+import android.text.style.BulletSpan
 import android.text.style.ForegroundColorSpan
-import android.text.style.StyleSpan
+import android.text.style.TypefaceSpan
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -316,14 +317,16 @@ class PhanTichTinNhanActivity : Activity() {
         v<TextView>(R.id.noiDung).text = SpannableString(tin).apply {
             for (d in kq.dauHieu) {
                 if (d.cuoi > length) continue
-                setSpan(BackgroundColorSpan(getColor(R.color.danger_c)), d.dau, d.cuoi, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                setSpan(ForegroundColorSpan(getColor(R.color.danger_ink)), d.dau, d.cuoi, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                setSpan(StyleSpan(Typeface.BOLD), d.dau, d.cuoi, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                // Như .hl của bản thiết kế: nền đỏ nhạt; đường dẫn lạ thì nền vàng (.hl.warn)
+                val link = d.nhom == "Đường dẫn rút gọn" || d.nhom == "Tên miền lạ"
+                setSpan(BackgroundColorSpan(getColor(if (link) R.color.warn_c else R.color.danger_c)), d.dau, d.cuoi, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                setSpan(ForegroundColorSpan(getColor(if (link) R.color.warn_ink else R.color.danger_ink)), d.dau, d.cuoi, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                setSpan(TypefaceSpan(resources.getFont(R.font.bvp_semibold)), d.dau, d.cuoi, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
         hienKetQua(kq.muc, kq.kieu, kq.loiKhuyen)
         v<TextView>(R.id.nguon).text = "Dấu hiệu nhận ra (lọc trên máy)"
-        v<TextView>(R.id.dauHieu).text = (kq.nhom + if (soBiBao > 0) listOf("Tin nhắn hiển thị số này đã bị báo cáo từ $soBiBao máy") else emptyList()).joinToString("\n") { "•  $it" }
+        v<TextView>(R.id.dauHieu).text = dsCham(kq.nhom + if (soBiBao > 0) listOf("Tin nhắn hiển thị số này đã bị báo cáo từ $soBiBao máy") else emptyList())
 
         // Chỉ tin đã vượt ngưỡng trên máy mới tới đây, và chỉ gửi bản đã che số.
         if (!LocTinNhan.laOtp(tin)) Luong.nen {
@@ -335,7 +338,7 @@ class PhanTichTinNhanActivity : Activity() {
                 hienKetQua(ai.muc, ai.kieu.ifBlank { kq.kieu }, ai.giaiThich.ifBlank { kq.loiKhuyen })
                 if (ai.dauHieu.isNotEmpty()) {
                     v<TextView>(R.id.nguon).text = "AI giải thích"
-                    v<TextView>(R.id.dauHieu).text = ai.dauHieu.joinToString("\n") { "•  $it" }
+                    v<TextView>(R.id.dauHieu).text = dsCham(ai.dauHieu)
                 }
             }
         }
@@ -390,13 +393,29 @@ class PhanTichTinNhanActivity : Activity() {
             }
         }
         v<Button>(R.id.nutKhong).setOnClickListener { finish() }
+        v<View>(R.id.nutQuayLai).setOnClickListener { finish() }
+    }
+
+    /** Danh sách có chấm tròn màu tím ở đầu dòng, như thẻ "AI giải thích" của bản thiết kế. */
+    private fun dsCham(ds: List<String>): CharSequence {
+        val dem = resources.displayMetrics.density
+        val b = SpannableStringBuilder()
+        ds.forEachIndexed { i, dong ->
+            if (i > 0) b.append("\n")
+            val dau = b.length
+            b.append(dong)
+            b.setSpan(BulletSpan((12 * dem).toInt(), getColor(R.color.ai), (4 * dem).toInt()), dau, b.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        return b
     }
 
     private fun hienKetQua(muc: Muc, kieu: String, loi: String) {
         val nguyHiem = muc == Muc.NGUY_HIEM
         v<View>(R.id.theKq).setBackgroundResource(if (nguyHiem) R.drawable.the_do else R.drawable.the_vang)
-        v<TextView>(R.id.muc).apply { text = muc.ten; setTextColor(getColor(if (nguyHiem) R.color.danger else R.color.warn)) }
-        v<TextView>(R.id.kieu).text = kieu
+        v<View>(R.id.mucIcon).setBackgroundResource(if (nguyHiem) R.drawable.box_danger_solid else R.drawable.box_warn_solid)
+        val chu = getColor(if (nguyHiem) R.color.danger_ink else R.color.warn_ink)
+        v<TextView>(R.id.muc).apply { text = muc.ten; setTextColor(chu) }
+        v<TextView>(R.id.kieu).apply { text = kieu; setTextColor(chu) }
         v<TextView>(R.id.loiKhuyen).text = loi
     }
 }

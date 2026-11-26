@@ -7,7 +7,7 @@ import java.net.HttpCookie
 import java.net.HttpURLConnection
 import java.net.URL
 
-/** The pre-paired demo entry issues an HttpOnly cookie. Keep it native, in memory and scoped to its server. */
+/** Pairing with the family code issues an HttpOnly cookie. Keep it native, in memory and scoped to its server. */
 internal object FamilySession {
     private var server = ""
     private var cookie = ""
@@ -20,9 +20,14 @@ internal object FamilySession {
             useCaches = false
         }
 
-    private fun pair(base: String) {
-        val request = connection(base, "/zalo")
+    private fun pair(c: Context, base: String) {
+        val request = connection(base, "/api/family/pair").apply {
+            requestMethod = "POST"
+            doOutput = true
+            setRequestProperty("Content-Type", "application/json")
+        }
         try {
+            request.outputStream.use { it.write(JSONObject().put("code", CaiDat.familyCode(c)).toString().toByteArray(Charsets.UTF_8)) }
             check(request.responseCode == 200)
             cookie = request.headerFields.entries.filter { it.key.equals("Set-Cookie", true) }
                 .flatMap { it.value }.flatMap(HttpCookie::parse).first { it.name == "lcs_family" }
@@ -48,7 +53,7 @@ internal object FamilySession {
         val base = CaiDat.mayChu(c)
         check(base.isNotBlank() && CaiDat.relative(c) && CaiDat.familyCode(c) == Api.ROOM)
         repeat(2) {
-            if (server != base || cookie.isEmpty()) pair(base)
+            if (server != base || cookie.isEmpty()) pair(c, base)
             check(CaiDat.relative(c) && base == CaiDat.mayChu(c))
             val request = connection(base, path)
             try {

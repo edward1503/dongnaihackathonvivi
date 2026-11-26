@@ -75,7 +75,7 @@ internal class FamilyAlertWatcher(private val context: Context) {
             }
             val notification = NotificationCompat.Builder(context, FAMILY_CHANNEL)
                 .setSmallIcon(R.drawable.ic_khien)
-                .setContentTitle(if (notice.isMessage) "Bà vừa nhận tin nhắn đáng ngờ" else "Bà vừa gặp cuộc gọi đáng ngờ")
+                .setContentTitle(if (notice.isMessage) "Mẹ vừa nhận tin nhắn đáng ngờ" else "Mẹ vừa gặp cuộc gọi đáng ngờ")
                 .setContentText(notice.text)
                 .setAutoCancel(true)
                 .setOnlyAlertOnce(true)

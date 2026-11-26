@@ -65,6 +65,8 @@ object MayChu {
     fun lay(c: Context, duong: String, choMs: Int = 1500): JSONObject? = try {
         mo(c, duong, choMs)?.let { doc(it) }
     } catch (e: Exception) {
+        // Không ghi đường dẫn (có thể chứa số điện thoại), chỉ ghi loại lỗi.
+        android.util.Log.w("LaChan", "Gọi máy chủ hỏng: ${e.javaClass.simpleName}: ${e.message?.take(120)}")
         null
     }
 
@@ -159,11 +161,14 @@ object TraCuu {
     fun tra(c: Context, so: String): KetQuaSo {
         val s = chuanHoa(so)
         if (s.isBlank()) return KetQuaSo(Muc.CHUA_CO_DU_LIEU)
-        if (CaiDat.trinhDien(c) && s == chuanHoa(CaiDat.soThu(c))) return KetQuaSo(Muc.NGUY_HIEM, nhan = "cuộc gọi thử")
         Api.lookupPhone(c, s)?.let { kq ->
             // Máy chủ chưa có báo cáo nào về số này: vẫn cho hiện nhãn nhẹ của cộng đồng nếu máy đang có (màn A03b).
             return if (kq.muc == Muc.CHUA_CO_DU_LIEU) NHAN_NHE[s] ?: kq else kq
         }
+        FlaggedNumbers.find(c, s)?.let { return it }
+        // Chế độ trình diễn KHÔNG có máy chủ: số thử luôn ra "nguy hiểm" để thấy thẻ cảnh báo.
+        // Có máy chủ mà tra hỏng thì đi đường dự phòng bình thường, để số thử phản ánh đúng cờ trên máy chủ.
+        if (CaiDat.trinhDien(c) && CaiDat.mayChu(c).isBlank() && s in CaiDat.testNumbers(c)) return KetQuaSo(Muc.NGUY_HIEM, nhan = "cuộc gọi thử")
         return when {
             s in TONG_DAI_THAT -> KetQuaSo(Muc.AN_TOAN, nhan = "tổng đài đã xác thực")
             else -> SO_BI_BAO[s] ?: NHAN_NHE[s] ?: KetQuaSo(Muc.CHUA_CO_DU_LIEU)
@@ -184,6 +189,8 @@ object SoQuen {
     fun laQuen(c: Context, so: String, truocLuc: Long = System.currentTimeMillis(), biBao: Boolean = false): Boolean {
         val s = TraCuu.chuanHoa(so)
         if (s.isBlank()) return false
+        // Demo only: a test number is never "known", so a saved contact can play any case flagged on the server.
+        if (CaiDat.trinhDien(c) && s in CaiDat.testNumbers(c)) return false
         if (s == TraCuu.chuanHoa(CaiDat.soNguoiThan(c))) return true
         if (s in CaiDat.soTuDanhDauQuen(c) || trongDanhBa(c, s)) return true
         return !biBao && trongLichSu(c, s, truocLuc)

@@ -143,7 +143,23 @@ class ThietLapActivity : Activity() {
         nhom(ds, "Tùy chọn", null)
         dong(ds, Buoc("Trả lời bằng giọng nói", "Dùng micro để nghe ${xung().ban} nói “có” hoặc “không”, hoặc kể lại cuộc gọi.", { Quyen.co(c, Manifest.permission.RECORD_AUDIO) }) { xin(Manifest.permission.RECORD_AUDIO) })
         dong(ds, Buoc("Cúp máy giúp khi nguy hiểm", "Cho nút “Cúp máy ngay” trên màn “Dừng lại” hoạt động.", { Quyen.co(c, Manifest.permission.ANSWER_PHONE_CALLS) }) { xin(Manifest.permission.ANSWER_PHONE_CALLS) })
-        dong(ds, Buoc("Thư mục ghi âm cuộc gọi", "Nếu máy tự ghi âm cuộc gọi, chọn thư mục chứa bản ghi để AI chép lời. Lá chắn không tự thu âm.", { CaiDat.thuMucGhiAm(c).isNotBlank() }) {
+        // Bật tự động ghi âm trong app gọi điện của máy: Lá chắn không tự thu âm, chỉ đọc bản ghi máy đã lưu.
+        val googleDialer = c.getSystemService(android.telecom.TelecomManager::class.java)?.defaultDialerPackage == "com.google.android.dialer"
+        dong(ds, Buoc("Bật tự động ghi âm cuộc gọi",
+            if (googleDialer) "Máy dùng app Điện thoại của Google: bản ghi nằm riêng trong app đó, Lá chắn không đọc được. Sau cuộc gọi lạ, Bé Nai sẽ hỏi ${xung().ban} một câu thay cho việc nghe bản ghi."
+            else "Mở cài đặt cuộc gọi của máy, chọn “Ghi âm cuộc gọi” rồi bật tự động ghi âm cho số lạ. Có bản ghi thì AI phân tích được nội dung cuộc gọi.",
+            { CaiDat.daXacNhan(c, "ghi-am-tu-dong") }) {
+            hoiSauKhiVe = "ghi-am-tu-dong"
+            // App gọi điện của Google: màn ghi âm của MIUI không có tác dụng, mở cài đặt của chính app Google.
+            // Máy khác: thử màn ghi âm của MIUI, rồi cài đặt cuộc gọi của app gọi điện mặc định, rồi Cài đặt của máy.
+            val dich = listOfNotNull(
+                if (googleDialer) null else Intent().setClassName("com.android.phone", "com.android.phone.settings.CallRecordSetting"),
+                Intent(android.telecom.TelecomManager.ACTION_SHOW_CALL_SETTINGS),
+                Intent(Settings.ACTION_SETTINGS),
+            )
+            dich.firstOrNull { runCatching { startActivity(it) }.isSuccess } ?: NhatKy.ghi(c, "Máy không mở được cài đặt ghi âm cuộc gọi")
+        })
+        if (!googleDialer) dong(ds, Buoc("Thư mục ghi âm cuộc gọi", "Nếu máy tự ghi âm cuộc gọi, chọn thư mục chứa bản ghi để AI chép lời. Lá chắn không tự thu âm.", { CaiDat.thuMucGhiAm(c).isNotBlank() }) {
             try {
                 @Suppress("DEPRECATION")
                 // Mở sẵn thư mục ghi âm cuộc gọi của máy Xiaomi nếu có, để chỉ còn một lần bấm.
@@ -163,6 +179,15 @@ class ThietLapActivity : Activity() {
             mo(Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:$packageName")), Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
         })
         if (Quyen.laXiaomi()) {
+            dong(ds, Buoc("Tiết kiệm pin: Không hạn chế (máy Xiaomi)", "Chọn “Không hạn chế” để máy không cho Lá chắn ngủ đông. Nếu ngủ đông, lúc có cuộc gọi lạ Lá chắn không kịp tra số.", { CaiDat.daXacNhan(c, "pin-khong-han-che") }) {
+                hoiSauKhiVe = "pin-khong-han-che"
+                val nhan = applicationInfo.loadLabel(packageManager).toString()
+                listOf(
+                    Intent().setComponent(ComponentName("com.miui.powerkeeper", "com.miui.powerkeeper.ui.HiddenAppsConfigActivity"))
+                        .putExtra("package_name", packageName).putExtra("package_label", nhan),
+                    chiTietApp(),
+                ).firstOrNull { runCatching { startActivity(it) }.isSuccess }
+            })
             dong(ds, Buoc("Tự khởi chạy (máy Xiaomi)", "Bật “Tự khởi chạy” cho Lá chắn số để máy không tắt lá chắn.", { CaiDat.daXacNhan(c, "tu-khoi-chay") }) {
                 hoiSauKhiVe = "tu-khoi-chay"
                 mo(Intent().setComponent(ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity")))

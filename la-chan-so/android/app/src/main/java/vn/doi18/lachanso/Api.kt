@@ -96,12 +96,22 @@ object Api {
 
     /** GET /api/lookup/phone/{số}: tra số lúc đổ chuông, không gọi AI. */
     fun lookupPhone(c: Context, so: String): KetQuaSo? {
-        val j = MayChu.lay(c, "/api/lookup/phone/${MayChu.ma(so)}") ?: return null
+        // Call screening allows 5 s. A fresh TLS connection over mobile data takes 0.8-1 s. MIUI may also have frozen the app
+        // ("hibernation") and only gives the network back a moment after the call wakes it, so retry quick failures.
+        val start = android.os.SystemClock.elapsedRealtime()
+        var j: JSONObject? = null
+        while (j == null) {
+            val left = 3200 - (android.os.SystemClock.elapsedRealtime() - start).toInt()
+            if (left < 600) return null
+            j = MayChu.lay(c, "/api/lookup/phone/${MayChu.ma(so)}", left)
+            if (j == null) android.os.SystemClock.sleep(400)
+        }
         if (j.isNull("level")) return null
         val m = muc(chu(j, "level")); val r = j.optJSONObject("reports")
         return KetQuaSo(
             m, r?.optInt("count") ?: 0,
-            if (m == Muc.AN_TOAN) "tổng đài đã xác thực" else nhan(chu(j, "scamLabel")),
+            // "khac" means no recognised scam type: no label rather than the word "khác" in a sentence
+            if (m == Muc.AN_TOAN) "tổng đài đã xác thực" else if (chu(j, "scamType") == "khac") "" else nhan(chu(j, "scamLabel")),
             r?.let { chu(it, "lastWhen") }.orEmpty(), tuMayChu = true,
         )
     }
