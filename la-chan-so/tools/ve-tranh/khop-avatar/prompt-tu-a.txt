@@ -1,0 +1,19 @@
+Use your image generation tool (built-in image_gen, edit mode with the attached images) to create the 2 separate square (1:1) illustrations listed below, then save each one as a PNG file at EXACTLY the given path inside the current working directory (overwrite existing files). Make out/ong-tu-bang-nhan-vat.png FIRST, then use it as the character reference for out/chan-dung-ong-tu.png. After saving, list the files to confirm they exist. Do not create any other files.
+
+ATTACHED IMAGES AND THEIR ROLES:
+- in/cu-ong-tu-bang-nhan-vat.png: EDIT TARGET for the sheet. It is the OLD character sheet of the same character, drawn in the exact comic style we need. Keep its style, layout, three poses, background, line weight and colours; only the character's look changes (described below).
+- in/cu-comic9-1.png and in/comic2-3.png: finished panels of the SAME comic series, style reference only.
+- in/style-man.png: style reference only (how chibi people are drawn).
+- in/ref-tu-trang-phuc.jpg: a photo whose face is deliberately blurred. Use it ONLY for hairstyle, clothing and colours (short black hair, dark navy suit, white shirt, blue tie). Never copy or invent a realistic face from it; the drawn face must be a simple generic chibi face like every other character in the series.
+- in/cu-chan-dung-ong-tu.png: the OLD close-up portrait, use it for the framing of the new portrait only.
+
+STYLE: exactly the style of the edit target and the comic panels: clean flat doodle, bold navy-black outlines, warm off-white pastel background (#FFF7ED), soft pastel colours, simple shapes, cute chibi people with big round heads, simple dot eyes, rosy cheeks, small smiles, short bodies. Not photorealistic, not semi-realistic, must not resemble any real person.
+
+THE CHARACTER "Chú Tư" (NEW LOOK, replaces the old grey-haired man in the plaid shirt):
+chibi Vietnamese man in his mid-forties (about 45, clearly younger than the old version, not elderly): neat short BLACK hair with no grey at all, styled up and slightly back on top with short tidy sides, natural black eyebrows, clean-shaven (NO beard, NO moustache), NO glasses and no glasses cord, no old-age wrinkles; dark navy-blue business suit (jacket and matching trousers), crisp white collared shirt, medium-blue necktie, black leather shoes. Friendly, a little proud, a typical office uncle. Same chibi proportions as the other people in the series.
+
+HARD RULES: absolutely NO text, letters, numbers or writing anywhere; no logos (none on the phone either); no national emblems; no flags; no maps; no uniforms or insignia. Every hand has a normal number of fingers (simple mitten-like chibi hands are fine). No Bé Nai and no other people in these two images.
+
+ILLUSTRATIONS:
+out/ong-tu-bang-nhan-vat.png: edit of in/cu-ong-tu-bang-nhan-vat.png. Character reference sheet of Chú Tư ONLY, plain warm off-white background, the same three full-body poses side by side as in the old sheet: standing facing the viewer with a friendly smile; sitting on the same wooden chair looking happily at a smartphone; standing scratching the back of his head with an embarrassed laugh. Same face, same black hairstyle, same navy suit, white shirt and blue tie in all three poses. Replace the sandals with black leather shoes.
+out/chan-dung-ong-tu.png: close-up head-and-shoulders portrait of the same Chú Tư from the new sheet (same face and hair), framed like in/cu-chan-dung-ong-tu.png: face centred and large (the head fills about two thirds of the frame height), top of the hair near the top edge, shoulders with the navy suit lapels, white shirt collar and blue tie knot visible at the bottom edge, friendly warm smile looking at the viewer, plain warm off-white background (#FFF7ED). No phone, no hands.

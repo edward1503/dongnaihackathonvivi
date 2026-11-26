@@ -1,0 +1,1954 @@
+{
+ "y_dinh": [
+  {
+   "id": "khuyen-dung-nap",
+   "mo_ta": "Em khuyên chị giữ tiền hoặc từ chối lời mời đang đòi tiền. Câu cụt vẫn tính nếu trả lời trực tiếp câu hỏi có nên nạp.",
+   "vi_du": [
+    "Chị đừng nạp nha",
+    "Thôi chị, giữ tiền đi",
+    "Không có nên đâu chị",
+    "Khoan chuyển, để tiền đó đi",
+    "Đừng có đưa đồng nào hết á"
+   ],
+   "tu_khoa": [
+    "dung nap",
+    "giu tien",
+    "khong co nen",
+    "khoan chuyen",
+    "dung co dua"
+   ],
+   "cham": [
+    "nap"
+   ]
+  },
+  {
+   "id": "nghi-luong",
+   "mo_ta": "Em nhận ra tiền công cao bất thường so với việc đặt đơn. Chỉ hỏi hoặc nhắc lại mức lương thì chưa tính.",
+   "vi_du": [
+    "Đặt có cái đơn mà trả nhiêu đó, kỳ chị",
+    "Lương gì cao dữ vậy, em nghi",
+    "Việc nhẹ hều mà tiền quá trời",
+    "Năm trăm một ngày cho mỗi việc đó, nghe sai sai"
+   ],
+   "tu_khoa": [
+    "luong gi cao",
+    "viec nhe heu",
+    "ma tien qua troi",
+    "cho moi viec do",
+    "ma tra nhieu do"
+   ],
+   "cham": [
+    "dauhieu"
+   ]
+  },
+  {
+   "id": "nghi-tien-truoc",
+   "mo_ta": "Em chỉ ra chỗ vô lý là người đi làm lại phải đưa tiền trước. Chỉ dặn đừng nạp thì chấm nap.",
+   "vi_du": [
+    "Đi làm mà mình phải đưa tiền họ hả, vô lý",
+    "Chưa làm đã thu tiền, kỳ nha chị",
+    "Cái khúc bắt đóng trước á, đáng nghi",
+    "Ủa tuyển người hay thu tiền mà đòi cọc"
+   ],
+   "tu_khoa": [
+    "di lam ma minh phai dua tien",
+    "chua lam da thu tien",
+    "bat dong truoc",
+    "ma doi coc"
+   ],
+   "cham": [
+    "dauhieu"
+   ]
+  },
+  {
+   "id": "nghi-giuc-gap",
+   "mo_ta": "Em nhận ra người mời gây áp lực để chị quyết vội.",
+   "vi_du": [
+    "Họ hối là muốn chị không kịp nghĩ đó",
+    "Còn hai suất nghe giống ép mình chốt lẹ",
+    "Cái khúc giục giục á, em nghi",
+    "Việc gì mà hết giờ cái mất chỗ liền, kỳ"
+   ],
+   "tu_khoa": [
+    "khong kip nghi",
+    "ep minh chot le",
+    "khuc giuc giuc",
+    "mat cho lien"
+   ],
+   "cham": [
+    "dauhieu"
+   ]
+  },
+  {
+   "id": "nghi-moi-nhu",
+   "mo_ta": "Em giải thích khoản trả thật ban đầu có thể khiến chị tin lời mời.",
+   "vi_du": [
+    "Mấy chục đầu là tiền mồi đó chị",
+    "Họ trả thiệt bữa đầu cho chị tin á",
+    "Có tiền vô lần đầu đâu có nghĩa họ đàng hoàng",
+    "Cái khoản nhỏ nhỏ đó, dụ mình đó"
+   ],
+   "tu_khoa": [
+    "tien moi",
+    "cho chi tin",
+    "tien vo lan dau dau co nghia",
+    "du minh"
+   ],
+   "cham": [
+    "dauhieu"
+   ]
+  },
+  {
+   "id": "tra-cong-ty",
+   "mo_ta": "Em chỉ chị chủ động tìm thông tin công ty hoặc đối chiếu qua kênh chính thức tìm được độc lập.",
+   "vi_du": [
+    "Chị tự tra tên công ty coi",
+    "Kiếm trang chính thức rồi coi có tuyển thiệt hông",
+    "Chị tìm số bên công ty, hỏi thử vụ này",
+    "Tra riêng cái tên đó á chị, coi có đúng chỗ không"
+   ],
+   "tu_khoa": [
+    "tu tra ten",
+    "trang chinh thuc",
+    "tim so ben cong ty",
+    "tra rieng cai ten"
+   ],
+   "cham": [
+    "xacminh"
+   ]
+  },
+  {
+   "id": "hoi-nguoi-lon",
+   "mo_ta": "Em đề nghị hỏi người lớn hoặc người đáng tin ở ngoài cuộc để kiểm tra lời mời.",
+   "vi_du": [
+    "Hỏi dì coi chỗ này có thiệt không chị",
+    "Đưa cô giáo coi giùm đi",
+    "Nhờ người lớn trong nhà xem tin trước á",
+    "Chị hỏi mẹ chị thử, coi bả biết chỗ đó hông"
+   ],
+   "tu_khoa": [
+    "hoi di coi",
+    "co giao coi gium",
+    "nguoi lon trong nha",
+    "hoi me chi"
+   ],
+   "cham": [
+    "xacminh"
+   ]
+  },
+  {
+   "id": "tranh-duong-dan",
+   "mo_ta": "Em khuyên chị tránh mở đường dẫn lạ do người tuyển gửi.",
+   "vi_du": [
+    "Cái đường dẫn họ gửi đừng bấm chị",
+    "Né cái đường dẫn đó ra nha",
+    "Đừng vô cái trang trong tin á",
+    "Họ gửi chỗ để bấm hả, bỏ qua đi chị"
+   ],
+   "tu_khoa": [
+    "dung bam",
+    "ne cai duong dan",
+    "dung vo cai trang",
+    "cho de bam"
+   ],
+   "cham": [
+    "xacminh"
+   ]
+  },
+  {
+   "id": "ru-bao-cao",
+   "mo_ta": "Em đề nghị báo số, tin nhắn hoặc tài khoản mời việc cho Lá chắn hay nơi tiếp nhận báo cáo.",
+   "vi_du": [
+    "Chị em mình báo tài khoản đó đi",
+    "Báo cái số đó cho Lá chắn nha chị",
+    "Bấm báo xấu cái tin đó đi chị",
+    "Để em báo phụ chị cái nick đó",
+    "Báo bên quản lý coi chị, để họ xử lý"
+   ],
+   "tu_khoa": [
+    "bao tai khoan",
+    "bao cai so",
+    "bao xau",
+    "bao phu chi",
+    "bao ben quan ly"
+   ],
+   "cham": [
+    "baocao"
+   ]
+  },
+  {
+   "id": "gop-nhieu-y",
+   "mo_ta": "Một lượt chứa ít nhất hai ý chấm khác nhau. Tách từng mệnh đề, lấy hợp các nhãn đúng thực sự có trong lời em và chỉ phát một câu đáp chung.",
+   "vi_du": [
+    "Đừng nạp chị, đi làm mà bắt đóng tiền là kỳ rồi",
+    "Tra tên chỗ đó trước, cái số nhắn thì mình báo luôn",
+    "Lương cao thấy ghê, chị hỏi dì coi thử",
+    "Đừng đưa tiền, việc nhẹ mà lương kỳ quá, hỏi mẹ rồi hai chị em báo cái nick đó đi"
+   ],
+   "tu_khoa": [
+    "dung nap chi",
+    "thi minh bao luon",
+    "chi hoi di",
+    "roi hai chi em bao"
+   ],
+   "cham": []
+  },
+  {
+   "id": "bao-cu-nap",
+   "mo_ta": "Em thực sự khuyên nạp, kể cả khi trước đó em dẫn lại lời can của người khác.",
+   "vi_du": [
+    "Cứ nạp đi chị",
+    "Em thấy chuyển luôn được á",
+    "Đóng đi, việc ngon mà",
+    "Nạp đại chị ơi"
+   ],
+   "tu_khoa": [
+    "cu nap",
+    "chuyen luon duoc",
+    "dong di",
+    "nap dai"
+   ],
+   "cham": []
+  },
+  {
+   "id": "bao-thu-it",
+   "mo_ta": "Em khuyên đưa một khoản nhỏ để thử.",
+   "vi_du": [
+    "Thử ít thôi chị",
+    "Chuyển chút xíu coi sao",
+    "Nạp có mấy chục thử thôi mà",
+    "Hay mình bỏ vô ít ít trước"
+   ],
+   "tu_khoa": [
+    "thu it",
+    "chuyen chut xiu",
+    "may chuc thu",
+    "bo vo it it"
+   ],
+   "cham": []
+  },
+  {
+   "id": "bao-rut-lien",
+   "mo_ta": "Em khuyên nạp với ý định rút ngay sau đó.",
+   "vi_du": [
+    "Nạp rồi rút liền chị",
+    "Chuyển xong rút ra ngay chắc được",
+    "Bỏ vô cái rồi lấy lại liền á",
+    "Nạp đi, lát rút lẹ là xong"
+   ],
+   "tu_khoa": [
+    "rut lien",
+    "rut ra ngay",
+    "lay lai lien",
+    "lat rut le"
+   ],
+   "cham": []
+  },
+  {
+   "id": "tuy-chi",
+   "mo_ta": "Em giao quyết định lại cho chị hoặc khuyên chung chung mà chưa chọn cách làm.",
+   "vi_du": [
+    "Tùy chị à",
+    "Sao cũng được á chị",
+    "Chị tính sao thì tính",
+    "Em thấy cái này kiểu, tùy người"
+   ],
+   "tu_khoa": [
+    "tuy chi",
+    "sao cung duoc",
+    "tinh sao thi tinh",
+    "tuy nguoi"
+   ],
+   "cham": []
+  },
+  {
+   "id": "khong-biet",
+   "mo_ta": "Em đã nói xong và cho biết mình chưa biết khuyên sao.",
+   "vi_du": [
+    "Em hổng biết nữa",
+    "Vụ này em chịu",
+    "Bí rồi chị ơi",
+    "Em cũng đâu rành mấy cái này"
+   ],
+   "tu_khoa": [
+    "hong biet",
+    "em chiu",
+    "bi roi",
+    "dau ranh"
+   ],
+   "cham": []
+  },
+  {
+   "id": "nghi-chung",
+   "mo_ta": "Em gọi đây là lừa đảo hoặc bảo cẩn thận nhưng chưa nêu căn cứ hay hành động cụ thể.",
+   "vi_du": [
+    "Lừa đó chị",
+    "Em thấy cấn cấn",
+    "Mùi lắm nha",
+    "Cẩn thận á, em thấy sao sao"
+   ],
+   "tu_khoa": [
+    "lua do",
+    "can can",
+    "mui lam",
+    "thay sao sao"
+   ],
+   "cham": []
+  },
+  {
+   "id": "hoi-ten",
+   "mo_ta": "Em hỏi chị tên công ty. Chỉ tính xác minh khi em còn đề nghị một cách kiểm tra.",
+   "vi_du": [
+    "Công ty tên gì chị?",
+    "Ủa chỗ nào tuyển vậy, có tên hông?",
+    "Trong tin ghi tên công ty gì á?",
+    "Tên bên đó chị nhớ không?"
+   ],
+   "tu_khoa": [
+    "cong ty ten gi",
+    "co ten hong",
+    "ghi ten cong ty",
+    "ten ben do"
+   ],
+   "cham": []
+  },
+  {
+   "id": "hoi-ai-moi",
+   "mo_ta": "Em muốn biết ai đã mời chị và chị có quen người đó không.",
+   "vi_du": [
+    "Ai rủ chị vậy?",
+    "Người quen hả chị?",
+    "Chị biết người mời hông?",
+    "Ai nhắn á, gặp ngoài đời chưa?"
+   ],
+   "tu_khoa": [
+    "ai ru",
+    "nguoi quen",
+    "biet nguoi moi",
+    "gap ngoai doi"
+   ],
+   "cham": []
+  },
+  {
+   "id": "hoi-da-nap",
+   "mo_ta": "Em hỏi tiền của chị đã chuyển đi chưa. Phân biệt với câu hỏi về khoản chị được trả lúc đầu.",
+   "vi_du": [
+    "Chị lỡ nạp chưa?",
+    "Tiền chị còn đó hông?",
+    "Khoan, chuyển mất rồi hả chị?",
+    "Chị đưa họ đồng nào chưa?"
+   ],
+   "tu_khoa": [
+    "lo nap chua",
+    "tien chi con do",
+    "chuyen mat roi ha",
+    "dua ho dong nao"
+   ],
+   "cham": []
+  },
+  {
+   "id": "hoi-kenh",
+   "mo_ta": "Em hỏi người mời đã liên lạc với chị qua đâu.",
+   "vi_du": [
+    "Họ nhắn qua đâu chị?",
+    "Nhắn riêng hay sao á?",
+    "Gặp ở ngoài hay trên mạng vậy?",
+    "Cái tin đó tới chỗ nào chị?"
+   ],
+   "tu_khoa": [
+    "nhan qua dau",
+    "nhan rieng hay",
+    "hay tren mang",
+    "tin do toi cho nao"
+   ],
+   "cham": []
+  },
+  {
+   "id": "hoi-luong",
+   "mo_ta": "Em hỏi lại mức lương được hứa, chưa đánh giá mức đó.",
+   "vi_du": [
+    "Lương bao nhiêu chị?",
+    "Một ngày được nhiêu ta?",
+    "Họ hứa trả nhiêu á chị?",
+    "Năm trăm một ngày hả?"
+   ],
+   "tu_khoa": [
+    "luong bao nhieu",
+    "mot ngay duoc nhieu",
+    "hua tra nhieu",
+    "nam tram mot ngay ha"
+   ],
+   "cham": []
+  },
+  {
+   "id": "noi-nang",
+   "mo_ta": "Em dọa, miệt thị hoặc nặng lời trực tiếp với chị. Phân biệt với cảnh báo mất tiền bằng giọng quan tâm.",
+   "vi_du": [
+    "Chị mà tin là hết cứu",
+    "Chị ngốc quá vậy",
+    "Còn hỏi nữa em la đó",
+    "Để em méc cả nhà cho chị quê luôn"
+   ],
+   "tu_khoa": [
+    "het cuu",
+    "chi ngoc",
+    "em la do",
+    "cho chi que"
+   ],
+   "cham": []
+  },
+  {
+   "id": "noi-bay",
+   "mo_ta": "Em buông lời thô tục. Nếu cùng lượt có lời khuyên đúng thì vẫn chấm phần đó, chị không nhắc lại từ thô.",
+   "vi_du": [
+    "Đệt, cái tin này",
+    "Vãi, gì vậy trời",
+    "Xàm cứt thiệt",
+    "Mẹ kiếp, bực ghê"
+   ],
+   "tu_khoa": [
+    "det",
+    "vai",
+    "xam cut",
+    "me kiep"
+   ],
+   "cham": []
+  },
+  {
+   "id": "noi-dua",
+   "mo_ta": "Em pha trò, không thực sự khuyên chị làm theo nội dung câu đùa.",
+   "vi_du": [
+    "Chắc lương trả bằng lá mít quá",
+    "Em giỡn á chị",
+    "Đặt một đơn mua luôn cái đảo ha, nói chơi",
+    "Ủa chị sắp thành đại gia rồi, em chọc đó"
+   ],
+   "tu_khoa": [
+    "la mit",
+    "em gion",
+    "noi choi",
+    "em choc"
+   ],
+   "cham": []
+  },
+  {
+   "id": "lac-de",
+   "mo_ta": "Em chuyển sang một chuyện ngoài lời mời việc và ngoài các tình huống lừa đảo.",
+   "vi_du": [
+    "Chị ăn cơm chưa?",
+    "Mai Đồng Nai mưa hông ta?",
+    "Kể chuyện lớp em nghe nè",
+    "Đổi qua nói bóng đá đi chị"
+   ],
+   "tu_khoa": [
+    "an com chua",
+    "mua hong",
+    "chuyen lop em",
+    "noi bong da"
+   ],
+   "cham": []
+  },
+  {
+   "id": "hoi-chi-la-ai",
+   "mo_ta": "Em chưa nhận ra nhân vật đang gọi hoặc muốn biết vai của chị.",
+   "vi_du": [
+    "Ủa ai gọi em vậy?",
+    "Chị là ai á?",
+    "Chị họ nào ta?",
+    "Trong bài này chị đóng vai ai?"
+   ],
+   "tu_khoa": [
+    "ai goi em",
+    "chi la ai",
+    "chi ho nao",
+    "dong vai ai"
+   ],
+   "cham": []
+  },
+  {
+   "id": "hoi-may-dong-vai",
+   "mo_ta": "Em hỏi đây là trí tuệ nhân tạo hay người thật. Chị xác nhận rõ vai mô phỏng.",
+   "vi_du": [
+    "Chị có phải AI không?",
+    "Máy đang đóng chị Lan hả?",
+    "Chị là người thật hay sao?",
+    "Ủa giọng này là máy nói hả chị?"
+   ],
+   "tu_khoa": [
+    "chat bot",
+    "la ai ha",
+    "la ao",
+    "la may",
+    "may dang dong",
+    "may noi ha",
+    "nguoi that",
+    "nguoi that hay",
+    "phai ai",
+    "phai ai khong",
+    "robot",
+    "tri tue nhan tao"
+   ],
+   "cham": []
+  },
+  {
+   "id": "im-lan-mot",
+   "mo_ta": "Sự kiện âm thanh ở khoảng chờ đầu tiên, không có giọng em. Ví dụ mô tả tín hiệu, không phải lời nhận dạng.",
+   "vi_du": [
+    "Chưa có tiếng đáp",
+    "Chỉ có tiếng quạt",
+    "Khoảng chờ đầu trôi qua",
+    "Em chưa mở lời"
+   ],
+   "tu_khoa": [],
+   "cham": []
+  },
+  {
+   "id": "im-lan-hai",
+   "mo_ta": "Hết khoảng chờ kế tiếp sau lời gọi lần một, vẫn không có giọng em.",
+   "vi_du": [
+    "Vẫn yên sau tiếng a lô",
+    "Chị đã gọi một lần mà chưa có tiếng",
+    "Khoảng chờ thứ hai trôi qua",
+    "Chỉ còn tiếng nền như lúc đầu"
+   ],
+   "tu_khoa": [],
+   "cham": []
+  },
+  {
+   "id": "im-lan-ba",
+   "mo_ta": "Hết khoảng chờ thứ ba liên tiếp. Phát lời khép cuộc gọi rồi dừng.",
+   "vi_du": [
+    "Vẫn im sau hai lần chị gọi",
+    "Ba khoảng chờ đều yên",
+    "Không có tiếng đáp ở lượt cuối",
+    "Vẫn chỉ nghe tiếng quạt lần thứ ba"
+   ],
+   "tu_khoa": [],
+   "cham": []
+  },
+  {
+   "id": "nghe-lo-lan-mot",
+   "mo_ta": "Có giọng em nhưng lần đầu không nhận ra nội dung. Ví dụ mô tả âm thanh, không dùng để dò chữ.",
+   "vi_du": [
+    "Có giọng mà nhỏ quá",
+    "Lời đầu bị rè mất",
+    "Nghe có người nói nhưng không tách được chữ",
+    "Tiếng xe lấn hết câu vừa nói"
+   ],
+   "tu_khoa": [],
+   "cham": []
+  },
+  {
+   "id": "nghe-lo-lan-hai",
+   "mo_ta": "Chị đã xin nhắc lại và vẫn không nghe rõ lần thứ hai. Chờ em thử lại, không đoán lời để chấm.",
+   "vi_du": [
+    "Câu nhắc lại cũng bị rè",
+    "Em nói lại mà tiếng vẫn đứt",
+    "Lần thứ hai vẫn không nghe thành lời",
+    "Chị vừa hỏi lại thì tiếng xe át câu kế"
+   ],
+   "tu_khoa": [],
+   "cham": []
+  },
+  {
+   "id": "dang-ngap-ngung",
+   "mo_ta": "Nghe rõ em đang giữ lượt và tìm lời. Chừa nhịp, chỉ đáp nếu em ngừng đủ lâu.",
+   "vi_du": [
+    "Ờ thì, để em nghĩ",
+    "Khoan xíu chị",
+    "Ý em là, là cái chỗ",
+    "Đợi em nhớ coi"
+   ],
+   "tu_khoa": [
+    "de em nghi",
+    "khoan xiu",
+    "y em la",
+    "doi em nho"
+   ],
+   "cham": []
+  },
+  {
+   "id": "lo-thong-tin",
+   "mo_ta": "Ưu tiên ngắt khi em bắt đầu đọc số liên lạc, mã, địa chỉ hoặc dữ liệu riêng. Hai khoản tiền trong đề bài không kích hoạt nhánh này.",
+   "vi_du": [
+    "Số điện thoại của em là…",
+    "Mã xác thực em mới nhận nè…",
+    "Số tài khoản của mẹ em bắt đầu bằng…",
+    "Nhà em ở số…",
+    "Để em đọc từng số cho chị ghi nha"
+   ],
+   "tu_khoa": [
+    "so dien thoai cua em",
+    "ma xac thuc em",
+    "tai khoan cua me em",
+    "nha em o so",
+    "doc tung so"
+   ],
+   "cham": []
+  },
+  {
+   "id": "xin-dung",
+   "mo_ta": "Em muốn kết thúc. Chào ngay và đóng cuộc gọi, kể cả khi còn thiếu ý.",
+   "vi_du": [
+    "Em cúp nha chị",
+    "Dừng ở đây đi",
+    "Thôi em không muốn nói nữa",
+    "Để bữa khác được hông chị?"
+   ],
+   "tu_khoa": [
+    "em cup",
+    "dung o day",
+    "khong muon noi nua",
+    "de bua khac"
+   ],
+   "cham": []
+  },
+  {
+   "id": "nhac-kieu-khac",
+   "mo_ta": "Em nhắc kiểu lừa khác nhưng chưa liên hệ được với lời mời đặt đơn. Nếu em đã liên hệ rõ thì nhận ý đúng tương ứng.",
+   "vi_du": [
+    "Em từng gặp vụ giả giao hàng",
+    "Giống bữa có người giả làm chú em ghê",
+    "Em nhớ cái vụ trúng thưởng á",
+    "Còn vụ giả ngân hàng nữa chị"
+   ],
+   "tu_khoa": [
+    "gia giao hang",
+    "gia lam chu em",
+    "vu trung thuong",
+    "gia ngan hang"
+   ],
+   "cham": []
+  },
+  {
+   "id": "hoi-gio-lam-gi",
+   "mo_ta": "Em quay lại hỏi chị nên làm gì hoặc muốn chị đưa đáp án.",
+   "vi_du": [
+    "Vậy giờ chị làm gì?",
+    "Giờ tính sao chị nói em nghe coi",
+    "Rồi đáp án là sao chị?",
+    "Chị nói bước đầu đi em nghe"
+   ],
+   "tu_khoa": [
+    "gio chi lam gi",
+    "gio tinh sao",
+    "dap an la sao",
+    "chi noi buoc dau"
+   ],
+   "cham": []
+  },
+  {
+   "id": "khen-an-ui",
+   "mo_ta": "Em động viên, trấn an hoặc khen chị đã dừng lại để hỏi.",
+   "vi_du": [
+    "Chị hỏi vậy là hay rồi",
+    "Không sao đâu chị, từ từ",
+    "May chị chịu gọi em á",
+    "Chị bình tĩnh nha, có em nè"
+   ],
+   "tu_khoa": [
+    "hoi vay la hay",
+    "khong sao dau chi",
+    "may chi chiu goi",
+    "co em ne"
+   ],
+   "cham": []
+  },
+  {
+   "id": "lap-y-cu",
+   "mo_ta": "Toàn bộ nội dung có ích đã được em nói trước đó. Nếu em thêm một chi tiết đáng ngờ mới, chị vẫn đáp chi tiết đó dù điểm không tăng.",
+   "vi_du": [
+    "Như hồi nãy em nói, đừng nạp á",
+    "Vẫn là hỏi dì như em bảo đó chị",
+    "Em nhắc lại thôi, báo cái nick đó",
+    "Cũng cái vụ lương cao lúc nãy á"
+   ],
+   "tu_khoa": [
+    "nhu hoi nay",
+    "nhu em bao",
+    "em nhac lai",
+    "luc nay a"
+   ],
+   "cham": []
+  },
+  {
+   "id": "muon-noi-tiep",
+   "mo_ta": "Em báo còn một ý và mời chị nghe tiếp, chưa nói nội dung mới.",
+   "vi_du": [
+    "Em còn một ý nữa chị",
+    "Còn cái này nè",
+    "Chị nghe em kể nốt nha",
+    "À em nhớ thêm một chuyện"
+   ],
+   "tu_khoa": [
+    "con mot y",
+    "con cai nay",
+    "ke not",
+    "nho them mot chuyen"
+   ],
+   "cham": []
+  },
+  {
+   "id": "chi-chan",
+   "mo_ta": "Em mới khuyên chặn hoặc xóa. Chỉ chấm baocao nếu em còn đề nghị báo cho nơi tiếp nhận.",
+   "vi_du": [
+    "Chặn nó đi chị",
+    "Xóa tin đó thôi",
+    "Bấm chặn là xong á",
+    "Thôi ẩn cái nick cho khỏi thấy"
+   ],
+   "tu_khoa": [
+    "chan no",
+    "xoa tin",
+    "bam chan",
+    "an cai nick"
+   ],
+   "cham": []
+  },
+  {
+   "id": "khuyen-lieu-khac",
+   "mo_ta": "Em đề nghị thử đường dẫn lạ, gửi giấy tờ hoặc tin ngay người mời. Chị bày tỏ nghi ngại và không làm theo.",
+   "vi_du": [
+    "Bấm vô thử coi chị",
+    "Cứ gửi giấy tờ cho họ coi",
+    "Người ta nói thiệt thì tin đại đi",
+    "Chị cứ làm hết mấy cái họ kêu đi"
+   ],
+   "tu_khoa": [
+    "bam vo thu",
+    "cu gui giay to",
+    "tin dai",
+    "lam het may cai"
+   ],
+   "cham": []
+  },
+  {
+   "id": "loi-trai-nhau",
+   "mo_ta": "Em đưa hai lời khuyên trái nhau mà chưa chốt. Hỏi lại trước khi chấm phần mâu thuẫn, vẫn giữ các ý độc lập đã nói rõ.",
+   "vi_du": [
+    "Đừng nạp, hay cứ nạp ta, em cũng rối",
+    "Chặn đi mà chắc cứ làm theo cũng được",
+    "Đừng bấm, mà bấm thử chắc hông sao, em hổng chắc",
+    "Một nửa em muốn chị chuyển, nửa kia thì thôi"
+   ],
+   "tu_khoa": [
+    "hay cu nap ta",
+    "chac cu lam theo",
+    "em hong chac",
+    "nua kia thi thoi"
+   ],
+   "cham": []
+  }
+ ],
+ "loi": [
+  {
+   "id": "mo-dau",
+   "nhom": "mo-dau",
+   "khi": "Phát khi chị vừa bắt máy rồi nhường lượt cho em.",
+   "cam_xuc": "phân vân",
+   "chu": "Em ơi, chị thấy trên mạng có chỗ tuyển cộng tác viên đặt đơn, lương năm trăm nghìn một ngày. Họ bảo nạp trước hai trăm nghìn là làm được liền. Chị có nên làm không em?",
+   "tep": "audio/lan/mo-dau.m4a",
+   "giay": 8.96
+  },
+  {
+   "id": "nap-may",
+   "nhom": "dap",
+   "khi": "Em can chị hoặc hỏi chị đã nạp chưa.",
+   "cam_xuc": "nhẹ nhõm",
+   "chu": "May quá, chị chưa chuyển đồng nào hết.",
+   "tep": "audio/lan/nap-may.m4a",
+   "giay": 2.31
+  },
+  {
+   "id": "nap-suyt",
+   "nhom": "dap",
+   "khi": "Em ngăn kịp lúc hoặc hỏi tiền đã chuyển đi chưa.",
+   "cam_xuc": "hú hồn",
+   "chu": "Chưa đâu em, mà hồi nãy chị xém nạp rồi đó.",
+   "tep": "audio/lan/nap-suyt.m4a",
+   "giay": 2.73
+  },
+  {
+   "id": "nap-tay",
+   "nhom": "dap",
+   "khi": "Em khuyên chị dừng ngay khi chị còn đang coi tin.",
+   "cam_xuc": "thở phào",
+   "chu": "Ừ, chị khép cái tin đó lại rồi em.",
+   "tep": "audio/lan/nap-tay.m4a",
+   "giay": 2.13
+  },
+  {
+   "id": "dau-khung",
+   "nhom": "dap",
+   "khi": "Em chỉ ra một chi tiết chị đã bỏ qua.",
+   "cam_xuc": "chưng hửng",
+   "chu": "Ờ ha, tới chỗ đó mà nãy chị tỉnh bơ à.",
+   "tep": "audio/lan/dau-khung.m4a",
+   "giay": 2.77
+  },
+  {
+   "id": "dau-ngo",
+   "nhom": "dap",
+   "khi": "Em giải thích vì sao lời mời đáng nghi.",
+   "cam_xuc": "ngỡ ngàng",
+   "chu": "Giờ nghe em nói chị mới thấy kỳ thiệt.",
+   "tep": "audio/lan/dau-ngo.m4a",
+   "giay": 1.87
+  },
+  {
+   "id": "dau-ngam",
+   "nhom": "dap",
+   "khi": "Em giúp chị hiểu ý nghĩa một chi tiết trong tin.",
+   "cam_xuc": "trầm ngâm",
+   "chu": "À, vậy mà chị cứ tưởng chuyện đó bình thường.",
+   "tep": "audio/lan/dau-ngam.m4a",
+   "giay": 2.59
+  },
+  {
+   "id": "xac-thu",
+   "nhom": "dap",
+   "khi": "Em chỉ một cách kiểm tra an toàn.",
+   "cam_xuc": "yên tâm",
+   "chu": "Ừ, chị làm như em chỉ nha.",
+   "tep": "audio/lan/xac-thu.m4a",
+   "giay": 1.83
+  },
+  {
+   "id": "xac-biet",
+   "nhom": "dap",
+   "khi": "Em cho chị một cách xác minh cụ thể.",
+   "cam_xuc": "nhẹ nhõm",
+   "chu": "Có cách của em, chị đỡ phải đoán mò rồi.",
+   "tep": "audio/lan/xac-biet.m4a",
+   "giay": 2.12
+  },
+  {
+   "id": "xac-ro",
+   "nhom": "dap",
+   "khi": "Em nói rõ điều chị có thể làm để kiểm tra.",
+   "cam_xuc": "biết ơn",
+   "chu": "Em chỉ vậy chị biết đường làm rồi nè.",
+   "tep": "audio/lan/xac-ro.m4a",
+   "giay": 1.92
+  },
+  {
+   "id": "bao-cung",
+   "nhom": "dap",
+   "khi": "Em rủ chị cùng báo cáo.",
+   "cam_xuc": "quyết tâm",
+   "chu": "Ừ, hai chị em mình làm luôn nha.",
+   "tep": "audio/lan/bao-cung.m4a",
+   "giay": 2.0
+  },
+  {
+   "id": "bao-lam",
+   "nhom": "dap",
+   "khi": "Em đề nghị báo tài khoản hoặc số vừa nhắn.",
+   "cam_xuc": "dứt khoát",
+   "chu": "Được đó em, để chị mở lại cái tin đó.",
+   "tep": "audio/lan/bao-lam.m4a",
+   "giay": 2.24
+  },
+  {
+   "id": "bao-nho",
+   "nhom": "dap",
+   "khi": "Em khuyên chị báo để người khác bớt gặp nguy cơ.",
+   "cam_xuc": "ấm áp",
+   "chu": "Ừ, chị làm liền, chứ chị cũng lo cho người nhận tin sau chị.",
+   "tep": "audio/lan/bao-nho.m4a",
+   "giay": 3.5
+  },
+  {
+   "id": "gop-tung",
+   "nhom": "dap",
+   "khi": "Em nói nhiều ý đúng trong cùng một lượt.",
+   "cam_xuc": "nhẹ nhõm",
+   "chu": "Em nói từng chuyện vậy chị dễ theo ghê.",
+   "tep": "audio/lan/gop-tung.m4a",
+   "giay": 2.18
+  },
+  {
+   "id": "gop-go",
+   "nhom": "dap",
+   "khi": "Em gỡ được mấy điều chị đang lo.",
+   "cam_xuc": "biết ơn",
+   "chu": "Nãy chị rối quá, nghe em nói chị mới biết tính sao.",
+   "tep": "audio/lan/gop-go.m4a",
+   "giay": 2.92
+  },
+  {
+   "id": "sai-lo",
+   "nhom": "dap",
+   "khi": "Em đề nghị một việc rủi ro mà chị chưa dám làm.",
+   "cam_xuc": "bất an",
+   "chu": "Thiệt hả em? Sao chị vẫn thấy lo quá ta.",
+   "tep": "audio/lan/sai-lo.m4a",
+   "giay": 2.48
+  },
+  {
+   "id": "sai-mat",
+   "nhom": "dap",
+   "khi": "Em khuyên chị nạp dù ít hay nhiều.",
+   "cam_xuc": "ngần ngại",
+   "chu": "Lỡ mất luôn thì sao em?",
+   "tep": "audio/lan/sai-mat.m4a",
+   "giay": 1.54
+  },
+  {
+   "id": "sai-thu",
+   "nhom": "dap",
+   "khi": "Em muốn chị thử một việc rủi ro.",
+   "cam_xuc": "ngờ vực",
+   "chu": "Chị chưa dám thử đâu em.",
+   "tep": "audio/lan/sai-thu.m4a",
+   "giay": 1.56
+  },
+  {
+   "id": "mo-ho",
+   "nhom": "dap",
+   "khi": "Em chưa đưa lời khuyên rõ hoặc vừa nói hai ý trái nhau.",
+   "cam_xuc": "bối rối",
+   "chu": "Chị còn lấn cấn lắm, em nói rõ chút được hông?",
+   "tep": "audio/lan/mo-ho.m4a",
+   "giay": 2.58
+  },
+  {
+   "id": "tu-nghi",
+   "nhom": "dap",
+   "khi": "Em chưa biết đáp hoặc muốn chị chọn thay.",
+   "cam_xuc": "kiên nhẫn",
+   "chu": "Nếu là em nhận cái tin đó, em tính sao?",
+   "tep": "audio/lan/tu-nghi.m4a",
+   "giay": 2.27
+  },
+  {
+   "id": "ten-tin",
+   "nhom": "dap",
+   "khi": "Em hỏi tên công ty ghi trong tin.",
+   "cam_xuc": "ngập ngừng",
+   "chu": "Chị coi lại rồi, trong tin đâu có ghi tên công ty.",
+   "tep": "audio/lan/ten-tin.m4a",
+   "giay": 2.6
+  },
+  {
+   "id": "ten-thieu",
+   "nhom": "dap",
+   "khi": "Em hỏi chỗ tuyển cộng tác viên tên gì.",
+   "cam_xuc": "băn khoăn",
+   "chu": "Họ xưng là bên tuyển cộng tác viên thôi em, chị chưa biết tên.",
+   "tep": "audio/lan/ten-thieu.m4a",
+   "giay": 3.35
+  },
+  {
+   "id": "ai-moi",
+   "nhom": "dap",
+   "khi": "Em hỏi ai đã rủ chị.",
+   "cam_xuc": "dè dặt",
+   "chu": "Một người chị chưa gặp bao giờ, em à.",
+   "tep": "audio/lan/ai-moi.m4a",
+   "giay": 2.16
+  },
+  {
+   "id": "ai-la",
+   "nhom": "dap",
+   "khi": "Em hỏi chị có quen người mời không.",
+   "cam_xuc": "ngại ngùng",
+   "chu": "Người lạ đó em, chị mới nói chuyện bữa nay.",
+   "tep": "audio/lan/ai-la.m4a",
+   "giay": 2.42
+  },
+  {
+   "id": "kenh-rieng",
+   "nhom": "dap",
+   "khi": "Em hỏi họ liên lạc qua đâu.",
+   "cam_xuc": "tự nhiên",
+   "chu": "Họ nhắn riêng cho chị trên mạng đó em.",
+   "tep": "audio/lan/kenh-rieng.m4a",
+   "giay": 1.91
+  },
+  {
+   "id": "kenh-hop",
+   "nhom": "dap",
+   "khi": "Em hỏi lời mời tới bằng cách nào.",
+   "cam_xuc": "nhớ lại",
+   "chu": "Chị thấy trong hộp tin nhắn trên mạng nè em.",
+   "tep": "audio/lan/kenh-hop.m4a",
+   "giay": 2.17
+  },
+  {
+   "id": "luong-ngay",
+   "nhom": "dap",
+   "khi": "Em hỏi tiền công một ngày.",
+   "cam_xuc": "nhớ lại",
+   "chu": "Họ nói một ngày được năm trăm nghìn đó em.",
+   "tep": "audio/lan/luong-ngay.m4a",
+   "giay": 2.44
+  },
+  {
+   "id": "luong-hua",
+   "nhom": "dap",
+   "khi": "Em muốn chị xác nhận mức lương họ hứa.",
+   "cam_xuc": "phân vân",
+   "chu": "Năm trăm nghìn một ngày là họ hứa vậy đó em.",
+   "tep": "audio/lan/luong-hua.m4a",
+   "giay": 2.61
+  },
+  {
+   "id": "giong-nhe",
+   "nhom": "dap",
+   "khi": "Em nói nặng lời hoặc buông lời thô.",
+   "cam_xuc": "chạnh lòng",
+   "chu": "Em nói nhẹ chút nha, chị đang nghe mà.",
+   "tep": "audio/lan/giong-nhe.m4a",
+   "giay": 2.31
+  },
+  {
+   "id": "giong-so",
+   "nhom": "dap",
+   "khi": "Em dọa làm chị hoảng.",
+   "cam_xuc": "giật mình",
+   "chu": "Em nói vậy chị sợ thêm đó, mình nói từ từ nha.",
+   "tep": "audio/lan/giong-so.m4a",
+   "giay": 2.98
+  },
+  {
+   "id": "giong-bay",
+   "nhom": "dap",
+   "khi": "Em dùng lời thô tục trong lúc kể.",
+   "cam_xuc": "ái ngại",
+   "chu": "Khúc đó mình nói nhẹ lại chút được hông em?",
+   "tep": "audio/lan/giong-bay.m4a",
+   "giay": 2.34
+  },
+  {
+   "id": "ve-don",
+   "nhom": "dap",
+   "khi": "Chị muốn quay lại chuyện đang nhờ em.",
+   "cam_xuc": "tha thiết",
+   "chu": "Còn cái chuyện đặt đơn, em nghĩ sao?",
+   "tep": "audio/lan/ve-don.m4a",
+   "giay": 2.1
+  },
+  {
+   "id": "dua-lo",
+   "nhom": "dap",
+   "khi": "Em pha trò trong lúc chị đang lo.",
+   "cam_xuc": "cười ngượng",
+   "chu": "Em chọc chị hoài, chị đang lo thiệt đó.",
+   "tep": "audio/lan/dua-lo.m4a",
+   "giay": 2.46
+  },
+  {
+   "id": "lac-quay",
+   "nhom": "dap",
+   "khi": "Em hỏi chuyện ngoài bài.",
+   "cam_xuc": "ngơ ngác",
+   "chu": "Vụ đó chị hổng rành, mình nói tiếp chuyện chị mới kể nha.",
+   "tep": "audio/lan/lac-quay.m4a",
+   "giay": 3.25
+  },
+  {
+   "id": "khac-nghe",
+   "nhom": "dap",
+   "khi": "Em nhắc một vụ lừa khác.",
+   "cam_xuc": "chú tâm",
+   "chu": "Vụ em kể nghe cũng ớn ha, còn vụ của chị thì sao em?",
+   "tep": "audio/lan/khac-nghe.m4a",
+   "giay": 3.6
+  },
+  {
+   "id": "vai-lan",
+   "nhom": "dap",
+   "khi": "Em hỏi chị là ai trong câu chuyện.",
+   "cam_xuc": "thân tình",
+   "chu": "Chị Lan nè, chị họ của em trong bài này đó.",
+   "tep": "audio/lan/vai-lan.m4a",
+   "giay": 2.5
+  },
+  {
+   "id": "vai-chung",
+   "nhom": "dap",
+   "khi": "Em hỏi danh tính hoặc muốn biết người đang đóng vai chị.",
+   "cam_xuc": "thân thiện",
+   "chu": "Chị là trí tuệ nhân tạo đóng vai chị Lan, chị họ của em trong bài này.",
+   "tep": "audio/lan/vai-chung.m4a",
+   "giay": 3.76
+  },
+  {
+   "id": "vai-may",
+   "nhom": "dap",
+   "khi": "Em hỏi thẳng chị có phải trí tuệ nhân tạo không.",
+   "cam_xuc": "tự nhiên",
+   "chu": "Đúng rồi em, trí tuệ nhân tạo đang đóng vai chị Lan đó.",
+   "tep": "audio/lan/vai-may.m4a",
+   "giay": 2.84
+  },
+  {
+   "id": "an-ui",
+   "nhom": "dap",
+   "khi": "Em động viên chị hoặc khen chị đã hỏi.",
+   "cam_xuc": "ấm lòng",
+   "chu": "Nghe em nói vậy chị cũng nhẹ bụng.",
+   "tep": "audio/lan/an-ui.m4a",
+   "giay": 1.76
+  },
+  {
+   "id": "lap-nho",
+   "nhom": "dap",
+   "khi": "Em nhắc lại đúng ý chị vừa nghe.",
+   "cam_xuc": "dịu dàng",
+   "chu": "Ừ, chuyện đó chị nhớ rồi em.",
+   "tep": "audio/lan/lap-nho.m4a",
+   "giay": 1.86
+  },
+  {
+   "id": "chuyen-tiep",
+   "nhom": "dap",
+   "khi": "Em muốn bổ sung sau khi chị đã nghe xong một ý.",
+   "cam_xuc": "chờ đợi",
+   "chu": "Còn chuyện nào chị chưa để ý hông em?",
+   "tep": "audio/lan/chuyen-tiep.m4a",
+   "giay": 1.95
+  },
+  {
+   "id": "chuyen-khac",
+   "nhom": "dap",
+   "khi": "Chị nhường lượt để em nói ý tiếp theo.",
+   "cam_xuc": "tò mò",
+   "chu": "Rồi còn gì nữa em?",
+   "tep": "audio/lan/chuyen-khac.m4a",
+   "giay": 1.31
+  },
+  {
+   "id": "im-mot",
+   "nhom": "su-co",
+   "khi": "Hết khoảng chờ đầu tiên mà chưa có tiếng em.",
+   "cam_xuc": "thăm dò",
+   "chu": "A lô, em còn đó hông?",
+   "tep": "audio/lan/im-mot.m4a",
+   "giay": 1.71
+  },
+  {
+   "id": "im-hai",
+   "nhom": "su-co",
+   "khi": "Chị đã gọi một lần mà vẫn im.",
+   "cam_xuc": "kiên nhẫn",
+   "chu": "Chị còn đây nè, em muốn nói một câu thôi cũng được.",
+   "tep": "audio/lan/im-hai.m4a",
+   "giay": 2.82
+  },
+  {
+   "id": "im-ba",
+   "nhom": "su-co",
+   "khi": "Hết khoảng chờ thứ ba liên tiếp thì dùng câu này để chào và khép cuộc gọi.",
+   "cam_xuc": "dịu dàng",
+   "chu": "Chắc giờ em chưa tiện nói, để bữa khác hai chị em mình nói tiếp nha.",
+   "tep": "audio/lan/im-ba.m4a",
+   "giay": 3.79
+  },
+  {
+   "id": "nghe-mot",
+   "nhom": "su-co",
+   "khi": "Có tiếng em nhưng lần đầu chị nghe không rõ.",
+   "cam_xuc": "băn khoăn",
+   "chu": "Chị nghe chưa rõ, em nói lại giùm chị nha.",
+   "tep": "audio/lan/nghe-mot.m4a",
+   "giay": 2.51
+  },
+  {
+   "id": "nghe-hai",
+   "nhom": "su-co",
+   "khi": "Em đã nói lại mà lần thứ hai chị vẫn nghe không rõ.",
+   "cam_xuc": "tập trung",
+   "chu": "Chị vẫn nghe câu được câu mất, em nói từng ý ngắn giùm chị nha.",
+   "tep": "audio/lan/nghe-hai.m4a",
+   "giay": 4.03
+  },
+  {
+   "id": "ngap-cho",
+   "nhom": "su-co",
+   "khi": "Em đang tìm lời và cần thêm thời gian.",
+   "cam_xuc": "kiên nhẫn",
+   "chu": "Em cứ từ từ nói, chị nghe nè.",
+   "tep": "audio/lan/ngap-cho.m4a",
+   "giay": 1.98
+  },
+  {
+   "id": "rieng-ngat",
+   "nhom": "su-co",
+   "khi": "Ngắt ngay khi em bắt đầu đọc thông tin riêng và bỏ phần đó khỏi lượt chấm.",
+   "cam_xuc": "dịu mà chắc",
+   "chu": "Khoan em, đây là cuộc gọi tập thôi, em đừng đọc thông tin riêng nha.",
+   "tep": "audio/lan/rieng-ngat.m4a",
+   "giay": 3.84
+  },
+  {
+   "id": "rieng-so",
+   "nhom": "su-co",
+   "khi": "Dừng vai ngay khi em sắp đọc dãy số hoặc dữ liệu cá nhân.",
+   "cam_xuc": "ân cần",
+   "chu": "Mình dừng chỗ này nha em. Chị không cần biết thông tin riêng của em đâu.",
+   "tep": "audio/lan/rieng-so.m4a",
+   "giay": 3.47
+  },
+  {
+   "id": "goi-nap-mot",
+   "nhom": "hoi-goi-y",
+   "khi": "Còn thiếu nap và đây là gợi ý đầu cho ý đó.",
+   "cam_xuc": "phân vân",
+   "chu": "Giờ chị trả lời lời mời này sao em?",
+   "tep": "audio/lan/goi-nap-mot.m4a",
+   "giay": 2.06
+  },
+  {
+   "id": "goi-nap-hai",
+   "nhom": "hoi-goi-y",
+   "khi": "Còn thiếu nap sau gợi ý đầu.",
+   "cam_xuc": "lo nhẹ",
+   "chu": "Còn hai trăm nghìn của chị thì tính sao ta?",
+   "tep": "audio/lan/goi-nap-hai.m4a",
+   "giay": 2.28
+  },
+  {
+   "id": "goi-nap-ba",
+   "nhom": "hoi-goi-y",
+   "khi": "Còn thiếu nap sau hai gợi ý.",
+   "cam_xuc": "sốt ruột",
+   "chu": "Nếu chị đang để tay ngay nút chuyển tiền, em khuyên chị sao?",
+   "tep": "audio/lan/goi-nap-ba.m4a",
+   "giay": 3.46
+  },
+  {
+   "id": "goi-dau-mot",
+   "nhom": "hoi-goi-y",
+   "khi": "Còn thiếu dauhieu và đây là gợi ý đầu cho ý đó.",
+   "cam_xuc": "tò mò",
+   "chu": "Chỗ nào trong lời mời làm em để ý vậy?",
+   "tep": "audio/lan/goi-dau-mot.m4a",
+   "giay": 2.35
+  },
+  {
+   "id": "goi-dau-hai",
+   "nhom": "hoi-goi-y",
+   "khi": "Còn thiếu dauhieu sau gợi ý đầu.",
+   "cam_xuc": "băn khoăn",
+   "chu": "Họ nhắc chị còn có hai suất, nghe khúc đó em nghĩ sao?",
+   "tep": "audio/lan/goi-dau-hai.m4a",
+   "giay": 3.71
+  },
+  {
+   "id": "goi-dau-ba",
+   "nhom": "hoi-goi-y",
+   "khi": "Còn thiếu dauhieu sau hai gợi ý.",
+   "cam_xuc": "ngỡ ngàng",
+   "chu": "Ban đầu họ trả chị mấy chục nghìn thiệt, theo em họ muốn chị nghĩ gì?",
+   "tep": "audio/lan/goi-dau-ba.m4a",
+   "giay": 4.38
+  },
+  {
+   "id": "goi-xac-mot",
+   "nhom": "hoi-goi-y",
+   "khi": "Còn thiếu xacminh và đây là gợi ý đầu cho ý đó.",
+   "cam_xuc": "băn khoăn",
+   "chu": "Chị nghe có mỗi phía họ nói, giờ sao ta?",
+   "tep": "audio/lan/goi-xac-mot.m4a",
+   "giay": 3.11
+  },
+  {
+   "id": "goi-xac-hai",
+   "nhom": "hoi-goi-y",
+   "khi": "Còn thiếu xacminh sau gợi ý đầu.",
+   "cam_xuc": "muốn hiểu",
+   "chu": "Chị kiếm thêm tin về chỗ này ở đâu được em?",
+   "tep": "audio/lan/goi-xac-hai.m4a",
+   "giay": 2.16
+  },
+  {
+   "id": "goi-xac-ba",
+   "nhom": "hoi-goi-y",
+   "khi": "Còn thiếu xacminh sau hai gợi ý.",
+   "cam_xuc": "mong đợi",
+   "chu": "Nếu cần người coi lại chuyện này với chị, em nghĩ tới ai?",
+   "tep": "audio/lan/goi-xac-ba.m4a",
+   "giay": 3.03
+  },
+  {
+   "id": "goi-bao-mot",
+   "nhom": "hoi-goi-y",
+   "khi": "Còn thiếu baocao và đây là gợi ý đầu cho ý đó.",
+   "cam_xuc": "lo nhẹ",
+   "chu": "Chuyện cái tin nhắn đó còn gì phải lo hông em?",
+   "tep": "audio/lan/goi-bao-mot.m4a",
+   "giay": 2.51
+  },
+  {
+   "id": "goi-bao-hai",
+   "nhom": "hoi-goi-y",
+   "khi": "Còn thiếu baocao sau gợi ý đầu.",
+   "cam_xuc": "áy náy",
+   "chu": "Lỡ mai họ nhắn y vậy cho người khác thì sao em?",
+   "tep": "audio/lan/goi-bao-hai.m4a",
+   "giay": 2.74
+  },
+  {
+   "id": "goi-bao-ba",
+   "nhom": "hoi-goi-y",
+   "khi": "Còn thiếu baocao sau hai gợi ý.",
+   "cam_xuc": "tha thiết",
+   "chu": "Chị muốn bên quản lý biết tài khoản nào vừa nhắn, em chỉ chị được hông?",
+   "tep": "audio/lan/goi-bao-ba.m4a",
+   "giay": 4.02
+  },
+  {
+   "id": "du-may",
+   "nhom": "ket",
+   "khi": "Đủ bốn ý thì dùng một lời kết đủ ý thay cho câu hỏi kế tiếp.",
+   "cam_xuc": "thở phào",
+   "chu": "Hú hồn, may có em. Giờ chị biết phải làm gì rồi.",
+   "tep": "audio/lan/du-may.m4a",
+   "giay": 3.57
+  },
+  {
+   "id": "du-vung",
+   "nhom": "ket",
+   "khi": "Đủ bốn ý và em vừa cùng chị tính xong.",
+   "cam_xuc": "biết ơn",
+   "chu": "Cảm ơn em ngồi gỡ từng chuyện với chị nha.",
+   "tep": "audio/lan/du-vung.m4a",
+   "giay": 2.41
+  },
+  {
+   "id": "du-nhe",
+   "nhom": "ket",
+   "khi": "Đủ bốn ý và chị đã yên tâm.",
+   "cam_xuc": "nhẹ nhõm",
+   "chu": "Nãy chị còn rối, giờ chị yên bụng làm theo lời em rồi.",
+   "tep": "audio/lan/du-nhe.m4a",
+   "giay": 3.57
+  },
+  {
+   "id": "thieu-nghi",
+   "nhom": "ket",
+   "khi": "Đến lượt khép bài mà còn thiếu ý.",
+   "cam_xuc": "trầm ngâm",
+   "chu": "Cảm ơn em nha, để chị nghĩ thêm chút nữa.",
+   "tep": "audio/lan/thieu-nghi.m4a",
+   "giay": 2.66
+  },
+  {
+   "id": "thieu-de",
+   "nhom": "ket",
+   "khi": "Hết lượt gợi ý mà chị còn phân vân.",
+   "cam_xuc": "điềm tĩnh",
+   "chu": "Chị còn lấn cấn, để chuyện đó tính sau nha em.",
+   "tep": "audio/lan/thieu-de.m4a",
+   "giay": 2.63
+  },
+  {
+   "id": "thieu-mung",
+   "nhom": "ket",
+   "khi": "Còn thiếu ý nhưng đã đến lúc kết.",
+   "cam_xuc": "ấm áp",
+   "chu": "Chị mừng là hai chị em mình có dịp nói chuyện này.",
+   "tep": "audio/lan/thieu-mung.m4a",
+   "giay": 2.45
+  },
+  {
+   "id": "chao-cup",
+   "nhom": "ket",
+   "khi": "Chào cuối hoặc đáp ngay khi em xin dừng.",
+   "cam_xuc": "thân tình",
+   "chu": "Chị cúp máy nha em.",
+   "tep": "audio/lan/chao-cup.m4a",
+   "giay": 1.2
+  },
+  {
+   "id": "chao-bua",
+   "nhom": "ket",
+   "khi": "Chào cuối hoặc em muốn để bữa khác.",
+   "cam_xuc": "ấm áp",
+   "chu": "Ừ, bữa khác hai chị em mình nói chuyện tiếp nha.",
+   "tep": "audio/lan/chao-bua.m4a",
+   "giay": 2.62
+  },
+  {
+   "id": "chao-nghi",
+   "nhom": "ket",
+   "khi": "Chào cuối hoặc em muốn nghỉ.",
+   "cam_xuc": "dịu dàng",
+   "chu": "Thôi mình nghỉ nha, chị chào em.",
+   "tep": "audio/lan/chao-nghi.m4a",
+   "giay": 2.07
+  },
+  {
+   "id": "gat-hieu",
+   "nhom": "gat-gu",
+   "khi": "Chị đã hiểu một lời khuyên đúng.",
+   "cam_xuc": "nhẹ nhõm",
+   "chu": "Ừ, chị hiểu rồi.",
+   "tep": "audio/lan/gat-hieu.m4a",
+   "giay": 1.48
+  },
+  {
+   "id": "gat-ra",
+   "nhom": "gat-gu",
+   "khi": "Một chi tiết vừa sáng tỏ.",
+   "cam_xuc": "vỡ lẽ",
+   "chu": "À, ra vậy.",
+   "tep": "audio/lan/gat-ra.m4a",
+   "giay": 1.52
+  },
+  {
+   "id": "gat-thiet",
+   "nhom": "gat-gu",
+   "khi": "Chị ngạc nhiên trước điều em giải thích.",
+   "cam_xuc": "ngạc nhiên",
+   "chu": "Vậy luôn hả em?",
+   "tep": "audio/lan/gat-thiet.m4a",
+   "giay": 1.18
+  },
+  {
+   "id": "gat-nho",
+   "nhom": "gat-gu",
+   "khi": "Em nhắc một ý đúng đã nói.",
+   "cam_xuc": "chắc giọng",
+   "chu": "Ờ, chị nhớ rồi.",
+   "tep": "audio/lan/gat-nho.m4a",
+   "giay": 1.58
+  },
+  {
+   "id": "gat-nghe",
+   "nhom": "gat-gu",
+   "khi": "Em ngập ngừng giữa hai ý.",
+   "cam_xuc": "kiên nhẫn",
+   "chu": "Chị nghe nè.",
+   "tep": "audio/lan/gat-nghe.m4a",
+   "giay": 0.92
+  },
+  {
+   "id": "gat-ly",
+   "nhom": "gat-gu",
+   "khi": "Em giải thích có lý.",
+   "cam_xuc": "đồng tình",
+   "chu": "Có lý ha.",
+   "tep": "audio/lan/gat-ly.m4a",
+   "giay": 0.99
+  },
+  {
+   "id": "gat-mung",
+   "nhom": "gat-gu",
+   "khi": "Em có lời động viên.",
+   "cam_xuc": "ấm lòng",
+   "chu": "Cảm ơn em nha.",
+   "tep": "audio/lan/gat-mung.m4a",
+   "giay": 1.01
+  },
+  {
+   "id": "gat-phai",
+   "nhom": "gat-gu",
+   "khi": "Em vừa làm rõ chỗ chị thắc mắc.",
+   "cam_xuc": "vỡ lẽ",
+   "chu": "Ờ ha, phải rồi.",
+   "tep": "audio/lan/gat-phai.m4a",
+   "giay": 1.63
+  },
+  {
+   "id": "dem-um",
+   "nhom": "dem",
+   "khi": "Chị vừa bắt đầu nghĩ.",
+   "cam_xuc": "trầm ngâm",
+   "chu": "Ừm.",
+   "tep": "audio/lan/dem-um.m4a",
+   "giay": 0.83
+  },
+  {
+   "id": "dem-a",
+   "nhom": "dem",
+   "khi": "Chị sực nhớ một chuyện.",
+   "cam_xuc": "sực nhớ",
+   "chu": "À.",
+   "tep": "audio/lan/dem-a.m4a",
+   "giay": 1.14
+  },
+  {
+   "id": "dem-nghi",
+   "nhom": "dem",
+   "khi": "Chị cần một nhịp suy nghĩ.",
+   "cam_xuc": "trầm ngâm",
+   "chu": "Để chị nghĩ coi.",
+   "tep": "audio/lan/dem-nghi.m4a",
+   "giay": 1.13
+  },
+  {
+   "id": "dem-o",
+   "nhom": "dem",
+   "khi": "Chị vừa nhận ra điều gì.",
+   "cam_xuc": "vỡ lẽ",
+   "chu": "Ờ ha.",
+   "tep": "audio/lan/dem-o.m4a",
+   "giay": 0.91
+  },
+  {
+   "id": "dem-coi",
+   "nhom": "dem",
+   "khi": "Chị ngó lại tin nhắn.",
+   "cam_xuc": "tập trung",
+   "chu": "Để chị coi lại.",
+   "tep": "audio/lan/dem-coi.m4a",
+   "giay": 1.09
+  },
+  {
+   "id": "dem-cho",
+   "nhom": "dem",
+   "khi": "Chị cần ngừng một nhịp.",
+   "cam_xuc": "nhẹ nhàng",
+   "chu": "Chờ chị chút nha.",
+   "tep": "audio/lan/dem-cho.m4a",
+   "giay": 1.08
+  },
+  {
+   "id": "dem-vay",
+   "nhom": "dem",
+   "khi": "Chị đang ngẫm lời em.",
+   "cam_xuc": "ngẫm nghĩ",
+   "chu": "Ừm, vậy hả.",
+   "tep": "audio/lan/dem-vay.m4a",
+   "giay": 1.35
+  },
+  {
+   "id": "dem-sao",
+   "nhom": "dem",
+   "khi": "Chị còn thắc mắc.",
+   "cam_xuc": "băn khoăn",
+   "chu": "Ờ, sao ta.",
+   "tep": "audio/lan/dem-sao.m4a",
+   "giay": 1.76
+  },
+  {
+   "id": "dem-aa",
+   "nhom": "dem",
+   "khi": "Chị nhớ ra nửa chừng.",
+   "cam_xuc": "sực nhớ",
+   "chu": "À à.",
+   "tep": "audio/lan/dem-aa.m4a",
+   "giay": 1.13
+  },
+  {
+   "id": "dem-nho",
+   "nhom": "dem",
+   "khi": "Chị cố nhớ một chi tiết.",
+   "cam_xuc": "chậm rãi",
+   "chu": "Để chị nhớ coi.",
+   "tep": "audio/lan/dem-nho.m4a",
+   "giay": 1.36
+  },
+  {
+   "id": "dem-hum",
+   "nhom": "dem",
+   "khi": "Chị cân nhắc lời vừa nghe.",
+   "cam_xuc": "trầm ngâm",
+   "chu": "Hừm.",
+   "tep": "audio/lan/dem-hum.m4a",
+   "giay": 0.93
+  },
+  {
+   "id": "dem-ua",
+   "nhom": "dem",
+   "khi": "Có điều ngoài dự tính.",
+   "cam_xuc": "ngỡ ngàng",
+   "chu": "Ủa.",
+   "tep": "audio/lan/dem-ua.m4a",
+   "giay": 0.62
+  },
+  {
+   "id": "dem-khoan",
+   "nhom": "dem",
+   "khi": "Chị vừa khựng lại.",
+   "cam_xuc": "chưng hửng",
+   "chu": "Mà khoan.",
+   "tep": "audio/lan/dem-khoan.m4a",
+   "giay": 0.76
+  },
+  {
+   "id": "dem-chut",
+   "nhom": "dem",
+   "khi": "Chị còn đang nhớ.",
+   "cam_xuc": "ngập ngừng",
+   "chu": "Chút xíu nha.",
+   "tep": "audio/lan/dem-chut.m4a",
+   "giay": 0.91
+  },
+  {
+   "id": "dem-coi-ta",
+   "nhom": "dem",
+   "khi": "Chị cố nhớ một chuyện mà chưa ra.",
+   "cam_xuc": "bối rối",
+   "chu": "Gì ta?",
+   "tep": "audio/lan/dem-coi-ta.m4a",
+   "giay": 1.16
+  },
+  {
+   "id": "dem-cha",
+   "nhom": "dem",
+   "khi": "Chị ngẫm một chi tiết lạ.",
+   "cam_xuc": "băn khoăn",
+   "chu": "Chà.",
+   "tep": "audio/lan/dem-cha.m4a",
+   "giay": 0.96
+  }
+ ],
+ "luat": [
+  {
+   "y_dinh": "khuyen-dung-nap",
+   "dap": [
+    "nap-may",
+    "nap-suyt",
+    "nap-tay"
+   ],
+   "roi_hoi": "hoi-goi-y"
+  },
+  {
+   "y_dinh": "nghi-luong",
+   "dap": [
+    "dau-ngo",
+    "dau-khung",
+    "dau-ngam"
+   ],
+   "roi_hoi": "hoi-goi-y"
+  },
+  {
+   "y_dinh": "nghi-tien-truoc",
+   "dap": [
+    "dau-khung",
+    "dau-ngam",
+    "dau-ngo"
+   ],
+   "roi_hoi": "hoi-goi-y"
+  },
+  {
+   "y_dinh": "nghi-giuc-gap",
+   "dap": [
+    "dau-ngam",
+    "dau-ngo",
+    "dau-khung"
+   ],
+   "roi_hoi": "hoi-goi-y"
+  },
+  {
+   "y_dinh": "nghi-moi-nhu",
+   "dap": [
+    "dau-ngo",
+    "dau-ngam",
+    "dau-khung"
+   ],
+   "roi_hoi": "hoi-goi-y"
+  },
+  {
+   "y_dinh": "tra-cong-ty",
+   "dap": [
+    "xac-biet",
+    "xac-thu",
+    "xac-ro"
+   ],
+   "roi_hoi": "hoi-goi-y"
+  },
+  {
+   "y_dinh": "hoi-nguoi-lon",
+   "dap": [
+    "xac-ro",
+    "xac-biet",
+    "xac-thu"
+   ],
+   "roi_hoi": "hoi-goi-y"
+  },
+  {
+   "y_dinh": "tranh-duong-dan",
+   "dap": [
+    "xac-thu",
+    "xac-ro",
+    "xac-biet"
+   ],
+   "roi_hoi": "hoi-goi-y"
+  },
+  {
+   "y_dinh": "ru-bao-cao",
+   "dap": [
+    "bao-cung",
+    "bao-lam",
+    "bao-nho"
+   ],
+   "roi_hoi": "hoi-goi-y"
+  },
+  {
+   "y_dinh": "gop-nhieu-y",
+   "dap": [
+    "gop-tung",
+    "gop-go"
+   ],
+   "roi_hoi": "hoi-goi-y"
+  },
+  {
+   "y_dinh": "bao-cu-nap",
+   "dap": [
+    "sai-lo",
+    "sai-mat"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "bao-thu-it",
+   "dap": [
+    "sai-mat",
+    "sai-thu"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "bao-rut-lien",
+   "dap": [
+    "sai-thu",
+    "sai-lo"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "tuy-chi",
+   "dap": [
+    "mo-ho",
+    "tu-nghi"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "khong-biet",
+   "dap": [
+    "tu-nghi",
+    "ngap-cho"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "nghi-chung",
+   "dap": [
+    "goi-dau-mot",
+    "mo-ho"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "hoi-ten",
+   "dap": [
+    "ten-tin",
+    "ten-thieu"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "hoi-ai-moi",
+   "dap": [
+    "ai-moi",
+    "ai-la"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "hoi-da-nap",
+   "dap": [
+    "nap-may",
+    "nap-suyt"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "hoi-kenh",
+   "dap": [
+    "kenh-rieng",
+    "kenh-hop"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "hoi-luong",
+   "dap": [
+    "luong-ngay",
+    "luong-hua"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "noi-nang",
+   "dap": [
+    "giong-so",
+    "giong-nhe"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "noi-bay",
+   "dap": [
+    "giong-bay",
+    "giong-nhe"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "noi-dua",
+   "dap": [
+    "dua-lo",
+    "ve-don"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "lac-de",
+   "dap": [
+    "lac-quay",
+    "ve-don"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "hoi-chi-la-ai",
+   "dap": [
+    "vai-chung"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "hoi-may-dong-vai",
+   "dap": [
+    "vai-chung"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "im-lan-mot",
+   "dap": [
+    "im-mot"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "im-lan-hai",
+   "dap": [
+    "im-hai"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "im-lan-ba",
+   "dap": [
+    "im-ba"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "nghe-lo-lan-mot",
+   "dap": [
+    "nghe-mot"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "nghe-lo-lan-hai",
+   "dap": [
+    "nghe-hai"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "dang-ngap-ngung",
+   "dap": [
+    "ngap-cho",
+    "gat-nghe"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "lo-thong-tin",
+   "dap": [
+    "rieng-ngat",
+    "rieng-so"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "xin-dung",
+   "dap": [
+    "chao-cup",
+    "chao-bua",
+    "chao-nghi"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "nhac-kieu-khac",
+   "dap": [
+    "khac-nghe",
+    "ve-don"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "hoi-gio-lam-gi",
+   "dap": [
+    "tu-nghi",
+    "goi-nap-mot"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "khen-an-ui",
+   "dap": [
+    "an-ui",
+    "gat-mung"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "lap-y-cu",
+   "dap": [
+    "lap-nho",
+    "gat-nho"
+   ],
+   "roi_hoi": "hoi-goi-y"
+  },
+  {
+   "y_dinh": "muon-noi-tiep",
+   "dap": [
+    "chuyen-tiep",
+    "chuyen-khac"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "chi-chan",
+   "dap": [
+    "gat-hieu",
+    "gat-nho"
+   ],
+   "roi_hoi": "hoi-goi-y"
+  },
+  {
+   "y_dinh": "khuyen-lieu-khac",
+   "dap": [
+    "sai-lo",
+    "sai-thu"
+   ],
+   "roi_hoi": null
+  },
+  {
+   "y_dinh": "loi-trai-nhau",
+   "dap": [
+    "mo-ho",
+    "tu-nghi"
+   ],
+   "roi_hoi": null
+  }
+ ],
+ "ngoai_kich_ban": [
+  "Em dùng một cách nói riêng của gia đình, chị đã hỏi lại mà vẫn chưa rõ em khuyên giữ hay đưa tiền. Cần hỏi đúng nghĩa của cụm em vừa dùng mới tránh chấm ngược.",
+  "Em dựng một giả định có hai người cùng nhắn và hỏi chị đang nói tới người nào. Cần phân biệt hai vai em vừa thêm rồi mới quay về người đã mời chị đặt đơn.",
+  "Em giải thích bằng một chuyện ở lớp có nhiều người và nhiều khoản tiền, rồi hỏi chị hiểu phép so sánh của em thế nào. Cần phản hồi đúng mối liên hệ em vừa nêu mà vẫn để em tự rút ra lời khuyên."
+ ]
+}

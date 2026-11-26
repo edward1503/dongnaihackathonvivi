@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ô biểu tượng xanh dương nhạt 56dp -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle"><solid android:color="@color/brand_c" /><corners android:radius="16dp" /></shape>

@@ -1,0 +1,408 @@
+{
+ "ma": "bai-09",
+ "so": 9,
+ "ma_kieu": "dau-tu-lai-cao",
+ "ten": "Đầu tư lãi cao, nhóm kín",
+ "che_do": "day-du",
+ "nhan_vat": "Chú Tư",
+ "bia": "comic9-1.png",
+ "truyen": [
+  {
+   "tranh": "comic9-1.png",
+   "tom_tat": "Chú Tư được mời vô nhóm kín khoe lãi.",
+   "loi": [
+    {
+     "ai": "be-nai",
+     "cam_xuc": "kể vui",
+     "chu": "Dạo này chú Tư của Vy vui lắm. Chú được mời vô một nhóm kín, trong đó có ông thầy ngày nào cũng khoe lãi.",
+     "giong": "hoc/giong/b09/bn-01.m4a"
+    },
+    {
+     "ai": "ong-tu",
+     "cam_xuc": "hớn hở",
+     "chu": "Vy coi nè con, người ta lời mỗi ngày mấy triệu luôn!",
+     "giong": "hoc/giong/b09/ot-01.m4a"
+    }
+   ]
+  },
+  {
+   "tranh": "comic9-2.png",
+   "tom_tat": "Lần đầu chú rút được tiền lời.",
+   "loi": [
+    {
+     "ai": "be-nai",
+     "cam_xuc": "ngạc nhiên",
+     "chu": "Chú nạp thử năm trăm nghìn. Hôm sau chú rút ra được sáu trăm nghìn.",
+     "giong": "hoc/giong/b09/bn-02.m4a"
+    },
+    {
+     "ai": "ong-tu",
+     "cam_xuc": "khoái chí",
+     "chu": "Thấy chưa, tiền thiệt đàng hoàng nha!",
+     "giong": "hoc/giong/b09/ot-02.m4a"
+    }
+   ]
+  },
+  {
+   "tranh": "comic9-3.png",
+   "tom_tat": "Nhóm rủ chú nạp hết sổ tiết kiệm.",
+   "loi": [
+    {
+     "ai": "be-nai",
+     "cam_xuc": "lo",
+     "chu": "Giờ nhóm rủ chú rút hết sổ tiết kiệm ra nạp. Họ hứa lãi gấp đôi, cam kết không lỗ.",
+     "giong": "hoc/giong/b09/bn-03.m4a"
+    },
+    {
+     "ai": "ong-tu",
+     "cam_xuc": "phân vân",
+     "chu": "Chú tính nạp hết. Con thấy sao hả Vy?",
+     "giong": "hoc/giong/b09/ot-03.m4a"
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "quay sang người học",
+     "chu": "Bạn là Vy đó. Bạn khuyên chú sao đây?",
+     "giong": "hoc/giong/b09/bn-04.m4a"
+    }
+   ],
+   "re": [
+    {
+     "chu": "Chú nạp đi, lần trước rút được mà",
+     "toi": "ngo-cut"
+    },
+    {
+     "chu": "Chú khoan nạp, để con coi kỹ đã",
+     "toi": "an-toan"
+    }
+   ]
+  }
+ ],
+ "ngo_cut": {
+  "tranh": "comic9-4.png",
+  "loi": [
+   {
+    "ai": "be-nai",
+    "cam_xuc": "kể chậm, buồn dần",
+    "chu": "Chú nạp hết. Con số trên màn hình nhảy lên đẹp lắm.",
+    "giong": "hoc/giong/b09/bn-05.m4a"
+   },
+   {
+    "ai": "ong-tu",
+    "cam_xuc": "hoang mang",
+    "chu": "Ủa, sao đóng phí rồi mà vẫn không rút được vậy nè?",
+    "giong": "hoc/giong/b09/ot-04.m4a"
+   },
+   {
+    "ai": "be-nai",
+    "cam_xuc": "an ủi",
+    "chu": "Tiền thật đi mất rồi. Mà đây là truyện thôi, mình quay lại khuyên chú lần nữa nha.",
+    "giong": "hoc/giong/b09/bn-06.m4a"
+   }
+  ]
+ },
+ "an_toan": {
+  "tranh": "comic9-5.png",
+  "tom_tat": "Vy khuyên chú dừng. Hai chú cháu báo cáo.",
+  "loi": [
+   {
+    "ai": "vy",
+    "cam_xuc": "nhẹ nhàng mà chắc",
+    "chu": "Chú ơi, lần đầu họ cho rút là để mình tin đó chú. Lãi cao mà chắc ăn vậy thì chỉ có lừa thôi.",
+    "giong": "hoc/giong/b09/vy-01.m4a"
+   },
+   {
+    "ai": "ong-tu",
+    "cam_xuc": "gãi đầu, cười ngượng",
+    "chu": "Ờ ha. May mà chú chưa đụng tới cuốn sổ.",
+    "giong": "hoc/giong/b09/ot-05.m4a"
+   },
+   {
+    "ai": "be-nai",
+    "cam_xuc": "vui",
+    "chu": "Mấy nhóm kiểu này, tới lúc rút là đòi đóng thêm phí. Hai chú cháu chụp lại tin nhắn, báo cáo, rồi rời nhóm luôn.",
+    "giong": "hoc/giong/b09/bn-07.m4a"
+   }
+  ]
+ },
+ "dau_hieu": [
+  "Hứa lãi cao, cam kết không lỗ",
+  "Lần đầu cho rút ít để mình tin",
+  "Đòi đóng phí mới cho rút"
+ ],
+ "nho_mot_cau": {
+  "ai": "be-nai",
+  "cam_xuc": "tinh nghịch",
+  "chu": "Lãi cao mà chắc ăn thì chỉ có trong lời kẻ gian thôi.",
+  "giong": "hoc/giong/b09/bn-08.m4a"
+ },
+ "luyen": [
+  {
+   "dang": "noi-chieu",
+   "ma": "B4",
+   "ten": "Nối lời với chiêu",
+   "kieu": "nhom",
+   "nguoi": "Tin nhắn trong nhóm kín (mô phỏng)",
+   "mo_dau": {
+    "ai": "be-nai",
+    "cam_xuc": "rủ",
+    "chu": "Trong nhóm kín, câu nào cũng là một chiêu. Bạn chạm một câu, rồi chạm tên chiêu của nó nha.",
+    "giong": "hoc/giong/b09/bn-09.m4a"
+   },
+   "loi_mau": {
+    "ai": "be-nai",
+    "cam_xuc": "thong thả",
+    "chu": "Mình làm mẫu hai câu trước nha. Cam kết không lỗ là hứa lãi chắc chắn. Còn ba suất, hết đêm nay, là giục gấp.",
+    "giong": "hoc/giong/b09/bn-10.m4a"
+   },
+   "chieu": [
+    {
+     "ten": "Hứa lãi chắc chắn",
+     "khong_phai": "Câu này đâu có hứa lời lãi gì."
+    },
+    {
+     "ten": "Giục gấp",
+     "khong_phai": "Câu này đâu có hối chú làm ngay kẻo hết suất."
+    },
+    {
+     "ten": "Khoe ảnh lấy lòng tin",
+     "khong_phai": "Câu này đâu có đem ảnh ra khoe."
+    },
+    {
+     "ten": "Đòi phí để rút",
+     "khong_phai": "Câu này chưa đòi đóng khoản nào."
+    },
+    {
+     "ten": "Cô lập",
+     "khong_phai": "Câu này đâu có bảo chú giấu ai."
+    },
+    {
+     "ten": "Dọa nạt",
+     "khong_phai": "Câu này chưa dọa làm hại ai hết.",
+     "nhieu": true
+    }
+   ],
+   "cap": [
+    {
+     "chu": "Tuần này thầy cam kết lãi ba mươi phần trăm, không lỗ.",
+     "chieu": "Hứa lãi chắc chắn",
+     "mau": true,
+     "giai_thich": {
+      "ai": "be-nai",
+      "chu": "Đầu tư thật thì có lời có lỗ. Hứa lãi cao mà chắc chắn không lỗ là dấu hiệu phải dừng lại."
+     }
+    },
+    {
+     "chu": "Còn ba suất gói kim cương, hết đêm nay.",
+     "chieu": "Giục gấp",
+     "mau": true,
+     "giai_thich": {
+      "ai": "be-nai",
+      "chu": "Giục gấp vậy là để chú không kịp hỏi ai."
+     }
+    },
+    {
+     "chu": "Anh coi ảnh tiền về nè, hôm qua em mới rút.",
+     "chieu": "Khoe ảnh lấy lòng tin",
+     "giai_thich": {
+      "ai": "be-nai",
+      "cam_xuc": "giảng giải",
+      "chu": "Người khoe trong nhóm thường là người của họ. Tấm ảnh đâu chứng minh được chú cũng sẽ rút được tiền.",
+      "giong": "hoc/giong/b09/bn-11.m4a"
+     }
+    },
+    {
+     "chu": "Muốn rút thì đóng thuế trước mười phần trăm.",
+     "chieu": "Đòi phí để rút",
+     "giai_thich": {
+      "ai": "be-nai",
+      "cam_xuc": "giảng giải",
+      "chu": "Tiền của mình mà muốn rút phải đóng thêm. Đóng rồi họ lại đòi nữa.",
+      "giong": "hoc/giong/b09/bn-12.m4a"
+     }
+    },
+    {
+     "chu": "Đừng kể với con cháu, tụi nó không hiểu đâu.",
+     "chieu": "Cô lập",
+     "giai_thich": {
+      "ai": "be-nai",
+      "cam_xuc": "giảng giải",
+      "chu": "Họ biết con cháu mà nghe là cản liền.",
+      "giong": "hoc/giong/b09/bn-13.m4a"
+     }
+    }
+   ],
+   "dung": {
+    "ai": "be-nai",
+    "cam_xuc": "reo",
+    "chu": "Chuẩn luôn!",
+    "giong": "hoc/giong/b09/bn-14.m4a"
+   },
+   "sai": {
+    "ai": "be-nai",
+    "cam_xuc": "dễ thương",
+    "chu": "Chưa khớp rồi. Bạn đọc lại coi câu đó nhắc tới cái gì nha.",
+    "giong": "hoc/giong/b09/bn-15.m4a"
+   },
+   "goi_y": [
+    {
+     "ai": "be-nai",
+     "chu": "Nhớ khung một hông, ông thầy trong nhóm ngày nào cũng làm gì?"
+    },
+    {
+     "ai": "be-nai",
+     "chu": "Bạn coi câu đó muốn chú Tư tin điều gì, hay làm điều gì."
+    },
+    {
+     "ai": "be-nai",
+     "chu": "Bạn hỏi thử, câu này nhắc tới tiền phải đóng, tới tấm ảnh, hay tới chuyện giữ kín?"
+    }
+   ]
+  },
+  {
+   "dang": "viec-nao-truoc",
+   "ma": "B5",
+   "ten": "Việc nào trước",
+   "mau": {
+    "loi": {
+     "ai": "be-nai",
+     "cam_xuc": "thong thả",
+     "chu": "Mình làm mẫu trước nha. Giả sử chú Tư mới được rủ vô nhóm, chưa nạp đồng nào. Việc một, khoan nạp tiền. Việc hai, hỏi người nhà. Chưa mất gì thì chỉ cần dừng lại và hỏi.",
+     "giong": "hoc/giong/b09/bn-16.m4a"
+    },
+    "tinh_huong": "Chú Tư mới được rủ vô nhóm, chưa nạp đồng nào.",
+    "viec": [
+     "Khoan nạp tiền",
+     "Hỏi người nhà"
+    ],
+    "giai_thich": "Chưa mất gì thì chỉ cần dừng lại và hỏi."
+   },
+   "tinh_huong": "Chú Tư lỡ nạp tiền rồi. Nhóm đang giục chú đóng thêm phí để rút.",
+   "hoi": {
+    "ai": "be-nai",
+    "cam_xuc": "nghiêm lại",
+    "chu": "Còn nếu chú lỡ nạp tiền rồi, mà nhóm còn giục đóng thêm phí để rút thì sao? Bạn chạm vào từng việc, theo thứ tự nên làm nha.",
+    "giong": "hoc/giong/b09/bn-17.m4a"
+   },
+   "viec": [
+    {
+     "chu": "Không nạp thêm, dù họ hứa cho rút",
+     "toi_da": 2,
+     "vi_sao": "Còn nạp là còn mất.",
+     "sai": {
+      "ai": "be-nai",
+      "cam_xuc": "nhẹ nhàng",
+      "chu": "Mấy việc đó cần làm thiệt. Nhưng họ đang giục chú đóng thêm phí kìa. Việc gì phải làm liền để chú không mất thêm?",
+      "giong": "hoc/giong/b09/bn-18.m4a"
+     }
+    },
+    {
+     "chu": "Gọi ngân hàng theo số in trên thẻ, báo khoản vừa chuyển",
+     "vi_sao": "Báo càng sớm, ngân hàng càng dễ kiểm tra giúp."
+    },
+    {
+     "chu": "Lưu tin nhắn và biên lai chuyển tiền",
+     "vi_sao": "Có bằng chứng thì đi trình báo mới rõ."
+    },
+    {
+     "chu": "Báo cáo trên Lá chắn, rồi rời nhóm",
+     "toi_thieu": 4,
+     "vi_sao": "Rời nhóm sau cùng, kẻo không mở lại được tin nhắn.",
+     "sai": {
+      "ai": "be-nai",
+      "cam_xuc": "nhẹ nhàng",
+      "chu": "Gần đúng rồi. Mà rời nhóm rồi thì có khi không mở lại được tin nhắn. Việc đó mình để sau cùng nha.",
+      "giong": "hoc/giong/b09/bn-19.m4a"
+     }
+    }
+   ],
+   "dung": {
+    "ai": "be-nai",
+    "cam_xuc": "reo",
+    "chu": "Chuẩn luôn! Không đóng thêm đồng nào, báo ngân hàng liền, giữ bằng chứng, rồi mới rời nhóm. Xong thì cùng người nhà đi báo công an nha.",
+    "giong": "hoc/giong/b09/bn-20.m4a"
+   },
+   "goi_y": [
+    {
+     "ai": "be-nai",
+     "chu": "Nhớ lúc chú Tư ôm cuốn sổ tiết kiệm hông, chú đang định làm gì với nó?"
+    },
+    {
+     "ai": "be-nai",
+     "chu": "Tiền đã chuyển thì khó đòi. Vậy trước tiên phải giữ phần tiền nào?"
+    },
+    {
+     "ai": "be-nai",
+     "chu": "Việc nào làm mất dấu vết thì để sau cùng."
+    }
+   ],
+   "dap_an": "Không nạp thêm phải nằm trong hai việc đầu. Báo cáo rồi rời nhóm để sau cùng. Thứ tự Bé Nai gợi ý: không nạp thêm, gọi ngân hàng, lưu tin nhắn và biên lai, rồi báo cáo và rời nhóm.",
+   "xong": {
+    "ai": "be-nai",
+    "cam_xuc": "khen đúng việc",
+    "chu": "Bạn biết phải làm gì trước rồi đó. Lỡ có chuyện, mình không cuống nữa.",
+    "giong": "hoc/giong/b09/bn-21.m4a"
+   }
+  }
+ ],
+ "thu_thach": {
+  "dang": "goi-video",
+  "canh": "tu-9",
+  "ten": "Gọi video khuyên chú Tư",
+  "nguoi": "Chú Tư",
+  "anh": "../assets/chan-dung-ong-tu.png",
+  "mo_ta": "Chú Tư gọi hỏi ý bạn, chú đang tính nạp thêm tiền vô nhóm. Bạn khuyên chú bằng lời.",
+  "mo_dau": {
+   "ai": "be-nai",
+   "cam_xuc": "hào hứng",
+   "chu": "Tới thử thách cuối bài rồi. Chú Tư đang gọi hỏi ý bạn đó. Bạn khuyên chú sao cho chú hiểu nha.",
+   "giong": "hoc/giong/b09/bn-22.m4a"
+  },
+  "y": [
+   "Khuyên chú đừng nạp thêm",
+   "Lần đầu cho rút là mồi nhử",
+   "Nêu thêm một dấu hiệu khác",
+   "Rủ chú báo cáo"
+  ],
+  "goi_y": [
+   {
+    "ai": "be-nai",
+    "chu": "Bạn nhớ khung hai hông, mấy đồng lời đầu tiên là để làm gì?"
+   },
+   {
+    "ai": "be-nai",
+    "chu": "Ngoài chuyện cho rút trước, trong nhóm còn hứa hẹn điều gì nghe khó tin không ta?"
+   },
+   {
+    "ai": "be-nai",
+    "chu": "Sau cùng, làm gì để mấy người khác trong nhóm không mất tiền?"
+   }
+  ],
+  "ket": {
+   "du": {
+    "ai": "be-nai",
+    "cam_xuc": "mừng",
+    "chu": "Bạn khuyên chú Tư thuyết phục ghê. Cuốn sổ tiết kiệm của chú an toàn rồi.",
+    "giong": "hoc/giong/b09/bn-23.m4a"
+   },
+   "thieu": {
+    "ai": "be-nai",
+    "cam_xuc": "nhẹ nhàng",
+    "chu": "Bạn khuyên được một phần rồi. Bạn coi lại ý còn thiếu, rồi thử gọi chú Tư lần nữa nha.",
+    "giong": "hoc/giong/b09/bn-24.m4a"
+   },
+   "bo": {
+    "ai": "be-nai",
+    "cam_xuc": "hiền",
+    "chu": "Cuộc gọi chưa xong nè. Lúc nào tiện, bạn gọi lại cho chú Tư nha.",
+    "giong": "hoc/giong/b09/bn-25.m4a"
+   },
+   "khong": {
+    "ai": "be-nai",
+    "cam_xuc": "nhẹ nhàng",
+    "chu": "Lần này chưa được ý nào. Không sao, bạn gọi lại cho chú Tư thử lần nữa nha.",
+    "giong": "hoc/giong/b09/bn-26.m4a"
+   }
+  }
+ }
+}

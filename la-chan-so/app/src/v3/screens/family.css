@@ -1,0 +1,13 @@
+.family-alert { text-align: left; padding-block: 14px; align-items: flex-start; }
+.family-alert time, .family-timeline time { font-variant-numeric: tabular-nums; }
+.family-confirm { padding-block: 32px; }
+.family-summary p { color: var(--ai-d); }
+.family-summary p, .family-message p, .family-timeline p { overflow-wrap: anywhere; }
+.btn.family-call { background: var(--safe); color: white; }
+.family-timeline { list-style: none; padding: 0; margin: 0 0 0 6px; }
+.family-timeline li { position: relative; padding: 0 0 14px 19px; border-left: 1px solid var(--bd); }
+.family-timeline li:last-child { padding-bottom: 0; border-color: transparent; }
+.family-timeline li::before { content: ''; position: absolute; left: -5px; top: 6px; width: 9px; height: 9px; border-radius: 50%; background: var(--mute); }
+.family-timeline li[data-tone=danger]::before { background: var(--dang); }
+.family-timeline li[data-tone=warn]::before { background: var(--warn); }
+.family-timeline li[data-tone=safe]::before { background: var(--safe); }

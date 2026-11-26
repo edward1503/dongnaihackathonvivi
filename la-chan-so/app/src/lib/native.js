@@ -8,8 +8,21 @@ function parse(v) {
   try { return JSON.parse(v) } catch { return v }
 }
 
+async function bridgeJson(method, ...args) {
+  const bridge = N()
+  if (!bridge?.[method]) throw new Error('Bạn cập nhật app Lá chắn số rồi thử lại nhé.')
+  const result = parse(await bridge[method](...args))
+  if (!result || typeof result !== 'object') throw new Error('Chưa nhận được phản hồi từ app. Bạn thử lại nhé.')
+  if (result.detail) throw new Error(result.detail)
+  return result
+}
+
 export const native = {
   available: () => Boolean(N()),
+
+  recentEvents: () => bridgeJson('recentEvents'),
+  reportEvent: (id, story) => bridgeJson('reportEvent', id, story),
+  withdrawReport: (id) => bridgeJson('withdrawReport', id),
 
   speak(text) {
     if (N()?.speak) return N().speak(text)
@@ -28,7 +41,7 @@ export const native = {
 
   // Trả về chữ nghe được, hoặc null nếu máy không hỗ trợ
   async listen() {
-    if (N()?.listen) return parse(await N().listen())
+    if (N()?.listen) return await N().listen()
     return null
   },
 
@@ -41,6 +54,12 @@ export const native = {
   // true nếu máy đã chặn được số
   blockNumber(phone) {
     if (N()?.blockNumber) return Boolean(parse(N().blockNumber(String(phone).replace(/\s/g, ''))))
+    return false
+  },
+
+  // A10b "Cúp máy ngay": Android ngắt cuộc gọi đang diễn ra (TelecomManager.endCall)
+  endCall() {
+    if (N()?.endCall) return N().endCall()
     return false
   },
 

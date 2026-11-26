@@ -10,7 +10,7 @@
   body{display:flex;gap:0;padding:0;background:var(--bg);min-height:100vh;flex-wrap:nowrap;align-items:stretch}
   .sidebar{position:sticky;top:0;height:100vh;flex:none}
   .main{overflow:auto;min-width:0;padding:24px 32px 48px}
-  .side-item{cursor:pointer}
+  .side-item{cursor:pointer;border:0;text-align:left;background:transparent}
   .w-brand{font-size:16px;line-height:22px;font-weight:700;color:#fff}.w-sub{font-size:12px;line-height:16px;color:#94A3B8}.w-user{font-size:14px;font-weight:700;color:#fff}
   .page{display:none;flex-direction:column;gap:16px}.page.on{display:flex}
   .btn{cursor:pointer;user-select:none}.btn:active{opacity:.85}.btn.off{opacity:.45;pointer-events:none}
@@ -28,26 +28,71 @@
   label.chk{display:flex;gap:10px;align-items:center;font-size:14px;line-height:20px;cursor:pointer}
   label.chk input{width:18px;height:18px}
   @media (max-width:1100px){.split{grid-template-columns:1fr}.panel{position:static}.grid-4{grid-template-columns:1fr 1fr}.sidebar{width:200px}}
+  [hidden]{display:none!important}
+  #login{width:min(420px,calc(100% - 32px));margin:12vh auto auto;padding:28px}
+  button{font:inherit} button:focus-visible,summary:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+  #md-list button,.tr.head{display:grid;grid-template-columns:1.35fr .65fr 1fr;gap:8px;text-align:left;width:100%;overflow-wrap:anywhere}
+  #md-list button{border:0;border-bottom:1px solid var(--outline-2);background:var(--surface);color:var(--ink)}
+  #md-list button.sel{background:var(--brand-c)}
+  #md-detail p{margin:0}
+  .rv{gap:16px}
+  .rv-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .rv-target{font-size:28px;line-height:1.2;letter-spacing:.3px;overflow-wrap:anywhere;margin-top:2px}
+  .rv-level{flex:none;padding:6px 14px;border-radius:999px;font-weight:700;font-size:14px;background:var(--surface-2);color:var(--ink-2)}
+  .rv-level.lv-danger{background:var(--danger-c);color:var(--danger-ink)} .rv-level.lv-suspicious{background:var(--warn-c);color:var(--warn-ink)} .rv-level.lv-safe{background:var(--safe-c);color:var(--safe-ink)}
+  .rv-tags{display:flex;flex-wrap:wrap;gap:6px} .rv-tags span{padding:4px 10px;border-radius:999px;background:var(--brand-c);color:var(--brand-ink);font-size:13px;font-weight:600}
+  .rv-tags span.warn{background:var(--warn-c);color:var(--warn-ink)}
+  .rv-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .rv-stats div{background:var(--surface-2);border-radius:12px;padding:10px 12px;min-width:0}
+  .rv-stats b{display:block;font-size:22px;line-height:1.2;color:var(--ink)} .rv-stats span{font-size:12px;color:var(--ink-2)}
+  .rv-ev summary{cursor:pointer;font-weight:700;list-style:none;display:flex;align-items:center;gap:10px;color:var(--ink)}
+  .rv-ev summary::-webkit-details-marker{display:none}
+  .rv-ev summary::before{content:'';width:7px;height:7px;border-right:2px solid var(--ink-2);border-bottom:2px solid var(--ink-2);transform:rotate(-45deg);transition:transform .15s;margin-left:2px}
+  .rv-ev[open] summary::before{transform:rotate(45deg)}
+  .rv-ev summary .n{padding:1px 9px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);font-size:13px}
+  .rv-list{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:8px;max-height:320px;overflow:auto}
+  .rv-item{display:flex;gap:10px;padding:10px 12px;border:1px solid var(--outline-2);border-radius:12px;background:var(--surface)}
+  .rv-ic{flex:none;width:34px;height:34px;border-radius:10px;background:var(--brand-c);color:var(--brand);display:grid;place-items:center}
+  .rv-body{min-width:0;flex:1}
+  .rv-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .rv-row strong{font-size:14px} .rv-row time{color:var(--ink-3);font-size:13px;white-space:nowrap}
+  .rv-body p{margin-top:3px;font-size:14px;line-height:1.4;color:var(--ink-2);overflow-wrap:anywhere}
+  .rv-body .ans{display:inline-block;margin:6px 6px 0 0;padding:2px 8px;border-radius:8px;background:var(--surface-2);font-size:12px;color:var(--ink-2)}
+  .rv-note{padding:10px 12px;border-radius:12px;background:var(--surface-2);font-size:14px;color:var(--ink-2)}
+  .qf-row{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) auto;gap:8px;align-items:center}
+  .qf-row .btn{height:44px;white-space:nowrap}
+  .qf-list{display:flex;flex-direction:column;gap:6px}
+  .qf-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--outline-2);border-radius:12px;background:var(--surface)}
+  .qf-item .rv-ic{background:var(--danger-c);color:var(--danger)}
+  .qf-item strong{font-size:16px;letter-spacing:.2px}
+  .rv-admin{padding:10px 12px;border-radius:12px;background:var(--brand-c);color:var(--brand-ink);font-size:14px;display:flex;gap:8px;align-items:center}
+  @media(max-width:760px){.qf-row{grid-template-columns:1fr}body{flex-direction:column}.sidebar{position:static;width:100%;height:auto;gap:6px}.main{padding:16px}.grid-3,.grid-4{grid-template-columns:1fr!important}}
 </style>
 </head>
 <body>
 
-<div class="sidebar">
+<form id="login" class="card col gap-12">
+  <h1 class="t-h1">Đăng nhập Lá chắn số</h1>
+  <label for="code">Mã thành viên</label><input id="code" class="field" type="password" inputmode="numeric" autocomplete="one-time-code" required>
+  <button class="btn primary">Đăng nhập</button><p role="alert" id="login-error"></p>
+</form>
+<div class="sidebar" hidden>
   <div class="row gap-12" style="padding:0 10px">
     <div class="icon-box solid-brand" style="width:36px;height:36px;border-radius:10px"><i class="ic s20" data-i="shield-check"></i></div>
-    <div class="col"><div class="w-brand">Lá chắn số</div><div class="w-sub">Đội tình nguyện</div></div>
+    <div class="col"><div class="w-brand">Lá chắn số</div><div class="w-sub" id="team-sub">Đội tình nguyện</div></div>
   </div>
+  <button class="btn outline sm" id="logout">Đăng xuất</button>
   <div class="none" style="height:16px"></div>
-  <div class="side-item active" data-go="stats"><i class="ic s20" data-i="chart"></i><span class="grow">Tổng quan</span></div>
-  <div class="side-item" data-go="mod"><i class="ic s20" data-i="inbox"></i><span class="grow">Kiểm duyệt</span><span class="chip solid-danger" id="side-count" style="height:22px;padding:0 8px">0</span></div>
-  <div class="side-item" data-go="camp"><i class="ic s20" data-i="megaphone"></i><span class="grow">Cảnh báo và tuyên truyền</span></div>
+  <button type="button" class="side-item active" data-go="stats"><i class="ic s20" data-i="chart"></i><span class="grow">Tổng quan</span></button>
+  <button type="button" class="side-item" data-go="mod"><i class="ic s20" data-i="inbox"></i><span class="grow">Kiểm duyệt</span><span class="chip solid-danger" id="side-count" style="height:22px;padding:0 8px">0</span></button>
+  <button type="button" class="side-item" data-go="camp"><i class="ic s20" data-i="megaphone"></i><span class="grow">Cảnh báo và tuyên truyền</span></button>
   <div class="row gap-12 mt-auto" style="padding:0 10px">
     <div class="avatar">K</div>
-    <div class="col grow"><div class="w-user">Khoa</div><div class="w-sub">Tình nguyện viên</div><div class="w-sub">Phường Trấn Biên</div></div>
+    <div class="col grow"><div class="w-user">Khoa</div><div class="w-sub" id="role">Tình nguyện viên</div><div class="w-sub">Phường Trấn Biên</div></div>
   </div>
 </div>
 
-<div class="main grow">
+<div class="main grow" hidden>
 
 <!-- ===================== W1: Thống kê ===================== -->
 <div class="page on" id="p-stats">
@@ -70,10 +115,19 @@
 <!-- ===================== W2: Kiểm duyệt ===================== -->
 <div class="page" id="p-mod">
   <div class="col gap-2"><div class="t-h1">Kiểm duyệt báo cáo</div><div class="t-label muted" id="md-sub"></div></div>
-  <div class="grid-4" id="md-cards"></div>
+  <div class="card col gap-12" id="qf" hidden>
+    <div class="row between wrap gap-8"><div class="t-h2">Gắn cờ nhanh số lừa đảo</div><span class="t-cap muted">Có hiệu lực ngay: máy nào cài Lá chắn số nhận cuộc gọi từ số này đều thấy thẻ đỏ</span></div>
+    <form class="qf-row" id="qf-form">
+      <input class="field" id="qf-phone" inputmode="tel" autocomplete="off" placeholder="Số điện thoại, ví dụ 0912 345 678" aria-label="Số điện thoại" required>
+      <select class="field" id="qf-type" aria-label="Kiểu lừa đảo"></select>
+      <button class="btn danger"><i class="ic s18" data-i="flag"></i>Gắn cờ lừa đảo</button>
+    </form>
+    <div class="qf-list" id="qf-list"></div>
+  </div>
+  
   <div class="split">
     <div class="card" style="padding:0;overflow:hidden">
-      <div class="tr head"><div style="flex:2">Đối tượng</div><div style="flex:1.4">AI đoán</div><div style="width:64px">Tin cậy</div><div style="width:44px">Báo</div></div>
+      <div class="tr head"><span>Đối tượng</span><span>Máy báo</span><span>Phiếu</span></div>
       <div id="md-list"></div>
       <div class="tr last"><div class="t-cap muted grow" id="md-foot"></div></div>
     </div>
@@ -127,15 +181,59 @@
 <script>
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const post = (u, b) => fetch(u, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(b || {}) }).then(r => r.json());
 const toast = t => { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('on'), 2400); };
-const kindIcon = { phone: 'phone', link: 'link', account: 'card', other: 'flag' };
-let S = null, reports = [], sel = null, appeals = [
-  { id: 'ap1', value: '0905 123 456', reason: 'Số của tiệm giao hoa, bị gắn nhãn nhầm là lừa đảo.', open: true },
-  { id: 'ap2', value: 'giaohang-nhanh-24h.top', reason: 'Đây là trang của cửa hàng em, em xin được xem lại.', open: true }];
+let session = JSON.parse(sessionStorage.getItem('lcs.web.team') || 'null');
+let S, cases = [], appeals = [], sel, previous = '', loading = false;
+const isAdmin = () => session?.member.role === 'admin';
+const isLead = () => ['lead', 'admin'].includes(session?.member.role);
+let flags = [];
+async function api(path, body) {
+  const headers = {'Content-Type':'application/json', 'X-LCS-Team':session?.token || ''};
+  const device = localStorage.getItem('lcs.device.' + location.origin);
+  if (device) headers['X-LCS-Device'] = device;
+  const response = await fetch(path, {method:body === undefined ? 'GET' : 'POST', headers, body:JSON.stringify(body)});
+  const data = await response.json();
+  if (!response.ok) {
+    if (response.status === 401 && session?.token === headers['X-LCS-Team']) setSession(null);
+    throw new Error(typeof data.detail === 'string' ? data.detail : 'Không gửi được. Bạn thử lại nhé.');
+  }
+  return data;
+}
+const post = api;
+function setSession(value) {
+  session = value;
+  sessionStorage.setItem('lcs.web.team',JSON.stringify(value));
+  previous = ''; sel = null; cases = []; appeals = []; flags = [];
+  $('#qf').hidden = !isAdmin(); $('#qf-list').replaceChildren();
+  $('#md-appeals').replaceChildren(); $('#md-appeals').hidden = !isLead();
+  $('#md-detail').replaceChildren(); $('#md-list').replaceChildren(); $('#c-sent').replaceChildren();
+  $('#login').hidden = !!value;
+  $('.sidebar').hidden = $('.main').hidden = !value;
+  if (!value) { $('#code').focus(); return; }
+  $('.w-user').textContent = value.member.name;
+  $('.avatar').textContent = value.member.name.charAt(0);
+  $('#role').textContent = isAdmin() ? 'Toàn quyền duyệt và gắn cờ' : isLead() ? 'Trưởng đội' : 'Tình nguyện viên';
+  $('#team-sub').textContent = isAdmin() ? 'Quản trị' : 'Đội tình nguyện';
+  $('[data-go="camp"]').hidden = !isLead();
+  go(location.hash.slice(1) || 'stats');
+}
+$('#login').onsubmit = async e => {
+  e.preventDefault(); $('#login-error').textContent = '';
+  try {
+    if (!localStorage.getItem('lcs.device.' + location.origin)) {
+      const device = await api('/api/devices', {});
+      localStorage.setItem('lcs.device.' + location.origin, device.deviceId);
+    }
+    setSession(await api('/api/team/login', {code:$('#code').value.trim()}));
+    $('#code').value = ''; await refresh(true);
+  } catch (error) { $('#login-error').textContent = error.message; }
+};
+$('#logout').onclick = () => setSession(null);
+window.addEventListener('unhandledrejection', e => { toast(e.reason?.message || 'Chưa kết nối được máy chủ.'); e.preventDefault(); });
 
 /* ---------- Điều hướng ---------- */
 function go(name) {
+  if (!['stats','mod',...(isLead() ? ['camp'] : [])].includes(name)) name = 'stats';
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('on', p.id === 'p-' + name));
   document.querySelectorAll('.side-item').forEach(s => s.classList.toggle('active', s.dataset.go === name));
   location.hash = name;
@@ -150,13 +248,14 @@ function renderStats() {
   $('#st-cards').innerHTML = `
     <div class="card col" style="padding:12px 16px"><div class="row between"><div class="t-label muted">Báo cáo trong tháng</div><i class="ic s18 faint" data-i="flag"></i></div><div class="num">${s.total}</div><div class="row gap-6"><i class="ic s16 c-danger" data-i="trend-up"></i><div class="t-cap c-danger">${s.totalDelta}</div></div></div>
     <div class="card col" style="padding:12px 16px"><div class="row between"><div class="t-label muted">Đường dẫn giả mạo</div><i class="ic s18 faint" data-i="link"></i></div><div class="num">${s.links}</div><div class="t-cap muted">${s.linkPct}% tổng số báo cáo</div></div>
-    <div class="card col" style="padding:12px 16px"><div class="row between"><div class="t-label muted">AI tự xác nhận</div><i class="ic s18 c-ai" data-i="sparkles"></i></div><div class="num">${s.aiConfirmed}</div><div class="t-cap muted">${s.aiPct}% · không cần người duyệt</div></div>
+    <div class="card col" style="padding:12px 16px"><div class="row between"><div class="t-label muted">Báo cáo góp vào cảnh báo</div><i class="ic s18 c-ai" data-i="sparkles"></i></div><div class="num">${s.aiConfirmed}</div><div class="t-cap muted">${s.aiPct}% · tổng số báo cáo</div></div>
     <div class="card col" style="padding:12px 16px;cursor:pointer" data-go-mod><div class="row between"><div class="t-label muted">Chờ đội duyệt</div><i class="ic s18 faint" data-i="inbox"></i></div><div class="num">${s.pending}</div><span class="chip warn" style="height:24px"><i class="ic s14" data-i="alert"></i>Cần cân nhắc</span></div>`;
-  const max = s.scam[0][1];
+  const max = s.scam[0]?.[1] || 1;
   $('#st-scam').innerHTML = `<div class="row between"><div class="t-h2">Kiểu lừa đảo trong tháng</div><div class="t-cap muted">tổng ${s.total} báo cáo</div></div>` +
     s.scam.map(([l, v], i) => `<div class="row gap-12"><div class="t-label" style="width:190px;flex:none">${esc(l)}</div>${bar(i === 0 ? 'danger' : l === 'Khác' ? 'gray' : '', v / max * 100)}<div class="t-label bold right" style="width:32px;flex:none">${v}</div></div>`).join('');
   const e = s.emerging;
-  $('#st-emerging').innerHTML = `<div class="row between gap-8"><span class="chip solid-danger"><i class="ic s14" data-i="trend-up"></i>Mới nổi tại Trấn Biên</span><span class="ai-tag"><i class="ic s14" data-i="sparkles"></i>AI gom từ ${e.reports} báo cáo</span></div>
+  $('#st-emerging').hidden = !e;
+  $('#st-emerging').innerHTML = !e ? '' : `<div class="row between gap-8"><span class="chip solid-danger"><i class="ic s14" data-i="trend-up"></i>Mới nổi tại Trấn Biên</span><span class="ai-tag"><i class="ic s14" data-i="sparkles"></i>${e.reports} báo cáo gần đây</span></div>
     <div class="t-h2">${esc(e.title)}</div><div class="t-label c-ai-ink">${e.reports} báo cáo trong ${e.days} ngày · tăng nhanh</div>
     <div class="row gap-8" style="align-items:stretch">${e.quotes.map(q => `<div class="card grow t-cap quote">“${esc(q)}”</div>`).join('')}</div>
     <div class="row gap-8 mt-auto"><span class="btn primary sm" id="em-compose"><i class="ic s18" data-i="megaphone"></i>Soạn cảnh báo</span><span class="btn outline sm" data-go-mod>Xem báo cáo</span></div>`;
@@ -166,14 +265,14 @@ function renderStats() {
     <svg width="100%" viewBox="0 0 360 110" style="display:block"><line x1="0" y1="20" x2="360" y2="20" stroke="#E2E8F0"/><line x1="0" y1="55" x2="360" y2="55" stroke="#E2E8F0"/><line x1="0" y1="90" x2="360" y2="90" stroke="#E2E8F0"/>
     <polyline points="${pts.join(' ')}" fill="none" stroke="#1D4ED8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${pts.map(p => `<circle cx="${p.split(',')[0]}" cy="${p.split(',')[1]}" r="5" fill="#1D4ED8"/>`).join('')}</svg>
     <div class="row">${w.map((v, i) => `<div class="col grow acenter"><div class="t-cap muted">Tuần ${i + 1}</div><div class="t-label bold">${v}</div></div>`).join('')}</div>`;
-  $('#st-target').innerHTML = `<div class="t-h2">Nhóm bị nhắm tới</div>` + s.targets.map(([l, v], i) => `<div class="row gap-10"><div class="t-label" style="width:112px;flex:none">${l}</div>${bar(['danger', 'warn', 'gray'][i], v)}<div class="t-label bold right" style="width:36px;flex:none">${v}%</div></div>`).join('') +
+  $('#st-target').innerHTML = `<div class="t-h2">Nhóm bị nhắm tới</div>` + s.targets.map(([l, v], i) => `<div class="row gap-10"><div class="t-label" style="width:112px;flex:none">${esc(l)}</div>${bar(['danger', 'warn', 'gray'][i], v)}<div class="t-label bold right" style="width:36px;flex:none">${v}%</div></div>`).join('') +
     `<div class="card soft row gap-8 mt-auto" style="padding:10px 12px;border-radius:12px"><i class="ic s18 muted" data-i="clock"></i><div class="t-cap c-ink">Khung giờ cao điểm: ${s.peak}</div></div>`;
-  const am = s.areas[0][1];
+  const am = s.areas[0]?.[1] || 1;
   $('#st-area').innerHTML = `<div class="row between"><div class="t-h2">Theo khu phố</div><div class="t-cap muted">Số báo cáo</div></div>` +
-    s.areas.map(([l, v]) => `<div class="row gap-10" style="min-height:32px"><div class="t-label" style="width:80px;flex:none">${l}</div>${bar('', v / am * 100)}<div class="t-label bold right" style="width:24px;flex:none">${v}</div></div>`).join('');
+    s.areas.map(([l, v]) => `<div class="row gap-10" style="min-height:32px"><div class="t-label" style="width:80px;flex:none">${esc(l)}</div>${bar('', v / am * 100)}<div class="t-label bold right" style="width:24px;flex:none">${v}</div></div>`).join('');
   $('#side-count').textContent = s.pending;
   document.querySelectorAll('[data-go-mod]').forEach(b => b.onclick = () => go('mod'));
-  const em = $('#em-compose'); if (em) em.onclick = () => { $('#c-type').value = 'dien-luc'; fillCampaign(); go('camp'); };
+  const em = $('#em-compose'); if (em) em.hidden = !isLead(); if (em && isLead()) em.onclick = () => { $('#c-type').value = 'dien-luc'; fillCampaign(); go('camp'); };
   paintIcons($('#p-stats'));
 }
 $('#st-export').onclick = () => {
@@ -183,69 +282,104 @@ $('#st-export').onclick = () => {
 };
 
 /* ---------- W2: kiểm duyệt ---------- */
-const STATUS = { pending: ['Chờ duyệt', 'warn'], confirmed: ['Đã xác nhận', 'danger'], spam: ['Spam quảng cáo', 'outline'], rejected: ['Không đủ căn cứ', 'outline'], labeled: ['Đã gắn nhãn', 'brand'], forwarded: ['Đã chuyển Công an phường', 'brand'] };
+const flagNames = {w3:'Cụm nhiều máy', w2:'Bản ghi chờ xét', conflict:'Ý kiến trái nhau', burst:'Báo dồn', appeal:'Đang xét báo nhầm'};
+const levels = {safe:'Khớp danh bạ', unknown:'Chưa rõ', suspicious:'Nghi ngờ', danger:'Nguy hiểm'};
+const choices = {yes:'Có', no:'Không', known:'Tôi biết số này', 'nguoi-quen':'Người quen', 'dung-chuyen':'Đừng chuyển'};
 function renderMod() {
-  const pend = reports.filter(r => r.status === 'pending');
-  const auto = reports.filter(r => r.auto).length;
-  $('#md-sub').textContent = `AI đã tự xử lý ${S ? S.aiConfirmed + S.aiRejected : '…'}/${S ? S.total : '…'} ca · chỉ ca AI chưa chắc mới chuyển tới người duyệt`;
-  const openAppeals = appeals.filter(a => a.open).length;
-  $('#md-cards').innerHTML = [['Cần cân nhắc', S ? S.pending : pend.length, 'warn'], ['AI đã xác nhận', S ? S.aiConfirmed : 0, 'danger'], ['AI đã loại', S ? S.aiRejected : 0, ''], ['Khiếu nại', openAppeals, 'brand']]
-    .map(([l, v, c]) => `<div class="card col" style="padding:12px 16px"><div class="t-label muted">${l}</div><div class="num">${v}</div></div>`).join('');
-  const list = reports.filter(r => r.status === 'pending');
-  if (sel && !reports.find(r => r.id === sel)) sel = null;
-  if (!sel && list[0]) sel = list[0].id;
-  $('#md-list').innerHTML = list.length ? list.map(r => `<div class="tr row-click ${r.id === sel ? 'sel' : ''}" data-id="${r.id}">
-      <div style="flex:2" class="row gap-8"><i class="ic s16 muted" data-i="${kindIcon[r.kind] || 'flag'}"></i><div class="t-label bold">${esc(r.value)}</div></div>
-      <div style="flex:1.4" class="t-label">${esc(r.aiGuess)}</div>
-      <div style="width:64px"><span class="chip ${r.confidence >= 70 ? 'warn' : ''}">${r.confidence}%</span></div>
-      <div style="width:44px" class="t-label bold">${r.count}</div></div>`).join('')
-    : '<div class="tr last"><div class="t-label muted">Không còn ca nào chờ duyệt. AI đã tự xử lý phần còn lại.</div></div>';
-  $('#md-foot').textContent = `Hiển thị ${list.length} ca chờ duyệt · ${auto} ca AI tự xác nhận trong phiên này`;
-  document.querySelectorAll('#md-list .row-click').forEach(row => row.onclick = () => { sel = row.dataset.id; renderMod(); });
-  renderDetail();
+  if (!cases.some(c => c.reviewId === sel)) sel = cases[0]?.reviewId;
+  $('#md-sub').textContent = 'Xem dấu hiệu đòi chuyển tiền hoặc lấy mã OTP và đối chiếu thời điểm các máy đã nhận.';
+  $('#md-list').innerHTML = cases.map(c => `<button type="button" class="tr row-click ${c.reviewId === sel ? 'sel' : ''}" data-id="${esc(c.reviewId)}">
+    <strong>${esc(c.reports[0]?.target || c.key)}</strong><span>${c.reportedCount} máy</span><span>${c.votes.confirm}/2 xác nhận</span></button>`).join('');
+  $('#md-foot').textContent = cases.length ? cases.length + ' đợt đang xét' : 'Hiện chưa có hồ sơ cần xét.';
+  $('#md-list').querySelectorAll('button').forEach(b => b.onclick = () => { sel = b.dataset.id; renderMod(); });
+  renderReview(cases.find(c => c.reviewId === sel));
   renderAppeals();
-  paintIcons($('#p-mod'));
 }
-function renderDetail() {
-  const r = reports.find(x => x.id === sel), el = $('#md-detail');
-  if (!r || r.status !== 'pending') { el.innerHTML = '<div class="card t-label muted">Chọn một ca bên trái để xem bằng chứng và quyết định.</div>'; return; }
-  el.innerHTML = `
-    <div class="card col gap-12">
-      <div class="row gap-8 wrap"><div class="t-h2">${esc(r.value)}</div><span class="chip warn">Cần cân nhắc</span></div>
-      <div class="t-cap muted">Báo lúc ${new Date(r.at).toTimeString().slice(0, 5)} · ${r.count} người báo · ${esc(r.area)}${r.note ? ' · ghi chú: “' + esc(r.note) + '”' : ''}</div>
-      <div class="card ai col gap-8"><span class="ai-tag"><i class="ic s14" data-i="sparkles"></i>AI nhận định</span>
-        <div class="row between"><div class="t-label bold">${esc(r.aiGuess)}</div><div class="t-label">Độ tin cậy <b>${r.confidence}%</b></div></div>
-        ${(r.signs || []).map(s => `<div class="row gap-8"><i class="ic s16 c-ai" data-i="check"></i><div class="t-label">${esc(s)}</div></div>`).join('')}</div>
-      <div class="col gap-6"><div class="t-over muted">Vì sao AI chưa chắc</div>${(r.whyUnsure || []).map(s => `<div class="row gap-8"><i class="ic s16 c-warn" data-i="alert"></i><div class="t-label">${esc(s)}</div></div>`).join('')}</div>
-      ${(r.history || []).length ? `<div class="col gap-6"><div class="t-over muted">Lịch sử của số này</div>${r.history.map(h => `<div class="t-cap muted">${esc(h)}</div>`).join('')}</div>` : ''}
-    </div>
-    <div class="grid-2">
-      <span class="btn danger" data-d="confirmed"><i class="ic s18" data-i="alert-oct"></i>Xác nhận lừa đảo</span>
-      <span class="btn outline" data-d="spam">Spam quảng cáo</span>
-      <span class="btn outline" data-d="rejected">Không đủ căn cứ</span>
-      <span class="btn outline" data-d="label">Gắn nhãn giao hàng</span></div>
-    <span class="btn tonal block" data-d="police"><i class="ic s18" data-i="send"></i>Chuyển tin báo cho Công an phường</span>
-    <div class="t-cap muted">Nhãn tự hết hạn sau 90 ngày nếu không có báo cáo mới, vì số điện thoại có thể được cấp lại cho người khác.</div>`;
-  el.querySelectorAll('[data-d]').forEach(b => b.onclick = async () => {
-    const d = b.dataset.d, id = r.id; await post(`/api/reports/${id}/decision`, { decision: d });
-    toast(({ confirmed: 'Đã xác nhận và gắn nhãn 90 ngày', spam: 'Đã loại: spam quảng cáo', rejected: 'Đã đóng: không đủ căn cứ', label: 'Đã gắn nhãn giao hàng', police: 'Đã gom hồ sơ chuyển Công an phường (mô phỏng)' })[d]);
-    sel = null; await refresh();
+function renderReview(c) {
+  const el = $('#md-detail');
+  if (!c) { el.replaceChildren(); return; }
+  const required = c.flags.includes('conflict');
+  const when = (t) => new Date(t).toLocaleString('vi-VN', {hour:'2-digit', minute:'2-digit', day:'2-digit', month:'2-digit'});
+  const reports = c.reports.map(r => {
+    const call = r.evidence.type === 'call_log';
+    const evidence = call ? (r.analysisId ? 'Cuộc gọi có bản ghi' : 'Nhật ký cuộc gọi đến') : 'Thông báo tin nhắn';
+    const icon = call ? (r.analysisId ? 'file-audio' : 'phone-in') : 'message';
+    const ans = [r.aiLevel ? 'Nhãn bản ghi · ' + esc(levels[r.aiLevel]) : '', r.selfAnswer ? 'Người nhận · ' + esc(choices[r.selfAnswer]) : '',
+      r.relativeChoice ? 'Người thân · ' + esc(choices[r.relativeChoice]) : '', ...r.lateAnswers.map(a => 'Trả lời muộn · ' + esc(choices[a.choice]))].filter(Boolean);
+    return `<li class="rv-item"><span class="rv-ic"><i class="ic s18" data-i="${icon}"></i></span><div class="rv-body">
+      <div class="rv-row"><strong>${evidence}</strong><time>${when(r.evidence.at)}</time></div>
+      <p>${esc(r.summary || r.story)}</p>${ans.map(a => '<span class="ans">' + a + '</span>').join('')}</div></li>`;
+  }).join('');
+  el.innerHTML = `<div class="card col rv"><div class="rv-head"><div class="col gap-2"><div class="t-cap muted">Đối tượng bị báo</div>
+      <h2 class="t-h2 rv-target">${esc(c.reports[0]?.target || c.key)}</h2></div>
+      <span class="rv-level lv-${esc(c.level)}">${levels[c.level] || esc(c.level)}</span></div>
+    ${c.flags.length ? '<div class="rv-tags">' + c.flags.map(f => '<span class="' + (f === 'burst' || f === 'conflict' ? 'warn' : '') + '">' + esc(flagNames[f] || f) + '</span>').join('') + '</div>' : ''}
+    <div class="rv-stats"><div><b>${c.count}</b><span>máy được tính</span></div><div><b>${c.reports.length}</b><span>bằng chứng đợt này</span></div>
+      <div><b>${c.votes.confirm}/2</b><span>phiếu xác nhận${c.votes.reject ? ' · ' + c.votes.reject + ' bác' : ''}${c.votes.spam ? ' · ' + c.votes.spam + ' rác' : ''}</span></div></div>
+    <details open class="rv-ev"><summary>Bằng chứng trong đợt này <span class="n">${c.reports.length}</span></summary><ul class="rv-list">${reports}</ul></details>
+    ${c.notes.filter(v => v.note).map(v => '<p class="rv-note"><strong>' + esc(v.member) + '</strong> · ' + esc(v.note) + '</p>').join('')}
+    ${c.canVote ? `${isAdmin() ? '<div class="rv-admin"><i class="ic s18" data-i="shield-check"></i>Quyết định của quản trị viên có hiệu lực ngay, không cần phiếu thứ hai.</div>' : ''}
+    <label for="vote-note">${required ? 'Lý do xử lý ý kiến trái nhau (bắt buộc)' : 'Nhận xét (nếu có)'}</label>
+    <textarea class="field" id="vote-note" rows="2"></textarea><div class="row wrap gap-8">
+    <button class="btn ${isAdmin() ? 'danger' : 'primary'} sm" data-vote="confirm">${isAdmin() ? 'Xác minh lừa đảo' : 'Xác nhận dấu hiệu'}</button>
+    <button class="btn outline sm" data-vote="reject">Bác báo cáo</button>
+    <button class="btn outline sm" data-vote="spam">Báo rác</button></div>` : '<p class="rv-note">' + esc(c.reasonCannotVote) + '</p>'}</div>`;
+  paintIcons(el);
+  el.querySelectorAll('[data-vote]').forEach(b => b.onclick = async () => {
+    const note = $('#vote-note').value.trim();
+    if (required && !note) { toast('Bạn ghi lý do trước khi bỏ phiếu nhé.'); $('#vote-note').focus(); return; }
+    await post('/api/cases/' + encodeURIComponent(c.key) + '/vote', {reviewId:c.reviewId, decision:b.dataset.vote, note});
+    toast(isAdmin() ? (b.dataset.vote === 'confirm' ? 'Đã xác minh. Số này giờ hiện cảnh báo Nguy hiểm.' : 'Đã bác hồ sơ.') : 'Đã ghi nhận phiếu.');
+    await refresh(true);
   });
 }
 function renderAppeals() {
-  $('#md-appeals').innerHTML = `<div class="row between"><div class="t-h2">Khiếu nại báo oan</div><span class="chip brand">${appeals.filter(a => a.open).length} đang mở</span></div>` +
-    appeals.map(a => `<div class="row gap-12" style="padding:8px 0;border-top:1px solid var(--outline-2)"><i class="ic s18 muted" data-i="flag"></i>
-      <div class="col grow"><div class="t-label bold">${esc(a.value)}</div><div class="t-cap muted">${esc(a.reason)}</div></div>
-      ${a.open ? `<span class="btn outline sm" data-ap="${a.id}:ok">Gỡ nhãn</span><span class="btn ghost sm" data-ap="${a.id}:no">Giữ nhãn</span>` : '<span class="chip safe">Đã xử lý</span>'}</div>`).join('');
-  if (!appeals.length) $('#md-appeals').insertAdjacentHTML('beforeend', '<div class="t-label muted">Không có khiếu nại nào đang mở.</div>');
-  document.querySelectorAll('[data-ap]').forEach(b => b.onclick = async () => {
-    const [id, v] = b.dataset.ap.split(':');
-    if (appealsLive) { const r = await post(`/api/reports/${id}/appeal/resolve`, { outcome: v === 'ok' ? 'remove' : 'keep' }); if (r.error || r.detail) return toast('Không xử lý được khiếu nại này'); }
-    else appeals.find(a => a.id === id).open = false;
-    toast(v === 'ok' ? 'Đã gỡ nhãn cảnh báo' : 'Giữ nhãn, đã đóng khiếu nại');
-    await refresh();
+  const el = $('#md-appeals');
+  el.hidden = !isLead();
+  if (!isLead()) { el.replaceChildren(); return; }
+  el.innerHTML = '<h2 class="t-h2">Khiếu nại đã xác minh</h2>' + (appeals.filter(a => a.status === 'verified').map(a => `
+    <div class="row wrap gap-8"><div class="col grow"><strong>${esc(a.target)}</strong><p>${esc(a.text)}</p></div>
+    <button class="btn outline sm" data-ap="${esc(a.id)}" data-out="remove">Gỡ nhãn</button>
+    <button class="btn outline sm" data-ap="${esc(a.id)}" data-out="keep">Giữ nhãn</button></div>`).join('')
+    || '<p>Chưa có khiếu nại đã xác minh.</p>');
+  el.querySelectorAll('[data-ap]').forEach(b => b.onclick = async () => {
+    await post('/api/appeals/' + b.dataset.ap + '/resolve', {outcome:b.dataset.out});
+    toast('Đã ghi nhận quyết định.'); await refresh(true);
   });
 }
+
+/* ---------- Quản trị: gắn cờ nhanh ---------- */
+const SCAMS = {gia_danh_cong_an:'Giả danh công an', nguoi_than_tai_nan:'Người thân gặp tai nạn', gia_dien_luc:'Giả nhân viên điện lực',
+  viec_nhe_luong_cao:'Việc nhẹ lương cao', dau_tu_lai_cao:'Đầu tư lãi cao', qua_tri_an:'Quà tri ân', khac:'Kiểu khác'};
+$('#qf-type').innerHTML = Object.entries(SCAMS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
+function renderFlags() {
+  const el = $('#qf-list');
+  if (!isAdmin()) { el.replaceChildren(); return; }
+  const at = t => new Date(t).toLocaleString('vi-VN', {hour:'2-digit', minute:'2-digit', day:'2-digit', month:'2-digit'});
+  el.innerHTML = flags.length ? `<div class="t-cap muted">Đã gắn cờ (${flags.length})</div>` + flags.map(f => `<div class="qf-item">
+      <span class="rv-ic"><i class="ic s18" data-i="phone-off"></i></span>
+      <div class="col grow" style="min-width:0"><strong>${esc(f.target)}</strong><span class="t-cap muted">${esc(f.scamLabel || 'Lừa đảo')} · gắn lúc ${at(f.at)}${f.count ? ' · ' + f.count + ' máy đã báo' : ''}</span></div>
+      <span class="rv-level lv-${esc(f.level)}">${levels[f.level] || esc(f.level)}</span>
+      <button type="button" class="btn outline sm" data-unflag="${esc(f.key)}"><i class="ic s16" data-i="trash"></i>Gỡ cờ</button></div>`).join('')
+    : '<div class="t-cap muted">Chưa có số nào được gắn cờ nhanh.</div>';
+  paintIcons(el);
+  el.querySelectorAll('[data-unflag]').forEach(b => b.onclick = async () => {
+    b.classList.add('off');
+    try { await post('/api/admin/flags/remove', {key:b.dataset.unflag}); toast('Đã gỡ cờ. Số này không còn bị cảnh báo.'); }
+    finally { await refresh(true); }
+  });
+}
+$('#qf-form').onsubmit = async e => {
+  e.preventDefault();
+  const btn = $('#qf-form button'); btn.classList.add('off');
+  try {
+    const r = await post('/api/admin/flags', {target:$('#qf-phone').value.trim(), scamType:$('#qf-type').value});
+    $('#qf-phone').value = '';
+    toast(r.level === 'danger' ? 'Đã gắn cờ. Số này giờ hiện thẻ đỏ khi gọi tới.' : 'Đã gắn cờ.');
+    await refresh(true);
+  } catch (error) { toast(error.message); }
+  finally { btn.classList.remove('off'); }
+};
 
 /* ---------- W3: tuyên truyền ---------- */
 const TYPES = {
@@ -276,25 +410,31 @@ $('#s-share').onclick = () => toast('Đã chia sẻ truyện vào 12 nhóm khu p
 $('#s-print').onclick = () => window.print();
 document.querySelectorAll('[data-quiz]').forEach(b => b.onclick = () => toast('Câu đố chạy từ bài kiểm tra của mảng Học như chơi game'));
 async function loadSent() {
-  const b = await fetch('/api/broadcasts').then(r => r.json());
+  const b = await api('/api/broadcasts');
   $('#c-sent').innerHTML = b.length ? '<div class="t-over muted">Đã gửi</div>' + b.slice(0, 3).map(x => `<div class="card soft row gap-10" style="padding:10px 12px"><i class="ic s18 c-safe" data-i="check-circle"></i><div class="col grow"><div class="t-label bold">${esc(x.title)}</div><div class="t-cap muted">${new Date(x.at).toTimeString().slice(0, 5)} · ${esc(x.to.join(', '))}</div></div></div>`).join('') : '';
   paintIcons($('#c-sent'));
 }
 
 /* ---------- Dữ liệu và đồng bộ ---------- */
-let appealsLive = false;
-async function loadAppeals() {   // máy chủ FastAPI có khiếu nại thật; máy chủ Node tối thiểu thì dùng dữ liệu mẫu ở trên
+async function refresh(force = false) {
+  if (!session || loading) return;
+  loading = true;
+  const token = session.token;
   try {
-    const d = await fetch('/api/reports?status=appealed').then(r => r.json());
-    if (d && Array.isArray(d.items)) { appealsLive = true; appeals = d.items.map(i => ({ id: i.id, value: i.target, reason: i.appeal, open: true })); }
-  } catch { /* giữ dữ liệu mẫu */ }
+    const [stats, queue, decisions, flagged] = await Promise.all([api('/api/stats'), api('/api/cases?status=open'),
+      isLead() ? api('/api/appeals') : {items:[]}, isAdmin() ? api('/api/admin/flags') : {items:[]}]);
+    if (session?.token !== token) return;
+    const signature = JSON.stringify([stats,queue,decisions,flagged]);
+    if (previous === signature && !force) return;
+    const note = $('#vote-note')?.value, selected = sel;
+    previous = signature; S = stats; cases = queue.items; appeals = decisions.items; flags = flagged.items;
+    renderStats(); renderMod(); renderFlags();
+    if (selected === sel && note && $('#vote-note')) $('#vote-note').value = note;
+    if (isLead()) await loadSent();
+  } finally { loading = false; }
 }
-async function refresh() { [S, reports] = await Promise.all([fetch('/api/stats').then(r => r.json()), fetch('/api/reports').then(r => r.json()), loadAppeals()]).then(x => [x[0], x[1]]); renderStats(); renderMod(); }
-refresh(); loadSent();
-const es = new EventSource('/api/events');
-es.addEventListener('report', e => { const r = JSON.parse(e.data); refresh(); if (r.source !== 'seed' && r.count === 1) toast('Báo cáo mới: ' + r.value + (r.auto ? ' · AI tự xác nhận' : ' · chờ duyệt')); });
-es.addEventListener('reset', () => { sel = null; refresh(); loadSent(); });
-go(['stats', 'mod', 'camp'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'stats');
+setSession(session);
+refresh(); setInterval(() => { if (!document.hidden) refresh(); }, 3000);
 </script>
 </body>
 </html>

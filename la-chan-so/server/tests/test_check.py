@@ -6,9 +6,8 @@ def test_so_bi_bao_ra_nguy_hiem(client):
     assert r["level"] == "danger"
     assert r["kind"] == "phone"
     assert r["display"] == "0912 345 678"
-    assert r["headline"] == "14 người đã báo số này giả danh công an."
-    assert r["why"][0] == "14 báo cáo trong 7 ngày, gần nhất hôm qua"
-    assert "Đội tình nguyện đã xác nhận" in r["why"]
+    assert r["headline"] == "Có 14 máy báo cuộc gọi hiển thị số này dụ chuyển tiền hoặc lấy mã OTP. Đội tình nguyện đã kiểm tra."
+    assert r["canAppeal"] and not r["appealOpen"]
     assert r["reports"]["count"] == 14 and r["reports"]["verified"] and r["reports"]["lastWhen"] == "hôm qua"
     assert r["scamType"] == "gia_danh_cong_an"
     assert r["todo"][0] == "Cúp máy, không gọi lại."
@@ -38,7 +37,7 @@ def test_tong_dai_that_ra_an_toan(client):
 def test_so_chua_ai_bao_ra_chua_co_du_lieu(client):
     r = client.post("/api/check", json={"value": "0987 654 321"}).json()
     assert r["level"] == "unknown"
-    assert r["headline"] == "Chưa ai báo cáo số này."
+    assert r["headline"] == "Chưa đủ bằng chứng để cảnh báo."
     assert r["note"] == "Điều đó không có nghĩa là an toàn."
 
 
@@ -48,7 +47,7 @@ def test_tai_khoan_che_giua(client):
     assert r["display"] == "1903 xxxx 5678"
     # Chỉ có báo cáo đang chờ duyệt -> chưa được tính
     assert r["level"] == "unknown"
-    assert r["headline"] == "Chưa ai báo cáo tài khoản này."
+    assert r["headline"] == "Chưa đủ bằng chứng để cảnh báo."
 
 
 def test_chi_danh_ba_trang_moi_cho_an_toan(client):
@@ -74,3 +73,16 @@ def test_nhan_het_han_sau_90_ngay(client, monkeypatch):
     monkeypatch.setattr(config, "demo_today", lambda: date(2027, 3, 1))
     r = client.post("/api/check", json={"value": "0912 345 678"}).json()
     assert r["level"] == "unknown"
+
+
+def test_red_headline_says_who_confirmed():
+    """Two recipient-confirmed recordings (W1) reach red without team votes: the headline must not claim a team check."""
+    from lcs import config
+    from lcs.checker import check_target
+
+    found = dict(appealOpen=False, canAppeal=True, count=2, official=None, level="danger", scamType="gia_danh_cong_an",
+                 lastAt=config.now().isoformat(), last7d=2, signs=[], teamChecked=False)
+    r = check_target("phone", "0901234567", None, found)
+    assert r.headline == "Có 2 máy báo cuộc gọi hiển thị số này dụ chuyển tiền hoặc lấy mã OTP. Người nhận đã xác nhận nội dung cuộc gọi."
+    found.update(level="suspicious", count=1)
+    assert check_target("phone", "0901234567", None, found).headline == "Có 1 máy báo cuộc gọi hiển thị số này dụ chuyển tiền hoặc lấy mã OTP."

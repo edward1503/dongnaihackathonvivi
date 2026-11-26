@@ -1,7 +1,9 @@
 """Hợp đồng dữ liệu dùng chung cho app, Android, Zalo và web. Xem KE-HOACH-MANG-2-3.md mục 2."""
 from typing import Any, Literal, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
+
+from .data import LESSONS
 
 Kind = Literal["phone", "link", "account", "message", "call"]
 Level = Literal["danger", "suspicious", "safe", "unknown"]
@@ -29,6 +31,16 @@ class AnalysisResult(BaseModel):
     kind: Kind
     display: str
     level: Level
+    analysisId: str | None = None
+    transferRequested: bool = False
+    aiLevel: Level | None = None
+    aiScamType: str | None = None
+    aiConfidence: float | None = None
+    summary: str | None = None
+    communityLevel: Level | None = None
+    appealOpen: bool = False
+    canAppeal: bool = False
+    count: int = 0
     reason: Reason = None
     scamType: Optional[str] = None
     scamLabel: Optional[str] = None
@@ -41,6 +53,14 @@ class AnalysisResult(BaseModel):
     reports: ReportSummary = Field(default_factory=ReportSummary)
     source: Source
     confidence: float = 0.0
+    adminVerified: bool = False  # quản trị viên đã xác minh: app ghi rõ trên thẻ cảnh báo
+    lesson: Optional[str] = None  # mã bài học của Mảng 4 (hoc.html?kieu=…); None: kiểu này chưa có bài
+
+    @model_validator(mode="after")
+    def _fill_lesson(self):
+        if self.lesson is None and self.scamType:
+            self.lesson = LESSONS.get(self.scamType)
+        return self
 
 
 # ---- Đầu vào ----
@@ -56,6 +76,9 @@ class MessageIn(BaseModel):
 
 class AlertIn(BaseModel):
     """Nhận cả dạng của app/Android (phone, scamLabel, asksMoney) lẫn dạng của trang Zalo (number, scenario, askedTransfer)."""
+    kind: str | None = None
+    reportId: str | None = None
+    analysisId: str | None = None
     room: str = "gia-dinh-hoa"
     level: str = "danger"
     scamType: Optional[str] = None
@@ -70,6 +93,7 @@ class AlertIn(BaseModel):
     callSeconds: Optional[int] = None
     timeline: list[dict[str, Any]] = []
     sender: str = Field("ba-hoa", alias="from")
+    eventId: Optional[str] = Field(None, max_length=80)  # mã sự kiện của bên gửi: gửi lại cùng mã thì không báo trùng
 
     model_config = {"populate_by_name": True}
 
@@ -106,28 +130,8 @@ class EventIn(BaseModel):
     model_config = {"populate_by_name": True}
 
 
-class ReportIn(BaseModel):
-    kind: Literal["call", "message", "link", "account"]
-    target: str
-    story: Optional[str] = None
-    hasAudio: bool = False
-    lostMoney: bool = False
-    area: Optional[str] = None
-    group: Optional[str] = None
-    reporter: str = "vy"
-
-
-class ReportPatch(BaseModel):
-    status: Literal["confirmed", "rejected"]
-
-
-class DecisionIn(BaseModel):
-    decision: Literal["confirmed", "spam", "rejected", "label", "police"]
-    label: Optional[str] = None
-
-
 class LegacyReplyIn(BaseModel):
-    choice: Literal["dung-chuyen", "nguoi-quen"] = "dung-chuyen"
+    choice: Literal["dung-chuyen", "nguoi-quen"]
     text: Optional[str] = None
 
 
@@ -138,9 +142,65 @@ class BroadcastIn(BaseModel):
 
 
 class AppealIn(BaseModel):
-    text: str
+    target: str
+    kind: Literal["phone", "call"]
+    contact: str
+    text: str = ""
 
 
 class AppealResolveIn(BaseModel):
     """Người duyệt xử lý khiếu nại: gỡ nhãn (remove) hoặc giữ nhãn (keep)."""
     outcome: Literal["remove", "keep"]
+    note: str = ""
+
+
+class IntentIn(BaseModel):
+    """POST /api/roleplay/intent (app Android, Mảng 4). Lời người học đã được app thay dãy số riêng tư."""
+    scene: str = "lan-2"
+    text: str = Field(..., max_length=2000)
+    lastLine: str = "mo-dau"
+    scored: list[str] = []
+
+
+class SpeakIn(BaseModel):
+    """POST /api/roleplay/speak: đọc một câu bằng giọng của nhân vật (mã trong prototype/nhan-vat.json)."""
+    text: str = Field(..., max_length=1000)
+    character: Optional[str] = "lan"
+
+
+class LiveHistoryItem(BaseModel):
+    ai: str
+    chu: str
+
+
+class LiveTurnIn(BaseModel):
+    scene: str = Field(pattern=r"^[a-z0-9-]{1,24}$")
+    history: list[LiveHistoryItem] = Field(min_length=1, max_length=14)
+    scored: list[str] = Field(default_factory=list)
+
+
+class Vote(BaseModel):
+    reviewId: str
+    decision: Literal["confirm", "reject", "spam"]
+    note: str = ""
+
+
+class Code(BaseModel):
+    code: str
+
+
+class LegacyVote(BaseModel):
+    reviewId: str | None = None
+    decision: str | None = None
+    status: str | None = None
+    note: str = ""
+
+
+class LegacyAppeal(BaseModel):
+    text: str = ""
+    contact: str | None = None
+
+
+class Withdrawal(BaseModel):
+    at: str
+    signature: str

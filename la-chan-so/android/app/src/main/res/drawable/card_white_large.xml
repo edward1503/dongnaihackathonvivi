@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Thẻ trắng bo 20 trên nền đỏ (A10) -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle"><solid android:color="@color/surface" /><corners android:radius="20dp" /></shape>

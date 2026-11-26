@@ -1,0 +1,83 @@
+{
+  "_ghi_chu": "Bài 3 phần C, Anh Minh hỏi mẹ về bé Vy: Minh lo cho mẹ và thương mẹ, nghe nói có người giả giọng cháu khóc xin tiền, nên gọi hỏi lỡ có ai gọi khóc xưng là bé Vy (cháu ngoại của bà) mà bà gọi Vy không được thì bà làm sao. Người học đóng vai bà Hoa (mẹ của Minh). Minh là người được giúp nên không tự nói ra việc nên làm. Luật ngoại tuyến (y[].luat, ngoai_tuyen) là biểu thức chính quy chạy trên lời đã bỏ dấu, viết thường, có dấu cách hai đầu (hàm boDau); luat_dau chạy trên lời còn dấu, cho những chữ bỏ dấu thì lẫn nghĩa. Máy chạy luật: prototype/hoi-thoai-canh.js. Bộ ca kiểm: tools/ca-hoi-thoai-canh.json. lui_khi_hong = true: ở chế độ AI nói chuyện trực tiếp, lượt nào AI không đáp được (hết lượt API, mất mạng) thì dùng luật ngoại tuyến và câu thu sẵn cho lượt đó. nut là hai nút trả lời sẵn lúc mở đầu; nut_theo_cau đổi nút khi Minh hỏi tới ý khác (khóa là biểu thức trên mã câu Minh vừa hỏi). song.loi_dan là lời dặn giọng cho câu AI đọc trực tiếp của riêng cảnh này.",
+  "ma": "minh-3",
+  "nhan_vat": "minh",
+  "ma_kho": "minh-vy",
+  "bo_may": "canh",
+  "bo_loi": "loi-minh.json",
+  "tien_to": "b3-",
+  "lui_khi_hong": true,
+  "anh": "canh/minh.jpg",
+  "chu_lon": true,
+  "chu": {
+    "tieu_de": "Anh Minh hỏi mẹ về bé Vy",
+    "ten": "Anh Minh",
+    "ten_thuong": "anh Minh",
+    "nguoi_hoc": "bà",
+    "nhan_bai": "Thử thách · Anh Minh hỏi mẹ về bé Vy",
+    "huong_dan": "Anh Minh lo cho bà, hỏi lỡ có người gọi khóc xưng là bé Vy thì bà làm sao. Bà trả lời bằng giọng nói, hoặc bấm một trong hai nút.",
+    "go_goi_y": "Gõ câu trả lời cho anh Minh…",
+    "kq_du": "Bà trả lời trọn vẹn",
+    "kq_thieu": "Bà trả lời được {dat}/{tong} ý",
+    "kq_loi_du": "Nghe cháu khóc xin tiền, bà chưa chuyển, gọi người nhà hoặc cô giáo bằng số đã lưu để hỏi lại trước.",
+    "kq_loi_thieu": "Lần sau bà nhớ nói thêm: {thieu}.",
+    "nut_ve": "Tiếp tục bài học"
+  },
+  "nut": [
+    "Mẹ gọi con hỏi trước đã",
+    "Mẹ chuyển trước cho kịp"
+  ],
+  "nut_theo_cau": {
+    "goihoi$": [
+      "Mẹ gọi cô giáo của Vy hỏi thử",
+      "Mẹ chuyển trước cho kịp"
+    ],
+    "chuachuyen$": [
+      "Chưa hỏi được thì mẹ chưa chuyển",
+      "Mẹ chuyển trước cho kịp"
+    ]
+  },
+  "y": [
+    {
+      "id": "chuachuyen",
+      "nhan": "Chưa chuyển tiền khi chưa hỏi lại được",
+      "luat": " (chua|khong|ko|hong|dung|khoan|chang|cha|dung co) (co )?(voi |voi vang |gap |dai |lien |ngay |vo )?(chuyen|gui|dua|nap|nop|chuyen khoan|bo tien)| khoan (da|chuyen|gui|dua|lam gi)| (hoi|kiem tra|xem|goi|xac minh) (lai |thu |cho ro |cho chac |coi )*(truoc|truoc da|cho chac|da roi|roi moi|ro rang da)( |$)| tu tu (da|roi|coi)| (binh tinh|tinh tao) (da|truoc|hoi)| (chua|khong) (hoi|biet|ro) (duoc |ro )?(thi|la) (chua|khong|dung)| (doi|cho|de) (me )?(hoi|goi|lien lac) (duoc |lai |cho chac |coi )*(da|roi tinh|truoc|vy da|chau da)( |$)"
+    },
+    {
+      "id": "goihoi",
+      "nhan": "Gọi người nhà khác hoặc cô giáo bằng số đã lưu",
+      "luat": " (goi|hoi|dien|alo|a lo|nhan tin|nhan|bao|lien lac) (dien thoai |dien |lai |ngay |lien |thu |cho |hoi |voi |truoc |thang |coi )*(con|minh|thang minh|anh minh|ba me con be|bo me con be|ba me no|bo me no|ba me|bo me|ba no|me no|ma no|ba vy|me vy|ma vy|ba con be|me con be|ma con be|ba me no|bo me no|nguoi nha|nguoi than|ca nha|co giao|thay giao|thay co|co chu nhiem|giao vien|nha truong|truong|lop|ban vy|ban cua vy|ban no|hang xom|chi hai|anh hai|di|cau)( |$)| so (dien thoai |may )?(ma )?(me |minh )?(da |co |hay |van )?(luu|ghi)| danh ba "
+    }
+  ],
+  "ngoai_tuyen": {
+    "sai": " (thi |se |cu |danh |phai |lien |voi |lo |thoi )(chuyen|gui|dua|nap) | (chuyen|gui|dua|nap) (tien |khoan )?(truoc|lien|ngay|gap|cho kip|cho no|cho chau|cho con be|luon|dai|het|di) | cho kip | (thuong|xot) (chau|con be|no) (qua |lam )?(thi |nen |la )?(chuyen|gui) | (lam theo|nghe theo|tin) (ho|nguoi ta|no|giong do|tieng khoc) | (goi|bam|nhan) (lai |vao |cho )*(cai )?so (do|vua goi|vua nhan|la|la do|ay|cua ho|nguoi la) | (chuyen|gui|dua|nop) (tien |khoan )?(xong|roi) | chuyen (tien )?(it|mot it|chut it|tam|chu|thoi) ",
+    "theo_cau": [
+      {
+        "cau": "chuachuyen$",
+        "y": "chuachuyen",
+        "luat": "^ (da |a |u |o |thi |thi me |me )*(chua|khoan|khoan da|tu tu|chua chuyen|khong chuyen|dung chuyen|de hoi da|hoi da|hoi truoc|cho hoi da|binh tinh da)( a| nha| nghen| da| dau| con| chuyen| vo| het| gi het)* $"
+      },
+      {
+        "cau": "goihoi$",
+        "y": "goihoi",
+        "luat": "^ (da |a |u |o |thi |thi me |me )*(goi |hoi |dien |nhan )?(cho |lai )?(co giao|thay giao|giao vien|nha truong|truong|con|ba no|me no|ma no|nguoi nha|ca nha|ban vy|ban no|hang xom)( a| nha| nghen| do| thoi| cho chac| lien| ngay| hoi| truoc| con)* $"
+      }
+    ]
+  },
+  "song": {
+    "loi_nhac": "canh/minh-3.song.txt",
+    "truong_loi": "loi_nhan_vat",
+    "ai_nv": "nv",
+    "ai_nh": "nh",
+    "ten_nv": "MINH",
+    "ten_nh": "MẸ",
+    "che_so": "(mẹ vừa đọc ra một dãy số riêng tư, app đã không gửi đi)",
+    "loi_dan": "Minh, người đàn ông Việt khoảng ba mươi tuổi, giọng nam trẻ miền Nam, ấm, thân mật. Minh lo cho mẹ và thương mẹ, nói chậm, rõ, dịu dàng."
+  },
+  "tra_loi": {
+    "loi_nhac": "canh/minh-3.tra-loi.txt",
+    "cau_nv": "Câu Minh vừa nói",
+    "cau_da": "Những ý mẹ đã trả lời được",
+    "cau_nh": "Mẹ vừa nói"
+  }
+}

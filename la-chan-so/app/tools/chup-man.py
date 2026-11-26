@@ -1,11 +1,14 @@
-"""Đi hết các luồng của app bằng cách bấm như người dùng, chụp từng màn để so với export/png/.
+"""Đi hết các luồng của app (giao diện V3, 3 đối tượng) bằng cách bấm như người dùng, chụp từng màn để soát.
 
-Cần: máy chủ đang chạy và phục vụ bản build (uvicorn lcs.main:app --port 8000), Firefox, selenium.
+Cần: máy chủ đang chạy và phục vụ bản build (python server/chay-demo.py, hoặc uvicorn lcs.main:app --port 8000), Firefox, selenium.
 Chạy:  python app/tools/chup-man.py [thư-mục-ảnh] [địa-chỉ]
-Máy Minh được giả lập bằng cách gọi thẳng API trả lời (/api/asks/{id}/seen, /reply).
+Máy Minh: dùng trang Zalo của Mảng 5 (/zalo) nếu máy chủ có, không thì gọi thẳng API trả lời.
 """
+from http.cookiejar import CookieJar
 import json
+import os
 import sys
+import tempfile
 import time
 import urllib.request
 from pathlib import Path
@@ -20,25 +23,22 @@ OUT = Path(sys.argv[1] if len(sys.argv) > 1 else "chup")
 BASE = (sys.argv[2] if len(sys.argv) > 2 else "http://127.0.0.1:8000").rstrip("/")
 OUT.mkdir(parents=True, exist_ok=True)
 errors: list[str] = []
+family = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(CookieJar()))
 
 
 def post(path, body=None):
-    req = urllib.request.Request(BASE + path, data=json.dumps(body or {}).encode(), method="POST",
-                                 headers={"Content-Type": "application/json"})
-    return json.loads(urllib.request.urlopen(req, timeout=10).read())
+    req = urllib.request.Request(BASE + path, data=json.dumps(body or {}).encode(), method="POST", headers={"Content-Type": "application/json"})
+    return json.loads(family.open(req, timeout=10).read())
 
 
 def get(path):
-    return json.loads(urllib.request.urlopen(BASE + path, timeout=10).read())
+    return json.loads(family.open(BASE + path, timeout=10).read())
 
 
 opts = Options()
 opts.add_argument("-headless")
 service = None
-# Firefox bản snap (Ubuntu): dùng geckodriver của snap, và thư mục tạm nằm trong vùng snap đọc được
-if Path("/snap/bin/geckodriver").exists():
-    import os
-    import tempfile
+if Path("/snap/bin/geckodriver").exists():   # Firefox bản snap (Ubuntu)
     from selenium.webdriver.firefox.service import Service
     tmp = Path.home() / "snap" / "firefox" / "common" / "tmp"
     tmp.mkdir(parents=True, exist_ok=True)
@@ -46,150 +46,241 @@ if Path("/snap/bin/geckodriver").exists():
     tempfile.tempdir = str(tmp)
     service = Service(executable_path="/snap/bin/geckodriver")
 d = webdriver.Firefox(options=opts, service=service)
-d.set_window_size(1000, 1000)  # rộng hơn 600px: app hiện trong khung 360x800 như thiết kế
-wait = WebDriverWait(d, 8)
+d.set_window_size(1000, 960)   # rộng hơn 600px: app hiện trong khung điện thoại 390x844
+wait = WebDriverWait(d, 10)
 
 
-def frame(name):
+def screen(name, file=None):
+    """Chờ tới màn có data-name bắt đầu bằng `name`, rồi chụp khung điện thoại."""
     try:
-        wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, f'[data-name="{name}"]')))
-        time.sleep(0.5)
+        wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, f'.phone[data-name^="{name}"]')))
+        time.sleep(0.6)
+        d.find_element(By.CSS_SELECTOR, ".phone").screenshot(str(OUT / f"{file or name}.png"))
+        print("chụp", file or name)
     except Exception:
-        errors.append(f"không thấy màn {name} (đang ở {d.current_url})")
+        here = d.find_elements(By.CSS_SELECTOR, ".phone")
+        errors.append(f"không tới màn {name} (đang ở {here[0].get_attribute('data-name') if here else d.current_url})")
 
 
-def shot(name, file=None):
-    frame(name)
-    d.find_element(By.CSS_SELECTOR, ".frame").screenshot(str(OUT / f"{file or name}.png"))
-    print("chụp", file or name)
+def click(text, css="button"):
+    xp = f'//{css}[contains(normalize-space(.), "{text}")]'
+    try:
+        el = wait.until(EC.element_to_be_clickable((By.XPATH, xp)))
+        d.execute_script("arguments[0].scrollIntoView({block:'center'})", el)
+        el.click()
+    except Exception as e:
+        here = d.find_elements(By.CSS_SELECTOR, ".phone")
+        errors.append(f"không bấm được “{text}” ở {here[0].get_attribute('data-name') if here else d.current_url}: {type(e).__name__}")
 
 
-def open_(query, route):
-    d.get(f"{BASE}/{query}#{route}")
+def key_in(digits):
+    for ch in digits:
+        d.find_element(By.CSS_SELECTOR, f'.key[aria-label="{ch}"]').click()
 
 
-def click(text):
-    xp = f'//button[contains(normalize-space(.), "{text}")]'
-    el = wait.until(EC.element_to_be_clickable((By.XPATH, xp)))
-    el.click()
+def hash_(h):
+    d.execute_script("location.hash = arguments[0]", h)
 
 
-def type_(css, text):
-    el = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, css)))
-    el.clear()
-    el.send_keys(text)
+def text_of_phone():
+    return d.find_element(By.CSS_SELECTOR, ".phone").text
 
 
-def check(value):
-    open_("", "/kiem-tra")
-    frame("A06a-kiem-tra-so")
-    type_("input.field", value)
-    click("Kiểm tra")
-
-
+family.open(BASE + "/zalo", timeout=10).close()
 post("/api/demo/reset")
 d.get(BASE + "/")
 d.execute_script("localStorage.clear()")
 
-# ---------- Bà Hoa: trang chủ đơn giản -> kiểm tra -> hỏi người thân -> báo cáo ----------
-open_("?mode=simple", "/")
-shot("A01a-trang-chu-don-gian")
-click("Kiểm tra trước khi chuyển tiền")
-shot("A06a-kiem-tra-so")
-type_("input.field", "0912 345 678")
+# ---------- Người dùng mới: màn chào -> chọn vai -> quyền riêng tư -> phường -> trang chủ ----------
+d.get(BASE + "/#/chao")
+screen("00-man-chao")
+click("Bắt đầu")
+screen("0-chon-vai")
+click("Người lớn tuổi")
+screen("0b-quyen-rieng-tu")
+click("Đồng ý")
+screen("0c-chon-phuong")
+click("Tiếp tục")
+screen("A1-trang-chu-lon-tuoi")
+
+# ---------- Bà Hoa: kiểm tra số bằng bàn phím -> Nguy hiểm -> hỏi Minh -> Minh trả lời ----------
+click("Số lạ, đường dẫn")
+screen("A2-kiem-tra-so")
+key_in("0912345678")
 click("Kiểm tra")
-shot("A07a-ket-qua-nguy-hiem")
+screen("A3-ket-qua-danger")
+if "NGUY HIỂM" not in text_of_phone():
+    errors.append("A3 không ghi NGUY HIỂM")
 click("Hỏi người thân")
-shot("A08a-hoi-nguoi-than-gui")
+screen("A4-hoi-nguoi-than")
 click("Gửi cho Minh")
-frame("A08b-hoi-nguoi-than-cho")
-ask = [e for e in get("/api/events?room=gia-dinh-hoa")["events"] if e["type"] == "ask.sent"][-1]["data"]
+screen("A4b-cho-tra-loi")
+ask = [e for e in get("/api/events?room=gia-dinh-hoa&since=1")["events"] if e["type"] == "ask.sent"][-1]["data"]
 post(f"/api/asks/{ask['askId']}/seen")
-time.sleep(1.5)
-shot("A08b-hoi-nguoi-than-cho")
+time.sleep(2.2)
+if "đã xem" not in text_of_phone():
+    errors.append("A4b không hiện 'Minh đã xem'")
 post(f"/api/asks/{ask['askId']}/reply", {"preset": "dung_chuyen"})
-shot("A08c-hoi-nguoi-than-tra-loi")
-click("Báo cáo số này")
-shot("A09a-bao-cao-form")
-type_("textarea.field", "Tự xưng cán bộ điều tra, yêu cầu chuyển tiền vào tài khoản tạm giữ.")
-click("Gửi báo cáo")
-shot("A09c-bao-cao-xong")
+screen("A4r-nguoi-than-tra-loi")
 
-# ---------- Ba mức còn lại của kết quả ----------
-check("qua-tri-an-khach-hang.top")
-shot("A07b-ket-qua-nghi-ngo")
-check("1900 5555 88")
-shot("A07c-ket-qua-an-toan")
-check("190388885678")
-shot("A07d-ket-qua-chua-co-du-lieu")
+# ---------- Ba mức còn lại ----------
+for value, tab, level in [("qua-tri-an-khach-hang.top", "text", "suspicious"), ("1900555588", "phone", "safe"), ("0987654321", "phone", "unknown")]:
+    hash_(f"/kiem-tra?loai={tab}&v={value}&tudong=1")
+    screen(f"A3-ket-qua-{level}")
 
-# ---------- Vy: tin nhắn -> phân tích -> báo cho cộng đồng ----------
-open_("?mode=full", "/")
-shot("A01b-trang-chu-day-du")
-open_("", "/kiem-tra/tin-nhan")
-frame("A06b-kiem-tra-tin-nhan")
-type_("textarea.field", "Tài khoản ngân hàng của quý khách sẽ bị khóa trong 24h. Xác minh ngay tại ngan-hang-xacminh.top để tránh gián đoạn.")
-shot("A06b-kiem-tra-tin-nhan")
-type_("textarea.field", "Chào em, bên chị đang tuyển cộng tác viên đặt đơn online, việc nhẹ lương cao 500k/ngày, không cần kinh nghiệm. "
-      "Chỉ cần nạp trước 200k để kích hoạt tài khoản, hoàn tiền kèm hoa hồng 20% ngay. Số lượng có hạn, đăng ký trong hôm nay tại bit.ly/viec-nhe-xyz")
-click("Phân tích tin nhắn")
-shot("A05b-phan-tich-tin-nhan")
-click("Báo cho cộng đồng")
-shot("A09b-bao-cong-dong")
-open_("", "/kiem-tra/tin-nhan")
-frame("A06b-kiem-tra-tin-nhan")
-type_("textarea.field", "Alo, gọi lại anh nhé")
-click("Phân tích tin nhắn")
-shot("E01d-ai-chua-du-thong-tin")
-
-# ---------- Trạng thái lỗi, trống ----------
-open_("?nguoithan=0", "/hoi-nguoi-than")
-shot("E01b-chua-co-nguoi-than")
-open_("?api=http://127.0.0.1:9", "/kiem-tra")
-frame("A06a-kiem-tra-so")
-type_("input.field", "0912 345 678")
-click("Kiểm tra")
-shot("E01c-mat-mang")
-d.execute_script("localStorage.removeItem('lcs.api')")
-
-# ---------- Cuộc gọi lừa đảo: đổ chuông -> Bé Nai hỏi -> AI phân tích ghi âm -> tự báo Minh -> Minh trả lời ----------
+# ---------- Cuộc gọi lừa đảo: đổ chuông -> Bé Nai hỏi -> AI phân tích -> tự báo Minh -> Minh trả lời trên Zalo ----------
 post("/api/demo/reset")
-d.execute_script("localStorage.clear()")
-open_("?mode=simple", "/cuoc-goi?so=0912345678")
-shot("A03a-do-chuong-nguy-hiem")
+d.execute_script("localStorage.removeItem('lcs.known')")
+hash_("/cuoc-goi?so=0912345678")
+screen("A03a-do-chuong-nguy-hiem")
 click("Nghe")
-shot("A04a-hoi-nhanh")
+screen("A04a-be-nai-hoi")
 click("Có")
-frame("A04b-phan-tich-ghi-am")
-try:
-    WebDriverWait(d, 15).until(EC.presence_of_element_located((By.XPATH, '//*[contains(text(), "Đã báo cho")]')))
-except Exception:
-    errors.append("A04b: chưa thấy dòng 'Đã báo cho Minh'")
-shot("A04b-phan-tich-ghi-am")
-alert_id = get("/api/alerts")[0]["id"]
-app_tab = d.current_window_handle
-try:
-    urllib.request.urlopen(BASE + "/zalo", timeout=5)
-    d.switch_to.new_window("tab")
-    d.get(BASE + "/zalo")
-    btn = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, f'.msg-card[data-id="{alert_id}"] [data-act="quick"]')))
-    d.save_screenshot(str(OUT / "Z01a-tren-trang-zalo-cua-duc.png"))
-    btn.click()
-    time.sleep(1)
-    d.close()
-    d.switch_to.window(app_tab)
-except Exception as e:
-    print("bỏ qua bước trang Zalo:", type(e).__name__)
-    d.switch_to.window(app_tab)
-    post(f"/api/alerts/{alert_id}/reply", {"choice": "dung-chuyen"})
-shot("A08c-hoi-nguoi-than-tra-loi", "A08c-tra-loi-tu-trang-zalo")
+screen("A04b-phan-tich-ghi-am")
+time.sleep(2.5)
+alerts = [a for a in get("/api/alerts") if a["id"] != "al_demo"]
+if not alerts:
+    errors.append("A04b không báo Minh")
+else:
+    zalo_ok = False
+    try:
+        urllib.request.urlopen(BASE + "/zalo", timeout=5)
+        app_tab = d.current_window_handle
+        d.switch_to.new_window("tab")
+        d.get(BASE + "/zalo")
+        time.sleep(2.5)
+        btn = d.find_elements(By.CSS_SELECTOR, f'.msg-card[data-id="{alerts[0]["id"]}"] [data-act="quick"]')
+        if btn:
+            btn[0].click()
+            zalo_ok = True
+        d.close()
+        d.switch_to.window(app_tab)
+    except Exception:
+        pass
+    if not zalo_ok:
+        post(f"/api/alerts/{alerts[0]['id']}/reply", {"choice": "dung-chuyen"})
+    screen("A4r-nguoi-than-tra-loi", "A4r-tu-trang-zalo")
 
-open_("", "/cuoc-goi?so=0987654321")
-shot("A03b-do-chuong-chua-ro")
-open_("", "/khong-ghi-am")
-shot("A04c-khong-co-ghi-am")
-open_("", "/dung-lai?phut=4")
-shot("A10a-phanh-sau-cuoc-goi")
+hash_("/cuoc-goi?so=0987654321")
+screen("A03b-do-chuong-chua-ro")
+hash_("/dung-lai?phut=4")
+screen("A10a-phanh-sau-cuoc-goi")
+hash_("/dung-lai?danggoi=1&giay=401")
+screen("A10b-phanh-dang-goi")
+click("Cúp máy ngay")
+screen("A04a-be-nai-hoi", "A04a-sau-khi-cup")
+
+# ---------- Đang bị gọi đòi tiền -> kể lại bằng 4 câu -> kết quả ----------
+hash_("/khan-cap")
+screen("A5-khan-cap")
+click("Kể lại cuộc gọi")
+screen("A6-ke-lai-cuoc-goi")
+for row in d.find_elements(By.CSS_SELECTOR, ".phone .li"):
+    chips = row.find_elements(By.CSS_SELECTOR, ".chip")
+    if chips:
+        chips[0].click()
+click("Xem kết quả")
+screen("A3-ket-qua-danger", "A3-tu-loi-ke")
+
+# ---------- Người thân, gọi mô phỏng, đọc số ----------
+hash_("/nguoi-than")
+screen("A4-nguoi-than")
+click("Gọi 113")
+screen("A8-goi-dien-mo-phong")
+if "mô phỏng" not in text_of_phone():
+    errors.append("Gọi 113 không phải màn mô phỏng")
+hash_("/nguoi-than/them")
+screen("A4c-them-nguoi-than")
+hash_("/doc-so")
+screen("A7-doc-so")
+
+# ---------- Thiết lập 3 lớp (A02a -> A02b) và Lá chắn đang ngủ (E01a) ----------
+d.execute_script("localStorage.setItem('lcs.layers', JSON.stringify({calls:true,messages:false,banking:false,asleep:false}));dispatchEvent(new Event('lcs-layers'))")
+hash_("/thiet-lap")
+screen("A02a-thiet-lap-dang-lam")
+click("Bật")
+click("Bật")
+screen("A02b-thiet-lap-hoan-tat")
+click("Về trang chủ")
+screen("A1-trang-chu-lon-tuoi", "A1-sau-thiet-lap")
+d.execute_script("localStorage.setItem('lcs.layers', JSON.stringify({calls:true,messages:true,banking:true,asleep:true}));dispatchEvent(new Event('lcs-layers'))")
+screen("E01a-la-chan-dang-ngu")
+click("Bật lại ngay")
+screen("A1-trang-chu-lon-tuoi", "A1-bat-lai")
+hash_("/ca-nhan")
+screen("0d-ca-nhan")
+
+# ---------- Học sinh: tin nhắn lạ -> phân tích -> báo cáo; bài học; bài kiểm tra ----------
+d.get(BASE + "/?mode=full#/")
+screen("B1-trang-chu-hoc-sinh")
+hash_("/thong-bao")
+screen("A05a-thong-bao-noi")
+time.sleep(1.5)
+click("Xem phân tích")
+screen("B3-phan-tich-tin-nhan")
+if "Ứng dụng nhắn tin" not in text_of_phone():
+    errors.append("B3 mở từ thông báo mà không ghi nguồn 'Ứng dụng nhắn tin'")
+click("Báo cáo")
+screen("B4-bao-cao")
+if "Báo cáo cần app Lá chắn số" not in text_of_phone() or d.find_elements(By.CSS_SELECTOR, ".phone input, .phone textarea"):
+    errors.append("B4 trên trình duyệt phải hướng dẫn báo trên máy Android")
+hash_("/bai-hoc")
+screen("B5-bai-hoc")
+d.find_element(By.XPATH, "//button[.//*[text()='Việc nhẹ lương cao'] and .//*[text()='Bài học 1 phút']]").click()
+screen("B6-bai-hoc-the-1")
+click("Xem dấu hiệu")
+screen("B6-bai-hoc-the-2")
+hash_("/kiem-tra-bai")
+screen("B7-bai-kiem-tra-chua-tra-loi")
+for i in range(5):
+    opts_ = d.find_elements(By.CSS_SELECTOR, ".phone .li.tap")
+    opts_[1].click()   # đáp án đúng luôn ở vị trí giữa trong bộ câu mẫu
+    if i == 0:
+        screen("B7-bai-kiem-tra-dung")
+    click("Câu tiếp")
+screen("B8-ket-qua-bai-kiem-tra")
+if "5/5" not in text_of_phone():
+    errors.append("B8 không ra 5/5 khi trả lời đúng hết")
+
+# ---------- Đội tình nguyện: mã đội -> thống kê -> duyệt -> chia sẻ ----------
+d.get(BASE + "/?mode=volunteer#/ma-doi")
+screen("C0-ma-doi")
+def login(code):
+    field = d.find_element(By.CSS_SELECTOR, ".phone input[type=password]")
+    field.clear()
+    field.send_keys(code)
+    click("Đăng nhập")
+
+
+login("invalid")
+screen("C0b-ma-doi-sai")
+login(os.environ.get("LCS_TEST_VOLUNTEER_CODE", "246810"))
+screen("C1-trang-chu-tinh-nguyen")
+click("Điểm nóng theo khu phố")
+screen("C2-thong-ke")
+hash_("/kieu-moi")
+screen("C3-kieu-moi")
+hash_("/duyet")
+screen("C4-duyet-bao-cao")
+card = wait.until(EC.presence_of_element_located((By.XPATH, "//article[.//textarea]")))
+target = card.find_element(By.TAG_NAME, "h2").text
+card.find_element(By.TAG_NAME, "textarea").send_keys("Đã xem tóm tắt và đối chiếu bằng chứng.")
+card.find_element(By.XPATH, ".//button[normalize-space(.)='Xác nhận']").click()
+wait.until(lambda driver: "Phiếu của bạn" in text_of_phone() or
+           all(row.text != target for row in driver.find_elements(By.CSS_SELECTOR, "article h2")))
+hash_("/chia-se")
+screen("C4-duyet-bao-cao", "C4-thanh-vien")
+hash_("/ca-nhan")
+click("Đăng xuất đội")
+screen("C0-ma-doi")
+login(os.environ.get("LCS_TEST_LEAD_CODE", "999111"))
+screen("C1-trang-chu-tinh-nguyen")
+hash_("/chia-se")
+screen("C5-chia-se-canh-bao")
+click("Gửi cảnh báo")
+screen("C5b-da-gui-canh-bao")
+if not get("/api/broadcasts"):
+    errors.append("C5 gửi cảnh báo mà máy chủ không có tin")
 
 d.quit()
 print("\n".join(errors) if errors else "Xong, không lỗi.")

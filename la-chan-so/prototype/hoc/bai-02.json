@@ -1,0 +1,460 @@
+{
+ "ma": "bai-02",
+ "so": 2,
+ "ma_kieu": "viec-nhe-luong-cao",
+ "ten": "Việc nhẹ lương cao",
+ "che_do": "day-du",
+ "nhan_vat": "Vy",
+ "bia": "comic2-1.png",
+ "truyen": [
+  {
+   "tranh": "comic2-1.png",
+   "tom_tat": "Vy được mời việc nhẹ, lương cao.",
+   "loi": [
+    {
+     "ai": "be-nai",
+     "chu": "Chào bạn, mình là Bé Nai. Hôm nay mình kể chuyện của Vy. Tới đoạn quan trọng, bạn sẽ quyết định Vy làm gì nha.",
+     "giong": "audio/benai-1.m4a"
+    },
+    {
+     "ai": "be-nai",
+     "chu": "Tối thứ Sáu, Vy đang lướt điện thoại thì có tin nhắn lạ. Người ta mời Vy làm cộng tác viên, việc nhẹ mà lương cao lắm.",
+     "giong": "audio/benai-2.m4a"
+    },
+    {
+     "ai": "vy",
+     "cam_xuc": "tròn mắt, mừng",
+     "chu": "Ủa, việc gì mà ngon dữ vậy trời?",
+     "giong": "hoc/giong/b02/vy-01.m4a"
+    }
+   ]
+  },
+  {
+   "tranh": "comic2-2.png",
+   "tom_tat": "Lần đầu họ trả tiền thật.",
+   "loi": [
+    {
+     "ai": "be-nai",
+     "chu": "Vy làm thử vài đơn. Lạ thay, tiền về thật, dù chỉ mấy chục nghìn. Vy vui lắm.",
+     "giong": "audio/benai-3.m4a"
+    },
+    {
+     "ai": "vy",
+     "cam_xuc": "khoái chí",
+     "chu": "Tiền về thiệt nè! Dễ ăn ghê ta.",
+     "giong": "hoc/giong/b02/vy-02.m4a"
+    }
+   ]
+  },
+  {
+   "tom_tat": "Họ giục Vy nạp trước hai triệu.",
+   "loi": [
+    {
+     "ai": "vy",
+     "cam_xuc": "đọc tin nhắn, sốt ruột",
+     "chu": "Họ nhắn nữa nè. Lẹ lên em, còn đúng hai suất thôi. Trời, hối dữ vậy ta.",
+     "giong": "hoc/giong/b02/vy-03.m4a"
+    },
+    {
+     "ai": "be-nai",
+     "chu": "Rồi họ nhắn, muốn nhận đơn lớn thì phải nạp trước hai triệu. Nếu là Vy, bạn sẽ làm gì?",
+     "giong": "audio/benai-4.m4a"
+    }
+   ],
+   "re": [
+    {
+     "chu": "Nạp ngay kẻo mất suất",
+     "toi": "ngo-cut"
+    },
+    {
+     "chu": "Dừng lại, hỏi cô giáo",
+     "toi": "an-toan"
+    }
+   ]
+  }
+ ],
+ "ngo_cut": {
+  "tranh": "comic2-3.png",
+  "loi": [
+   {
+    "ai": "be-nai",
+    "chu": "Vy chuyển hai triệu. Ngay sau đó, người kia chặn Vy rồi biến mất. Hóa ra mấy đồng lúc đầu chỉ là mồi nhử thôi.",
+    "giong": "audio/benai-5.m4a"
+   },
+   {
+    "ai": "vy",
+    "cam_xuc": "ỉu xìu",
+    "chu": "Trời ơi, hai triệu của mình.",
+    "giong": "hoc/giong/b02/vy-04.m4a"
+   },
+   {
+    "ai": "be-nai",
+    "chu": "Không sao đâu, mình quay lại điểm rẽ nhé. Lần này bạn thử chọn khác xem.",
+    "giong": "audio/benai-6.m4a"
+   }
+  ]
+ },
+ "an_toan": {
+  "tranh": "comic2-4.png",
+  "tom_tat": "Vy hỏi cô giáo. Cô biết ngay là lừa.",
+  "loi": [
+   {
+    "ai": "be-nai",
+    "chu": "Vy đem tin nhắn hỏi cô giáo. Cô nhìn qua là biết ngay. Việc thật thì không bao giờ bắt mình nạp tiền trước.",
+    "giong": "audio/benai-7.m4a"
+   },
+   {
+    "ai": "vy",
+    "cam_xuc": "nhẹ nhõm",
+    "chu": "Hết hồn. Xém nữa là em nạp rồi cô ơi.",
+    "giong": "hoc/giong/b02/vy-05.m4a"
+   }
+  ]
+ },
+ "dau_hieu": [
+  "Lương cao bất thường",
+  "Đòi nạp tiền trước",
+  "Giục làm thật gấp"
+ ],
+ "nho_mot_cau": {
+  "ai": "be-nai",
+  "cam_xuc": "dặn dò, thân mật",
+  "chu": "Bạn nhớ giúp mình ba dấu hiệu nha. Lương cao bất thường, đòi nạp tiền trước, và giục làm thật gấp. Gặp một trong ba cái là dừng lại hỏi người lớn liền.",
+  "giong": "hoc/giong/b02/bn-01.m4a",
+  "hien": "Việc thật thì không ai bắt mình nạp tiền trước."
+ },
+ "luyen": [
+  {
+   "dang": "cham-bat-bai",
+   "ma": "B1",
+   "ten": "Chạm bắt bài",
+   "mo_dau": {
+    "ai": "be-nai",
+    "cam_xuc": "thách vui",
+    "chu": "Tin nhắn này có mấy chỗ đáng ngờ lắm. Mình làm mẫu hai chỗ, câu chào thì hiền khô, còn lương cao mà nhàn thì bắt bài. Giờ bạn chạm vào bốn chỗ còn lại nha.",
+    "giong": "hoc/giong/b02/bn-02.m4a"
+   },
+   "tin": {
+    "tu": "Số lạ · 20:14",
+    "doan": [
+     {
+      "chu": "Chào em,",
+      "loai": "thuong",
+      "mau": true,
+      "giai_thich": {
+       "ai": "be-nai",
+       "chu": "Mẫu: câu chào thì hiền khô à."
+      }
+     },
+     {
+      "chu": "bên chị đang tuyển người làm thêm.",
+      "loai": "nhieu",
+      "giai_thich": {
+       "ai": "be-nai",
+       "cam_xuc": "dễ thương",
+       "chu": "Tuyển người thì chưa lạ. Lạ là ở chỗ họ hứa và họ đòi kìa.",
+       "giong": "hoc/giong/b02/bn-03.m4a"
+      }
+     },
+     {
+      "chu": "Việc nhẹ lương cao 500k/ngày,",
+      "loai": "dau-hieu",
+      "ten": "Hứa thu nhập cao",
+      "mau": true,
+      "giai_thich": {
+       "ai": "be-nai",
+       "chu": "Mẫu: hứa trả nhiều tiền cho việc rất nhẹ, là để dụ mình đăng ký."
+      }
+     },
+     {
+      "chu": "chỉ cần nạp trước 200k để kích hoạt,",
+      "loai": "dau-hieu",
+      "ten": "Đòi tiền trước",
+      "giai_thich": {
+       "ai": "be-nai",
+       "cam_xuc": "reo",
+       "chu": "Bắt bài! Việc thật thì ai lại bắt mình nạp tiền trước.",
+       "giong": "hoc/giong/b02/bn-05.m4a"
+      }
+     },
+     {
+      "chu": "không cần kinh nghiệm.",
+      "loai": "nhieu",
+      "giai_thich": {
+       "ai": "be-nai",
+       "cam_xuc": "dễ thương",
+       "chu": "Việc không cần kinh nghiệm thì cũng có thiệt. Câu này hiền khô à, bạn thử chỗ khác nha.",
+       "giong": "hoc/giong/b02/bn-04.m4a"
+      }
+     },
+     {
+      "chu": "Hoàn tiền kèm hoa hồng 20%.",
+      "loai": "dau-hieu",
+      "ten": "Hứa hoàn tiền kèm lời",
+      "giai_thich": {
+       "ai": "be-nai",
+       "cam_xuc": "khoái",
+       "chu": "Chuẩn luôn! Hứa hoàn tiền kèm hoa hồng là để mình yên tâm mà nạp đó.",
+       "giong": "hoc/giong/b02/bn-06.m4a"
+      }
+     },
+     {
+      "chu": "Đăng ký ngay, năm phút nữa là hết suất.",
+      "loai": "dau-hieu",
+      "ten": "Giục gấp",
+      "giai_thich": {
+       "ai": "be-nai",
+       "cam_xuc": "nhanh nhảu",
+       "chu": "Đúng rồi! Giục gấp vậy là để bạn không kịp hỏi ai.",
+       "giong": "hoc/giong/b02/bn-08.m4a"
+      }
+     },
+     {
+      "chu": "Làm tại nhà, giờ giấc tự do.",
+      "loai": "nhieu",
+      "giai_thich": {
+       "ai": "be-nai",
+       "cam_xuc": "dễ thương",
+       "chu": "Làm tại nhà thì cũng có việc thiệt. Chỗ này chưa lạ đâu, bạn tìm tiếp nha.",
+       "giong": "hoc/giong/b02/bn-07.m4a"
+      }
+     },
+     {
+      "chu": "Chi tiết tại viec-nhe-xyz.example",
+      "loai": "dau-hieu",
+      "ten": "Đường dẫn lạ",
+      "giai_thich": {
+       "ai": "be-nai",
+       "cam_xuc": "tinh nghịch",
+       "chu": "Tinh mắt ghê! Đường dẫn lạ hoắc, đừng bấm vô nha.",
+       "giong": "hoc/giong/b02/bn-09.m4a"
+      }
+     }
+    ]
+   },
+   "nham_toi_da": 1,
+   "xong": {
+    "ai": "be-nai",
+    "cam_xuc": "hào hứng",
+    "chu": "Bạn bắt đủ bốn chỗ rồi đó. Gặp tin kiểu này, bạn đừng trả lời, đừng chuyển tiền. Giữ tin lại rồi báo cáo, chặn số nha.",
+    "giong": "hoc/giong/b02/bn-10.m4a"
+   },
+   "goi_y": [
+    {
+     "ai": "be-nai",
+     "chu": "Nhớ cảnh ba hông, họ bắt Vy làm gì mới cho nhận đơn lớn?"
+    },
+    {
+     "ai": "be-nai",
+     "chu": "Bạn tìm chỗ nào họ hứa, chỗ nào họ đòi, chỗ nào họ giục."
+    },
+    {
+     "ai": "be-nai",
+     "chu": "Bạn thử coi người gửi muốn mình làm gì trước khi kịp kiểm tra nha."
+    }
+   ]
+  },
+  {
+   "dang": "noi-chieu",
+   "ma": "B4",
+   "ten": "Nối lời với chiêu",
+   "kieu": "goi",
+   "nguoi": "Người gọi (mô phỏng)",
+   "mo_dau": {
+    "ai": "be-nai",
+    "cam_xuc": "rủ",
+    "chu": "Mình cho bạn nghe thử mấy câu trong một cuộc gọi giả nha. Giọng người gọi là máy đóng vai. Bạn chạm một câu, rồi chạm tên chiêu của nó nha.",
+    "giong": "hoc/giong/b02/bn-11.m4a"
+   },
+   "loi_mau": {
+    "ai": "be-nai",
+    "cam_xuc": "thong thả",
+    "chu": "Mình làm mẫu hai câu trước nha. Cho lời vài đồng là thả mồi nhỏ. Còn hai suất, năm phút nữa hết, là giục gấp.",
+    "giong": "hoc/giong/b02/bn-12.m4a"
+   },
+   "chieu": [
+    {
+     "ten": "Thả mồi nhỏ",
+     "khong_phai": "Câu này đâu có cho mình đồng nào trước."
+    },
+    {
+     "ten": "Giục gấp",
+     "khong_phai": "Câu này đâu có hối mình làm ngay kẻo hết suất."
+    },
+    {
+     "ten": "Đòi tiền trước",
+     "khong_phai": "Câu này chưa nhắc tới chuyện nạp tiền."
+    },
+    {
+     "ten": "Cô lập",
+     "khong_phai": "Câu này đâu có bảo mình giấu ai."
+    },
+    {
+     "ten": "Khoe ảnh lấy lòng tin",
+     "khong_phai": "Câu này đâu có đem ảnh ra khoe."
+    },
+    {
+     "ten": "Dọa nạt",
+     "khong_phai": "Câu này chưa dọa làm hại ai hết.",
+     "nhieu": true
+    }
+   ],
+   "cap": [
+    {
+     "ai": "nguoi-goi-nu",
+     "cam_xuc": "ngọt",
+     "chu": "Mấy đơn đầu chị chuyển tiền cho em liền nè.",
+     "giong": "hoc/giong/b02/gu-01.m4a",
+     "chieu": "Thả mồi nhỏ",
+     "mau": true,
+     "giai_thich": {
+      "ai": "be-nai",
+      "chu": "Cho mình lời vài đồng trước, để mình tin rồi nạp nhiều."
+     }
+    },
+    {
+     "ai": "nguoi-goi-nu",
+     "cam_xuc": "hối",
+     "chu": "Còn đúng hai suất thôi, năm phút nữa là hết.",
+     "giong": "hoc/giong/b02/gu-02.m4a",
+     "chieu": "Giục gấp",
+     "mau": true,
+     "giai_thich": {
+      "ai": "be-nai",
+      "chu": "Giục vậy là để mình không kịp nghĩ, không kịp hỏi."
+     }
+    },
+    {
+     "ai": "nguoi-goi-nu",
+     "cam_xuc": "tỉnh bơ",
+     "chu": "Nạp hai triệu thì mới mở được đơn lớn nha em.",
+     "giong": "hoc/giong/b02/gu-03.m4a",
+     "chieu": "Đòi tiền trước",
+     "giai_thich": {
+      "ai": "be-nai",
+      "cam_xuc": "giảng giải",
+      "chu": "Việc thật thì trả lương cho mình, chứ đâu bắt mình nạp tiền.",
+      "giong": "hoc/giong/b02/bn-13.m4a"
+     }
+    },
+    {
+     "ai": "nguoi-goi-nu",
+     "cam_xuc": "thì thầm",
+     "chu": "Chuyện này chị em mình biết với nhau thôi nha em.",
+     "giong": "hoc/giong/b02/gu-04.m4a",
+     "chieu": "Cô lập",
+     "giai_thich": {
+      "ai": "be-nai",
+      "cam_xuc": "giảng giải",
+      "chu": "Họ sợ bạn hỏi người lớn là lộ liền.",
+      "giong": "hoc/giong/b02/bn-14.m4a"
+     }
+    },
+    {
+     "ai": "nguoi-goi-nu",
+     "cam_xuc": "khoe",
+     "chu": "Em coi ảnh tiền về nè, ai làm cũng có hết.",
+     "giong": "hoc/giong/b02/gu-05.m4a",
+     "chieu": "Khoe ảnh lấy lòng tin",
+     "giai_thich": {
+      "ai": "be-nai",
+      "cam_xuc": "giảng giải",
+      "chu": "Tấm ảnh họ đưa đâu chứng minh được bạn cũng sẽ nhận lại tiền.",
+      "giong": "hoc/giong/b02/bn-15.m4a"
+     }
+    }
+   ],
+   "dung": {
+    "ai": "be-nai",
+    "cam_xuc": "reo",
+    "chu": "Chuẩn luôn!",
+    "giong": "hoc/giong/b02/bn-16.m4a"
+   },
+   "sai": {
+    "ai": "be-nai",
+    "cam_xuc": "dễ thương",
+    "chu": "Chưa khớp rồi. Bạn đọc lại coi câu đó nhắc tới cái gì nha.",
+    "giong": "hoc/giong/b02/bn-17.m4a"
+   },
+   "xong": {
+    "ai": "be-nai",
+    "cam_xuc": "khen đúng việc",
+    "chu": "Bạn gọi được tên từng chiêu rồi đó. Gọi được tên là hết sợ.",
+    "giong": "hoc/giong/b02/bn-18.m4a"
+   },
+   "goi_y": [
+    {
+     "ai": "be-nai",
+     "chu": "Nhớ cảnh hai hông, mấy đồng đầu tiên Vy nhận được là để làm gì?"
+    },
+    {
+     "ai": "be-nai",
+     "chu": "Bạn coi câu đó đang muốn Vy tin, muốn Vy vội, hay muốn Vy im lặng."
+    },
+    {
+     "ai": "be-nai",
+     "chu": "Bạn hỏi thử, câu này nhắc tới tiền, tới thời gian, tới tấm ảnh, hay tới chuyện giữ kín?"
+    }
+   ]
+  }
+ ],
+ "thu_thach": {
+  "dang": "goi-video",
+  "canh": "lan-2",
+  "ten": "Gọi video khuyên chị Lan",
+  "nguoi": "Chị Lan",
+  "anh": "../assets/avatar-chi-lan.png",
+  "mo_ta": "Chị Lan, chị họ của Vy, gọi hỏi ý bạn về một lời mời việc nhẹ lương cao. Bạn khuyên chị bằng lời.",
+  "mo_dau": {
+   "ai": "be-nai",
+   "chu": "Tới thử thách cuối bài rồi. Chị Lan đang gọi nhờ bạn tư vấn. Bạn khuyên chị sao cho dễ hiểu nha.",
+   "giong": "audio/benai-8.m4a"
+  },
+  "y": [
+   "Khuyên chị đừng nạp tiền",
+   "Chỉ ra dấu hiệu lừa đảo",
+   "Chỉ cách kiểm tra",
+   "Rủ chị báo cáo"
+  ],
+  "goi_y": [
+   {
+    "ai": "be-nai",
+    "chu": "Nhớ lại cảnh hai, lần đầu họ trả tiền thật để làm gì?"
+   },
+   {
+    "ai": "be-nai",
+    "chu": "Muốn biết thật hay giả, chị nên hỏi ai trước?"
+   },
+   {
+    "ai": "be-nai",
+    "chu": "Sau cùng, làm gì để người khác không bị lừa giống vậy?"
+   }
+  ],
+  "ket": {
+   "du": {
+    "ai": "be-nai",
+    "cam_xuc": "mừng",
+    "chu": "Bạn khuyên chị Lan rõ ràng ghê. Chị ấy thoát rồi đó.",
+    "giong": "hoc/giong/b02/bn-19.m4a"
+   },
+   "thieu": {
+    "ai": "be-nai",
+    "cam_xuc": "nhẹ nhàng",
+    "chu": "Bạn khuyên được một phần rồi. Bạn coi lại ý còn thiếu, rồi thử gọi chị Lan lần nữa nha.",
+    "giong": "hoc/giong/b02/bn-20.m4a"
+   },
+   "bo": {
+    "ai": "be-nai",
+    "cam_xuc": "hiền",
+    "chu": "Cuộc gọi chưa xong nè. Lúc nào tiện, bạn gọi lại cho chị Lan nha.",
+    "giong": "hoc/giong/b02/bn-21.m4a"
+   },
+   "khong": {
+    "ai": "be-nai",
+    "cam_xuc": "nhẹ nhàng",
+    "chu": "Lần này chưa được ý nào. Không sao, bạn gọi lại cho chị Lan thử lần nữa nha.",
+    "giong": "hoc/giong/b02/bn-22.m4a"
+   }
+  }
+ }
+}

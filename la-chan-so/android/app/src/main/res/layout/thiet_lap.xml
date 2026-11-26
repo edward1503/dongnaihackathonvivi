@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A02: thiết lập lá chắn -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/bg" android:fitsSystemWindows="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+        <TextView style="@style/Chu.Muc" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Thiết lập lá chắn" />
+        <TextView style="@style/Chu.Lon" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="Bật 3 lớp bảo vệ" />
+        <TextView style="@style/Chu.Phu" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="Mỗi lớp chỉ cần bật một lần." android:textSize="16sp" />
+        <TextView android:id="@+id/tienDo" style="@style/Chu.Dam" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:background="@drawable/nhan_xam" android:paddingStart="14dp" android:paddingTop="6dp" android:paddingEnd="14dp" android:paddingBottom="6dp" android:textSize="14sp" />
+        <LinearLayout android:id="@+id/danhSach" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:orientation="vertical" />
+        <TextView android:id="@+id/ghiChu" style="@style/Chu.Phu" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="18dp" />
+        <Button android:id="@+id/nutXong" style="@style/Nut.Chinh" android:layout_marginTop="16dp" android:text="Về trang chủ" />
+    </LinearLayout>
+</ScrollView>

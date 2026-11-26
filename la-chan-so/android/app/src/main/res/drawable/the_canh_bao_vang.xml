@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A03a, mức Cần cẩn thận: cùng dáng thẻ đỏ, màu cam đậm để chữ trắng vẫn đủ tương phản -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle"><solid android:color="@color/warn_card_dark" /><corners android:radius="20dp" /></shape>

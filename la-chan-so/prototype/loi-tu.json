@@ -1,0 +1,314 @@
+{
+ "_ghi_chu": "Bộ câu thu sẵn của chú Tư (Bài 9: chú của Vy; xưng chú, gọi con) cho cuộc gọi video. Câu có tiền tố b<số bài>- là câu riêng của cảnh đó (xem prototype/canh/); câu không tiền tố dùng chung cho mọi cảnh của nhân vật. Nhóm: mo-dau, dem (tiếng chờ), su-co (im lặng, nghe không rõ), hoi/goi (câu hỏi gợi mở cho một ý, lần một và lần hai), nhan (nhận một ý), sua (người học khuyên sai), ket, chao. Cả bộ thu MỘT lượt duy nhất bằng giọng ghi ở prototype/nhan-vat.json rồi cắt, lọc rẹt, nghe kiểm, dựng hình miệng: tools/dung-bo-loi.sh. Thêm hay đổi một câu thì thu lại cả lượt.",
+ "nhan_vat": "tu",
+ "giong": "Algenib",
+ "loi": [
+  {
+   "id": "dem-o",
+   "nhom": "dem",
+   "cam_xuc": "ngẫm nghĩ",
+   "chu": "Ờ, ờ.",
+   "tep": "audio/tu/dem-o.m4a",
+   "giay": 1.7,
+   "kiem": "lech-nhe"
+  },
+  {
+   "id": "dem-vay",
+   "nhom": "dem",
+   "cam_xuc": "lắng nghe",
+   "chu": "Vậy hả con.",
+   "tep": "audio/tu/dem-vay.m4a",
+   "giay": 1.0,
+   "kiem": "ngan"
+  },
+  {
+   "id": "dem-coi",
+   "nhom": "dem",
+   "cam_xuc": "trầm ngâm",
+   "chu": "Để chú coi.",
+   "tep": "audio/tu/dem-coi.m4a",
+   "giay": 1.56,
+   "kiem": "khop"
+  },
+  {
+   "id": "dem-nghi",
+   "nhom": "dem",
+   "cam_xuc": "khựng lại",
+   "chu": "Khoan, để chú nghĩ coi.",
+   "tep": "audio/tu/dem-nghi.m4a",
+   "giay": 1.76,
+   "kiem": "khop"
+  },
+  {
+   "id": "dem-um",
+   "nhom": "dem",
+   "cam_xuc": "ngẫm nghĩ",
+   "chu": "Ừm.",
+   "tep": "audio/tu/dem-um.m4a",
+   "giay": 0.92,
+   "kiem": "ngan"
+  },
+  {
+   "id": "dem-cha",
+   "nhom": "dem",
+   "cam_xuc": "băn khoăn",
+   "chu": "Chà.",
+   "tep": "audio/tu/dem-cha.m4a",
+   "giay": 1.21,
+   "kiem": "ngan"
+  },
+  {
+   "id": "dem-sao",
+   "nhom": "dem",
+   "cam_xuc": "thắc mắc",
+   "chu": "Ờ, sao ta.",
+   "tep": "audio/tu/dem-sao.m4a",
+   "giay": 1.95,
+   "kiem": "lech-nhe"
+  },
+  {
+   "id": "dem-cho",
+   "nhom": "dem",
+   "cam_xuc": "chậm rãi",
+   "chu": "Con chờ chú chút nghen.",
+   "tep": "audio/tu/dem-cho.m4a",
+   "giay": 1.22,
+   "kiem": "ngan"
+  },
+  {
+   "id": "im-mot",
+   "nhom": "su-co",
+   "cam_xuc": "thăm dò",
+   "chu": "A lô, con còn nghe chú không con?",
+   "tep": "audio/tu/im-mot.m4a",
+   "giay": 2.5,
+   "kiem": "lech-nhe"
+  },
+  {
+   "id": "im-hai",
+   "nhom": "su-co",
+   "cam_xuc": "kiên nhẫn",
+   "chu": "Chú còn đây nè. Con nói một câu thôi cũng được.",
+   "tep": "audio/tu/im-hai.m4a",
+   "giay": 3.23,
+   "kiem": "khop"
+  },
+  {
+   "id": "im-ba",
+   "nhom": "su-co",
+   "cam_xuc": "hiền",
+   "chu": "Chắc con đang bận học. Thôi để bữa khác chú gọi lại nghen.",
+   "tep": "audio/tu/im-ba.m4a",
+   "giay": 3.99,
+   "kiem": "khop"
+  },
+  {
+   "id": "nghe-mot",
+   "nhom": "su-co",
+   "cam_xuc": "băn khoăn",
+   "chu": "Chú nghe chưa rõ. Con nói lại giùm chú nghen.",
+   "tep": "audio/tu/nghe-mot.m4a",
+   "giay": 3.1,
+   "kiem": "lech-nhe"
+  },
+  {
+   "id": "nghe-hai",
+   "nhom": "su-co",
+   "cam_xuc": "kiên nhẫn",
+   "chu": "Máy chú nghe câu được câu mất. Con nói chậm chậm, từng ý một nghen.",
+   "tep": "audio/tu/nghe-hai.m4a",
+   "giay": 4.41,
+   "kiem": "can-nghe"
+  },
+  {
+   "id": "chao-cup",
+   "nhom": "chao",
+   "cam_xuc": "thân tình",
+   "chu": "Ừ, vậy chú cúp máy nghen con.",
+   "tep": "audio/tu/chao-cup.m4a",
+   "giay": 2.15,
+   "kiem": "lech-nhe"
+  },
+  {
+   "id": "chao-bua",
+   "nhom": "chao",
+   "cam_xuc": "hiền",
+   "chu": "Ừ, bữa khác hai chú cháu mình nói tiếp nghen.",
+   "tep": "audio/tu/chao-bua.m4a",
+   "giay": 2.85,
+   "kiem": "lech-nhe"
+  },
+  {
+   "id": "chua-ro",
+   "nhom": "su-co",
+   "cam_xuc": "băn khoăn",
+   "chu": "Chú chưa hiểu ý con lắm.",
+   "tep": "audio/tu/chua-ro.m4a",
+   "giay": 1.74,
+   "kiem": "khop"
+  },
+  {
+   "id": "chua-ro-hai",
+   "nhom": "su-co",
+   "cam_xuc": "kiên nhẫn",
+   "chu": "Ý chú hỏi là vầy nè con.",
+   "tep": "audio/tu/chua-ro-hai.m4a",
+   "giay": 1.55,
+   "kiem": "khop"
+  },
+  {
+   "id": "lo-so",
+   "nhom": "su-co",
+   "cam_xuc": "vội ngăn",
+   "chu": "Ấy con, đừng đọc số ra. Số điện thoại hay số tài khoản thì mình không đọc cho ai hết.",
+   "tep": "audio/tu/lo-so.m4a",
+   "giay": 4.81,
+   "kiem": "khop"
+  },
+  {
+   "id": "ai-la",
+   "nhom": "su-co",
+   "cam_xuc": "thật thà",
+   "chu": "Chú là trí tuệ nhân tạo đóng vai chú Tư để con tập thôi.",
+   "tep": "audio/tu/ai-la.m4a",
+   "giay": 3.76,
+   "kiem": "khop"
+  },
+  {
+   "id": "b9-mo-dau",
+   "nhom": "mo-dau",
+   "cam_xuc": "hào hứng pha chút lưỡng lự",
+   "chu": "A lô, Vy đó hả con? Mấy người trong nhóm rủ chú nạp thêm, nói lãi gấp đôi. Lần trước chú rút được thiệt mà. Chú có nên nạp không con?",
+   "tep": "audio/tu/b9-mo-dau.m4a",
+   "giay": 8.96,
+   "kiem": "can-nghe"
+  },
+  {
+   "id": "b9-nhan-nap",
+   "nhom": "nhan",
+   "cam_xuc": "chùng xuống",
+   "chu": "Ờ, con nói vậy thì chú khoan nạp đã.",
+   "tep": "audio/tu/b9-nhan-nap.m4a",
+   "giay": 2.72,
+   "kiem": "khop"
+  },
+  {
+   "id": "b9-goi-nap",
+   "nhom": "goi",
+   "cam_xuc": "phân vân",
+   "chu": "Vậy rốt cuộc con thấy chú nên nạp hay thôi hả con?",
+   "tep": "audio/tu/b9-goi-nap.m4a",
+   "giay": 3.55,
+   "kiem": "khop"
+  },
+  {
+   "id": "b9-hoi-moinhu",
+   "nhom": "hoi",
+   "cam_xuc": "chưng hửng",
+   "chu": "Ủa, vậy sao lần đầu họ cho chú rút được vậy con?",
+   "tep": "audio/tu/b9-hoi-moinhu.m4a",
+   "giay": 3.23,
+   "kiem": "khop"
+  },
+  {
+   "id": "b9-goi-moinhu",
+   "nhom": "goi",
+   "cam_xuc": "thắc mắc",
+   "chu": "Chú vẫn chưa hiểu. Họ cho chú lời trước mấy đồng đó để làm chi hả con?",
+   "tep": "audio/tu/b9-goi-moinhu.m4a",
+   "giay": 4.53,
+   "kiem": "lech-nhe"
+  },
+  {
+   "id": "b9-nhan-moinhu",
+   "nhom": "nhan",
+   "cam_xuc": "vỡ lẽ",
+   "chu": "Trời đất, té ra mấy đồng lời đó là để nhử chú.",
+   "tep": "audio/tu/b9-nhan-moinhu.m4a",
+   "giay": 3.43,
+   "kiem": "can-nghe"
+  },
+  {
+   "id": "b9-hoi-dauhieu",
+   "nhom": "hoi",
+   "cam_xuc": "tò mò",
+   "chu": "Mà ngoài chuyện đó ra, con thấy cái nhóm này còn chỗ nào đáng ngờ nữa không?",
+   "tep": "audio/tu/b9-hoi-dauhieu.m4a",
+   "giay": 4.37,
+   "kiem": "khop"
+  },
+  {
+   "id": "b9-goi-dauhieu",
+   "nhom": "goi",
+   "cam_xuc": "kể lại, thắc mắc",
+   "chu": "Ông thầy trong nhóm nói chắc ăn lắm, không bao giờ lỗ. Con nghe vậy thấy sao?",
+   "tep": "audio/tu/b9-goi-dauhieu.m4a",
+   "giay": 4.51,
+   "kiem": "lech-nhe"
+  },
+  {
+   "id": "b9-nhan-dauhieu",
+   "nhom": "nhan",
+   "cam_xuc": "vỡ lẽ",
+   "chu": "Ờ ha, con nói chú mới thấy kỳ thiệt.",
+   "tep": "audio/tu/b9-nhan-dauhieu.m4a",
+   "giay": 3.15,
+   "kiem": "lech-nhe"
+  },
+  {
+   "id": "b9-hoi-baocao",
+   "nhom": "hoi",
+   "cam_xuc": "lo cho người khác",
+   "chu": "Mà trong nhóm còn nhiều người lắm con. Giờ chú làm gì với cái nhóm đó đây?",
+   "tep": "audio/tu/b9-hoi-baocao.m4a",
+   "giay": 5.72,
+   "kiem": "lech-nhe"
+  },
+  {
+   "id": "b9-goi-baocao",
+   "nhom": "goi",
+   "cam_xuc": "gợi mở",
+   "chu": "Làm sao cho mấy người khác khỏi mất tiền như chú suýt mất hả con?",
+   "tep": "audio/tu/b9-goi-baocao.m4a",
+   "giay": 3.35,
+   "kiem": "lech-nhe"
+  },
+  {
+   "id": "b9-nhan-baocao",
+   "nhom": "nhan",
+   "cam_xuc": "gật gù",
+   "chu": "Ừ, phải đó con, để người khác khỏi bị.",
+   "tep": "audio/tu/b9-nhan-baocao.m4a",
+   "giay": 3.0,
+   "kiem": "lech-nhe"
+  },
+  {
+   "id": "b9-sua",
+   "nhom": "sua",
+   "cam_xuc": "lo, phân vân",
+   "chu": "Con nói vậy chứ chú vẫn run. Nguyên cuốn sổ tiết kiệm của chú đó con.",
+   "tep": "audio/tu/b9-sua.m4a",
+   "giay": 5.04,
+   "kiem": "khop"
+  },
+  {
+   "id": "b9-ket-du",
+   "nhom": "ket",
+   "cam_xuc": "thở ra, cười",
+   "chu": "May mà chú hỏi con. Để chú lưu tin nhắn, báo cáo rồi rời nhóm nha con.",
+   "tep": "audio/tu/b9-ket-du.m4a",
+   "giay": 5.13,
+   "kiem": "khop"
+  },
+  {
+   "id": "b9-ket-thieu",
+   "nhom": "ket",
+   "cam_xuc": "hiền",
+   "chu": "Cảm ơn con nghen. Chú chưa nạp vội đâu, để chú nghĩ thêm đã.",
+   "tep": "audio/tu/b9-ket-thieu.m4a",
+   "giay": 3.58,
+   "kiem": "lech-nhe"
+  }
+ ],
+ "_kiem": "Trường kiem của từng câu = kết quả nghe lại bằng máy ngày 25/11/2026 cho lượt thu hiện tại (OpenAI gpt-4o-transcribe nghe từng câu; Gemini 3.5 Flash nghe cả lượt thu hai lần (một lần hỏi đích danh về lời dặn giọng), có mốc thời gian. Gemini chưa nghe từng câu của chú Tư (hết hạn mức trong ngày)). khop = OpenAI chép đúng và ít nhất một lượt Gemini chép đúng; lech-nhe = chỉ lệch tiếng đệm, chữ cuối câu (nghen, nha) hoặc chữ gần âm, có lượt chép đúng; can-nghe = các lượt chép khác nhau ở chữ mang nghĩa, CẦN NGƯỜI NGHE trước khi dùng; ngan = tệp dưới khoảng 1,5 giây, máy không kiểm được. Không lượt nào nghe thấy lời dặn giọng bị đọc lẫn. Chưa có người nghe câu nào; danh sách cần nghe ở bai-hoc/nghe-thu/CAN-NGHE.md."
+}

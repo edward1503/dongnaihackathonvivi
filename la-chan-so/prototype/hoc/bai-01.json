@@ -1,0 +1,513 @@
+{
+ "ma": "bai-01",
+ "so": 1,
+ "ma_kieu": "gia-danh-co-quan",
+ "ten": "Cuộc gọi tự xưng cơ quan chức năng",
+ "che_do": "don-gian",
+ "nhan_vat": "Bà Hoa",
+ "bia": "comic1-2.png",
+ "truyen": [
+  {
+   "tranh": "comic1-1.png",
+   "tom_tat": "Bà Hoa nhận cuộc gọi từ một số lạ.",
+   "loi": [
+    {
+     "ai": "be-nai",
+     "cam_xuc": "ấm áp, rủ rê",
+     "chu": "Con kể bà nghe chuyện bà Hoa nha. Tới đoạn gay cấn, bà chọn giúp bà Hoa nha.",
+     "giong": "hoc/giong/b01/bn-01.m4a"
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "thủng thẳng, như kể chuyện nhà",
+     "chu": "Trưa đó bà Hoa đang ngồi nghỉ thì điện thoại reo. Một số lạ hoắc.",
+     "giong": "hoc/giong/b01/bn-02.m4a"
+    },
+    {
+     "ai": "ba-hoa",
+     "cam_xuc": "lẩm bẩm",
+     "chu": "Ai gọi giờ này vậy ta?",
+     "giong": "hoc/giong/b01/bh-01.m4a"
+    }
+   ]
+  },
+  {
+   "tranh": "comic1-2.png",
+   "tom_tat": "Người gọi tự xưng cán bộ, nói bà dính vụ án.",
+   "loi": [
+    {
+     "ai": "be-nai",
+     "cam_xuc": "hạ giọng, hồi hộp",
+     "chu": "Bên kia là một giọng đàn ông, nghe nghiêm lắm. Ông ta xưng là cán bộ điều tra, nói bà dính tới một vụ án.",
+     "giong": "hoc/giong/b01/bn-03.m4a"
+    },
+    {
+     "ai": "ba-hoa",
+     "cam_xuc": "hoảng hốt",
+     "chu": "Trời đất ơi, tôi có làm gì đâu!",
+     "giong": "hoc/giong/b01/bh-02.m4a"
+    }
+   ]
+  },
+  {
+   "tranh": "comic1-3.png",
+   "tom_tat": "Họ giục bà chuyển tiền. Lá chắn hiện \"Khoan đã\". Bà chọn làm gì?",
+   "loi": [
+    {
+     "ai": "nguoi-goi-nam",
+     "cam_xuc": "gấp gáp mà vẫn lễ phép",
+     "chu": "Bà chuyển hết tiền qua tài khoản tạm giữ giúp tôi. Chuyện này bà đừng nói với ai nha.",
+     "giong": "hoc/giong/b01/gn-01.m4a"
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "dồn dập",
+     "chu": "Bà run quá, tay đã mở ứng dụng ngân hàng.",
+     "giong": "hoc/giong/b01/bn-04.m4a"
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "dứt khoát",
+     "chu": "Đúng lúc đó, Lá chắn hiện lên. Khoan đã bà ơi!",
+     "giong": "hoc/giong/b01/bn-05.m4a"
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "hỏi nhỏ nhẹ",
+     "chu": "Nếu là bà Hoa, bà làm gì ạ?",
+     "giong": "hoc/giong/b01/bn-06.m4a"
+    }
+   ],
+   "re": [
+    {
+     "chu": "Chuyển tiền cho xong",
+     "toi": "ngo-cut",
+     "ai": "be-nai",
+     "cam_xuc": "đọc rõ, chậm",
+     "giong": "hoc/giong/b01/bn-07.m4a"
+    },
+    {
+     "chu": "Cúp máy, gọi cho con",
+     "toi": "an-toan",
+     "ai": "be-nai",
+     "cam_xuc": "đọc rõ, chậm",
+     "giong": "hoc/giong/b01/bn-08.m4a"
+    }
+   ]
+  }
+ ],
+ "ngo_cut": {
+  "tranh": "comic1-5.png",
+  "tom_tat": "Bà chuyển tiền, gọi lại thì không ai nghe máy.",
+  "loi": [
+   {
+    "ai": "be-nai",
+    "cam_xuc": "kể chậm, buồn dần",
+    "chu": "Bà bỏ qua lời nhắc, chuyển hết tiền. Lát sau gọi lại số kia thì không ai nghe máy nữa.",
+    "giong": "hoc/giong/b01/bn-09.m4a"
+   },
+   {
+    "ai": "ba-hoa",
+    "cam_xuc": "buồn, nghẹn ngào",
+    "chu": "Tiền dành dụm bao lâu nay, mất hết rồi.",
+    "giong": "hoc/giong/b01/bh-03.m4a"
+   },
+   {
+    "ai": "be-nai",
+    "cam_xuc": "an ủi, dịu dàng",
+    "chu": "Không sao đâu bà, đây chỉ là truyện thôi. Mình quay lại chọn lại nha.",
+    "giong": "hoc/giong/b01/bn-10.m4a"
+   }
+  ]
+ },
+ "an_toan": {
+  "tranh": "comic1-4.png",
+  "tom_tat": "Bà cúp máy, gọi con trai. An toàn rồi.",
+  "loi": [
+   {
+    "ai": "be-nai",
+    "cam_xuc": "dịu lại",
+    "chu": "Bà cúp máy, rồi gọi liền cho anh Minh.",
+    "giong": "hoc/giong/b01/bn-11.m4a"
+   },
+   {
+    "ai": "minh",
+    "cam_xuc": "bật cười, trấn an",
+    "chu": "Mẹ ơi, lừa đảo đó. Công an nào lại đòi tiền qua điện thoại hả mẹ.",
+    "giong": "hoc/giong/b01/mi-01.m4a"
+   },
+   {
+    "ai": "ba-hoa",
+    "cam_xuc": "nhẹ nhõm, nói rõ từng tiếng",
+    "chu": "Trời ơi, hết hồn. Suýt nữa thì mất hết.",
+    "giong": "hoc/giong/b01/bh-04.m4a"
+   }
+  ]
+ },
+ "dau_hieu": [
+  "Tự xưng cơ quan chức năng",
+  "Đòi chuyển tiền",
+  "Bắt giữ bí mật"
+ ],
+ "nho_mot_cau": {
+  "ai": "be-nai",
+  "cam_xuc": "ấm áp",
+  "chu": "Ai tự xưng công an mà đòi chuyển tiền, bà cứ cúp máy nhé.",
+  "giong": "hoc/giong/b01/bn-12.m4a"
+ },
+ "luyen": [
+  {
+   "dang": "nghe-bam-dung",
+   "ma": "B6",
+   "ten": "Nghe và bấm Dừng",
+   "nguoi_goi": {
+    "ten": "Số lạ",
+    "anh": "../assets/avatar-hat-dau.png"
+   },
+   "mo_dau": {
+    "ai": "be-nai",
+    "cam_xuc": "rủ rê",
+    "chu": "Giờ con cho bà nghe thử một cuộc gọi giả nha. Người gọi là máy đóng vai thôi ạ. Nghe thấy lạ là bà bấm Dừng liền.",
+    "giong": "hoc/giong/b01/bn-13.m4a"
+   },
+   "mau": {
+    "loi": {
+     "ai": "be-nai",
+     "cam_xuc": "thong thả",
+     "chu": "Con làm mẫu trước nha bà.",
+     "giong": "hoc/giong/b01/bn-14.m4a"
+    },
+    "cau": [
+     {
+      "ai": "nguoi-goi-nam",
+      "cam_xuc": "lễ phép",
+      "chu": "Dạ alo, chào bà ạ.",
+      "giong": "hoc/giong/b01/gn-02.m4a",
+      "nhan": "Mới chào hỏi, chưa có gì lạ"
+     },
+     {
+      "ai": "nguoi-goi-nam",
+      "cam_xuc": "lễ phép, nghiêm",
+      "chu": "Tôi gọi từ tòa án. Bà có một giấy triệu tập chưa nhận.",
+      "giong": "hoc/giong/b01/gn-03.m4a",
+      "dau_hieu": {
+       "ten": "Tự xưng tòa án, báo tin làm bà sợ",
+       "cum": "tòa án",
+       "luc": 1.1
+      }
+     }
+    ],
+    "giai_thich": {
+     "ai": "be-nai",
+     "cam_xuc": "chắc nịch",
+     "chu": "Tới đây là con bấm Dừng. Người lạ gọi tới, tự xưng cơ quan nhà nước rồi báo tin làm bà sợ, là có chuyện rồi ạ.",
+     "giong": "hoc/giong/b01/bn-15.m4a"
+    }
+   },
+   "toi_luot": {
+    "ai": "be-nai",
+    "cam_xuc": "khích lệ",
+    "chu": "Giờ tới lượt bà nha. Cuộc gọi này khác một chút đó ạ.",
+    "giong": "hoc/giong/b01/bn-16.m4a"
+   },
+   "cau": [
+    {
+     "ai": "nguoi-goi-nam",
+     "cam_xuc": "lịch sự",
+     "chu": "Dạ alo, bà nghe máy có rõ không ạ?",
+     "giong": "hoc/giong/b01/gn-04.m4a"
+    },
+    {
+     "ai": "nguoi-goi-nam",
+     "cam_xuc": "lễ phép, nghiêm",
+     "chu": "Tôi là cán bộ điều tra. Bà đang có liên quan tới một vụ án.",
+     "giong": "hoc/giong/b01/gn-05.m4a",
+     "dau_hieu": {
+      "ten": "Tự xưng cán bộ, nói bà dính vụ án",
+      "nhieu": "Hỏi thăm sức khỏe của bà",
+      "sao": 3,
+      "cum": "cán bộ điều tra",
+      "luc": 1.2,
+      "nhac": {
+       "ai": "be-nai",
+       "cam_xuc": "nhẹ nhàng",
+       "chu": "Họ vừa xưng là cán bộ, rồi nói bà dính vụ án đó ạ.",
+       "giong": "hoc/giong/b01/bn-17.m4a"
+      }
+     }
+    },
+    {
+     "ai": "nguoi-goi-nam",
+     "cam_xuc": "gấp, vẫn lễ phép",
+     "chu": "Bà chuyển hết tiền vào tài khoản tạm giữ giúp tôi, để chứng minh bà trong sạch.",
+     "giong": "hoc/giong/b01/gn-06.m4a",
+     "dau_hieu": {
+      "ten": "Đòi bà chuyển tiền",
+      "nhieu": "Hẹn hôm khác gọi lại",
+      "sao": 2,
+      "cum": "chuyển hết tiền",
+      "luc": 1.1,
+      "nhac": {
+       "ai": "be-nai",
+       "cam_xuc": "nhẹ nhàng",
+       "chu": "Họ vừa đòi bà chuyển tiền đó ạ.",
+       "giong": "hoc/giong/b01/bn-18.m4a"
+      }
+     }
+    },
+    {
+     "ai": "nguoi-goi-nam",
+     "cam_xuc": "hạ giọng, dặn dò",
+     "chu": "Việc này bà đừng nói với ai, kể cả con cháu nha bà.",
+     "giong": "hoc/giong/b01/gn-07.m4a",
+     "dau_hieu": {
+      "ten": "Dặn bà giấu con cháu",
+      "nhieu": "Khuyên bà hỏi con cháu",
+      "sao": 1,
+      "cum": "đừng nói với ai",
+      "luc": 1.4,
+      "nhac": {
+       "ai": "be-nai",
+       "cam_xuc": "nhẹ nhàng",
+       "chu": "Họ vừa dặn bà giấu con cháu đó ạ.",
+       "giong": "hoc/giong/b01/bn-19.m4a"
+      }
+     }
+    }
+   ],
+   "som": {
+    "ai": "be-nai",
+    "cam_xuc": "cười hiền",
+    "chu": "Bà thấy không yên tâm nên cúp máy, là đúng rồi ạ. Ngoài đời bà cứ làm vậy nha. Bà muốn nghe thử lượt nữa, để biết mặt mấy chiêu của họ không ạ?",
+    "giong": "hoc/giong/b01/bn-20.m4a"
+   },
+   "hoi_xac_nhan": {
+    "ai": "be-nai",
+    "cam_xuc": "tò mò",
+    "chu": "Bà dừng rồi ạ. Bà vừa nghe ra điều gì lạ ạ?",
+    "giong": "hoc/giong/b01/bn-21.m4a"
+   },
+   "ket": {
+    "3": {
+     "ai": "be-nai",
+     "cam_xuc": "reo lên",
+     "chu": "Bà bấm đúng lúc ghê! Công an không bao giờ gọi điện bắt bà chuyển tiền để chứng minh trong sạch đâu ạ.",
+     "giong": "hoc/giong/b01/bn-22.m4a"
+    },
+    "2": {
+     "ai": "be-nai",
+     "cam_xuc": "khen",
+     "chu": "Dạ, nghe đòi tiền là bà dừng liền. Lần sau, mới nghe người lạ xưng cán bộ rồi nói bà dính vụ án, là bà cúp máy được rồi ạ.",
+     "giong": "hoc/giong/b01/bn-23.m4a"
+    },
+    "1": {
+     "ai": "be-nai",
+     "cam_xuc": "nhẹ nhàng",
+     "chu": "Bà dừng là đúng rồi ạ. Mà ngay lúc người lạ xưng cán bộ, nói bà dính vụ án, là bà đã cúp máy được rồi ạ.",
+     "giong": "hoc/giong/b01/bn-24.m4a"
+    }
+   },
+   "het": {
+    "ai": "be-nai",
+    "cam_xuc": "nhẹ nhàng",
+    "chu": "Không sao đâu ạ, bà nghe lại nha. Lần này bà để ý coi người lạ xưng là ai, rồi nói chuyện gì làm bà sợ nha.",
+    "giong": "hoc/giong/b01/bn-25.m4a"
+   },
+   "tong_ket": {
+    "ai": "be-nai",
+    "cam_xuc": "dặn dò",
+    "chu": "Bà coi nè, cuộc gọi đó có tới ba chiêu. Xưng cán bộ, đòi chuyển tiền, rồi bắt giấu con cháu.",
+    "giong": "hoc/giong/b01/bn-26.m4a"
+   },
+   "goi_y": [
+    {
+     "ai": "be-nai",
+     "cam_xuc": "gợi nhớ",
+     "chu": "Bà nhớ trong truyện, ông kia mở đầu bằng cách xưng là ai ạ?",
+     "giong": "hoc/giong/b01/bn-27.m4a"
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "gợi nhớ",
+     "chu": "Người lạ mà nhắc tới vụ án, tới tiền, là bà dè chừng ạ.",
+     "giong": "hoc/giong/b01/bn-28.m4a"
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "gợi nhớ",
+     "chu": "Nghe tới đó là bà đâu cần nghe thêm nữa ạ.",
+     "giong": "hoc/giong/b01/bn-29.m4a"
+    }
+   ],
+   "dap_an": "Bấm Dừng ngay khi người gọi xưng là cán bộ điều tra và nói bà dính tới một vụ án (câu thứ hai)."
+  },
+  {
+   "dang": "that-hay-lua",
+   "ma": "B2",
+   "ten": "Thật hay lừa",
+   "mo_dau": {
+    "ai": "be-nai",
+    "cam_xuc": "vui vẻ",
+    "chu": "Giờ con đọc từng thẻ cho bà nghe nha. Chuyện nào thấy lạ, bà bấm Khoan đã. Chuyện nào yên tâm, bà bấm Được ạ.",
+    "giong": "hoc/giong/b01/bn-30.m4a"
+   },
+   "the": [
+    {
+     "ai": "be-nai",
+     "cam_xuc": "đọc rõ, chậm",
+     "chu": "Người lạ gọi, bảo bà chuyển tiền để chứng minh trong sạch.",
+     "giong": "hoc/giong/b01/bn-31.m4a",
+     "dap_an": "lua",
+     "mau": true,
+     "giai_thich": {
+      "ai": "be-nai",
+      "cam_xuc": "giảng giải",
+      "chu": "Thẻ này con làm mẫu, là Khoan đã. Đâu có cơ quan nào bắt bà chuyển tiền để chứng minh đâu ạ.",
+      "giong": "hoc/giong/b01/bn-32.m4a"
+     }
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "đọc rõ, chậm",
+     "chu": "Bà hàng xóm gọi rủ sáng mai đi chợ.",
+     "giong": "hoc/giong/b01/bn-33.m4a",
+     "dap_an": "binh-thuong",
+     "mau": true,
+     "giai_thich": {
+      "ai": "be-nai",
+      "cam_xuc": "giảng giải",
+      "chu": "Thẻ này thì Được. Bà ấy chỉ rủ đi chợ, không xin gì hết ạ.",
+      "giong": "hoc/giong/b01/bn-34.m4a"
+     }
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "đọc rõ, chậm",
+     "chu": "Người lạ gọi, dặn bà đừng kể cho con cháu.",
+     "giong": "hoc/giong/b01/bn-35.m4a",
+     "dap_an": "lua",
+     "giai_thich": {
+      "ai": "be-nai",
+      "cam_xuc": "giảng giải",
+      "chu": "Họ sợ bà hỏi con cháu là lộ liền đó ạ.",
+      "giong": "hoc/giong/b01/bn-36.m4a"
+     }
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "đọc rõ, chậm",
+     "chu": "Anh Minh gọi nhắc bà mai đi khám.",
+     "giong": "hoc/giong/b01/bn-37.m4a",
+     "dap_an": "binh-thuong",
+     "giai_thich": {
+      "ai": "be-nai",
+      "cam_xuc": "giảng giải",
+      "chu": "Anh Minh chỉ nhắc lịch khám, không đòi tiền, không hỏi thông tin gì ạ.",
+      "giong": "hoc/giong/b01/bn-38.m4a"
+     }
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "đọc rõ, chậm",
+     "chu": "Người lạ gọi, bảo bà đọc số căn cước qua điện thoại.",
+     "giong": "hoc/giong/b01/bn-39.m4a",
+     "dap_an": "lua",
+     "giai_thich": {
+      "ai": "be-nai",
+      "cam_xuc": "giảng giải",
+      "chu": "Số căn cước là chuyện riêng của bà. Người lạ gọi tới hỏi thì bà đừng đọc ạ.",
+      "giong": "hoc/giong/b01/bn-40.m4a"
+     }
+    }
+   ],
+   "dung": {
+    "ai": "be-nai",
+    "cam_xuc": "reo",
+    "chu": "Dạ đúng rồi ạ!",
+    "giong": "hoc/giong/b01/bn-41.m4a"
+   },
+   "sai": {
+    "ai": "be-nai",
+    "cam_xuc": "nhẹ nhàng",
+    "chu": "Chưa đúng rồi bà ơi. Bà nghe con nói nè.",
+    "giong": "hoc/giong/b01/bn-42.m4a"
+   },
+   "can_than": {
+    "ai": "be-nai",
+    "cam_xuc": "hiền",
+    "chu": "Bà cẩn thận vậy cũng tốt ạ. Mà chuyện này thì bà yên tâm được.",
+    "giong": "hoc/giong/b01/bn-43.m4a"
+   },
+   "goi_y": [
+    {
+     "ai": "be-nai",
+     "cam_xuc": "gợi nhớ",
+     "chu": "Bà nhớ trong truyện, ông kia giục bà Hoa làm gì ạ?",
+     "giong": "hoc/giong/b01/bn-44.m4a"
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "gợi nhớ",
+     "chu": "Bà coi người gọi là ai, và họ muốn bà làm gì ạ.",
+     "giong": "hoc/giong/b01/bn-45.m4a"
+    },
+    {
+     "ai": "be-nai",
+     "cam_xuc": "gợi nhớ",
+     "chu": "Người gọi đang rủ bà làm chuyện thường ngày, hay muốn lấy tiền, lấy thông tin của bà ạ?",
+     "giong": "hoc/giong/b01/bn-46.m4a"
+    }
+   ],
+   "xong": {
+    "ai": "be-nai",
+    "cam_xuc": "khen đúng việc",
+    "chu": "Bà phân biệt được chuyện lạ với chuyện thường rồi đó ạ.",
+    "giong": "hoc/giong/b01/bn-47.m4a"
+   }
+  }
+ ],
+ "thu_thach": {
+  "dang": "goi-video",
+  "canh": "minh-1",
+  "ten": "Anh Minh hoảng hốt gọi",
+  "nguoi": "Anh Minh",
+  "anh": "../assets/chan-dung-minh.png",
+  "mo_ta": "Anh Minh vừa bị người tự xưng công an gọi dọa, hoảng quá nên gọi hỏi mẹ có nên chuyển tiền không. Bà trấn an con bằng lời, hoặc bấm nút.",
+  "mo_dau": {
+   "ai": "be-nai",
+   "cam_xuc": "hào hứng mà ân cần",
+   "chu": "Tới thử thách rồi bà ơi. Anh Minh đang gọi, giọng hoảng lắm. Bà bình tĩnh khuyên con nha.",
+   "giong": "hoc/giong/b01/bn-48.m4a"
+  },
+  "y": [
+   "Cúp máy, không chuyển tiền",
+   "Hỏi lại công an phường hoặc người nhà, đừng giấu"
+  ],
+  "ket": {
+   "du": {
+    "ai": "be-nai",
+    "cam_xuc": "mừng",
+    "chu": "Bà trấn an anh Minh giỏi ghê. Anh Minh hết sợ rồi ạ.",
+    "giong": "hoc/giong/b01/bn-49.m4a"
+   },
+   "thieu": {
+    "ai": "be-nai",
+    "cam_xuc": "nhẹ nhàng",
+    "chu": "Bà khuyên được một phần rồi ạ. Lúc nào rảnh, bà gọi lại anh Minh tập thêm nha.",
+    "giong": "hoc/giong/b01/bn-50.m4a"
+   },
+   "bo": {
+    "ai": "be-nai",
+    "cam_xuc": "hiền",
+    "chu": "Cuộc gọi chưa xong bà ơi. Lúc nào tiện, bà bấm gọi lại nha.",
+    "giong": "hoc/giong/b01/bn-51.m4a"
+   },
+   "khong": {
+    "ai": "be-nai",
+    "cam_xuc": "nhẹ nhàng",
+    "chu": "Lần này chưa được ý nào bà ơi. Không sao hết, bà gọi lại anh Minh tập thêm nha.",
+    "giong": "hoc/giong/b01/bn-52.m4a"
+   }
+  }
+ }
+}

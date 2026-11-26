@@ -1,0 +1,171 @@
+{
+ "chuong": {
+  "bursts": [
+   [
+    0.0,
+    0.5
+   ],
+   [
+    0.7,
+    1.2
+   ]
+  ],
+  "file": "chuong.wav",
+  "duration_s": 1.3,
+  "peak_dbfs": -3.5,
+  "rms_dbfs": -10.9,
+  "clipped_samples": 0
+ },
+ "chuong-lap": {
+  "bursts": [
+   [
+    0.0,
+    0.5
+   ],
+   [
+    0.7,
+    1.2
+   ],
+   [
+    3.0,
+    3.5
+   ],
+   [
+    3.7,
+    4.2
+   ],
+   [
+    6.0,
+    6.5
+   ],
+   [
+    6.7,
+    7.2
+   ]
+  ],
+  "file": "chuong-lap.wav",
+  "duration_s": 7.3,
+  "peak_dbfs": -3.5,
+  "rms_dbfs": -13.6,
+  "clipped_samples": 0
+ },
+ "rung": {
+  "pulses": [
+   [
+    0.0,
+    0.4
+   ],
+   [
+    0.6,
+    1.0
+   ]
+  ],
+  "file": "rung.wav",
+  "duration_s": 1.05,
+  "peak_dbfs": -3.5,
+  "rms_dbfs": -6.6,
+  "clipped_samples": 0
+ },
+ "rung-manh": {
+  "pulses": [
+   [
+    0.0,
+    0.5
+   ],
+   [
+    0.65,
+    1.15
+   ],
+   [
+    1.3,
+    1.8
+   ]
+  ],
+  "file": "rung-manh.wav",
+  "duration_s": 1.85,
+  "peak_dbfs": -3.5,
+  "rms_dbfs": -6.4,
+  "clipped_samples": 0
+ },
+ "doi-tram": {
+  "hit": 0.0,
+  "pitch_hz": [
+   80,
+   40
+  ],
+  "decay_s": 0.75,
+  "file": "doi-tram.wav",
+  "duration_s": 2.4,
+  "peak_dbfs": -3.5,
+  "rms_dbfs": -12.3,
+  "clipped_samples": 0
+ },
+ "luot": {
+  "loudest": 0.495,
+  "pan": "trái sang phải",
+  "file": "luot.wav",
+  "duration_s": 0.9,
+  "peak_dbfs": -3.5,
+  "rms_dbfs": -21.1,
+  "clipped_samples": 0
+ },
+ "thong-bao": {
+  "notes": [
+   {
+    "t": 0.0,
+    "hz": 987.77
+   },
+   {
+    "t": 0.14,
+    "hz": 1318.51
+   }
+  ],
+  "file": "thong-bao.wav",
+  "duration_s": 1.0,
+  "peak_dbfs": -3.5,
+  "rms_dbfs": -17.0,
+  "clipped_samples": 0
+ },
+ "tinh": {
+  "hit": 0.07,
+  "hz": 1318.51,
+  "file": "tinh.wav",
+  "duration_s": 1.4,
+  "peak_dbfs": -3.5,
+  "rms_dbfs": -16.9,
+  "clipped_samples": 0
+ },
+ "trong": {
+  "hit": 0.0,
+  "file": "trong.wav",
+  "duration_s": 1.2,
+  "peak_dbfs": -3.5,
+  "rms_dbfs": -13.9,
+  "clipped_samples": 0
+ },
+ "trong-ba-nhip": {
+  "hits": [
+   0.0,
+   1.486,
+   2.972
+  ],
+  "gains": [
+   0.75,
+   0.87,
+   1.0
+  ],
+  "file": "trong-ba-nhip.wav",
+  "duration_s": 4.372,
+  "peak_dbfs": -3.5,
+  "rms_dbfs": -15.5,
+  "clipped_samples": 0
+ },
+ "tach": {
+  "hit": 0.0,
+  "file": "tach.wav",
+  "duration_s": 0.12,
+  "peak_dbfs": -3.5,
+  "rms_dbfs": -23.6,
+  "clipped_samples": 0
+ }
+}

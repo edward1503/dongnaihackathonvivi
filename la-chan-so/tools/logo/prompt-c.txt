@@ -1,0 +1,5 @@
+Use your image generation tool to create ONE square 1:1 image (1024x1024) and save it as a PNG at EXACTLY this path: out/logo-c.png. After saving, list the file to confirm it exists. Do not create any other files.
+
+Read the brand brief and rules in chung.txt (same folder) and follow them.
+
+Concept C, antler shield: a geometric royal-blue shield whose top edge is shaped by two stylised small deer antlers curving outward (a nod to Đồng Nai, "plain of deer"). Inside the shield, a white rounded check mark that starts as three small digital dots and turns into a solid stroke. Navy inner outline, one amber accent on an antler tip.

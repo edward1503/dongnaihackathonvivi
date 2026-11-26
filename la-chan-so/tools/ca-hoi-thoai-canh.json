@@ -1,0 +1,1022 @@
+{
+ "_ghi_chu": "Ca kiểm luật ngoại tuyến của các cảnh mới (prototype/hoi-thoai-canh.js). luot: [lời người học, các ý phải được chấm | \"mã ý định\", mã câu nhân vật vừa hỏi (bỏ trống = mo-dau)]. cuoc: một cuộc gọi trọn vẹn, \"(im)\" = im lặng, \"(loi)\" = máy không nghe ra; diem = số ý cuối cùng, het = cuộc gọi đã kết thúc, cuoi = mã câu cuối nhân vật nói. Kỳ vọng viết theo NGHĨA của câu; luật sai thì sửa luật, không sửa kỳ vọng.",
+ "minh-1": {
+  "luot": [
+   [
+    "Con cúp máy đi, đừng chuyển",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "Con làm theo họ cho xong đi",
+    "sai"
+   ],
+   [
+    "Con lên công an phường hỏi, đừng giấu",
+    [
+     "hoilai"
+    ]
+   ],
+   [
+    "Thôi con giấu đi, đừng nói ai",
+    "sai"
+   ],
+   [
+    "cúp máy liền đi con",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "đừng chuyển đồng nào hết con",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "lừa đảo đó con, kệ tụi nó",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "công an giả đó con",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "con tắt điện thoại đi",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "không con, không chuyển",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "không",
+    [
+     "cup"
+    ],
+    "mo-dau"
+   ],
+   [
+    "đừng con ơi",
+    [
+     "cup"
+    ],
+    "mo-dau"
+   ],
+   [
+    "không nha con",
+    [
+     "cup"
+    ],
+    "goi-cup"
+   ],
+   [
+    "con ra công an phường hỏi cho chắc",
+    [
+     "hoilai"
+    ]
+   ],
+   [
+    "con hỏi lại công an xã coi",
+    [
+     "hoilai"
+    ]
+   ],
+   [
+    "con báo công an đi",
+    [
+     "hoilai"
+    ]
+   ],
+   [
+    "con nói với ba con đi",
+    [
+     "hoilai"
+    ]
+   ],
+   [
+    "con cứ kể hết cho người nhà",
+    [
+     "hoilai"
+    ]
+   ],
+   [
+    "đừng giấu, con cứ nói với mẹ",
+    [
+     "hoilai"
+    ]
+   ],
+   [
+    "công an phường",
+    [
+     "hoilai"
+    ],
+    "hoi-hoilai"
+   ],
+   [
+    "hỏi người nhà",
+    [
+     "hoilai"
+    ],
+    "goi-hoilai"
+   ],
+   [
+    "con cúp máy rồi lên phường hỏi",
+    [
+     "cup",
+     "hoilai"
+    ]
+   ],
+   [
+    "Kệ họ, con cúp máy, rồi đến công an phường trình báo",
+    [
+     "cup",
+     "hoilai"
+    ]
+   ],
+   [
+    "con không chuyển mà lên phường hỏi",
+    [
+     "cup",
+     "hoilai"
+    ]
+   ],
+   [
+    "Con khỏi cần chuyển tiền, cúp máy đi",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "Đúng rồi, con cúp máy đi",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "con đừng tin, công an thật không gọi đòi tiền",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "con cúp máy đi công an giả đó",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "con chuyển cho xong chuyện",
+    "sai"
+   ],
+   [
+    "sợ quá thì chuyển đi con",
+    "sai"
+   ],
+   [
+    "ừ chuyển đi",
+    "sai"
+   ],
+   [
+    "con nghe theo công an đi",
+    "sai"
+   ],
+   [
+    "con đừng nói với ai hết",
+    "sai"
+   ],
+   [
+    "con đừng hỏi ai hết",
+    "sai"
+   ],
+   [
+    "con giữ bí mật nha",
+    "sai"
+   ],
+   [
+    "con cúp máy rồi chuyển tiền cho xong",
+    "sai"
+   ],
+   [
+    "con chuyển tiền xong rồi lên phường",
+    "sai"
+   ],
+   [
+    "hỏi công an làm gì cho mệt",
+    "sai"
+   ],
+   [
+    "nếu con chuyển là mất tiền đó, cúp máy đi",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "con có nên cúp máy không",
+    "hoi-lai"
+   ],
+   [
+    "con cúp máy hả?",
+    "hoi-lai"
+   ],
+   [
+    "họ bảo con không được nói với ai",
+    []
+   ],
+   [
+    "họ bảo con chuyển vô tài khoản tạm giữ",
+    []
+   ],
+   [
+    "Họ bảo con cúp máy rồi lên phường",
+    []
+   ],
+   [
+    "con đừng cúp máy",
+    []
+   ],
+   [
+    "con chưa định cúp máy hay hỏi ai",
+    []
+   ],
+   [
+    "mẹ không biết nữa",
+    []
+   ],
+   [
+    "tiền nhiều không con",
+    []
+   ],
+   [
+    "không chín một hai ba bốn năm sáu bảy tám",
+    "lo-thong-tin"
+   ],
+   [
+    "con là người thật hay máy vậy",
+    "ai-la"
+   ],
+   [
+    "thôi để bữa khác nói nha con",
+    "xin-dung"
+   ],
+   [
+    "Mã PIN của mẹ là 4321",
+    []
+   ],
+   [
+    "con đi công an hỏi",
+    [
+     "hoilai"
+    ]
+   ],
+   [
+    "chuyển vô tài khoản tạm giữ đi con",
+    "sai"
+   ],
+   [
+    "con cứ làm theo lời công an",
+    "sai"
+   ],
+   [
+    "con chuyển đi rồi tính",
+    "sai"
+   ],
+   [
+    "đừng nghe lời họ",
+    [
+     "cup"
+    ]
+   ],
+   [
+    "con đừng giấu mẹ",
+    [
+     "hoilai"
+    ]
+   ],
+   [
+    "giấu chi con",
+    "sai",
+    "hoi-hoilai"
+   ]
+  ],
+  "cuoc": [
+   {
+    "luot": [
+     "Con cúp máy đi, đừng chuyển",
+     "Con lên công an phường hỏi, đừng giấu"
+    ],
+    "diem": 2,
+    "het": true,
+    "cuoi": "ket-du"
+   },
+   {
+    "luot": [
+     "con cúp máy rồi lên phường hỏi"
+    ],
+    "diem": 2,
+    "het": true,
+    "cuoi": "ket-du"
+   },
+   {
+    "luot": [
+     "không",
+     "công an phường"
+    ],
+    "diem": 2,
+    "het": true,
+    "cuoi": "ket-du"
+   },
+   {
+    "luot": [
+     "Con làm theo họ cho xong đi",
+     "không con, đừng chuyển",
+     "hỏi lại công an phường"
+    ],
+    "diem": 2,
+    "het": true,
+    "cuoi": "ket-du"
+   },
+   {
+    "luot": [
+     "con nói với ba con đi",
+     "cúp máy liền đi con"
+    ],
+    "diem": 2,
+    "het": true,
+    "cuoi": "ket-du"
+   },
+   {
+    "luot": [
+     "(im)",
+     "(im)",
+     "(im)"
+    ],
+    "diem": 0,
+    "het": true,
+    "cuoi": "im-ba"
+   },
+   {
+    "luot": [
+     "(loi)",
+     "(loi)",
+     "con cúp máy đi"
+    ],
+    "diem": 1,
+    "het": false
+   },
+   {
+    "luot": [
+     "trời nóng quá",
+     "ăn cơm chưa con",
+     "mai mẹ đi chợ"
+    ],
+    "diem": 0,
+    "het": true,
+    "cuoi": "ket-thieu"
+   },
+   {
+    "luot": [
+     "con cúp máy đi",
+     "thôi để bữa khác nói nha con"
+    ],
+    "diem": 1,
+    "het": true,
+    "cuoi": "chao-cup"
+   },
+   {
+    "luot": [
+     "Con cúp máy đi, tạm biệt con"
+    ],
+    "diem": 1,
+    "het": true,
+    "cuoi": "chao-cup"
+   },
+   {
+    "luot": [
+     "(loi)",
+     "(im)",
+     "(loi)",
+     "(im)",
+     "(loi)"
+    ],
+    "diem": 0,
+    "het": false
+   }
+  ]
+ },
+ "minh-3": {
+  "luot": [
+   [
+    "Mẹ gọi con hỏi trước đã",
+    [
+     "chuachuyen",
+     "goihoi"
+    ]
+   ],
+   [
+    "Mẹ chuyển trước cho kịp",
+    "sai"
+   ],
+   [
+    "Mẹ gọi cô giáo của Vy hỏi thử",
+    [
+     "goihoi"
+    ]
+   ],
+   [
+    "Chưa hỏi được thì mẹ chưa chuyển",
+    [
+     "chuachuyen"
+    ]
+   ],
+   [
+    "mẹ chưa chuyển đâu",
+    [
+     "chuachuyen"
+    ]
+   ],
+   [
+    "khoan đã, mẹ hỏi lại cho chắc",
+    [
+     "chuachuyen"
+    ]
+   ],
+   [
+    "mẹ không chuyển vội",
+    [
+     "chuachuyen"
+    ]
+   ],
+   [
+    "mẹ hỏi trước rồi mới chuyển",
+    [
+     "chuachuyen"
+    ]
+   ],
+   [
+    "từ từ đã con",
+    [
+     "chuachuyen"
+    ]
+   ],
+   [
+    "mẹ gọi cho ba mẹ con bé",
+    [
+     "goihoi"
+    ]
+   ],
+   [
+    "mẹ gọi nhà trường hỏi",
+    [
+     "goihoi"
+    ]
+   ],
+   [
+    "mẹ điện cho thằng Minh",
+    [
+     "goihoi"
+    ]
+   ],
+   [
+    "mẹ gọi bằng số đã lưu trong máy",
+    [
+     "goihoi"
+    ]
+   ],
+   [
+    "Mẹ dùng danh bạ gọi ba nó",
+    [
+     "goihoi"
+    ]
+   ],
+   [
+    "mẹ khoan chuyển, gọi người nhà hỏi trước",
+    [
+     "chuachuyen",
+     "goihoi"
+    ]
+   ],
+   [
+    "cô giáo",
+    [
+     "goihoi"
+    ],
+    "hoi-goihoi"
+   ],
+   [
+    "hỏi con",
+    [
+     "goihoi"
+    ],
+    "goi-goihoi"
+   ],
+   [
+    "chưa",
+    [
+     "chuachuyen"
+    ],
+    "goi-chuachuyen"
+   ],
+   [
+    "khoan đã",
+    [
+     "chuachuyen"
+    ],
+    "goi-chuachuyen"
+   ],
+   [
+    "mẹ gọi lại số vừa gọi",
+    "sai"
+   ],
+   [
+    "thương cháu quá thì mẹ chuyển liền",
+    "sai"
+   ],
+   [
+    "mẹ chuyển cho cháu",
+    "sai"
+   ],
+   [
+    "mẹ chuyển tiền xong rồi gọi con",
+    "sai"
+   ],
+   [
+    "hỏi con làm gì cho mệt, chuyển luôn",
+    "sai"
+   ],
+   [
+    "gọi cô giáo chi cho mệt",
+    "sai"
+   ],
+   [
+    "mẹ có nên chuyển không",
+    "hoi-lai"
+   ],
+   [
+    "nó khóc bảo chuyển gấp",
+    []
+   ],
+   [
+    "Họ bảo mẹ gọi cô giáo",
+    []
+   ],
+   [
+    "mẹ lo quá",
+    []
+   ],
+   [
+    "mẹ không gọi ai hết",
+    []
+   ],
+   [
+    "mẹ gọi lại cho Vy",
+    []
+   ],
+   [
+    "mẹ chưa biết nữa",
+    []
+   ],
+   [
+    "không chín một hai ba bốn năm sáu bảy tám",
+    "lo-thong-tin"
+   ],
+   [
+    "con là người thật hay máy",
+    "ai-la"
+   ],
+   [
+    "mẹ chuyển ít thôi",
+    "sai"
+   ],
+   [
+    "chuyển chứ",
+    "sai",
+    "goi-chuachuyen"
+   ],
+   [
+    "mẹ đợi hỏi được Vy đã",
+    [
+     "chuachuyen"
+    ]
+   ],
+   [
+    "mẹ không tin, gọi con hỏi",
+    [
+     "goihoi"
+    ]
+   ],
+   [
+    "mẹ thương cháu, chuyển liền cho nó",
+    "sai"
+   ]
+  ],
+  "cuoc": [
+   {
+    "luot": [
+     "Mẹ gọi con hỏi trước đã"
+    ],
+    "diem": 2,
+    "het": true,
+    "cuoi": "ket-du"
+   },
+   {
+    "luot": [
+     "mẹ chưa chuyển đâu",
+     "Mẹ gọi cô giáo của Vy hỏi thử"
+    ],
+    "diem": 2,
+    "het": true,
+    "cuoi": "ket-du"
+   },
+   {
+    "luot": [
+     "Mẹ chuyển trước cho kịp",
+     "chưa",
+     "cô giáo"
+    ],
+    "diem": 2,
+    "het": true,
+    "cuoi": "ket-du"
+   },
+   {
+    "luot": [
+     "mẹ gọi nhà trường",
+     "Mẹ chuyển trước cho kịp",
+     "Chưa hỏi được thì mẹ chưa chuyển"
+    ],
+    "diem": 2,
+    "het": true,
+    "cuoi": "ket-du"
+   },
+   {
+    "luot": [
+     "(im)",
+     "mẹ gọi cho ba nó",
+     "(im)",
+     "(im)",
+     "(im)"
+    ],
+    "diem": 1,
+    "het": true,
+    "cuoi": "im-ba"
+   },
+   {
+    "luot": [
+     "mẹ lo quá",
+     "trời ơi",
+     "mẹ không biết"
+    ],
+    "diem": 0,
+    "het": true,
+    "cuoi": "ket-thieu"
+   }
+  ]
+ },
+ "tu-9": {
+  "luot": [
+   [
+    "không chú ơi",
+    [
+     "nap"
+    ]
+   ],
+   [
+    "đừng chú",
+    [
+     "nap"
+    ]
+   ],
+   [
+    "chú đừng nạp thêm nha",
+    [
+     "nap"
+    ]
+   ],
+   [
+    "chú khoan nạp đã",
+    [
+     "nap"
+    ]
+   ],
+   [
+    "lừa đảo đó chú",
+    [
+     "nap"
+    ]
+   ],
+   [
+    "chú giữ cuốn sổ lại đi",
+    [
+     "nap"
+    ]
+   ],
+   [
+    "lần đầu họ cho rút là mồi nhử đó chú",
+    [
+     "moinhu"
+    ]
+   ],
+   [
+    "họ cho rút ít trước để chú tin",
+    [
+     "moinhu"
+    ]
+   ],
+   [
+    "họ thả con săn sắt bắt con cá rô đó",
+    [
+     "moinhu"
+    ]
+   ],
+   [
+    "đó là để tạo lòng tin thôi",
+    [
+     "moinhu"
+    ]
+   ],
+   [
+    "họ dụ chú nạp nhiều hơn",
+    [
+     "moinhu"
+    ]
+   ],
+   [
+    "lãi gấp đôi là bất thường",
+    [
+     "dauhieu"
+    ]
+   ],
+   [
+    "làm gì có chuyện không bao giờ lỗ",
+    [
+     "dauhieu"
+    ]
+   ],
+   [
+    "họ cam kết lãi chắc chắn là có vấn đề",
+    [
+     "dauhieu"
+    ]
+   ],
+   [
+    "tới lúc rút họ sẽ đòi phí",
+    [
+     "dauhieu"
+    ]
+   ],
+   [
+    "họ giục gấp vậy là đáng ngờ",
+    [
+     "dauhieu"
+    ]
+   ],
+   [
+    "chú báo cáo nhóm đó đi",
+    [
+     "baocao"
+    ]
+   ],
+   [
+    "mình báo công an nha chú",
+    [
+     "baocao"
+    ]
+   ],
+   [
+    "chú cảnh báo cho mọi người trong nhóm",
+    [
+     "baocao"
+    ]
+   ],
+   [
+    "chú đừng nạp, lần đầu cho rút là mồi nhử, lãi chắc chắn là bất thường, chú báo cáo đi",
+    [
+     "nap",
+     "moinhu",
+     "dauhieu",
+     "baocao"
+    ]
+   ],
+   [
+    "chú cứ nạp đi",
+    "sai"
+   ],
+   [
+    "lần trước rút được mà chú",
+    "sai"
+   ],
+   [
+    "lãi cao vậy ngon mà chú",
+    "sai"
+   ],
+   [
+    "chú nạp thử ít thôi",
+    "sai"
+   ],
+   [
+    "chú đừng nạp, à mà thôi chú cứ nạp đi",
+    "sai"
+   ],
+   [
+    "con nghĩ không phải lừa đâu",
+    "sai"
+   ],
+   [
+    "chắc không lừa đâu chú",
+    "sai"
+   ],
+   [
+    "đừng có không nạp",
+    []
+   ],
+   [
+    "chú có nên nạp không",
+    "hoi-lai"
+   ],
+   [
+    "báo cáo làm gì cho mệt",
+    "sai"
+   ],
+   [
+    "nhóm đó tên gì vậy chú",
+    []
+   ],
+   [
+    "chú mới nạp hôm qua hả",
+    []
+   ],
+   [
+    "như chú nói thì cũng được",
+    []
+   ],
+   [
+    "nhóm rủ chú nạp đi là để lấy lòng tin",
+    [
+     "moinhu"
+    ]
+   ],
+   [
+    "không",
+    [
+     "nap"
+    ],
+    "goi-nap"
+   ],
+   [
+    "không",
+    [],
+    "hoi-baocao"
+   ],
+   [
+    "không ba tám bảy sáu năm bốn ba hai một",
+    "lo-thong-tin"
+   ],
+   [
+    "khỏi cần báo cáo đâu chú",
+    []
+   ],
+   [
+    "chặn nhóm đó là đủ rồi",
+    "sai"
+   ],
+   [
+    "nạp thêm có sao đâu",
+    "sai"
+   ],
+   [
+    "họ đâu có giục gì",
+    []
+   ],
+   [
+    "lãi đâu có cao",
+    []
+   ],
+   [
+    "Đúng",
+    []
+   ],
+   [
+    "Đúng rồi chú nạp đi",
+    "sai"
+   ],
+   [
+    "Báo cáo làm gì",
+    "sai"
+   ],
+   [
+    "Chú không nên báo cáo",
+    []
+   ],
+   [
+    "chú không nên nạp đâu",
+    [
+     "nap"
+    ]
+   ],
+   [
+    "Đừng nạp thêm vì lần trước chú rút được rồi là họ nhử chú",
+    [
+     "nap",
+     "moinhu"
+    ]
+   ],
+   [
+    "Là mồi nhử",
+    [
+     "moinhu"
+    ]
+   ],
+   [
+    "Nhóm kín lãi cao",
+    [
+     "dauhieu"
+    ]
+   ],
+   [
+    "Nhóm rủ chú báo cáo đi",
+    []
+   ],
+   [
+    "chú đừng nạp chú báo cáo nhóm đó đi",
+    [
+     "nap",
+     "baocao"
+    ]
+   ],
+   [
+    "lãi cao vậy là lừa đảo đó chú hả",
+    "hoi-lai"
+   ]
+  ],
+  "cuoc": [
+   {
+    "luot": [
+     "chú đừng nạp, lần đầu cho rút là mồi nhử, lãi chắc chắn là bất thường, chú báo cáo đi"
+    ],
+    "diem": 4,
+    "het": true,
+    "cuoi": "ket-du"
+   },
+   {
+    "luot": [
+     "không chú ơi",
+     "họ cho rút trước để chú tin",
+     "lãi gấp đôi là bất thường",
+     "chú báo cáo nhóm đó đi"
+    ],
+    "diem": 4,
+    "het": true,
+    "cuoi": "ket-du"
+   },
+   {
+    "luot": [
+     "chú cứ nạp đi",
+     "chú cứ nạp đi",
+     "chú cứ nạp đi",
+     "chú cứ nạp đi",
+     "chú cứ nạp đi",
+     "chú cứ nạp đi",
+     "chú cứ nạp đi",
+     "chú cứ nạp đi",
+     "chú cứ nạp đi",
+     "chú cứ nạp đi",
+     "chú cứ nạp đi",
+     "chú cứ nạp đi"
+    ],
+    "diem": 0,
+    "het": true,
+    "cuoi": "ket-thieu"
+   },
+   {
+    "luot": [
+     "đừng chú",
+     "(im)",
+     "(loi)",
+     "chú báo công an đi"
+    ],
+    "diem": 2,
+    "het": false
+   },
+   {
+    "luot": [
+     "Đúng",
+     "Là mồi nhử",
+     "Nhóm kín lãi cao",
+     "Báo cáo làm gì"
+    ],
+    "diem": 2,
+    "het": false
+   }
+  ]
+ },
+ "_astra": "Các ca thêm sau lần review độc lập của Astra (25/11/2026) nằm cuối mỗi danh sách luot."
+}

@@ -7,11 +7,14 @@ FastAPI. Làm S1 đến S6 trong [`../KE-HOACH-MANG-2-3.md`](../KE-HOACH-MANG-2-
 ```bash
 cd la-chan-so/server
 pip install -r requirements.txt
-uvicorn lcs.main:app --host 0.0.0.0 --port 8000     # điện thoại trong cùng mạng gọi http://<ip-máy>:8000
-python -m pytest -q                                 # 51 bài kiểm thử
+LCS_DEMO=1 python chay-demo.py                      # HTTP 8000 + HTTPS 8443 chung một dữ liệu, in mã QR (xem ../HUONG-DAN-CHAY-DEMO.md)
+uvicorn lcs.main:app --host 0.0.0.0 --port 8000     # hoặc chỉ HTTP
+python -m pytest -q
 ```
 
-Khóa AI: tạo tệp `server/.env` (không đưa lên kho) có một dòng `GEMINI_API_KEYS=khóa1,khóa2`. Không có khóa thì mọi thứ vẫn chạy bằng bộ luật và kịch bản dự phòng.
+Khóa AI: tạo tệp `server/.env`, hoặc dùng chung `la-chan-so/.env` của Mảng 4 (cả hai không đưa lên kho), có dòng `GEMINI_API_KEYS=khóa1,khóa2`, tùy chọn `OPENAI_API_KEY=…`. Không có khóa thì mọi thứ vẫn chạy bằng bộ luật và kịch bản dự phòng.
+
+Điện thoại cần HTTPS để dùng micro và chạy avatar nhiều luồng: `chay-demo.py` tự tạo chứng chỉ tự ký cho IP LAN (ở `server/.chung-chi/`, không đưa lên kho).
 
 Một địa chỉ cho cả demo:
 
@@ -30,11 +33,15 @@ Nếu đã build app (`cd ../app && npm run build`), máy chủ phục vụ luô
 | `GEMINI_API_KEYS` | (trống) | Khóa Gemini, nhiều khóa cách nhau dấu phẩy. Trống thì dùng bộ luật dự phòng, demo vẫn chạy |
 | `GEMINI_MODELS` | `gemini-3.5-flash,gemini-2.5-flash` | Thử lần lượt |
 | `LCS_AI_TIMEOUT` | `6` | Giây chờ AI, quá thì dùng dự phòng |
-| `LCS_TODAY` | `2026-11-24` | Ngày của kịch bản demo (khớp thiết kế). `real` để dùng ngày thật |
-| `LCS_DB` | `:memory:` | SQLite; mặc định nạp lại dữ liệu mẫu mỗi lần chạy |
+| `LCS_TODAY` | `real` | Dùng thời gian thực cho biên nhận Android. Đặt ngày cố định khi kiểm thử. |
+| `LCS_DB` | `server/community.db` | SQLite lưu bền máy, phân tích, báo cáo, đợt xét, phiếu, điểm và lời đáp. Dùng `:memory:` khi kiểm thử. |
+| `LCS_DEMO` | (trống) | Đặt `1` để đặt lại dữ liệu mẫu và hiển thị mã xác minh khiếu nại. |
 | `LCS_DEMO_FALLBACK` | `1` | Không chép lời được thì trả bản chép lời mẫu của màn A04b |
 | `LCS_CORS` | `*` | Nguồn được phép gọi |
 | `LCS_STATIC` | `../app/dist` | Thư mục app đã build |
+| `OPENAI_API_KEY`, `OPENAI_MODEL` | (trống), `gpt-6-luna` | Hiểu ý người học trong gọi video (như máy chủ giả của Mảng 4). Trống thì dùng Gemini |
+| `GEMINI_TTS_MODELS` | `gemini-3.8-flash-tts,…` | Model đọc giọng nhân vật |
+| `LCS_PUBLIC_URL`, `LCS_HTTP_URL` | do `chay-demo.py` đặt | Địa chỉ cho điện thoại trong mã QR |
 
 ## API cho từng người
 
@@ -43,17 +50,23 @@ Kết quả phân tích luôn có dạng `AnalysisResult` (mục 2.1 của kế 
 **Hoàng (Android):**
 - `GET /api/lookup/phone/{số}`: tra số lúc đổ chuông (N1). Không gọi AI.
 - `POST /api/analyze/call`, dạng multipart, gồm `audio` (tệp ghi âm) hoặc `transcript` (chữ), kèm `phone` và `unknownNumber`. Dùng cho N2, màn A04b. Máy chủ không lưu tệp ghi âm. Gemini nhận mp3, wav, aac, ogg, flac.
-- `POST /api/alerts` `{level, scamType, phone, summary, asksMoney, timeline}`: báo Minh. Phát `alert.created`.
+- `POST /api/alerts` `{level, scamType, phone, summary, asksMoney, timeline, eventId}`: báo Minh. Phát `alert.created`. Gửi lại cùng `eventId` thì trả cảnh báo cũ, không báo trùng.
+- Nhận tệp ghi âm `m4a`, `amr`, `3gp`, `webm`: máy chủ đổi sang FLAC bằng ffmpeg trước khi gửi Gemini (tệp tạm xóa ngay).
+- Nhật ký truy cập che số trong `/api/lookup/phone/…`.
+- Kết quả phân tích có thêm `lesson`: mã bài học Mảng 4 (`hoc.html?kieu=…`) theo kiểu lừa đảo; `GET /api/scam-types` trả bảng đầy đủ.
+- `POST /api/roleplay/intent` `{scene, text, lastLine, scored}` → `{ideas, intent, wantsStop, offScript}` và `POST /api/roleplay/speak` `{text, character}` → `{text, audio, sampleRate, seconds}`: đúng hợp đồng `android/HOP-DONG-DU-LIEU.md`, chuyển từ `may-chu-gia.py` sang (cùng lời nhắc `prototype/hieu-y-loi-nhac.txt`, cùng cách lọc rẹt). Chỉ cảnh `lan-2` có bộ ý định; cảnh khác trả 422; không có khóa trả 503 để app dùng luật trên máy.
 - `POST /api/events` `{type:"alert.timeline", room:"gia-dinh-hoa", data:{time, text}}`: thêm diễn biến (N3, N5).
 
-**Đức (Zalo, web):**
-- `WS /ws?room=gia-dinh-hoa&who=minh`: nhận `alert.created`, `alert.timeline`, `ask.sent`. Mất WebSocket thì gọi `GET /api/events?room=…&since=<id cuối>` mỗi 2 giây.
-- `POST /api/asks/{askId}/seen`: Minh đã xem.
-- `POST /api/asks/{askId}/reply` `{preset:"dung_chuyen"|"nguoi_quen", text?}`: trả lời một chạm (Z2). Máy bà Hoa hiện to và đọc thành tiếng.
-- `POST /api/reports`: báo số cho cộng đồng (Z3).
-- `GET /api/stats`: số liệu màn W01.
-- `GET /api/reports?status=needs_review`: danh sách màn W02. `PATCH /api/reports/{id}` `{status:"confirmed"|"rejected"}` để duyệt; `POST /api/reports/{id}/appeal` để khiếu nại.
-- Phòng `tnv-tran-bien`: nhận `report.created`, `report.updated`.
+**Máy nhận, Minh và đội Trấn Biên**
+
+- Đăng ký máy bằng `POST /api/devices`. Phân tích gọi có biên nhận bằng multipart `POST /api/analyze/call`. Chỉ kết quả AI của bản ghi thật có liên kết sự kiện mới cấp `analysisId`. Kho lưu nhãn nội dung và tóm tắt đã che.
+- Android gửi `POST /api/reports` với biên nhận HMAC của sự kiện đến. `POST /api/reports/{id}/withdraw` nhận chữ ký rút. Báo cáo được xác nhận qua `selfAnswer` hoặc Minh trả lời cảnh báo cùng sự kiện.
+- Minh mở `/zalo` để nhận phiên gia đình mẫu. `GET /api/alerts`, SSE `GET /api/events` và `POST /api/alerts/{id}/reply` dùng phiên này. Android nhận `ask.reply` qua WebSocket hoặc hỏi định kỳ.
+- Đội đăng nhập ở `POST /api/team/login`. Gửi `X-LCS-Team` để đọc báo cáo, lấy `GET /api/cases` và gửi `POST /api/cases/{key}/vote`. Phiếu chốt theo danh sách báo cáo của từng đợt.
+- Người có số vàng/đỏ gửi `POST /api/appeals`, rồi `POST /api/appeals/{id}/verify`. Trưởng đội dùng `GET /api/appeals`, `POST /api/appeals/{id}/resolve` và `POST /api/broadcasts`.
+- Tra cứu và `GET /api/stats` dùng cùng hàm tính mức trên 90 ngày. Hai số mẫu đỏ là 028 9999 1234 (7 máy) và 0912 345 678 (14 máy).
+
+Dạng JSON, chuỗi ký, mã thử, trường thống kê và đường tương thích có trong [hợp đồng Zalo và web](../mvp/HOP-DONG-DU-LIEU.md). Luật nghiệp vụ nằm trong [vai và kiểm duyệt](../VAI-VA-KIEM-DUYET.md).
 
 **Tún (app React):**
 - `POST /api/check` `{value, kind?}`: kiểm tra nhanh. `kind` là `phone`, `link`, `account` hoặc `message`.
@@ -67,6 +80,8 @@ Kết quả phân tích luôn có dạng `AnalysisResult` (mục 2.1 của kế 
 - Người học đọc ra dãy số dài thì dừng vai ngay (an toàn, theo KICH-BAN-THOAI.md).
 
 **Lớp tương thích cho Mảng 5, 6** (`lcs/compat.py`): đủ các đường dẫn của `mvp/HOP-DONG-DU-LIEU.md` (SSE `/api/events`, `/api/alerts/:id/reply|call`, `/api/reports/:id/decision`, `/api/lookup?v=`, `/api/broadcasts`, `/api/reset`). Câu hỏi của bà Hoa hiện ở trang Zalo như một cảnh báo; Minh trả lời ở đó thì máy bà Hoa nhận ngay (A08c).
+
+**Buổi trình diễn:** `GET /api/demo/links` (địa chỉ LAN cho điện thoại), `GET /api/demo/qr.svg?path=/…` (mã QR), sự kiện `demo.go` `{path, mode, layers}` để laptop đổi màn trên điện thoại. Lệnh `demo.go`, `demo.reset` chỉ sống 15 giây trong lịch sử, và sự kiện phát lại lúc máy vừa mở trang mang `replay: true`, nên điện thoại mở lại trang không làm lại lệnh cũ.
 
 **Cả đội:** gọi `POST /api/demo/reset` trước mỗi lần diễn. Lệnh này đưa dữ liệu về đầu kịch bản và báo mọi máy đang mở bằng sự kiện `demo.reset`.
 
@@ -83,3 +98,19 @@ Kết quả phân tích luôn có dạng `AnalysisResult` (mục 2.1 của kế 
   - Tuổi tên miền dùng bảng mẫu trong `data.py`; triển khai thật thì tra WHOIS.
   - Phễu bảo vệ trên W01 là số mẫu; triển khai thật thì Android gửi lên.
   - 120 báo cáo nạp sẵn là dữ liệu giả lập.
+
+## Lượt gọi video trực tiếp
+
+`POST /api/roleplay/live` nhận mã cảnh, tối đa 14 lượt thoại theo thứ tự và danh sách mã ý đã chấm. Lượt cuối phải là của người học. Ví dụ cho cảnh `minh-1`
+
+```json
+{"scene":"minh-1","history":[{"ai":"nv","chu":"Mẹ ơi, con phải làm sao?"},{"ai":"nh","chu":"Con cúp máy đi."}],"scored":[]}
+```
+
+Các cảnh hiện có gồm `minh-1`, `minh-3`, `tu-9` và `lan-2`. Máy chủ che dãy từ bốn chữ số trong hội thoại trước khi gửi OpenAI. Máy chủ dùng `OPENAI_API_KEY`, mô hình `OPENAI_MODEL` (mặc định `gpt-6-luna`) và lời nhắc của cảnh. Chỉ ý mới có bằng chứng trong lượt cuối được tính. Gemini TTS dùng giọng của nhân vật và ưu tiên lời dặn giọng riêng của cảnh. Tiếng được cắt nhiễu đuôi và lọc bằng ffmpeg như ở `/speak`.
+
+Phản hồi có `id` (16 ký tự hex), câu thoại `chu`, ý mới `y`, cờ khuyên sai `sai`, cờ kết thúc `het`, tiếng PCM16 mono dạng base64 `pcm`, tần số `tanSo`, thời lượng `giay` và `timings` (mili giây cho `llm_ms`, `tts_ms`, `mouth_ms`, `total_ms`). Yêu cầu trùng cảnh, lịch sử và các ý đã chấm dùng lại toàn bộ kết quả trong `server/.cache/live/`. Lịch sử đầu vào chỉ tham gia tính mã băm. Cảnh lạ, cảnh thiếu `song` hoặc lịch sử sai trả 422. Thiếu khóa khi tạo lượt mới, lỗi mô hình, câu thoại không hợp lệ hoặc lỗi đọc giọng trả 503.
+
+Đặt `LCS_TOKEN` để yêu cầu header `X-LCS-Token` trên cả ba đường `/api/roleplay/live`, `/api/roleplay/intent` và `/api/roleplay/speak`. Thiếu hoặc sai token trả 401. Khi biến trống, ba đường này mở như mặc định.
+
+Để dựng miệng, cài thêm `onnxruntime numpy Pillow` trong môi trường chạy máy chủ và đặt ffmpeg có bộ mã hóa `libx264` trên PATH. Máy chủ dùng bộ khớp `d01-tech/lipfit-21.json` và mô hình LiteAvatar đi kèm kho mã, giữ hai phiên ONNX cho mỗi avatar sau lần dùng đầu. Trường `mouth.lip` chứa `fps`, `params`, `bg` và `mieng` với khung đứng `F` và tên tệp. `mouth.mp4` chứa video H.264 768×384, 30 hình/giây dạng base64. Khi ffmpeg thiếu bộ đọc rawvideo, máy chủ truyền khung PNG, cũng có thể chọn cách này bằng `LCS_FF_PNG=1`. Khi thiếu thư viện hoặc dựng video lỗi, phản hồi vẫn có tiếng và `mouth` bằng `null`.

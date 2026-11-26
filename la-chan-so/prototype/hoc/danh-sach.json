@@ -1,0 +1,85 @@
+{
+ "_ghi_chu": "Danh sách phát hành của trang bài học. Thứ tự các dòng trong \"phat_hanh\" là số bài người học nhìn thấy (Bài 1, Bài 2, …); \"mo\": false thì bài chưa hiện. \"so\" là mã nội bộ dùng trong ?bai= và tên tệp, không hiện ra màn hình. \"bi_danh\": các mã kiểu khác cùng trỏ về bài này (mã của máy chủ, đã đổi gạch dưới thành gạch nối), dùng cho ?kieu=. Thêm bài: thêm tệp bai-NN.json rồi thêm một dòng ở đây.",
+ "phat_hanh": [
+  {
+   "so": 1,
+   "ma": "bai-01",
+   "ma_kieu": "gia-danh-co-quan",
+   "ten": "Cuộc gọi tự xưng cơ quan chức năng",
+   "che_do": "don-gian",
+   "nhan_vat": "Bà Hoa",
+   "bia": "comic1-2.png",
+   "tep": "hoc/bai-01.json",
+   "thu_thach": "Anh Minh hoảng hốt gọi",
+   "luyen": [
+    "Nghe và bấm Dừng",
+    "Thật hay lừa"
+   ],
+   "mo": true,
+   "bi_danh": [
+    "gia-danh-cong-an"
+   ]
+  },
+  {
+   "so": 2,
+   "ma": "bai-02",
+   "ma_kieu": "viec-nhe-luong-cao",
+   "ten": "Việc nhẹ lương cao",
+   "che_do": "day-du",
+   "nhan_vat": "Vy",
+   "bia": "comic2-1.png",
+   "tep": "hoc/bai-02.json",
+   "thu_thach": "Gọi video khuyên chị Lan",
+   "luyen": [
+    "Chạm bắt bài",
+    "Nối lời với chiêu"
+   ],
+   "mo": true,
+   "bi_danh": []
+  },
+  {
+   "so": 3,
+   "ma": "bai-03",
+   "ma_kieu": "nguoi-than-gap-nan",
+   "ten": "Người thân gặp nạn, cần tiền gấp",
+   "che_do": "don-gian",
+   "nhan_vat": "Bà Hoa",
+   "bia": "comic3-5.png",
+   "tep": "hoc/bai-03.json",
+   "thu_thach": "Anh Minh hỏi mẹ về bé Vy",
+   "luyen": [
+    "Việc nào trước",
+    "Thật hay lừa"
+   ],
+   "mo": true,
+   "bi_danh": [
+    "nguoi-than-tai-nan"
+   ]
+  },
+  {
+   "so": 9,
+   "ma": "bai-09",
+   "ma_kieu": "dau-tu-lai-cao",
+   "ten": "Đầu tư lãi cao, nhóm kín",
+   "che_do": "day-du",
+   "nhan_vat": "Chú Tư",
+   "bia": "comic9-1.png",
+   "tep": "hoc/bai-09.json",
+   "thu_thach": "Gọi video khuyên chú Tư",
+   "luyen": [
+    "Nối lời với chiêu",
+    "Việc nào trước"
+   ],
+   "mo": true,
+   "bi_danh": []
+  }
+ ],
+ "sap_co": [
+  "Trúng thưởng, quà tri ân",
+  "Giả danh ngân hàng, xin mã xác thực",
+  "Giả danh giao hàng",
+  "Bạn nhắn mượn tiền, tài khoản lạ",
+  "Gọi video giả mặt người thân",
+  "Cài ứng dụng giả mạo"
+ ]
+}

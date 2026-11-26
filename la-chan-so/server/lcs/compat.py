@@ -17,8 +17,8 @@ from datetime import datetime
 from fastapi import Request
 from fastapi.responses import StreamingResponse
 
-from . import config, rules
-from .masking import mask
+from . import config
+from .masking import has_otp, mask
 from .text import fmt_phone
 
 FAMILY_ROOM = "gia-dinh-hoa"
@@ -94,9 +94,9 @@ def make_alert(*, alert_id: str | None = None, level: str = "danger", who: str =
                source: str = "alert", keep_phones: bool = False) -> dict:
     """Một cảnh báo mang cả tên trường của trang Zalo (who, number, scenario…) và của app (alertId, scamLabel…)."""
     aid = alert_id or "al_" + uuid.uuid4().hex[:8]
-    lvl = "warn" if level in ("warn", "suspicious") else "danger"
+    lvl = {"warn":"warn", "suspicious":"warn", "unknown":"unknown", "safe":"safe"}.get(level, "danger")
     phone = fmt_phone(number) if number else None
-    masked = mask(summary, phones=not keep_phones)[0] if summary else None
+    masked = mask(summary, phones=not keep_phones)[0] if summary and not has_otp(summary) else None
     return {
         "id": aid, "alertId": aid, "level": lvl, "at": now_iso(), "who": who,
         "number": phone, "phoneDisplay": phone,
@@ -124,6 +124,17 @@ def demo_alert() -> dict:
     )
 
 
+def set_reply(alert, preset, text, at):
+    body = (text or REPLY_TEXT[preset]).strip().removeprefix("Minh:").strip()
+    reply_id = uuid.uuid4().hex
+    if alert:
+        alert["reply"] = {"id":reply_id, "by":"Minh", "text":"Minh: " + body, "choice":PRESET_TO_CHOICE[preset],
+                          "at":at, "delivered":True}
+        alert["status"] = "cleared" if preset == "nguoi_quen" else "open"
+        alert["timeline"].append(_timeline_item({"text":"Minh trả lời: " + body, "tone":"safe"}))
+    return {"askId":alert["id"] if alert else None, "preset":preset, "text":body, "replyId":reply_id}
+
+
 class Alerts:
     def __init__(self) -> None:
         self.items: list[dict] = []
@@ -133,10 +144,13 @@ class Alerts:
     def reset(self) -> None:
         self.items = [demo_alert()]
         self.broadcasts = []
+        self.owners: dict[str, str] = {}
+        self.by_event: dict[tuple, str] = {}  # mã sự kiện của bên gửi -> mã cảnh báo, để gửi lại không báo trùng
 
     def add(self, alert: dict) -> dict:
         self.items.insert(0, alert)
-        hub.emit("alert", alert)
+        if alert.get("room", FAMILY_ROOM) == FAMILY_ROOM:
+            hub.emit("alert", alert)
         return alert
 
     def get(self, alert_id: str) -> dict | None:
@@ -144,18 +158,11 @@ class Alerts:
 
     def apply_reply(self, alert_id: str, preset: str, text: str | None = None) -> dict | None:
         """Ghi lời Minh trả lời vào cảnh báo (nếu có) và báo trang Zalo. Trả về dữ liệu cho sự kiện ask.reply."""
-        body = (text or REPLY_TEXT.get(preset, REPLY_TEXT["dung_chuyen"])).strip()
-        if body.lower().startswith("minh:"):
-            body = body[5:].strip()
         a = self.get(alert_id)
-        if a:
-            a["reply"] = {"by": "Minh", "text": "Minh: " + body, "choice": PRESET_TO_CHOICE.get(preset, "dung-chuyen"),
-                          "at": now_iso(), "delivered": True}
-            if preset == "nguoi_quen":
-                a["status"] = "cleared"
-            a["timeline"].append(_timeline_item({"text": "Minh trả lời: " + body, "tone": "safe"}))
+        data = set_reply(a, preset, text, now_iso())
+        if a and a.get("room", FAMILY_ROOM) == FAMILY_ROOM:
             hub.emit("reply", {"alertId": alert_id, "reply": a["reply"]})
-        return {"askId": alert_id, "preset": preset, "text": body}
+        return {**data, "askId": alert_id}
 
     def add_timeline(self, alert_id: str, text: str, tone: str = "") -> dict | None:
         a = self.get(alert_id)
@@ -167,69 +174,13 @@ class Alerts:
 alerts = Alerts()
 
 
-# ---------------- Báo cáo theo dạng của trang web Mảng 6 ----------------
-
-LEGACY_KIND = {"call": "phone", "message": "other", "link": "link", "account": "account"}
-KIND_FROM_LEGACY = {"phone": "call", "link": "link", "account": "account", "other": "message"}
-LEGACY_STATUS = {
-    "needs_review": "pending", "pending": "pending",
-    "ai_confirmed": "confirmed", "confirmed": "confirmed",
-    "ai_rejected": "rejected", "rejected": "rejected",
-    "spam": "spam", "labeled": "labeled", "forwarded": "forwarded",
-}
-DECISION_TO_STATUS = {"confirmed": "confirmed", "spam": "spam", "rejected": "rejected", "label": "labeled", "police": "forwarded"}
-
-
-def legacy_report(r: dict) -> dict:
-    conf = round((r["ai"]["confidence"] or 0) * 100)
-    label = r["ai"]["scamLabel"] or "Chưa rõ"
-    status = LEGACY_STATUS.get(r["status"], "pending")
-    hits = rules.find(r["story"] or "")
-    by_key = {x.key: x for x in rules.RULES}
-    signs = [by_key[k].text for k in hits][:3] or [f'Có dấu hiệu theo kiểu "{label}"']
-    unsure = []
-    if status == "pending":
-        unsure.append(f"Mới có {r['reporterCount']} người báo")
-        if conf < 75:
-            unsure.append(f"AI mới chắc {conf}%")
-    value = r["target"]
-    if r["kind"] == "account" and not value.startswith("TK "):
-        value = "TK " + value
-    return {
-        "id": r["id"], "value": value, "kind": LEGACY_KIND.get(r["kind"], "other"),
-        "note": r["story"] or "", "aiGuess": label, "confidence": conf, "count": r["reporterCount"],
-        "area": r["area"], "status": status, "at": r["createdAt"],
-        "source": "seed" if r["id"].startswith("rp_seed") else ("zalo" if r.get("reporter") == "minh" else "app"),
-        "consent": True, "auto": r["status"] == "ai_confirmed",
-        "signs": signs, "whyUnsure": unsure, "history": [],
-        "label": r.get("label"), "decidedAt": r.get("decidedAt"),
-        "decidedBy": "Khoa" if r.get("decidedAt") else None,
-    }
-
-
-def legacy_kind(value: str, kind: str | None) -> str:
-    if kind in KIND_FROM_LEGACY:
-        return KIND_FROM_LEGACY[kind]
-    v = value.strip()
-    if any(c.isalpha() for c in v) and ("." in v or "/" in v):
-        return "link"
-    digits = "".join(c for c in v if c.isdigit())
-    if v.upper().startswith("TK") or (len(digits) >= 11 and not digits.startswith("0")):
-        return "account"
-    return "call" if len(digits) >= 3 else "message"
-
-
 def strip_tk(value: str) -> str:
     v = value.strip()
     return v[2:].strip() if v.upper().startswith("TK") else v
 
 
-def is_legacy_request(body: dict) -> bool:
-    return "value" in body and "target" not in body
-
-
-def broadcast(title: str, body: str, to: list[str]) -> dict:
-    x = {"id": "bc_" + uuid.uuid4().hex[:6], "title": title, "body": body, "to": to, "at": now_iso(), "by": "Khoa"}
+def broadcast(title: str, body: str, to: list[str], author: str) -> dict:
+    x = {"id": "bc_" + uuid.uuid4().hex[:6], "title": title, "body": body, "to": to, "at": now_iso(), "by": author}
     alerts.broadcasts.insert(0, x)
     if any(t.startswith("Người thân") for t in to):
         hub.emit("broadcast", x)  # hiện thành tin của tài khoản chính thức ở Zalo của Minh

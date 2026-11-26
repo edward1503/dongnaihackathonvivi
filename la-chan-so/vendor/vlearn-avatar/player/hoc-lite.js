@@ -12,6 +12,10 @@
 // and a missing background video no longer fails the load (only the .mp4 background is vendored).
 const VF = new URL("../stage/_shared/voice/", import.meta.url).href, N = 384, HN = 192, CW = 1280, CH = 720, TAIL = 8; // TAIL: số khung khép miệng máy chủ thêm sau khi hết tiếng (lite_timeline.py)
 let ortP = null;
+// la-chan-so (25/11/2026): trong app Android (?goc=1) mô hình miệng chạy bằng mã gốc của máy (nhanh gấp đôi WASM và không chiếm luồng của trang).
+// Trang chỉ gửi (khung tham chiếu k, 32 thông số) tới /__mieng và nhận về ảnh miệng 384×384 dạng byte CHW.
+// la-chan-so (25/11/2026, cảnh mới): trang bài học mở cuộc gọi bằng đường dẫn thường, không có ?goc=1; khi đó nhận ra app qua cầu nối LaChan.thamSo().
+const GOC = new URLSearchParams(location.search).get("goc") === "1" || (() => { try { return JSON.parse(window.LaChan?.thamSo?.() || "null")?.goc === true; } catch (e) { return false; } })();
 
 export function loadOrt() {
   ortP ||= (async () => {
@@ -30,9 +34,14 @@ const VS = "attribute vec2 p; void main(){ gl_Position = vec4(p, 0., 1.); }";
 // Mỗi điểm trên khung ra -> toạ độ khung gốc -> trừ độ dịch của phép uốn đầu (cùng công thức tools/lipcal/head_warp.py) -> lấy màu,
 // alpha và miếng miệng (alpha của miếng = trọng số dán).
 const FS = `precision highp float;
-uniform sampler2D uVid, uMouth, uPrev; uniform float uFade;
+uniform sampler2D uVid, uMouth, uPrev; uniform float uFade, uPack;
 uniform vec2 uSrc; uniform vec3 uView; uniform vec4 uBox, uFace, uPiv; uniform vec3 uPose; uniform vec2 uShift; uniform float uMouthOn;
-vec4 M(vec2 m){ return mix(texture2D(uPrev, m), texture2D(uMouth, m), uFade); } // hoà từ miếng miệng trước sang miếng mới
+uniform sampler2D uBlink; uniform float uBlinkA, uBlinkN; uniform vec4 uEye; uniform vec2 uBlinkOff; // la-chan-so 25/11: chớp mắt khi đang nói bằng chuỗi khung thật; uBlinkA = số thứ tự khung trong chuỗi (từ 1), 0 = không chớp
+// uPack: miếng miệng dựng sẵn (tools/dung-mieng.py) nằm trong một khung video, nửa trái là màu, nửa phải là trọng số dán
+vec4 M(vec2 m){
+  if (uPack > 0.5) { float x = clamp(m.x, 0.003, 0.997) * 0.5; return vec4(texture2D(uMouth, vec2(x, m.y)).rgb, texture2D(uMouth, vec2(0.5 + x, m.y)).g); }
+  return mix(texture2D(uPrev, m), texture2D(uMouth, m), uFade); // hoà từ miếng miệng trước sang miếng mới
+}
 void main(){
   vec2 c = vec2(gl_FragCoord.x, ${CH}.0 - gl_FragCoord.y);
   vec2 p = vec2((c.x - uView.y) / uView.x, c.y / uView.x + uView.z);
@@ -45,6 +54,10 @@ void main(){
   vec2 uv = q / uSrc; float hx = clamp(uv.x * 0.5, 0.0005, 0.4995);
   vec3 col = texture2D(uVid, vec2(hx, uv.y)).rgb;
   float a = texture2D(uVid, vec2(0.5 + hx, uv.y)).g;
+  if (uBlinkA > 0.0) { float fe = 0.25 * (uEye.w - uEye.y);
+    float em = smoothstep(uEye.x, uEye.x + fe, q.x) * (1.0 - smoothstep(uEye.z - fe, uEye.z, q.x)) * smoothstep(uEye.y, uEye.y + fe, q.y) * (1.0 - smoothstep(uEye.w - fe, uEye.w, q.y));
+    vec2 l = clamp((q - uBlinkOff - uEye.xy) / (uEye.zw - uEye.xy), 0.002, 0.998);   // toạ độ trong dải mắt; uBlinkOff: khung chớp lệch so với dáng chuẩn bao nhiêu (meta.lech_chuoi)
+    col = mix(col, texture2D(uBlink, vec2(l.x, (uBlinkA - 1.0 + l.y) / uBlinkN)).rgb, em); }
   vec2 m = (q - uBox.xy) / (uBox.zw - uBox.xy);
   if (uMouthOn > 0.5 && m.x > 0.0 && m.y > 0.0 && m.x < 1.0 && m.y < 1.0) {
     vec4 t = M(m); float d = 1.0 / ${N}.0;
@@ -71,13 +84,13 @@ export function prepareLite(id) {
   P.load = (async () => {
     const ext = document.createElement("video").canPlayType('video/mp4; codecs="avc1.640028"') ? "mp4" : "webm"; // Chromium nguyên bản không có H.264: dùng bản VP9
     const [meta, ort, refsBuf, protImg] = await Promise.all([
-      fetch(`${base}/meta.json`).then((r) => r.json()).then(step), loadOrt().then(step),
-      fetch(`${base}/refs.bin`).then((r) => r.arrayBuffer()).then(step),
+      fetch(`${base}/meta.json`).then((r) => r.json()).then(step), (GOC ? Promise.resolve(null) : loadOrt()).then(step),
+      (GOC ? Promise.resolve(null) : fetch(`${base}/refs.bin`).then((r) => r.arrayBuffer())).then(step),
       new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = `${base}/protect.png`; }).then(step),
     ]);
     // the two videos are kept whole in memory (blob URLs, ~13 MB) so the call never waits on the network for them
     const [sess, vidUrl, bgUrl] = await Promise.all([
-      ort.InferenceSession.create(`${base}/lite.onnx`, { executionProviders: ["wasm"] }).then(step),
+      (GOC ? Promise.resolve(null) : ort.InferenceSession.create(`${base}/lite.onnx`, { executionProviders: ["wasm"] })).then(step),
       blobUrl(`${base}/person.${ext}`).then(step),
       meta.bg.name ? blobUrl(`${VF}assets/bg/${meta.bg.name}.mp4`).catch(() => blobUrl(`${VF}assets/bg/${meta.bg.name}.${ext}`)).catch(() => "").then(step) : step(""),
     ]);
@@ -101,6 +114,15 @@ export function prepareLite(id) {
       const out = await sess.run({ ref: await P.refTensor(k), params: new ort.Tensor("float32", Float32Array.from(params), [1, 32]) });
       const dt = performance.now() - t; P.ms = P.ms ? P.ms * 0.9 + dt * 0.1 : dt; P.runs++;
       return out.mouth.data;
+    };
+    if (GOC) P.run = async (k, params) => {
+      const t = performance.now();
+      const r = await fetch(`/__mieng?id=${id}&k=${k}&p=${Array.from(params, (v) => +v.toFixed(5)).join(",")}`);
+      if (!r.ok) throw new Error("máy không tính được miệng: " + r.status);
+      const u = new Uint8Array(await r.arrayBuffer()), d = new Float32Array(u.length);
+      for (let i = 0; i < u.length; i++) d[i] = u[i] / 127.5 - 1;
+      const dt = performance.now() - t; P.ms = P.ms ? P.ms * 0.9 + dt * 0.1 : dt; P.runs++;
+      return d;
     };
     P.rests = new Array(NR);
     return { meta, ort, protImg, vidUrl, bgUrl, ext };
@@ -177,25 +199,32 @@ export async function mountLiteAvatar(host, id, audioCtx) {
     for (const [k, v] of [[gl.TEXTURE_MIN_FILTER, gl.LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR], [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]]) gl.texParameteri(gl.TEXTURE_2D, k, v);
     return t; };
   // hai miếng miệng luân phiên: bộ vẽ chậm hơn 30 khung/giây (WASM ~50–100 ms/khung) nên hoà dần giữa hai miếng liên tiếp cho mượt
-  const tVid = tex(0), tM = [tex(1), tex(2)];
+  const tVid = tex(0), tM = [tex(1), tex(2)], tPk = tex(3), tBlink = tex(4);
   for (const u of [1, 2]) { gl.activeTexture(gl.TEXTURE0 + u); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, N, N, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(N * N * 4)); }
   let cur = 0, tPatch = 0, gap = 60;
-  const uM = U("uMouth"), uP = U("uPrev"), uFade = U("uFade");
+  const uM = U("uMouth"), uP = U("uPrev"), uFade = U("uFade"), uPk = U("uPack");
   gl.uniform1i(U("uVid"), 0);
   gl.uniform2f(U("uSrc"), W, H); gl.uniform3f(U("uView"), s, ox, y0); gl.uniform4f(U("uBox"), bx1, by1, bx2, by2);
   gl.uniform4f(U("uFace"), g.cx, g.cy, g.fw, g.fh); gl.uniform4f(U("uPiv"), g.piv[0], g.piv[1], g.chin_y, g.depth);
-  const uPose = U("uPose"), uShift = U("uShift"), uOn = U("uMouthOn");
+  const uPose = U("uPose"), uShift = U("uShift"), uOn = U("uMouthOn"), uBlinkA = U("uBlinkA");
+  // la-chan-so 25/11 (người dùng: đứng im thì hơi giả, mắt cũng phải cử động): lấy sẵn khung chớp mắt (meta.khung_chop, tools/khung-chuan.py)
+  // vào một texture; khi đang nói và video nhân vật đứng yên ở dáng chuẩn thì vài giây hoà khung này vào dải mắt một lần
+  gl.uniform1i(U("uBlink"), 4); gl.uniform1f(uBlinkA, 0);
+  const CHUOI = meta.chuoi_chop || []; gl.uniform1f(U("uBlinkN"), Math.max(1, CHUOI.length)); const uBlinkOff = U("uBlinkOff"), LECH = meta.lech_chuoi || []; gl.uniform2f(uBlinkOff, 0, 0);
+  let chopSan = false, chopLuc = 0, chopTiep = 0;
+  if (meta.khung_chop != null && meta.mat) gl.uniform4f(U("uEye"), ...meta.mat);
 
   // ----- dữ liệu cho miếng miệng (không gian 384×384 của bộ vẽ) -----
   const pc = Object.assign(document.createElement("canvas"), { width: protImg.width, height: protImg.height }).getContext("2d", { willReadFrequently: true });
   pc.drawImage(protImg, 0, 0);
   const pd = pc.getImageData(0, 0, protImg.width, protImg.height).data, PC = meta.protect.cols, PS = meta.protect.cell, PW = protImg.width;
-  const bw = bx2 - bx1, bh = by2 - by1, fg = new Float32Array(N * N), zone = new Float32Array(N * N);
+  const bw = bx2 - bx1, bh = by2 - by1, fg = new Float32Array(N * N), zone = new Float32Array(N * N), cua = new Float32Array(N * N);
   const [r0, r1, c0, c1] = meta.zone, zx = (c0 + c1) / 2, zy = (r0 + r1) / 2, za = (c1 - c0) * 0.62, zb = (r1 - r0) * 0.62;
   for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
     const d = Math.min(x * bw / N, (N - 1 - x) * bw / N, y * bh / N, (N - 1 - y) * bh / N); // cách mép hộp (px khung gốc)
     fg[y * N + x] = sstep(2, 20, d);
     zone[y * N + x] = 1 - sstep(0.85, 1.15, Math.hypot((x - zx) / za, (y - zy) / zb)); // vùng miệng: luôn dùng ảnh vẽ
+    cua[y * N + x] = 1 - sstep(1.0, 1.3, Math.hypot((x - zx) / za, (y - zy) / zb)); // la-chan-so 25/11: ngoài cửa sổ quanh miệng (viền hàm, cổ áo) không dán, như tools/dung-mieng.py
   }
   const patch = new Uint8Array(N * N * 4), mv = new Float32Array(HN * HN), tmp = new Float32Array(HN * HN);
   function compose(d, k, bgw) {
@@ -216,7 +245,7 @@ export async function mountLiteAvatar(host, id, audioCtx) {
     const px = (k % PC) * PS, py = Math.floor(k / PC) * PS;
     for (let y = 0, i = 0; y < N; y++) for (let x = 0; x < N; x++, i++) {
       const hy = y >> 1, hx = x >> 1, prot = pd[((py + hy) * PW + px + hx) * 4] / 255;
-      const a = fg[i] * (1 - bgw) * Math.max(mv[hy * HN + hx], zone[i]) * (1 - prot);
+      const a = fg[i] * (1 - bgw) * Math.max(mv[hy * HN + hx] * cua[i], zone[i]) * (1 - prot);
       patch[i * 4] = (d[i] * 0.5 + 0.5) * 255; patch[i * 4 + 1] = (d[P + i] * 0.5 + 0.5) * 255; patch[i * 4 + 2] = (d[2 * P + i] * 0.5 + 0.5) * 255; patch[i * 4 + 3] = a * 255;
     }
     const now = performance.now(), first = !mouthOn;
@@ -227,7 +256,7 @@ export async function mountLiteAvatar(host, id, audioCtx) {
   }
 
   // ----- vòng vẽ -----
-  let frame = 0, newFrame = true, clip = null, t0 = 0, mouthOn = false, env = 0, src = null, analyser = null, alive = true, done = null;
+  let lac = 1, frame = 0, newFrame = true, clip = null, t0 = 0, mouthOn = false, env = 0, src = null, analyser = null, alive = true, done = null;
   const kr = () => { const j = frame % (2 * NR); return j < NR ? j : 2 * NR - 1 - j; };
   if (vid.requestVideoFrameCallback) { const on = (_, m) => { frame = Math.round(m.mediaTime * meta.fps) % meta.frames; newFrame = true; if (alive) vid.requestVideoFrameCallback(on); }; vid.requestVideoFrameCallback(on); }
   const TW = 20, w = (t, k, ph = 0) => Math.sin(2 * Math.PI * k * t / TW + ph), rad = Math.PI / 180, lv = new Float32Array(512);
@@ -238,45 +267,150 @@ export async function mountLiteAvatar(host, id, audioCtx) {
     if (newFrame && vid.readyState >= 2) { gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tVid); gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, vid); }
     // khẩu hình theo đồng hồ âm thanh, lấy trước một khoảng bằng thời gian vẽ + nửa thời gian hoà để miệng khớp tiếng
     if (clip) {
-      const i = Math.floor((audioCtx.currentTime - t0 - (audioCtx.outputLatency || audioCtx.baseLatency || 0) + Math.min(0.2, Math.max(0.04, 1.5 * PR.ms / 1000))) * 30);   // what is heard now = currentTime − output latency
+      const i = khungNay(0.02);   // khung miệng ứng với tiếng đang nghe (hình đã tính sẵn nên chỉ lấy trước 20 ms cho bước vẽ)
       // còn câu chờ sẵn thì kết thúc ngay khi hết tiếng (bỏ mấy khung khép miệng cuối) để câu sau nối liền
-      if (i >= clip.params.length - (clip.more?.() ? TAIL : 0)) { clip = null; mouthOn = false; done?.(); }
+      if (i >= clip.params.length - (clip.more?.() ? TAIL : 0)) { try { clip.mv?.pause(); } catch (e) { /* đã gỡ */ } clip = null; mouthOn = false; done?.(); }
       else if (i >= 0) {
         const bgw = clip.bg[i] ?? 0;
         if (bgw >= 0.999) mouthOn = false;
-        else if (!PR.busy && newFrame) { PR.busy = true; const k = kr(); run(k, clip.params[i]).then((d) => { if (clip) { compose(d, k, bgw); mouthOn = true; } }).catch((e) => console.warn("miệng Lite:", e)).finally(() => (PR.busy = false)); }
+        else if (clip.mv) {   // câu soạn sẵn: miếng miệng đã dựng và ghép sẵn trên máy tính; ở đây GPU chỉ nhận khung video, trang không tính gì
+          if (clip.mv.readyState >= 2 && !clip.mv.paused) {
+            gl.activeTexture(gl.TEXTURE3); gl.bindTexture(gl.TEXTURE_2D, tPk); gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, clip.mv);
+            clip.len = true; mouthOn = true;
+          }
+        }
+        else {   // hiện hình miệng đã tính sẵn gần nhất không vượt quá khung i (xem nap())
+          let best = -1; for (const j of clip.san.keys()) if (j <= i && j > best) best = j;
+          if (best >= 0 && best !== clip.hien) { const m = clip.san.get(best); compose(m.d, m.k, clip.bg[best] ?? bgw); mouthOn = true; clip.hien = best; }
+        }
       }
     }
     newFrame = false;
     if (analyser && clip) { analyser.getFloatTimeDomainData(lv); let q = 0; for (let i = 0; i < lv.length; i++) q += lv[i] * lv[i]; env += (Math.min(1, Math.sqrt(q / lv.length) * 6) - env) * 0.25; } else env *= 0.9;
+    lac += ((clip ? 0.7 : 1) - lac) * 0.04;   // la-chan-so 25/11: đang nói thì lắc lư nhẹ hơn (còn 70%, đứng im hẳn thì giả), nói xong cử động lại bình thường
+    { const bay = performance.now(); let b = 0;
+      if (chopSan && clip?.dung) {
+        if (!chopTiep) chopTiep = bay + 1200 + Math.random() * 1800;
+        if (bay >= chopTiep) { chopLuc = bay; chopTiep = bay + (Math.random() < 0.15 ? 450 : 2200 + Math.random() * 3300); }   // thỉnh thoảng chớp đôi
+        const i = Math.floor((bay - chopLuc) / (1000 / meta.fps));   // phát lại chuỗi khung thật đúng nhịp video
+        b = i < CHUOI.length ? i + 1 : 0;
+        if (b) gl.uniform2f(uBlinkOff, ...(LECH[i] || [0, 0]));   // dời từng khung cho mắt nằm đúng chỗ mắt của dáng chuẩn (không nhảy)
+      } else chopTiep = 0;
+      gl.uniform1f(uBlinkA, b); }
     const t = performance.now() / 1000; // lắc lư chậm + gật nhẹ theo giọng (cùng đường cong tools/lipcal/idle_motion.py)
-    gl.uniform3f(uPose, rad * (2.2 * w(t, 2) + 1.0 * w(t, 5, 1.0) + 0.4 * w(t, 9, 2.1)), rad * (1.3 * w(t, 3, 0.5) + 0.7 * w(t, 8, 1.7) + 1.4 * env), rad * (1.1 * w(t, 1, 0.8) + 0.5 * w(t, 4, 2.6)));
-    gl.uniform2f(uShift, 0.012 * w(t, 2, 0.4) + 0.006 * w(t, 7, 1.2), 0.006 * w(t, 5, 2.0));
-    gl.uniform1f(uOn, mouthOn ? 1 : 0); gl.uniform1i(uM, 1 + cur); gl.uniform1i(uP, 2 - cur);
+    gl.uniform3f(uPose, lac * rad * (2.2 * w(t, 2) + 1.0 * w(t, 5, 1.0) + 0.4 * w(t, 9, 2.1)), lac * rad * (1.3 * w(t, 3, 0.5) + 0.7 * w(t, 8, 1.7) + 1.4 * env), lac * rad * (1.1 * w(t, 1, 0.8) + 0.5 * w(t, 4, 2.6)));
+    gl.uniform2f(uShift, lac * (0.012 * w(t, 2, 0.4) + 0.006 * w(t, 7, 1.2)), lac * 0.006 * w(t, 5, 2.0));
+    const goi = !!(clip && clip.mv && clip.len);   // đang dùng miếng miệng dựng sẵn
+    gl.uniform1f(uOn, mouthOn ? 1 : 0); gl.uniform1i(uM, goi ? 3 : 1 + cur); gl.uniform1i(uP, 2 - cur); gl.uniform1f(uPk, goi ? 1 : 0);
     gl.uniform1f(uFade, Math.min(1, (performance.now() - tPatch) / Math.max(20, gap)));
     gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
-  await vid.play().catch(() => {}); bgv.play().catch(() => {});
+  await vid.play().catch(() => {});
+  // lấy khung chớp mắt từ chính video nhân vật trước khi vẽ (video ẩn thứ hai không nạp được trong WebView Android khi chưa phát)
+  // Người dùng 25/11: thôi bỏ chớp mắt khi nói (lắc nhẹ là đủ). Giữ sẵn mã, bật lại bằng CHOP_KHI_NOI = true.
+  const CHOP_KHI_NOI = false;
+  if (CHOP_KHI_NOI && meta.chuoi_chop?.length && meta.mat) {
+    try {
+      vid.pause();
+      // cắt dải mắt của từng khung trong chuỗi chớp thật (meta.chuoi_chop) xếp dọc vào một ảnh nhỏ, đưa lên GPU một lần
+      const [mx0, my0, mx1, my1] = meta.mat.map(Math.round), bw = mx1 - mx0, bh = my1 - my0;
+      const atlas = Object.assign(document.createElement("canvas"), { width: bw, height: bh * CHUOI.length }), ac = atlas.getContext("2d");
+      let du = CHUOI.length > 0;
+      for (let i = 0; i < CHUOI.length && du; i++) {
+        await new Promise((ok) => { let xong = false; const het = () => { if (!xong) { xong = true; vid.removeEventListener("seeked", het); ok(); } };
+          vid.addEventListener("seeked", het); vid.currentTime = (CHUOI[i] % meta.frames) / meta.fps; setTimeout(het, 1500); });
+        if (vid.readyState < 2) du = false; else ac.drawImage(vid, mx0, my0, bw, bh, 0, i * bh, bw, bh);
+      }
+      if (du) {
+        gl.activeTexture(gl.TEXTURE4); gl.bindTexture(gl.TEXTURE_2D, tBlink); gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, atlas); chopSan = true;
+      }
+      console.info("chớp mắt:", chopSan ? "sẵn sàng, chuỗi " + CHUOI[0] + "–" + CHUOI[CHUOI.length - 1] : "không lấy được khung");
+    } catch (e) { console.warn("chớp mắt:", e); }
+    vid.currentTime = 0; await vid.play().catch(() => {});
+  }
+  bgv.play().catch(() => {});
   tick();
 
   PR.hold = () => !!clip;   // the shared rest-pose loop (prepareLite) waits while this tile speaks
 
-  function stop() { try { src?.stop(); } catch (e) { /* đã dừng */ } src = null; clip = null; mouthOn = false; done?.(); }
+  // la-chan-so (25/11/2026): TÍNH TRƯỚC hình miệng thay vì tính đúng lúc cần. Trên điện thoại mỗi hình mất 75–140 ms, tính đúng lúc cần
+  // thì miệng luôn trễ và chỉ đổi 4–7 lần mỗi giây. Thông số miệng của cả câu đã biết từ đầu, dáng đầu ở từng thời điểm cũng đoán được
+  // (video nhân vật chạy đều), nên một vòng nạp chạy trước tiếng: tiếng được lùi lại TRE giây, vòng nạp tính dần các khung sắp tới
+  // (mỗi BUOC khung một hình) và vòng vẽ chỉ việc lấy hình đã sẵn. Khi máy không theo kịp, vòng nạp tự nhảy cóc để miệng không bao giờ trễ tiếng.
+  const BUOC = 2;
+  // Câu có hình miệng dựng sẵn: nạp video miệng và đưa video nhân vật về đúng khung F mà hình miệng đã được dựng theo (dáng đầu phải khớp).
+  // la-chan-so 25/11 (ý người dùng): khi nói, nhân vật về DÁNG CHUẨN (meta.khung_noi: khung gần dáng trung bình nhất, tools/khung-chuan.py)
+  // rồi đứng yên tới hết câu; hình miệng dựng sẵn cũng dựng cho đúng khung đó, nên ghép khớp, không xéo khi đầu nghiêng
+  async function veDangChuan(c, F) {
+    c.dung = true; vid.pause();
+    await new Promise((ok) => { let xong = false; const het = () => { if (!xong) { xong = true; vid.removeEventListener("seeked", het); ok(); } };
+      vid.addEventListener("seeked", het); vid.currentTime = (F % meta.frames) / meta.fps; setTimeout(het, 700); });
+    frame = F % meta.frames; newFrame = true;
+  }
+  async function chuanBiMieng(c) {
+    const mv = Object.assign(document.createElement("video"), { muted: true, playsInline: true, preload: "auto", src: c.mieng.url });
+    await new Promise((ok, no) => { mv.oncanplaythrough = ok; mv.onerror = () => no(new Error("không nạp được video miệng")); setTimeout(() => no(new Error("video miệng nạp quá lâu")), 4000); mv.load(); });
+    // la-chan-so 25/11: tệp dựng kiểu "đứng yên" (mieng.dung) thì video nhân vật đứng ở khung F suốt câu, khỏi lệch nhịp với video miệng (miệng xéo)
+    if (c.mieng.dung) await veDangChuan(c, c.mieng.F);
+    else await new Promise((ok) => { let xong = false; const het = () => { if (!xong) { xong = true; vid.removeEventListener("seeked", het); ok(); } };
+      vid.addEventListener("seeked", het); vid.currentTime = (c.mieng.F % meta.frames) / meta.fps; setTimeout(het, 700); });
+    c.mv = mv;
+  }
+  const khungNay = (truoc = 0) => Math.floor((audioCtx.currentTime - t0 - (audioCtx.outputLatency || audioCtx.baseLatency || 0) + truoc) * 30);
+  // la-chan-so 25/11: câu tính miệng tại chỗ thì video nhân vật đứng yên (xem say()), nên mọi hình miệng tính cho đúng một khung đang hiện
+  const kTai = (i, cur) => { const fr = clip?.dung ? frame : frame + Math.round((i - cur) / 30 * meta.fps), M2 = 2 * NR, j = ((fr % M2) + M2) % M2; return j < NR ? j : M2 - 1 - j; };
+  async function nap(c) {
+    let i = 0;
+    while (clip === c && alive && i < c.params.length) {
+      const cur = khungNay(), dau = Math.ceil((PR.ms || 80) / 33.4) + 1;   // tính xong thì khung ấy vẫn còn ở phía trước
+      if (i < cur + dau) i = cur + dau;
+      if (i >= c.params.length) break;
+      if ((c.bg[i] ?? 0) < 0.999) {
+        const k = kTai(i, cur);
+        PR.busy = true;
+        try { const d = await run(k, c.params[i]); if (clip === c) c.san.set(i, { d, k }); }
+        catch (e) { console.warn("miệng Lite:", e); await new Promise((ok) => setTimeout(ok, 200)); }
+        finally { PR.busy = false; }
+        for (const j of c.san.keys()) if (j < cur - 2 && j !== c.hien) c.san.delete(j);
+      }
+      i += BUOC;
+      if (c.san.size > 24) await new Promise((ok) => setTimeout(ok, 60));   // đã sẵn gần 2 giây: nghỉ, không giữ quá nhiều hình trong bộ nhớ
+    }
+  }
+
+  function stop() { try { src?.stop(); } catch (e) { /* đã dừng */ } try { clip?.mv?.pause(); } catch (e) { /* video miệng đã gỡ */ } src = null; clip = null; mouthOn = false; done?.(); }
   // phát một câu đã chuẩn bị; trả về khi nói xong (kể cả vài khung khép miệng sau khi hết tiếng) hoặc bị dừng
   // more(): hàm cho biết còn câu kế tiếp đã sẵn sàng hay chưa
   function say(c, more) {
-    stop(); c = { ...c, more };
+    stop(); c = { ...c, more, san: new Map(), hien: -1 };
     return new Promise((ok) => {
-      done = () => { done = null; ok(); };
+      done = () => { done = null; if (c.dung) vid.play().catch(() => {}); ok(); };
       analyser ||= Object.assign(audioCtx.createAnalyser(), { fftSize: 512 });
       src = audioCtx.createBufferSource(); src.buffer = c.buf; src.connect(analyser); src.connect(audioCtx.destination);
       // tab bị ẩn thì trình duyệt ngừng requestAnimationFrame nên vòng vẽ không báo xong câu: tiếng vẫn phát,
       // nên hết tiếng mà tab đang ẩn thì tự kết thúc câu để cuộc gọi chạy tiếp (12/11, người dùng: chuyển tab vẫn nghe tiếp được)
       src.onended = () => { if (clip === c && document.hidden) { clip = null; mouthOn = false; done?.(); } };
-      t0 = audioCtx.currentTime + 0.02; clip = c; src.start(t0);
+      const srcCua = src;
+      const batDau = () => {
+        if (src !== srcCua) return;   // đã bị dừng, hoặc đã có câu khác, trong lúc chuẩn bị
+        if (c.mv) {   // hình miệng dựng sẵn: tiếng và video miệng cùng chạy sau 80 ms
+          t0 = audioCtx.currentTime + 0.08; clip = c; src.start(t0);
+          setTimeout(() => { if (clip === c) c.mv.play().catch(() => {}); }, 80 + 1000 * (audioCtx.outputLatency || audioCtx.baseLatency || 0));
+        } else {
+          // lùi tiếng một nhịp để vòng nạp kịp có sẵn vài hình đầu (máy càng chậm lùi càng nhiều, tối đa 0,9 giây); c.nhanh: tiếng đệm, phát gần như ngay
+          // la-chan-so 25/11: điện thoại tính một hình miệng mất 120–160 ms, trong lúc đó đầu nhân vật (video gốc) đã đổi dáng, nên miệng dán vào bị lệch,
+          // thấy rõ ở avatar cử động đầu nhiều (Minh). Câu tính tại chỗ thì cho video gốc đứng yên ở khung hiện tại; đầu vẫn lắc lư nhẹ nhờ uPose của cả hình.
+          t0 = audioCtx.currentTime + (c.nhanh ? 0.12 : Math.min(0.9, Math.max(0.15, (PR.ms || 80) / 1000 * 5))); clip = c; src.start(t0); nap(c);
+        }
+      };
+      if (c.mieng) chuanBiMieng(c).then(batDau, (e) => { console.warn("miệng dựng sẵn:", e); batDau(); });
+      else if (meta.khung_noi != null) veDangChuan(c, meta.khung_noi).then(batDau);   // câu tính tại chỗ: cũng về dáng chuẩn rồi đứng yên
+      else { c.dung = true; vid.pause(); batDau(); }
     });
   }
-  return { say, stop, ready: PR.ready, meta, speaking: () => !!clip, stats: () => ({ ms: Math.round(PR.ms * 10) / 10, runs: PR.runs, threads: crossOriginIsolated ? ort.env.wasm.numThreads : 1 }),
+  return { say, stop, ready: PR.ready, meta, speaking: () => !!clip, stats: () => ({ ms: Math.round(PR.ms * 10) / 10, runs: PR.runs, threads: GOC ? "gốc" : crossOriginIsolated ? ort.env.wasm.numThreads : 1 }),
     destroy() { alive = false; stop(); PR.hold = () => false; vid.pause(); bgv.pause(); bgv.remove(); chair.remove(); cv.remove(); } };
 }
 

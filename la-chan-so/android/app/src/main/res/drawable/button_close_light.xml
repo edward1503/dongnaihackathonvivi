@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nút đóng trên thẻ đỏ: vùng bấm 56dp, hình tròn mờ 36dp ở giữa -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android" android:inset="10dp">
+    <ripple android:color="#33FFFFFF">
+        <item><shape android:shape="oval"><solid android:color="#33FFFFFF" /></shape></item>
+    </ripple>
+</inset>

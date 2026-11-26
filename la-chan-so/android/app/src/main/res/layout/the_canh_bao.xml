@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A03a: thẻ nổi trên màn đổ chuông (float-card của bản thiết kế: cách mép 12, bo 20, đệm 16, các khối cách nhau 12) -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:paddingStart="12dp" android:paddingEnd="12dp">
+    <FrameLayout
+        android:id="@+id/the"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:background="@drawable/the_canh_bao" android:elevation="12dp">
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp">
+
+            <!-- Dòng đầu: khiên + "LÁ CHẮN SỐ CẢNH BÁO" (nút đóng nằm đè ở góc phải) -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginEnd="40dp" android:gravity="center_vertical" android:orientation="horizontal">
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:importantForAccessibility="no" android:src="@drawable/ic_shield_alert" android:tint="@color/surface" />
+                <TextView style="@style/Text.Overline" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:layout_weight="1" android:text="Lá chắn số cảnh báo" android:textColor="@color/surface" />
+            </LinearLayout>
+
+            <!-- Mức cảnh báo -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:gravity="center_vertical" android:orientation="horizontal">
+                <ImageView android:layout_width="28dp" android:layout_height="28dp" android:importantForAccessibility="no" android:src="@drawable/ic_alert_octagon" android:tint="@color/surface" />
+                <TextView android:id="@+id/tieuDe" style="@style/Text" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="10dp" android:layout_weight="1" android:fontFamily="@font/bvp_bold" android:lineHeight="32sp" android:text="Nghi lừa đảo" android:textColor="@color/surface" android:textSize="26sp" />
+            </LinearLayout>
+            <TextView android:id="@+id/noiDung" style="@style/Text.Label" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:fontFamily="@font/bvp_semibold" android:textColor="@color/surface" />
+
+            <!-- Báo cáo gần nhất: nhãn trắng có đồng hồ -->
+            <TextView android:id="@+id/phu" style="@style/Text.Chip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:background="@drawable/chip_white" android:drawableStart="@drawable/ic_clock_16" android:drawableTint="@color/ink" android:textColor="@color/ink" />
+
+            <Button android:id="@+id/chan" style="@style/Button.White" android:layout_marginTop="12dp" android:text="Chặn số này" />
+            <Button android:id="@+id/reportCall" style="@style/Button.OnRed" android:layout_marginTop="10dp" android:text="Báo cuộc vừa nhận" android:visibility="gone" />
+        </LinearLayout>
+        <!-- Nút đóng: vùng bấm 56dp, vòng mờ 36dp -->
+        <ImageView android:id="@+id/dong" android:layout_width="56dp" android:layout_height="56dp" android:layout_gravity="top|end" android:layout_marginTop="2dp" android:layout_marginEnd="2dp" android:background="@drawable/button_close_light" android:contentDescription="Đóng thẻ cảnh báo" android:padding="18dp" android:src="@drawable/ic_close" android:tint="@color/surface" />
+    </FrameLayout>
+</LinearLayout>

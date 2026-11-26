@@ -1,0 +1,46 @@
+{
+  "_ghi_chu": "Cảnh gọi video của Bài 2 (Việc nhẹ lương cao): người học là Vy, khuyên chị Lan. Cảnh này chỉ trỏ tới các tệp đã có của chị Lan, không thu lại. Khuôn của một tệp cảnh xem android/README.md mục Gọi video.",
+  "ma": "lan-2",
+  "nhan_vat": "lan",
+  "ma_kho": "chi-lan",
+  "bo_may": "chi-lan",
+  "bo_loi": "loi-chi-lan.json",
+  "tien_to": "",
+  "anh": "../vendor/vlearn-avatar/stage/d01-tech/call-still.jpg",
+  "ban_dien": true,
+  "chu": {
+    "tieu_de": "Gọi video chị Lan",
+    "ten": "Chị Lan",
+    "ten_thuong": "chị Lan",
+    "nguoi_hoc": "bạn",
+    "nhan_bai": "Kiểm tra cuối bài · Việc nhẹ lương cao",
+    "huong_dan": "Chị Lan hỏi ý kiến bạn. Nghe chị nói xong thì trả lời bằng giọng nói, hoặc bấm “Gõ chữ”.",
+    "go_goi_y": "Gõ lời khuyên cho chị Lan…",
+    "kq_du": "Bạn giúp chị Lan trọn vẹn",
+    "kq_thieu": "Bạn giúp chị Lan được {dat}/{tong} ý",
+    "kq_loi_du": "Chị Lan không nạp tiền, biết vì sao đó là lừa, biết cách kiểm tra và đã báo cáo.",
+    "kq_loi_thieu": "Lần sau bạn thử nói thêm: {thieu}.",
+    "nut_ve": "Tiếp tục bài học"
+  },
+  "y": [
+    { "id": "nap", "nhan": "Đừng nạp tiền" },
+    { "id": "dauhieu", "nhan": "Chỉ ra dấu hiệu" },
+    { "id": "xacminh", "nhan": "Cách xác minh" },
+    { "id": "baocao", "nhan": "Rủ báo cáo" }
+  ],
+  "song": {
+    "loi_nhac": "hoi-thoai-song-loi-nhac.txt",
+    "truong_loi": "loi_chi_lan",
+    "ai_nv": "chi-lan",
+    "ai_nh": "em",
+    "ten_nv": "CHỊ LAN",
+    "ten_nh": "EM",
+    "che_so": "(em vừa đọc ra một dãy số riêng tư, app đã không gửi đi)"
+  },
+  "tra_loi": {
+    "loi_nhac": "tra-loi-loi-nhac.txt",
+    "cau_nv": "Câu chị Lan vừa nói",
+    "cau_da": "Những ý em đã khuyên được",
+    "cau_nh": "Em vừa nói"
+  }
+}
