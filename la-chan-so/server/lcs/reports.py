@@ -376,6 +376,7 @@ class Store:
             until=(timestamp(latest["at"]) + WINDOW).isoformat() if latest else None,
             scamType=latest["category"] if latest else None,
             contributors=list(counted),
+            teamChecked=any(weight < 5 for weight, _ in counted.values()),
             contributionIds=[r["id"] for r in records],
             reportedCount=len({r["device"] for r in rows}),
         )

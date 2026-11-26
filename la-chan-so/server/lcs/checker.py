@@ -68,8 +68,13 @@ def check_target(kind: str, value: str, store: Store, found: dict | None = None)
     count = found["count"]
     if count:
         label = SCAM_TYPES.get(found["scamType"])
-        headline = (f"Có {count} máy báo cuộc gọi hiển thị số này có dấu hiệu đáng ngờ." if kind == "phone"
-                    else f"Có {count} máy báo dấu hiệu đáng ngờ liên quan đến {noun}.")
+        # Every counted device was confirmed as a money or OTP lure (W1 by the recipient, W2/W3 by team votes), so say exactly that.
+        lure = "dụ chuyển tiền hoặc lấy mã OTP"
+        headline = (f"Có {count} máy báo cuộc gọi hiển thị số này {lure}." if kind == "phone"
+                    else f"Có {count} máy báo {noun} được dùng để {lure}.")
+        if found["level"] == "danger":
+            headline += (" Đội tình nguyện đã kiểm tra." if found.get("teamChecked")
+                         else " Người nhận đã xác nhận nội dung cuộc gọi.")
         why = [f"Gần nhất {when(found['lastAt'])}."]
         if found["appealOpen"]:
             why.append("Đang xét báo nhầm.")

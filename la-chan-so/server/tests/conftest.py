@@ -25,7 +25,7 @@ def client():
     main.relay.asks.clear()
     main.alerts.reset()
     with TestClient(main.app) as c:
-        c.get("/zalo")  # pre-paired demo relative
+        c.post("/api/family/pair", json={"code": "gia-dinh-hoa"})  # relative role in the app, demo family
         yield c
 
 

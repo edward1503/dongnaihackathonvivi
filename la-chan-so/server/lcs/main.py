@@ -17,21 +17,22 @@ from pathlib import Path
 from fastapi import (Body, Depends, FastAPI, File, Form, Header, HTTPException, Query, Request, UploadFile, WebSocket,
                      WebSocketDisconnect)
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, Response
+from fastapi.responses import FileResponse, JSONResponse, Response
+from pydantic import BaseModel
 from fastapi.staticfiles import StaticFiles
 
-from . import ai, compat, config, demo, giong, hieu_y, live_call, roleplay
+from . import ai, compat, config, demo, giong, hieu_y, live_call, quiz, roleplay
 from . import team
 from .evidence import Evidence, Submission, fail, key_hash, timestamp, verify_signature, verify_receipt
 from .audio import has_audio_stream, prepare as prepare_audio
 from .analyze import NeedInput, analyze_call, analyze_text
-from .checker import check_target
+from .checker import check_target, when
 from .contract import (AlertIn, AnalysisResult, AppealIn, AppealResolveIn, AskIn, AskReplyIn, BroadcastIn, CheckIn, Code, LegacyAppeal, LegacyVote, Vote, Withdrawal,
                        EventIn, IntentIn, LiveTurnIn, LegacyReplyIn, MessageIn, SpeakIn)
 from .data import LESSONS, OFFICIAL_NUMBERS, SCAM_TYPES
 from .masking import mask
 from .relay import Relay, RelayError
-from .reports import REPORTS, Store
+from .reports import REPORTS, RISK, Store
 from .text import detect_kind, digits, nfc, target_key
 
 MAX_AUDIO = 20 * 1024 * 1024
@@ -62,6 +63,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 store = Store()
+quiz.ensure(store)
 relay = Relay()
 alerts = compat.alerts
 hub = compat.hub
@@ -97,6 +99,7 @@ async def demo_reset():
     if config.env("LCS_DEMO") != "1":
         bad("Chỉ đặt lại được trong chế độ demo.", 403)
     store.reset()
+    quiz.reset(store)
     alerts.reset()
     await relay.reset()
     hub.emit("reset", {})
@@ -128,6 +131,21 @@ def lookup_phone(phone: str):
     if len(digits(phone)) < 3:
         bad("Số này ngắn quá, bạn kiểm tra lại nhé")
     return check_target("phone", phone, store)
+
+
+@app.get("/api/lookup/flagged")
+def lookup_flagged():
+    items = []
+    with store.transaction():
+        now = config.now()
+        for (key,) in store.db.execute("SELECT DISTINCT key FROM evidence_reports WHERE kind='phone'"):
+            found = store.target_level(key, now, "phone")
+            if found["level"] in RISK:
+                items.append({
+                    "hash": key_hash(key), "level": found["level"], "count": found["count"],
+                    "lastWhen": when(found["lastAt"]), "scamType": found["scamType"], "appealOpen": found["appealOpen"],
+                })
+    return {"generatedAt": now.isoformat(), "items": items}
 
 
 @app.get("/api/lookup")
@@ -286,13 +304,28 @@ async def _publish_alert(alert: dict, room: str, sender: str) -> dict:
     return alert
 
 
-# /zalo is the pre-paired Minh demo entry point. An alert id or room name is not a reply credential.
+# The relative role in the app pairs with the family code (pre-paired in the demo) and gets an HttpOnly session cookie.
+# An alert id or room name is not a reply credential.
 family_token = secrets.token_urlsafe(32)
 
 
 def require_family(request: Request):
     if not secrets.compare_digest(request.cookies.get("lcs_family", "").encode(), family_token.encode()):
-        fail("Bạn mở trang Zalo của Minh để xem cảnh báo gia đình nhé.", 401)
+        fail("Anh ghép với máy của mẹ ở vai Người thân trong app Lá chắn số nhé.", 401)
+
+
+class FamilyPairIn(BaseModel):
+    code: str
+
+
+@app.post("/api/family/pair")
+def family_pair(body: FamilyPairIn):
+    """Vai Người thân trong app: nhập mã gia đình để nhận cảnh báo của mẹ. Bản demo chỉ có một gia đình đã ghép sẵn."""
+    if not secrets.compare_digest(body.code.strip().encode(), compat.FAMILY_ROOM.encode()):
+        fail("Mã gia đình chưa đúng. Anh xem lại mã trên điện thoại của mẹ nhé.", 403)
+    response = JSONResponse({"room": compat.FAMILY_ROOM})
+    response.set_cookie("lcs_family", family_token, httponly=True, samesite="strict")
+    return response
 
 
 def family_alert(alert_id):
@@ -652,6 +685,32 @@ def stats(month: str | None = None):
 
 
 # ---------------- Gọi video khuyên chị Lan (A11h): AI đóng vai và chấm ----------------
+
+# ---------------- Thi đua bài kiểm tra theo lớp, trường, phường ----------------
+
+@app.get("/api/quiz/schools")
+def quiz_schools():
+    return quiz.schools()
+
+
+@app.post("/api/quiz/results")
+def quiz_result(body: quiz.ResultIn, x_lcs_device: str | None = Header(None)):
+    if not x_lcs_device:
+        bad("Thiếu mã máy.", 401)
+    try:
+        return quiz.submit(store, x_lcs_device, body)
+    except quiz.QuizError as e:
+        bad(str(e))
+
+
+@app.get("/api/quiz/leaderboard")
+def quiz_leaderboard(scope: Literal["group", "school", "ward"] = "group", school: str = Query(..., max_length=40),
+                     group: str | None = Query(None, max_length=12), quiz_id: str = Query("nhan-dien", alias="quiz", max_length=40)):
+    try:
+        return quiz.board(store, scope, school, group, quiz_id)
+    except quiz.QuizError as e:
+        bad(str(e))
+
 
 @app.post("/api/roleplay/start")
 def roleplay_start():

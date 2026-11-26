@@ -6,7 +6,7 @@ def test_so_bi_bao_ra_nguy_hiem(client):
     assert r["level"] == "danger"
     assert r["kind"] == "phone"
     assert r["display"] == "0912 345 678"
-    assert r["headline"] == "Có 14 máy báo cuộc gọi hiển thị số này có dấu hiệu đáng ngờ."
+    assert r["headline"] == "Có 14 máy báo cuộc gọi hiển thị số này dụ chuyển tiền hoặc lấy mã OTP. Đội tình nguyện đã kiểm tra."
     assert r["canAppeal"] and not r["appealOpen"]
     assert r["reports"]["count"] == 14 and r["reports"]["verified"] and r["reports"]["lastWhen"] == "hôm qua"
     assert r["scamType"] == "gia_danh_cong_an"
@@ -73,3 +73,16 @@ def test_nhan_het_han_sau_90_ngay(client, monkeypatch):
     monkeypatch.setattr(config, "demo_today", lambda: date(2027, 3, 1))
     r = client.post("/api/check", json={"value": "0912 345 678"}).json()
     assert r["level"] == "unknown"
+
+
+def test_red_headline_says_who_confirmed():
+    """Two recipient-confirmed recordings (W1) reach red without team votes: the headline must not claim a team check."""
+    from lcs import config
+    from lcs.checker import check_target
+
+    found = dict(appealOpen=False, canAppeal=True, count=2, official=None, level="danger", scamType="gia_danh_cong_an",
+                 lastAt=config.now().isoformat(), last7d=2, signs=[], teamChecked=False)
+    r = check_target("phone", "0901234567", None, found)
+    assert r.headline == "Có 2 máy báo cuộc gọi hiển thị số này dụ chuyển tiền hoặc lấy mã OTP. Người nhận đã xác nhận nội dung cuộc gọi."
+    found.update(level="suspicious", count=1)
+    assert check_target("phone", "0901234567", None, found).headline == "Có 1 máy báo cuộc gọi hiển thị số này dụ chuyển tiền hoặc lấy mã OTP."

@@ -13,6 +13,7 @@ import json
 import re
 import math
 import shutil
+import statistics
 import subprocess
 from pathlib import Path
 
@@ -136,8 +137,66 @@ def max_seconds(text: str) -> float:
     return len(text.split()) * 0.42 + stops * 0.6 + commas * 0.2 + 1.2
 
 
+def _resample_contour(levels: list[float]) -> list[float]:
+    """Linearly interpolate the frame levels at 100 evenly spaced points."""
+    points = []
+    for point in range(100):
+        left, fraction = divmod(point * (len(levels) - 1), 99)
+        right = min(left + 1, len(levels) - 1)
+        points.append(levels[left] + (levels[right] - levels[left]) * fraction / 99)
+    return points
+
+
+def split_double_reading(pcm: bytes, rate: int, text: str) -> bytes | None:
+    """Keep the first reading when a central pause separates two similar envelopes."""
+    if rate < 100 or len(pcm) % 2:
+        return None
+    samples = memoryview(pcm).cast("h")
+    levels = []
+    pauses = []
+    pause_start = None
+    frame_count = (len(samples) * 100 + rate - 1) // rate
+    for frame in range(frame_count):
+        start = frame * rate // 100
+        end = min((frame + 1) * rate // 100, len(samples))
+        window = samples[start:end]
+        rms = math.sqrt(sum(value * value for value in window) / len(window))
+        level = 20 * math.log10(max(1.0, rms) / 32768)
+        levels.append(level)
+        if level < -45:
+            if pause_start is None:
+                pause_start = frame
+        elif pause_start is not None:
+            pause_sample = pause_start * rate // 100
+            midpoint = (pause_sample + start) / 2
+            if (pause_start > 0 and start - pause_sample >= 0.2 * rate
+                    and 0.35 * len(samples) <= midpoint <= 0.65 * len(samples)):
+                pauses.append((start - pause_sample, pause_start, frame))
+            pause_start = None
+
+    min_duration = 0.18 * len(text.split())
+    max_duration = max_seconds(text)
+    for _, first_end, second_start in sorted(pauses, reverse=True):
+        cut = first_end * rate // 100
+        second_length = len(samples) - second_start * rate // 100
+        if not (0.75 <= cut / second_length <= 1.33 and min_duration <= cut / rate <= max_duration):
+            continue
+        first = _resample_contour(levels[:first_end])
+        second = _resample_contour(levels[second_start:])
+        if min(first) == max(first) or min(second) == max(second):
+            continue  # Pearson correlation is undefined for a flat contour.
+        if statistics.correlation(first, second) >= 0.6:
+            reading = array.array("h", samples[:cut])
+            fade = min(cut, round(0.03 * rate))
+            for index in range(cut - fade, cut):
+                gain = (cut - 1 - index) / max(1, fade - 1)
+                reading[index] = round(reading[index] * gain)
+            return reading.tobytes()
+    return None
+
+
 async def voiced(text: str, voice: str, notes: str, tries: int = 2) -> tuple[bytes, int] | None:
-    """Đọc rồi lọc; tiếng dài bất thường (đọc lặp, đọc lẫn lời dặn) thì đọc lại, tối đa `tries` lần. None nếu không được."""
+    """Đọc rồi lọc, giữ lần đọc đầu nếu tách được câu lặp, còn lại thử tối đa `tries` lần."""
     for _ in range(tries):
         got = await tts_pcm(text, voice, notes)
         if not got:
@@ -145,6 +204,9 @@ async def voiced(text: str, voice: str, notes: str, tries: int = 2) -> tuple[byt
         pcm, rate = await asyncio.to_thread(clean, *got)
         if not too_long(pcm, text, rate):
             return pcm, rate
+        first = await asyncio.to_thread(split_double_reading, pcm, rate, text)
+        if first is not None and not too_long(first, text, rate):
+            return first, rate
     return None
 
 

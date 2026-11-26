@@ -77,3 +77,14 @@ def test_reset_demo(client):
     assert [e["type"] for e in evs] == ["demo.reset"]
 
 
+
+
+def test_family_pair_in_app(client):
+    """The relative role pairs with the family code inside the app; a wrong code gets no session."""
+    client.cookies.clear()
+    assert client.get("/api/alerts").status_code == 401
+    bad = client.post("/api/family/pair", json={"code": "nha-khac"})
+    assert bad.status_code == 403 and "lcs_family" not in bad.cookies
+    ok = client.post("/api/family/pair", json={"code": "gia-dinh-hoa"})
+    assert ok.status_code == 200 and ok.json() == {"room": "gia-dinh-hoa"}
+    assert client.get("/api/alerts").status_code == 200
