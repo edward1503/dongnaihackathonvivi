@@ -28,3 +28,22 @@ video/*.mp4
 
 # Tệp tạm của bàn giao (lượt thu, ảnh chụp, bản sao lưu): giữ trên máy, không đưa lên kho
 ban-giao/tam-*/
+
+# Trailer: đoạn quay, bản xuất, giọng, nhạc tải về là tệp nặng hoặc tạm, giữ trên máy
+video/trailer/quay/
+video/trailer/ban/
+video/trailer/giong/
+video/trailer/nhac/tai-ve/
+video/trailer/nhac/*.wav
+video/trailer/am/**/*.wav
+video/trailer/am/app/*.m4a
+video/trailer/soat/anh/
+
+# Slide và trailer: video xuất, ảnh gốc, tờ soát, tệp nghe thử là tệp nặng hoặc tạm (video slide đã đưa lên Vercel)
+trinh-bay/video/*.mp4
+trinh-bay/anh-ai/
+trinh-bay/soat.png
+video/trailer/soat/
+video/trailer/soat2/
+video/trailer/anh-ai/
+bai-hoc/nghe-thu/

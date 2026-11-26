@@ -34,7 +34,7 @@ Cửa sổ dòng lệnh in ra mọi địa chỉ và một mã QR:
 | Điện thoại "Vy" (học sinh) | `https://<ip-laptop>:8443/?mode=full` |
 | Điện thoại "Khoa" (đội tình nguyện, mã đội thử 246 810) | `https://<ip-laptop>:8443/?mode=volunteer` |
 | Mở như người dùng mới (màn chào, chọn vai) | `https://<ip-laptop>:8443/#/chao` |
-| Máy Minh trên Zalo (Mảng 5) | `https://<ip-laptop>:8443/zalo` |
+| Máy Minh | App Lá chắn số, vai **Người thân**, mã gia đình `gia-dinh-hoa` |
 | Web đội tình nguyện (Mảng 6) | `https://<ip-laptop>:8443/web` |
 | Gọi video khuyên chị Lan (Mảng 4) | `https://<ip-laptop>:8443/prototype/video-call.html` |
 | App Android của Mảng 1, ô "Máy chủ của đội" | `http://<ip-laptop>:8000` |
@@ -55,7 +55,7 @@ Mở đầu nên cho xem màn chào và màn **Bạn là ai?**: một app, 3 đ�
 1. Laptop bấm **Có cuộc gọi lạ**. Điện thoại bà Hoa đổ chuông và rung, thẻ đỏ "Nghi lừa đảo" (A03).
 2. Bấm **Nghe**. Bé Nai hỏi: "Người vừa gọi có bảo bà chuyển tiền không ạ?" (A04a). Bấm **Có**.
 3. AI chép lời, tô đỏ dấu hiệu, rồi tự báo Minh (A04b).
-4. Trên máy Minh (`/zalo`), cảnh báo hiện ra. Bấm **Mẹ đừng chuyển**. Điện thoại bà Hoa hiện lời Minh thật to và đọc thành tiếng.
+4. Trên máy Minh (app, vai Người thân), thông báo cảnh báo hiện ra. Bấm vào, chọn **Đừng chuyển**. Điện thoại bà Hoa hiện lời Minh thật to và đọc thành tiếng.
 5. Laptop bấm **Mở app ngân hàng sau cuộc gọi**. Màn đỏ "DỪNG LẠI" có Bé Nai hiện lên (A10a).
 
 **b. Đang bị gọi đòi tiền:** trên trang chủ bấm **Xử lý ngay** (A5). Màn hiện "Bình tĩnh. Đừng chuyển tiền." kèm 3 bước. Bấm **Kể lại cuộc gọi**, trả lời 4 câu Có/Không (A6), xem kết quả.
@@ -73,7 +73,7 @@ Mở đầu nên cho xem màn chào và màn **Bạn là ai?**: một app, 3 đ�
 
 - Xem tổng quan, rồi mở **Kiểm duyệt** để đối chiếu số máy, thời điểm nhận, bản ghi đã che và ý kiến của gia đình. Chọn cụm 5 máy có một phiếu để thử bỏ phiếu thứ hai bằng tài khoản khác.
 - Tra **028 9999 1234** để thấy đỏ với 7 máy. Khiếu nại từ kết quả tra số. Dùng mã **246810** khi bật `LCS_DEMO=1`. Xác minh xong, số chuyển vàng trong lúc chờ xét. Đăng nhập bằng mã của Hùng để giữ hoặc gỡ nhãn.
-- Hùng có thể phát cảnh báo khu phố. Chọn người thân đã ghép để Minh nhận trên Zalo.
+- Hùng có thể phát cảnh báo khu phố. Chọn người thân đã ghép để Minh nhận trong app.
 
 **g. Thiết lập và Lá chắn đang ngủ:**
 - **Thiết lập lần đầu:** bật từng lớp bảo vệ (A02a), đủ 3 lớp thì sang màn "Lá chắn đã sẵn sàng" (A02b).
@@ -86,7 +86,7 @@ Mở đầu nên cho xem màn chào và màn **Bạn là ai?**: một app, 3 đ�
 | Hiện tượng | Cách xử lý |
 |---|---|
 | Điện thoại không mở được trang | Laptop và điện thoại phải chung một mạng. Mạng của khách sạn hoặc trường thường chặn các máy nhìn thấy nhau: dùng điểm phát 4G của điện thoại khác, cho laptop vào mạng đó |
-| Bấm trên laptop mà điện thoại không đổi màn | Bảng mô phỏng phải đang chọn **Điện thoại**. Điện thoại phải đang mở app, không phải trang Zalo hay web |
+| Bấm trên laptop mà điện thoại không đổi màn | Bảng mô phỏng phải đang chọn **Điện thoại**. Điện thoại phải đang mở app, không phải trang web |
 | Không có tiếng Bé Nai trên điện thoại | Chạm vào màn hình điện thoại một lần, rồi bấm lại |
 | Mất mạng Internet | Demo vẫn chạy: AI lùi về bộ luật và bản chép lời mẫu. Riêng nhận giọng nói của trình duyệt cần Internet |
 | Đổi mạng (IP laptop khác) | Chạy lại `python chay-demo.py`, tệp sẽ tự tạo chứng chỉ mới |

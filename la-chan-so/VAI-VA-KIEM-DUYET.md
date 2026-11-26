@@ -13,7 +13,7 @@
 |---|---|
 | **Người lớn tuổi (bà Hoa)** | Bấm “Báo cuộc vừa nhận” trên thẻ cảnh báo cuộc gọi của Android hoặc ở màn Bé Nai sau cuộc gọi. Nếu bấm lúc đổ chuông, máy giữ lựa chọn đến khi đối chiếu được nhật ký cuộc gọi đến. Bà có thể tra số bằng giọng hoặc bàn phím, hỏi con cháu, dùng màn Dừng lại khi mở ứng dụng ngân hàng, màn Khẩn cấp, bài học 1 và 3, gọi video cho Minh. |
 | **Học sinh (Vy)** | Tra tin nhắn, đường dẫn, số hoặc tài khoản. Từ thông báo tin nhắn trên máy mình, Vy chọn báo người gửi hoặc đối tượng xuất hiện trong chính tin đó. Dùng `sms_received` hoặc kèm ảnh đã che theo quy tắc `screenshot` ở mục 3. Có bài học 2 và 4, gọi video với chị Lan, chú Tư và bài kiểm tra 5 câu. |
-| **Người thân (Minh, vai "Người thân" trong app Lá chắn số; trang Zalo mẫu chỉ để trình diễn trên trình duyệt)** | Chọn vai "Người thân" và nhập mã gia đình (bản demo ghép sẵn với máy bà Hoa). Nhận **thông báo Android** khi máy bà có cuộc gọi hoặc tin nhắn đáng ngờ, kể cả khi không mở app. Xem tóm tắt đã che, nhãn AI và câu bà trả lời Bé Nai, chọn “Đừng chuyển” hoặc “Người quen”, gọi mẹ ngay. Không báo cáo, không duyệt. Minh chỉ trả lời về cuộc gọi bà đã nhận. Zalo Mini App thật để sau, vì phát hành cần xác thực doanh nghiệp. |
+| **Người thân (Minh, vai "Người thân" trong app Lá chắn số)** | Chọn vai "Người thân" và nhập mã gia đình (`POST /api/family/pair`; bản demo ghép sẵn với máy bà Hoa). Nhận **thông báo Android** khi máy bà có cuộc gọi hoặc tin nhắn đáng ngờ, kể cả khi không mở app. Xem tóm tắt đã che, nhãn AI và câu bà trả lời Bé Nai, chọn “Đừng chuyển” hoặc “Người quen”, gọi mẹ ngay. Không báo cáo, không duyệt. Minh chỉ trả lời về cuộc gọi bà đã nhận. |
 | **Đội tình nguyện (Khoa)** | Đăng nhập để xem thống kê phường, xét cụm nhiều máy thiếu bản ghi, ý kiến trái nhau, đợt báo dồn và bằng chứng liên quan khiếu nại. Web đội chỉ có tác vụ xét hồ sơ. **Trưởng đội** tiếp nhận nhận xét, quyết định giữ hoặc gỡ nhãn khi có khiếu nại và phát thông báo khu phố. |
 
 APK dùng màn Android cho bảo vệ cuộc gọi, tin nhắn và dùng bài học hiện có. Khung React V3 có thể mở đúng màn Android. Web tra cứu và màn “Thử Lá chắn” không tạo bằng chứng đã nhận.
@@ -34,7 +34,7 @@ APK dùng màn Android cho bảo vệ cuộc gọi, tin nhắn và dùng bài h�
 | `sms_received` | Android ghi nhận thông báo tin nhắn đến, khớp người gửi, giờ nhận và đối tượng được báo. |
 | `screenshot` | Ảnh đã che gắn với sự kiện `sms_received` cùng máy. Android đối chiếu đối tượng được báo với thông báo gốc trước khi che. Ảnh rời hoặc ảnh do người khác chuyển tiếp không đủ bằng chứng. |
 
-Máy chủ từ chối báo hộ, số nhập tay không có sự kiện nhận, cuộc gọi đi, số ẩn không xác định được đối tượng, báo từ Zalo/web và bằng chứng mô phỏng. Mỗi máy được báo tối đa **5 đối tượng mới trong 24 giờ trượt**. Gửi lại cùng sự kiện chỉ cập nhật báo cáo cũ.
+Máy chủ từ chối báo hộ, số nhập tay không có sự kiện nhận, cuộc gọi đi, số ẩn không xác định được đối tượng, báo từ trang web và bằng chứng mô phỏng. Mỗi máy được báo tối đa **5 đối tượng mới trong 24 giờ trượt**. Gửi lại cùng sự kiện chỉ cập nhật báo cáo cũ.
 
 ### Xác nhận cuộc gọi có bản ghi
 
@@ -83,7 +83,7 @@ Tính hai tổng `S1`, `S2`. Với mỗi tổng, lấy **điểm cao nhất củ
 
 ## 4. Giao kèo API
 
-Đây là giao kèo cần triển khai trên Android, máy chủ và các giao diện. Hiện Android đã phân tích bản ghi và hỏi sau cuộc gọi, còn trang Zalo đã gửi hai lựa chọn qua đường trả lời cảnh báo. Thay đổi ở vòng này là nối những thao tác ấy với **một báo cáo do máy nhận tạo**. Lỗi trả `{detail}`.
+Đây là giao kèo cần triển khai trên Android, máy chủ và các giao diện. Hiện Android đã phân tích bản ghi và hỏi sau cuộc gọi, còn vai Người thân gửi hai lựa chọn qua đường trả lời cảnh báo. Thay đổi ở vòng này là nối những thao tác ấy với **một báo cáo do máy nhận tạo**. Lỗi trả `{detail}`.
 
 ### Máy và quyền đội
 
@@ -104,9 +104,9 @@ Tính hai tổng `S1`, `S2`. Với mỗi tổng, lấy **điểm cao nhất củ
   selfAnswer?: "yes"|"no"|"known", alertId? }
 ```
 
-- Máy chủ chuẩn hóa `target`, kiểm biên nhận, chỉ nhận `recording` với `call_log`, tra bản phân tích do **chính máy chủ** cấp cho cùng máy, sự kiện và đối tượng. Dùng nhãn từ kho phân tích. Trả 422 nếu ID thuộc cuộc khác hoặc trường nhãn sai. `hasAudio` cũ không chứng minh có bản ghi. Từ chối `on_behalf`, `none` và dữ liệu cũ từ `source="zalo-minh"`. Báo đối tượng mới thứ sáu trong 24 giờ trả 429.
+- Máy chủ chuẩn hóa `target`, kiểm biên nhận, chỉ nhận `recording` với `call_log`, tra bản phân tích do **chính máy chủ** cấp cho cùng máy, sự kiện và đối tượng. Dùng nhãn từ kho phân tích. Trả 422 nếu ID thuộc cuộc khác hoặc trường nhãn sai. `hasAudio` cũ không chứng minh có bản ghi. Từ chối `on_behalf`, `none`. Báo đối tượng mới thứ sáu trong 24 giờ trả 429.
 - Với `by="self"`, máy bà ký `eventId` và `selfAnswer`. Máy chủ tự suy ra `result` theo mục 3, bác giá trị khai sai và ghi giờ nhận làm `at`. Lưu lựa chọn gốc để phân biệt “Không” và “Tôi biết số này”. `POST /api/reports/{id}/withdraw` chỉ chấp nhận yêu cầu ký từ máy đã báo.
-- Để xin xác nhận cho bản ghi, Android gọi `POST /api/alerts` với `eventId, reportId, analysisId, summary` và giữ `id` trả về làm `alertId`. Máy chủ kiểm liên kết, chọn người nhận từ ghép đôi đã xác thực và trả lại cùng cảnh báo khi gửi trùng. Cảnh báo gia đình thông thường vẫn gửi được khi thiếu bản ghi, nhưng câu trả lời chỉ dùng để nhắc bà. `GET /api/alerts` và luồng sự kiện Zalo chỉ hiện cảnh báo thuộc phiên gia đình đó.
+- Để xin xác nhận cho bản ghi, Android gọi `POST /api/alerts` với `eventId, reportId, analysisId, summary` và giữ `id` trả về làm `alertId`. Máy chủ kiểm liên kết, chọn người nhận từ ghép đôi đã xác thực và trả lại cùng cảnh báo khi gửi trùng. Cảnh báo gia đình thông thường vẫn gửi được khi thiếu bản ghi, nhưng câu trả lời chỉ dùng để nhắc bà. `GET /api/alerts` và luồng sự kiện của vai Người thân chỉ hiện cảnh báo thuộc phiên gia đình đó.
 - Minh gọi `POST /api/alerts/{alertId}/reply {choice}` bằng phiên người thân. Máy chủ kiểm người nhận và ghép đôi hiện hành, lưu bền `alertId, reportId, analysisId, relativeId, choice, at`, rồi tự cập nhật báo cáo kể cả khi máy bà đã tắt. Chỉ đọc lựa chọn `dung-chuyen` hoặc `nguoi-quen` từ bản trả lời đã lưu. Nếu máy bà gửi lại `by="relative"` thì bắt buộc có `alertId`; máy chủ đối chiếu toàn bộ liên kết, lựa chọn và giờ. Từ chối xác nhận thiếu hoặc sai bản trả lời. Lời nhắn tự do không có trọng số.
 - Trả `{report: {id, status}, case: {key, level, count, votes}, message}`. Ví dụ khi chờ Minh, hiển thị “Đã nhận báo cáo. Đang chờ Minh xác nhận nội dung cuộc gọi.” Mỗi phản hồi, phiếu, lần rút hoặc gỡ đều cập nhật báo cáo và tính lại mức trong cùng giao dịch, rồi phát sự kiện cập nhật cho các kênh. Gửi lại cùng thao tác không cộng lần hai. Báo cáo cũ thiếu bằng chứng nguồn nhận hoặc chỉ có `ai_confirmed`/`ai_rejected` không được tính tự động.
 
@@ -137,7 +137,7 @@ Tính hai tổng `S1`, `S2`. Với mỗi tổng, lấy **điểm cao nhất củ
 | Mục | Bản hackathon | Để sau |
 |---|---|---|
 | Biên nhận sự kiện | `POST /api/devices` trả `{deviceId, deviceSecret}`. Android ký HMAC-SHA256 bằng `deviceSecret` trên chuỗi `eventId\|deviceId\|type\|direction\|targetKey\|at\|durationSec`. Máy chủ kiểm chữ ký. | Play Integrity, khóa phần cứng |
-| Xác nhận của người thân | Câu trả lời chỉ được nhận cho cảnh báo do chính máy báo cáo tạo (`alertId` gắn `reportId` ở máy chủ). Trang Zalo mẫu dùng phòng gia đình đã ghép sẵn. | Đăng nhập Zalo OA, xác thực ghép đôi |
+| Xác nhận của người thân | Câu trả lời chỉ được nhận cho cảnh báo do chính máy báo cáo tạo (`alertId` gắn `reportId` ở máy chủ). Vai Người thân trong app dùng mã gia đình đã ghép sẵn. | Mã ghép đôi riêng cho từng gia đình, xác thực ghép đôi |
 | Ảnh chụp màn hình | Chưa làm, chỉ có `call_log` và `sms_received` | Tải ảnh đã che |
 | Mã khiếu nại | `demoCode` khi `LCS_DEMO=1` | SMS thật đến số bị báo |
 | Báo từ trình duyệt | Màn Báo cáo trên web nói rõ "Báo cáo cần app Android trên máy đã nhận cuộc gọi hoặc tin nhắn" | |
@@ -145,7 +145,7 @@ Tính hai tổng `S1`, `S2`. Với mỗi tổng, lấy **điểm cao nhất củ
 
 ## 6. Cảnh diễn cho ban giám khảo
 
-1. **Minh xác nhận, số đổi mức ngay.** Dùng số ngoài danh bạ chính thức chưa có báo cáo. Bà bấm “Báo cuộc vừa nhận”. Android tìm đúng bản ghi, máy chủ nhận ra lời giục chuyển tiền. Bé Nai hỏi, bà chưa trả lời. Minh đọc tóm tắt trên Zalo, bấm “Đừng chuyển”. Android, React, Zalo và web đội đều hiện ngay **Nghi ngờ, 1 máy**. Một người nhận khác có bản ghi cùng số và tự trả lời “Có” thì cả bốn kênh hiện **Nguy hiểm, 2 máy**, chưa cần phiếu đội.
+1. **Minh xác nhận, số đổi mức ngay.** Dùng số ngoài danh bạ chính thức chưa có báo cáo. Bà bấm “Báo cuộc vừa nhận”. Android tìm đúng bản ghi, máy chủ nhận ra lời giục chuyển tiền. Bé Nai hỏi, bà chưa trả lời. Minh nhận thông báo trên máy mình (vai Người thân), đọc tóm tắt, bấm “Đừng chuyển”. Máy bà, máy Minh và web đội đều hiện ngay **Nghi ngờ, 1 máy**. Một người nhận khác có bản ghi cùng số và tự trả lời “Có” thì cả ba nơi hiện **Nguy hiểm, 2 máy**, chưa cần phiếu đội.
 2. **Nhiều máy thiếu bản ghi.** Một máy báo cùng số cửa hàng bảy lần vẫn chỉ là một máy, mức **Chưa rõ**. Khi có đủ năm máy độc lập, Khoa xem cụm, thấy cùng thủ đoạn dụ chuyển tiền rồi xác nhận. Mức chuyển vàng. Với mười máy đã được cả Khoa và Lan Anh xác nhận, mức chuyển đỏ.
 3. **Đội giải quyết ý kiến trái nhau.** Trên hồ sơ mới, AI thấy giục chuyển tiền, bà bấm “Không”, Minh bấm “Đừng chuyển”. Khoa xem tóm tắt đã che và hai câu trả lời, ghi lý do rồi xác nhận dấu hiệu giục chuyển tiền. Hồ sơ hết mâu thuẫn, máy này góp W2 = 2 vào `S1`. Chỉ một máy nên số vẫn **Chưa rõ**.
 4. **Chủ số khiếu nại.** Chủ số đỏ ở cảnh 1 nhận mã qua chính số đó. Xác minh xong, mọi kênh hiện vàng và “Đang xét báo nhầm”. Trưởng đội xem hồ sơ, chọn gỡ vì số hiển thị bị giả mạo. Tra lại trên các kênh đều thấy **Chưa rõ**.
