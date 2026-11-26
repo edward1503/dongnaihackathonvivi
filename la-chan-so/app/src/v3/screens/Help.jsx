@@ -1,7 +1,7 @@
 // A5 khẩn cấp (đang bị gọi đòi tiền) · A6 kể lại cuộc gọi bằng 4 câu Có/Không · A7 đọc số bằng giọng nói
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { Art, Bar, Btn, Circle, I, Screen, Speak, StateView, fmtPhone } from '../ui.jsx'
+import { Art, Bar, Btn, Circle, I, IconBox, Screen, Speak, StateView, fmtPhone } from '../ui.jsx'
 import { api } from '../../lib/api.js'
 import { native } from '../../lib/native.js'
 import { buzz } from '../../lib/sound.js'
@@ -34,14 +34,14 @@ export function Emergency() {
       </div>
       <div className="col g12">
         {STEPS.map(([icon, text], i) => (
-          <div key={text} className="li rise" style={{ background: '#fff', minHeight: 76, animationDelay: `${0.08 * i}s` }}>
+          <div key={text} className="card row g12 rise" style={{ minHeight: 76, padding: '12px 16px', borderColor: '#FCA5A5', animationDelay: `${0.08 * i}s` }}>
             <Circle z={44} bg="dang" c="w"><b style={{ fontSize: 20 }}>{i + 1}</b></Circle>
-            <div className="t-row grow" style={{ fontSize: 21 }}>{text}</div>
+            <div className="h-m grow">{text}</div>
             <I n={icon} z={28} c="dang" />
           </div>
         ))}
       </div>
-      <div className="t-sub center">Không cơ quan nào yêu cầu chuyển tiền qua điện thoại.</div>
+      <div className="card tone-dang row g10 tight"><I n="info" z={20} c="dang" /><div className="t-sub c-dang-ink grow">Không cơ quan nào yêu cầu chuyển tiền qua điện thoại.</div></div>
     </Screen>
   )
 }
@@ -80,13 +80,16 @@ export function AfterCallQuestions() {
   return (
     <Screen name="A6-ke-lai-cuoc-goi" bar={<Bar title="Cuộc gọi lạ" right={<Speak text="Bà nhớ lại giúp con nha. Người gọi có xưng là công an hay nhân viên ngân hàng không ạ? Họ có đòi tiền hay đòi mã OTP không bà? Họ có giục bà làm liền không? Rồi họ có dặn bà giữ bí mật, đừng nói với ai không ạ?" />} />}
       foot={<Btn onClick={submit} disabled={!all}>Xem kết quả</Btn>}>
-      <div className="t-sub" style={{ padding: '0 4px' }}>{call?.phone ? `Cuộc gọi từ ${fmtPhone(call.phone)}. ` : ''}Bà nhớ lại và chọn Có hoặc Không.</div>
+      <div className="row g12">
+        <IconBox icon="phone-in" tone="warn" size="lgx" z={28} />
+        <div className="t-sub grow">{call?.phone ? `Cuộc gọi từ ${fmtPhone(call.phone)}. ` : ''}Bà nhớ lại và chọn Có hoặc Không.</div>
+      </div>
       {QUESTIONS.map(([k, q], i) => (
-        <div key={k} className="li rise" style={{ background: '#fff', minHeight: 76, animationDelay: `${0.05 * i}s` }}>
-          <div className="t-row grow" style={{ fontSize: 18 }}>{q}</div>
-          <div className="row g6">
+        <div key={k} className="card col g10 rise" style={{ padding: '12px 14px', animationDelay: `${0.05 * i}s` }}>
+          <div className="t-row">{q}</div>
+          <div className="row g8">
             {[[true, 'Có'], [false, 'Không']].map(([v, l]) => (
-              <button key={l} type="button" className={`chip${ans[k] === v ? ' on' : ''}`} style={{ height: 44, padding: '0 16px' }}
+              <button key={l} type="button" className={`chip answer-chip${ans[k] === v ? ' on' : ''}`}
                 aria-pressed={ans[k] === v} onClick={() => setAns((a) => ({ ...a, [k]: v }))}>{l}</button>
             ))}
           </div>

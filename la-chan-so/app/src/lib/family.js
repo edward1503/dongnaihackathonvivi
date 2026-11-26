@@ -19,7 +19,11 @@ async function familyRequest(id, action, body) {
   })
   let response = await request()
   if (response.status === 401) {
-    await fetch(API_BASE + '/zalo', { cache: 'no-store', signal: AbortSignal.timeout(10000) })
+    const code = JSON.parse(localStorage.getItem('lcs.familyCode') || '""')
+    await fetch(API_BASE + '/api/family/pair', {
+      method: 'POST', cache: 'no-store', signal: AbortSignal.timeout(10000),
+      headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code }),
+    })
     response = await request()
   }
   const data = await response.json()

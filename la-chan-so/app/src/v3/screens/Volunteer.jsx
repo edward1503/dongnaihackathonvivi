@@ -135,22 +135,26 @@ export function Stats() {
 
 // ---------- C3 ----------
 export function NewType() {
-  const { persona, team } = useApp()
+  const { persona, team, ward } = useApp()
   const nav = useNavigate()
   const s = useStats()
   const e = s?.emerging
-  if (!e) return <Screen name="C3-kieu-moi" bar={<Bar title="Kiểu mới" />}><StateView icon="tri" iconBg="warn-t" iconColor="warn" title={s === null ? 'Đang tải…' : 'Chưa có kiểu mới'} /></Screen>
+  if (!e) return <Screen name="C3-kieu-moi" bar={<Bar title="Kiểu lừa đảo mới" />}><StateView icon="tri" iconBg="warn-t" iconColor="warn" title={s === null ? 'Đang tải…' : 'Chưa có kiểu mới'} /></Screen>
   return (
-    <Screen name="C3-kieu-moi" bar={<Bar title="Kiểu mới" />} foot={persona === 'volunteer' && team?.member.role === 'lead' && <Btn icon="share" onClick={() => nav('/chia-se')}>Chia sẻ cảnh báo</Btn>}>
-      <div className="h-l">{e.title}</div>
-      <div className="row g12">
-        <div className="card col g2 grow"><div className="h-xl c-warn">{e.count}</div><div className="t-sub">lượt tuần này</div></div>
-        <div className="card col g2 grow"><div className="h-xl c-warn">{e.days}</div><div className="t-sub">ngày gần đây</div></div>
+    <Screen name="C3-kieu-moi" bar={<Bar title="Kiểu lừa đảo mới" />} foot={persona === 'volunteer' && team?.member.role === 'lead' && <Btn icon="share" onClick={() => nav('/chia-se')}>Chia sẻ cảnh báo</Btn>}>
+      <div className="card tone-warn col g8">
+        <div className="row g8 c-warn"><I n="mega" z={18} /><span className="t-over">Kiểu lừa đảo mới{ward ? ` ở ${ward}` : ''}</span></div>
+        <div className="h-l">{e.title}</div>
       </div>
-      {(e.quotes || []).map((q) => <div key={q} className="sms">{highlight(q, ['cắt', 'phím 9', 'nợ tiền điện'])}</div>)}
-      <div className="card col g10">
+      <div className="row g12">
+        <div className="card col g2 grow"><div className="t-display c-warn-ink">{e.count}</div><div className="t-sub">lượt tuần này</div></div>
+        <div className="card col g2 grow"><div className="t-display c-warn-ink">{e.days}</div><div className="t-sub">ngày gần đây</div></div>
+      </div>
+      {(e.quotes || []).map((q) => <div key={q} className="bubble in">{highlight(q, ['cắt', 'phím 9', 'nợ tiền điện'])}</div>)}
+      <div className="card col g8" style={{ padding: 14 }}>
+        <div className="t-head">Dấu hiệu</div>
         {['Dọa cắt điện trong vài giờ', 'Bắt bấm phím hoặc đường dẫn lạ để "xử lý"', 'Điện lực thật không gọi đòi tiền'].map((t, i) => (
-          <div key={t} className="why"><I n={i === 2 ? 'info' : 'tri'} z={22} c={i === 2 ? 'pri' : 'warn'} /><span>{t}</span></div>
+          <div key={t} className="why reason"><I n={i === 2 ? 'info' : 'alert'} z={18} c={i === 2 ? 'pri' : 'warn'} /><span>{t}</span></div>
         ))}
       </div>
     </Screen>

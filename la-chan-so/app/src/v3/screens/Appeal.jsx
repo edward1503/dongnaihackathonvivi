@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { api } from '../../lib/api.js'
 import { useApp } from '../../lib/state.jsx'
-import { Bar, Btn, Screen, StateView } from '../ui.jsx'
+import { Bar, Btn, IconBox, Screen, StateView } from '../ui.jsx'
 
 export function Appeal() {
   const nav = useNavigate()
@@ -47,11 +47,18 @@ export function Appeal() {
       foot={done && <Btn onClick={() => nav(back, { replace: true })}>Xem kết quả tra cứu</Btn>}>
       {done ? <StateView art="an-toan" title="Đã xác minh số điện thoại" text="Đội sẽ xem lại trong 24 giờ." /> :
         <form className="col g14" onSubmit={submit}>
-          <h1 className="h-l">{appealId ? 'Xác minh số bị báo' : 'Số của tôi bị báo nhầm'}</h1>
-          <p className="t-sub">Mã xác minh dành cho chính số bị báo <strong>{target}</strong>.</p>
-          {appealId ? <label className="col g8"><span className="t-lbl">Mã xác minh</span>
+          <div className="row g12">
+            <IconBox icon="shield-alert" tone="pri" size="lgx" z={28} />
+            <h1 className="h-l grow">{appealId ? 'Xác minh số bị báo' : 'Số của tôi bị báo nhầm'}</h1>
+          </div>
+          <div className="card tone-gray tight col g2">
+            <span className="t-sm">Số bị báo</span>
+            <strong className="t-row">{target}</strong>
+            <span className="t-sm">Mã xác minh được gửi đến chính số này.</span>
+          </div>
+          {appealId ? <label className="col g8"><span className="t-head">Mã xác minh</span>
             <input key="code" className="field" autoComplete="one-time-code" inputMode="numeric" type="password" required value={code} onChange={(e) => setCode(e.target.value)} /></label> :
-            <label className="col g8"><span className="t-lbl">Số điện thoại để đội liên hệ</span>
+            <label className="col g8"><span className="t-head">Số điện thoại để đội liên hệ</span>
               <input key="contact" type="tel" autoComplete="tel" className="field" required value={contact} onChange={(e) => setContact(e.target.value)} /></label>}
           {error && <p role="alert" className="t-sub c-dang">{error}</p>}
           <Btn type="submit" busy={busy} disabled={!(appealId ? code : contact).trim()}>{appealId ? 'Xác minh' : 'Nhận mã xác minh'}</Btn>

@@ -1,7 +1,7 @@
 // Chung cho 3 đối tượng: 00 màn chào · 0 chọn vai · 0b quyền riêng tư · 0c chọn phường · 0d cá nhân · A02 thiết lập 3 lớp
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { APP, Art, Bar, Btn, Circle, Group, I, Logo, Progress, Row, Screen, Speak, StateView, Switch, Tag } from '../ui.jsx'
+import { APP, Art, Bar, Btn, Circle, Group, I, IconBox, Logo, Progress, Row, Screen, Speak, StateView, Switch, Tag } from '../ui.jsx'
 import { LAYERS, useLayers } from '../../lib/layers.js'
 import { memberRole, saveTeam } from '../../lib/api.js'
 import { native } from '../../lib/native.js'
@@ -14,6 +14,8 @@ export const ROLES = [
   { mode: 'full', icon: 'grad', title: 'Học sinh', sub: 'Kiểm tra tin nhắn, học qua truyện 1 phút' },
   { mode: 'relative', icon: 'users', title: 'Người thân', sub: 'Nhận cảnh báo khi bố mẹ gặp cuộc gọi lạ' },
 ]
+
+const ROLE_TONE = ['pri', 'safe', 'warn']
 
 // ---------- 00 Màn chào ----------
 export function Splash() {
@@ -59,10 +61,10 @@ export function RolePick() {
       </div>}
       <div className="col g12">
         {ROLES.map((r, i) => (
-          <button key={r.mode} type="button" className="li tap rise" onClick={() => pick(r.mode)}
-            style={{ background: '#fff', minHeight: 84, border: mode === r.mode && onboarded ? '2px solid var(--pri)' : '1px solid var(--line)', animationDelay: `${i * 0.05}s` }}>
-            <Circle z={52} icon={r.icon} />
-            <div className="col grow g2"><div className="t-row">{r.title}</div><div className="t-sub">{r.sub}</div></div>
+          <button key={r.mode} type="button" className={`act tap rise${mode === r.mode && onboarded ? ' on' : ''}`} onClick={() => pick(r.mode)}
+            aria-current={mode === r.mode && onboarded ? 'true' : undefined} style={{ animationDelay: `${i * 0.05}s` }}>
+            <IconBox icon={r.icon} tone={ROLE_TONE[i]} size="lgx" z={28} />
+            <div className="col grow g2"><div className="h-m">{r.title}</div><div className="t-sub">{r.sub}</div></div>
             <I n="next" z={22} className="chev" />
           </button>
         ))}
@@ -89,16 +91,16 @@ export function Privacy() {
   return (
     <Screen name="0b-quyen-rieng-tu" bar={onboarded ? <Bar title="Quyền riêng tư" /> : null}
       foot={!onboarded && <Btn onClick={() => nav('/phuong')}>Đồng ý</Btn>}>
-      <div className="col g10" style={{ paddingTop: onboarded ? 0 : 18 }}>
-        <Circle z={64} icon="lock" iz={30} />
-        <div className="h-l">Quyền riêng tư</div>
+      <div className="row g12" style={{ paddingTop: onboarded ? 0 : 18 }}>
+        <IconBox icon="lock" tone="pri" size="lgx" z={28} />
+        <div className="col grow"><div className="h-l">Quyền riêng tư</div><div className="t-sub">Lá chắn dùng gì trên máy, giữ gì lại</div></div>
       </div>
       <Group>
         {rows.map(([icon, t, v, k]) => <Row key={t} icon={icon} title={t} right={<Tag kind={k}>{v}</Tag>} />)}
       </Group>
-      <div className="card col g10">
+      <div className="card tone-safe col g10">
         {['Tin có mã OTP không bao giờ rời máy.', 'Số điện thoại, số tài khoản được che trước khi gửi AI.', 'Người thân chỉ thấy mức cảnh báo và tóm tắt đã che.'].map((t) => (
-          <div key={t} className="why"><I n="check" z={22} c="safe" sw={2.6} /><span>{t}</span></div>
+          <div key={t} className="why reason c-safe-ink"><I n="check" z={20} c="safe" sw={2.6} /><span>{t}</span></div>
         ))}
       </div>
     </Screen>
@@ -108,7 +110,7 @@ export function Privacy() {
 // ---------- 0c Chọn phường ----------
 export function WardPick() {
   const nav = useNavigate()
-  const { ward, setWard, onboarded, setOnboarded, mode } = useApp()
+  const { ward, setWard, onboarded, setOnboarded, mode, persona } = useApp()
   const [sel, setSel] = useState(ward)
   const done = () => {
     setWard(sel)
@@ -119,7 +121,10 @@ export function WardPick() {
   }
   return (
     <Screen name="0c-chon-phuong" bar={<Bar title="Chọn phường" />} foot={<Btn onClick={done}>{onboarded ? 'Lưu' : 'Tiếp tục'}</Btn>}>
-      <div className="t-sub" style={{ padding: '0 4px' }}>Lá chắn báo cho bạn các kiểu lừa đảo mới ở phường mình.</div>
+      <div className="row g12">
+        <IconBox icon="pin" tone="pri" size="lgx" z={28} />
+        <div className="t-sub grow">Lá chắn báo cho {persona === 'elder' ? 'bà' : 'bạn'} các kiểu lừa đảo mới ở phường mình.</div>
+      </div>
       <Group>
         {WARDS.map((w) => (
           <button key={w} type="button" className="li" onClick={() => setSel(w)} role="radio" aria-checked={sel === w}>
@@ -151,11 +156,8 @@ export function Profile() {
   const protectedPhone = persona === 'elder' || persona === 'student'
   const toggle = (key, set) => (v) => { set(v); localStorage.setItem(key, v ? '1' : '0'); if (key === 'lcs.voiceAsk') window.LCSNative?.setVoiceAsk?.(v) }
   return (
-    <Screen name="0d-ca-nhan" nav="/ca-nhan">
-      <div className="row jb" style={{ paddingTop: 10 }}>
-        <div className="h-xl">Cá nhân</div>
-        {persona === 'student' && Number.isFinite(points) && <Tag kind="new" icon="award">{points} điểm</Tag>}
-      </div>
+    <Screen name="0d-ca-nhan" nav="/ca-nhan"
+      bar={<Bar title="Cá nhân" left={null} right={persona === 'student' && Number.isFinite(points) ? <Tag kind="new" icon="award">{points} điểm</Tag> : null} />}>
       <Group>
         {persona === 'volunteer' && team && <Row icon="user" title={team.member.name} sub={memberRole(team.member)} />}
         {protectedPhone && <Row icon="users" title="Người thân" value={relatives[0]?.name || 'Chưa có'} onClick={() => nav('/nguoi-than')} />}
@@ -166,14 +168,14 @@ export function Profile() {
       </Group>
       {protectedPhone && (
         <Group>
-          <Row icon={asleep ? 'shieldoff' : 'shieldok'} iconColor={asleep ? 'dang' : 'safe'} title="Lá chắn" onClick={() => nav('/thiet-lap')}
+          <Row icon={asleep ? 'shield-off' : 'shield-check'} iconColor={asleep ? 'dang' : 'safe'} title="Lá chắn" onClick={() => nav('/thiet-lap')}
             right={<Tag kind={asleep ? 'off' : 'on'}>{asleep ? 'Đang ngủ' : `${on}/3 lớp`}</Tag>} />
           <Row icon="mic" title="Hỏi bằng giọng nói" right={<Switch on={voice} onChange={toggle('lcs.voiceAsk', setVoice)} label="Hỏi bằng giọng nói" />} />
         </Group>
       )}
       {persona === 'volunteer' && <Btn kind="o" onClick={() => { saveTeam(null); nav('/ma-doi', { replace: true }) }}>Đăng xuất đội</Btn>}
       {protectedPhone && native.available() && <>
-        <h2 className="sec">Thử Lá chắn</h2>
+        <h2 className="t-head" style={{ marginTop: 4 }}>Thử Lá chắn</h2>
         <Group>{demos.map(([key, icon, title, sub]) => <Row key={key} icon={icon} title={title} sub={sub}
           onClick={() => window.LCSNative.demo ? window.LCSNative.demo(key) : toast('Bạn cập nhật app để thử màn này nhé.')} />)}</Group>
       </>}
@@ -188,49 +190,86 @@ export function Profile() {
 }
 
 // ---------- A02 Thiết lập 3 lớp bảo vệ (Android mở đúng màn xin quyền qua LCSNative.enableLayer) ----------
+// Lời trên màn viết cho bà; học sinh thì đổi "bà" thành "bạn"
+const forPersona = (text, elder) => (elder ? text : text.replace(/ bà /g, ' bạn '))
+
+function useVoiceAsk() {
+  const [voice, setVoice] = useState(() => localStorage.getItem('lcs.voiceAsk') !== '0')
+  const change = (v) => { setVoice(v); localStorage.setItem('lcs.voiceAsk', v ? '1' : '0'); window.LCSNative?.setVoiceAsk?.(v) }
+  return [voice, change]
+}
+
 export function Setup() {
   const nav = useNavigate()
-  const { relatives } = useApp()
+  const { relatives, persona } = useApp()
   const { state, on, enable } = useLayers()
+  const [voice, setVoice] = useVoiceAsk()
+  const elder = persona === 'elder'
   const first = relatives.find((r) => r.paired)
   const next = LAYERS.find((l) => !state[l.key])?.key
   if (on === LAYERS.length && !state.asleep) {
     return (
       <Screen name="A02b-thiet-lap-hoan-tat" bar={<Bar title="" left="back" onLeft={() => nav('/', { replace: true })} />}
         foot={<Btn onClick={() => nav('/', { replace: true })}>Về trang chủ</Btn>}>
-        <div className="col ac g8 center">
-          <Art name="an-toan" z={170} className="pop" />
-          <div className="h-l">Lá chắn đã sẵn sàng</div>
-          <div className="t-body c-ink2">3/3 lớp đang bảo vệ bạn</div>
+        <div className="col ac g4 center">
+          <Art name="an-toan" z={112} className="pop" />
+          <div className="h-l" style={{ marginTop: 8 }}>Lá chắn đã sẵn sàng</div>
+          <div className="t-body c-ink2">3/3 lớp đang bảo vệ {elder ? 'bà' : 'bạn'}</div>
         </div>
-        <Group>
-          {LAYERS.map((l) => <Row key={l.key} lead={<Circle z={44} icon={l.icon} iz={22} />} title={l.title} right={<Tag kind="on">Đã bật</Tag>} />)}
-        </Group>
-        {first
-          ? <Group><Row lead={<div className="avatar">{first.name[0]}</div>} title={`${first.name} (${first.relation})`} sub="Nhận cảnh báo qua Lá chắn số" right={<Tag kind="on">Đã ghép</Tag>} /></Group>
-          : <Group><Row icon="plus" iconColor="pri" title="Thêm người thân nhận cảnh báo" onClick={() => nav('/nguoi-than/them')} /></Group>}
+        <div className="group">
+          {LAYERS.map((l) => (
+            <div key={l.key} className="li">
+              <IconBox icon={l.icon} tone="pri" size="sm" z={20} />
+              <div className="t-row grow">{l.title}</div>
+              <Tag kind="on">Đã bật</Tag>
+            </div>
+          ))}
+        </div>
+        {first ? (
+          <div className="card tight col g8">
+            <div className="t-lbl">Người thân nhận cảnh báo</div>
+            <div className="row g12">
+              <div className="avatar">{first.name[0]}</div>
+              <div className="col grow g2">
+                <div className="row jb g8"><div className="t-row">{first.name} ({first.relation})</div><Tag kind="on">Đã ghép</Tag></div>
+                <div className="t-sm">Nhận cảnh báo qua {APP}</div>
+              </div>
+            </div>
+          </div>
+        ) : <Group><Row icon="plus" iconColor="pri" title="Thêm người thân nhận cảnh báo" onClick={() => nav('/nguoi-than/them')} /></Group>}
+        <div className="card tight row g12">
+          <IconBox icon="mic" tone="pri" z={20} />
+          <div className="col grow g2">
+            <div className="t-row t-b">Hỏi bằng giọng nói</div>
+            <div className="t-sm">Sau cuộc gọi đáng ngờ, Lá chắn hỏi {elder ? 'bà' : 'bạn'} bằng lời. Tắt được bất cứ lúc nào.</div>
+          </div>
+          <Switch on={voice} onChange={setVoice} label="Hỏi bằng giọng nói" />
+        </div>
       </Screen>
     )
   }
   return (
-    <Screen name="A02a-thiet-lap-dang-lam" bar={<Bar title="Thiết lập lá chắn" right={<Speak text={`Bà ơi, mình bật ba lớp bảo vệ nha. Mỗi lớp bà chỉ cần bật một lần thôi ạ. Giờ bà đã bật được ${on} trên ba lớp rồi.`} />} />}>
+    <Screen name="A02a-thiet-lap-dang-lam" bar={<Bar title="Thiết lập lá chắn" right={<Speak text={elder
+      ? `Bà ơi, mình bật ba lớp bảo vệ nha. Mỗi lớp bà chỉ cần bật một lần thôi ạ. Giờ bà đã bật được ${on} trên ba lớp rồi.`
+      : `Bật ba lớp bảo vệ. Mỗi lớp chỉ cần bật một lần. Bạn đã bật ${on} trên ba lớp.`} />} />}>
       <div className="row g12">
-        <Circle z={64} icon="shield" iz={32} />
-        <div className="col grow"><div className="h-m">Bật 3 lớp bảo vệ</div><div className="t-sub">Mỗi lớp chỉ cần bật một lần.</div></div>
+        <IconBox icon="shield" tone="pri" size="lgx" z={32} />
+        <div className="col grow"><div className="h-l">Bật 3 lớp bảo vệ</div><div className="t-lbl" style={{ fontWeight: 500 }}>Mỗi lớp chỉ cần bật một lần.</div></div>
       </div>
-      <div className="row g12"><div className="grow"><Progress total={3} at={on} /></div><div className="t-b c-pri" style={{ fontSize: 15 }}>Đã bật {on}/3</div></div>
+      <div className="row g12"><div className="grow"><Progress total={3} at={on} /></div><div className="t-sm t-b c-pri none">Đã bật {on}/3</div></div>
       {LAYERS.map((l) => {
         const isOn = state[l.key] && !state.asleep
         const isNext = l.key === next
         return (
-          <div key={l.key} className="card col g10" style={{ border: isNext ? '2px solid var(--pri)' : '1px solid var(--line)', background: isOn ? 'var(--safe-t)' : '#fff' }}>
+          <div key={l.key} className={`card col g6 setup-layer${isOn ? ' tone-safe' : isNext ? ' next' : ' tone-gray'}`}>
             <div className="row g12">
-              <Circle z={48} icon={l.icon} iz={24} bg={isOn ? 'safe' : 'pri-t'} c={isOn ? 'w' : 'pri'} />
-              <div className="t-row grow" style={{ fontSize: 20 }}>{l.title}</div>
+              <IconBox icon={l.icon} tone={isOn ? 'solid-safe' : isNext ? 'pri' : 'white'} z={20} />
+              <div className="h-m grow">{l.title}</div>
             </div>
             <div className="row g12">
-              <div className="t-sub grow">{l.sub}</div>
-              {isOn ? <Tag kind="on" icon="check">Đã bật</Tag> : <button type="button" className={`btn ${isNext ? 'p' : 'o'} sm`} style={{ height: 52 }} onClick={() => enable(l.key)}>Bật</button>}
+              <div className={`t-sm grow${isOn ? ' c-safe-ink' : ''}`}>{forPersona(l.sub, elder)}</div>
+              {isOn ? <Tag kind="w" icon="check">Đã bật</Tag>
+                : <button type="button" className={`btn ${isNext ? 'p' : 'o'} sm setup-on`} onClick={() => enable(l.key)}>Bật</button>}
             </div>
           </div>
         )
@@ -239,7 +278,7 @@ export function Setup() {
         const text = `Con ơi, cài giúp mẹ ${APP} nhé: ${location.origin}${location.pathname}`
         try { if (navigator.share) await navigator.share({ title: APP, text }); else { await navigator.clipboard.writeText(text); native.speak('Con chép lời nhờ rồi nè bà, bà dán vào Zalo gửi cho con cháu nha') } } catch { /* bấm hủy */ }
       }}>Nhờ người thân cài hộ</Btn>
-      <div className="why t-sub"><I n="lock" z={18} /><span>Lá chắn không lưu nội dung cuộc gọi, tin nhắn.</span></div>
+      <div className="why t-sm"><I n="lock" z={16} style={{ marginTop: 2 }} /><span>Lá chắn không lưu nội dung cuộc gọi, tin nhắn.</span></div>
     </Screen>
   )
 }

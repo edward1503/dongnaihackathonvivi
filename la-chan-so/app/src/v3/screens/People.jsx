@@ -2,13 +2,14 @@
 // Hỏi người thân: gửi · chờ · lời trả lời (đồng bộ với trang Zalo của Minh qua máy chủ) · A8 màn gọi điện mô phỏng
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
-import { Art, Bar, Btn, Circle, Group, I, Row, Screen, Speak, StateView, Tag, fmtPhone } from '../ui.jsx'
+import { Art, Bar, Btn, Circle, Group, I, IconBox, Row, Screen, Speak, StateView, Tag, fmtPhone } from '../ui.jsx'
 import { api } from '../../lib/api.js'
 import { native } from '../../lib/native.js'
 import { buzz } from '../../lib/sound.js'
 import { FAMILY_ROOM, useApp } from '../../lib/state.jsx'
 
 const HOTLINES = [['Công an', '113'], ['Báo cuộc gọi rác', '156']]
+const APP_NAME = 'Lá chắn số'
 const RELATIONS = ['Con', 'Cháu', 'Vợ / chồng', 'Khác']
 
 // Gọi người thân: máy Android quay số thật (số do người dùng lưu); trình duyệt và đường dây nóng: màn gọi mô phỏng
@@ -22,34 +23,38 @@ export function useCall() {
 }
 
 // ---------- A4 ----------
+const relationLabel = (r) => (r.relation ? r.relation[0].toUpperCase() + r.relation.slice(1) : '')
+
 export function Relatives() {
   const nav = useNavigate()
   const { relatives } = useApp()
   const call = useCall()
   return (
-    <Screen name="A4-nguoi-than" nav="/nguoi-than">
-      <div className="h-xl" style={{ paddingTop: 10 }}>Người thân</div>
-      <Group>
-        {relatives.map((r) => (
-          <div key={r.id} className="li tall">
-            <div className="avatar">{r.name[0]}</div>
-            <button type="button" className="col grow g2 tap" style={{ textAlign: 'left' }} aria-label={`Sửa ${r.name}`} onClick={() => nav(`/nguoi-than/them?id=${encodeURIComponent(r.id)}`)}><div className="t-row">{r.name}</div><div className="t-sub">{r.relation[0].toUpperCase() + r.relation.slice(1)}{r.paired ? ' · đã ghép' : ''}</div></button>
-            <button type="button" className="tap" aria-label={`Gọi ${r.name}`} onClick={() => call(r.name, r.phone)}><Circle z={46} bg="pg" c="ink" icon="phone" iz={22} /></button>
-            <button type="button" className="tap" aria-label={`Nhắn ${r.name}`} onClick={() => nav(`/hoi-nguoi-than?to=${r.id}`)}><Circle z={46} bg="pri" c="w" icon="msg" iz={22} /></button>
-          </div>
-        ))}
-        <Row icon="plus" title="Thêm người thân" onClick={() => nav('/nguoi-than/them')} />
-      </Group>
-      <div className="sec">Đường dây nóng</div>
-      <Group>
+    <Screen name="A4-nguoi-than" bar={<Bar title="Người thân" />}>
+      {relatives.map((r, i) => (
+        <div key={r.id} className="card tight row g12">
+          <div className={`avatar${i ? ' amber' : ''}`}>{r.name[0]}</div>
+          <button type="button" className="col grow g2 tap" style={{ textAlign: 'left' }} aria-label={`Sửa ${r.name}`} onClick={() => nav(`/nguoi-than/them?id=${encodeURIComponent(r.id)}`)}>
+            <span className="t-row">{r.name}</span>
+            <span className="row g6" style={{ flexWrap: 'wrap' }}><span className="t-sm">{relationLabel(r)}</span>{r.paired && <Tag kind="on" icon="check">Đã ghép</Tag>}</span>
+          </button>
+          <button type="button" className="tap" aria-label={`Gọi ${r.name}`} onClick={() => call(r.name, r.phone)}><span className="round-btn"><I n="phone" z={22} /></span></button>
+          <button type="button" className="tap" aria-label={`Nhắn ${r.name}`} onClick={() => nav(`/hoi-nguoi-than?to=${r.id}`)}><span className="round-btn solid"><I n="msg" z={22} /></span></button>
+        </div>
+      ))}
+      <button type="button" className="card tight row g12 tap" onClick={() => nav('/nguoi-than/them')}>
+        <IconBox icon="plus" tone="pri" z={20} /><span className="t-row grow c-pri">Thêm người thân</span>
+      </button>
+      <div className="t-head" style={{ marginTop: 8 }}>Đường dây nóng</div>
+      <div className="group">
         {HOTLINES.map(([name, num]) => (
           <div key={num} className="li">
-            <I n="phone" z={26} />
+            <IconBox icon="phone" tone="dang" size="sm" z={20} />
             <div className="t-row grow">{name}</div>
-            <button type="button" className="btn p sm" style={{ height: 42 }} onClick={() => call(name, num)}>Gọi {num}</button>
+            <button type="button" className="btn p sm" onClick={() => call(name, num)}>Gọi {num}</button>
           </div>
         ))}
-      </Group>
+      </div>
     </Screen>
   )
 }
@@ -77,21 +82,27 @@ export function AddRelative() {
   }
   return (
     <Screen name="A4c-them-nguoi-than" bar={<Bar title="Người thân" />} foot={<Btn onClick={save}>Lưu</Btn>}>
-      <label className="col g8"><span className="t-lbl">Tên</span><input className="field" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ví dụ: Lan" autoComplete="off" /></label>
-      <label className="col g8"><span className="t-lbl">Số điện thoại</span><input className="field" value={phone} onChange={(e) => setPhone(e.target.value)} inputMode="tel" placeholder="09xx xxx xxx" /></label>
-      <div className="col g8"><span className="t-lbl">Là</span>
+      <label className="col g8"><span className="t-head">Tên</span><input className="field" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ví dụ: Lan" autoComplete="off" /></label>
+      <label className="col g8"><span className="t-head">Số điện thoại</span><input className="field" value={phone} onChange={(e) => setPhone(e.target.value)} inputMode="tel" placeholder="09xx xxx xxx" /></label>
+      <div className="col g8"><span className="t-head">Là</span>
         <div className="chips">{RELATIONS.map((x) => <button key={x} type="button" className={`chip${rel === x ? ' on' : ''}`} onClick={() => setRel(x)}>{x}</button>)}</div>
       </div>
     </Screen>
   )
 }
 
-// ---------- A4a ----------
+// ---------- A4a (E01b) ----------
 export function NoRelatives() {
   const nav = useNavigate()
+  const call = useCall()
   return (
-    <Screen name="A4a-chua-co-nguoi-than" bar={<Bar title="Hỏi người thân" />} foot={<Btn onClick={() => nav('/nguoi-than/them', { replace: true })}>Chọn người thân</Btn>}>
-      <StateView art="gia-dinh" title="Chưa có người thân" text="Thêm con cháu để Lá chắn báo ngay khi có cuộc gọi đáng ngờ." />
+    <Screen name="E01b-chua-co-nguoi-than"
+      bar={<Bar title="Hỏi người thân" right={<Speak text="Chưa có người thân nào. Thêm con, cháu để Lá chắn báo ngay khi có nguy hiểm." />} />}
+      foot={<>
+        <Btn icon="users" onClick={() => nav('/nguoi-than/them', { replace: true })}>Thêm người thân</Btn>
+        <button type="button" className="btn ghost" onClick={() => call('Công an', '113')}><I n="phone" />Cần gấp? Gọi 113</button>
+      </>}>
+      <StateView art="gia-dinh" square title="Chưa có người thân nào" text="Thêm con, cháu để Lá chắn báo ngay khi có nguy hiểm." />
     </Screen>
   )
 }
@@ -109,6 +120,13 @@ export function composeAsk(r, persona, to) {
   }[r.kind] || `${me.toLowerCase()} gặp chuyện lạ`
   const money = [...(r.why || []), ...(r.signs || []).map((s) => s.text)].some((t) => /chuyển tiền|nạp/i.test(t))
   return `${hi}${what}${money ? ' đòi tiền' : ''}. Lá chắn báo ${LEVEL_WORD[r.level] || 'CHƯA RÕ'}${r.scamLabel && r.level !== 'unknown' && r.level !== 'safe' ? ` (${r.scamLabel.toLowerCase()})` : ''}. Có phải lừa đảo không?`
+}
+
+// Tô đậm mức cảnh báo trong lời nhắn ("NGUY HIỂM" màu đỏ thẫm)
+const WORD_TONE = { 'NGUY HIỂM': 'c-dang-ink', 'NGHI NGỜ': 'c-warn-ink', 'AN TOÀN': 'c-safe-ink', 'CHƯA RÕ': 'c-ink' }
+function AskText({ text }) {
+  return text.split(/(NGUY HIỂM|NGHI NGỜ|AN TOÀN|CHƯA RÕ)/).map((part, i) =>
+    WORD_TONE[part] ? <b key={i} className={WORD_TONE[part]}>{part}</b> : part)
 }
 
 export function AskSend() {
@@ -137,48 +155,77 @@ export function AskSend() {
     } finally { setBusy(false) }
   }
   return (
-    <Screen name="A4-hoi-nguoi-than" bar={<Bar title="Hỏi người thân" right={<Speak text={text} />} />}
-      foot={<><Btn icon="send" onClick={send} busy={busy}>Gửi cho {to.name}</Btn><Btn kind="o" icon="phone" onClick={() => call(to.name, to.phone)}>Gọi điện</Btn></>}>
-      <div className="li" style={{ background: '#fff', borderRadius: 24 }}>
-        <div className="avatar">{to.name[0]}</div>
-        <div className="col grow g2"><div className="t-row">{to.name}</div><div className="t-sub">{to.relation[0].toUpperCase() + to.relation.slice(1)}</div></div>
-        {relatives.length > 1 && <button type="button" className="t-b c-pri tap" style={{ padding: 8, fontSize: 17 }} onClick={() => setIdx((i) => (i + 1) % relatives.length)}>Đổi</button>}
+    <Screen name="A08a-hoi-nguoi-than-gui" bar={<Bar title="Hỏi người thân" right={<Speak text={text} />} />}
+      foot={<><Btn icon="send" onClick={send} busy={busy}>Gửi cho {to.name}</Btn><Btn kind="o" icon="phone" onClick={() => call(to.name, to.phone)}>Gọi điện cho {to.name}</Btn></>}>
+      {relatives.map((r, i) => i === idx ? (
+        <div key={r.id} className="card row as g12" aria-current="true">
+          <div className="avatar big">{r.name[0]}</div>
+          <div className="col grow g2">
+            <div className="h-m">{r.name}{r.relation ? ` (${r.relation})` : ''}</div>
+            <div className="t-sm">{r.paired ? `Nhận qua ${APP_NAME}` : 'Gửi tin nhắn thường'}</div>
+            {r.paired && <span style={{ marginTop: 6 }}><Tag kind="on" icon="check">Đã ghép</Tag></span>}
+          </div>
+        </div>
+      ) : (
+        <button key={r.id} type="button" className="card tight row g12 tap" aria-label={`Gửi cho ${r.name}`} onClick={() => setIdx(i)}>
+          <div className="avatar amber">{r.name[0]}</div>
+          <div className="col grow"><div className="t-row">{r.name}</div>{r.relation && <div className="t-sm">{relationLabel(r)}</div>}</div>
+          <Tag kind="line">{r.paired ? 'Đã ghép' : 'Dự phòng'}</Tag>
+        </button>
+      ))}
+      <div className="card tone-pri col g8 rise">
+        <div className="t-over c-pri-ink">Tin sẽ gửi</div>
+        <div className="t-body"><AskText text={text} /></div>
       </div>
-      <div className="bubble rise">{text}</div>
-      <div className="t-sm" style={{ textAlign: 'right', padding: '0 6px' }}>{to.paired ? 'Gửi qua Lá chắn số của gia đình' : 'Gửi tin nhắn thường'}</div>
     </Screen>
   )
 }
 
+// ---------- A08b đang chờ ----------
 export function AskWait() {
   const nav = useNavigate()
-  const { ask } = useApp()
+  const { ask, persona } = useApp()
   const call = useCall()
   useEffect(() => { if (ask?.reply) nav('/hoi-nguoi-than/tra-loi', { replace: true }) }, [ask?.reply, nav])
   if (!ask) return <Navigate to="/" replace />
+  const elder = persona === 'elder'
+  const name = ask.to.name
+  const hint = elder ? 'Trong lúc chờ, bà đừng chuyển tiền và đừng nghe lại số lạ.' : 'Trong lúc chờ, đừng chuyển tiền và đừng nghe lại số lạ.'
   return (
-    <Screen name="A4b-cho-tra-loi" bar={<Bar title="Hỏi người thân" left="x" onLeft={() => nav('/', { replace: true })} />}
-      foot={<><Btn icon="phone" onClick={() => call(ask.to.name, ask.to.phone)}>Gọi điện</Btn><Btn kind="o" onClick={() => nav('/', { replace: true })}>Về trang chủ</Btn></>}>
-      <StateView icon="clock" title={`Chờ ${ask.to.name} trả lời`} text="Đừng chuyển tiền.">
-        <div className="row g8 jc" style={{ marginTop: 6 }}>
-          <Tag kind="ok" icon="check">Đã gửi {new Date(ask.sentAt).toTimeString().slice(0, 5)}</Tag>
-          {ask.seen && <Tag kind="on" icon="check">{ask.to.name} đã xem</Tag>}
-        </div>
-      </StateView>
+    <Screen name="A08b-hoi-nguoi-than-cho" bar={<Bar title="Hỏi người thân" onLeft={() => nav('/', { replace: true })} right={<Speak text={`Đã gửi cho ${name}. ${hint}`} />} />}
+      foot={<Btn kind="o" icon="phone" onClick={() => call(name, ask.to.phone)}>Gọi điện cho {name}</Btn>}>
+      <div className="col ac center" style={{ padding: '28px 0 12px' }}>
+        <IconBox icon="send" tone="pri" size="xl" z={40} />
+        <div className="h-l" style={{ marginTop: 16 }}>Đã gửi cho {name}</div>
+        <div className="t-lbl" style={{ marginTop: 4, fontWeight: 500 }}>lúc {new Date(ask.sentAt).toTimeString().slice(0, 5)}</div>
+      </div>
+      <div className="card tl" style={{ padding: '18px 20px' }} role="status">
+        <div className="tl-row"><span className="tl-dot safe" /><span className="t-body">Đã gửi</span></div>
+        <div className={`tl-line${ask.seen ? ' safe' : ''}`} />
+        <div className="tl-row"><span className={`tl-dot${ask.seen ? ' safe' : ''}`} /><span className={`t-body${ask.seen ? '' : ' c-mute'}`}>{ask.seen ? `${name} đã xem` : `${name} chưa xem`}</span></div>
+        <div className="tl-line" />
+        <div className="tl-row"><span className="tl-dot pri" /><span className="t-body t-b">Đang chờ trả lời…</span></div>
+      </div>
+      <div className="card tone-warn row as g12">
+        <I n="hand" z={28} c="warn" />
+        <div className="t-body c-warn-ink grow" style={{ fontWeight: 500 }}>{hint}</div>
+      </div>
     </Screen>
   )
 }
 
+// ---------- A08c người thân trả lời ----------
 export function AskReply() {
   const nav = useNavigate()
-  const { ask, result } = useApp()
+  const { ask, result, persona } = useApp()
   const call = useCall()
   const [blocked, setBlocked] = useState(false)
   const phone = !ask?.fromInbox && result && (result.kind === 'phone' || result.kind === 'call') ? result.display : null
+  const say = ask?.reply ? `${ask.to?.name || 'Người thân'} trả lời rồi nè bà: ${ask.reply.text}` : ''
   useEffect(() => {
     if (!ask?.reply) return
     buzz([200, 100, 200])
-    native.speak(`${ask.to?.name || 'Người thân'} trả lời rồi nè bà: ${ask.reply.text}`)
+    native.speak(say)
     if (phone && ask.reply.preset === 'dung_chuyen' && native.available()) setBlocked(native.blockNumber(phone))
     return () => native.stopSpeaking()
   }, [ask?.reply, phone])
@@ -197,19 +244,38 @@ export function AskReply() {
   }, [ask?.askId, ask?.reply?.id])
   if (!ask?.reply) return <Navigate to="/hoi-nguoi-than" replace />
   const stop = ask.reply.preset !== 'nguoi_quen'
+  const name = ask.to.name
+  const elder = persona === 'elder'
   return (
-    <Screen name="A4r-nguoi-than-tra-loi" tone={stop ? 'dang' : 'safe'} bar={<Bar title="" left="x" onLeft={() => nav('/', { replace: true })} right={<Speak text={`${ask.to?.name || 'Người thân'} trả lời: ${ask.reply.text}`} />} />}
-      foot={<>
-        <Btn icon="phone" onClick={() => call(ask.to.name, ask.to.phone)}>Gọi {ask.to.name}</Btn>
-        {phone && !blocked && stop && <Btn kind="o" icon="phoneoff" onClick={() => setBlocked(native.blockNumber(phone) || true)}>Chặn số {fmtPhone(phone)}</Btn>}
-        {blocked && <div className="row jc"><Tag kind="on" icon="check">Đã chặn số</Tag></div>}
-      </>}>
-      <div className="col ac g8 center" style={{ paddingTop: 6 }}>
-        <div className="avatar pop" style={{ width: 88, height: 88, borderRadius: 44, fontSize: 36, background: '#fff' }}>{ask.to.name[0]}</div>
-        <div className="t-row c-ink2" style={{ fontWeight: 500 }}>{ask.to.name} trả lời lúc {new Date(ask.reply.at || Date.now()).toTimeString().slice(0, 5)}</div>
+    <Screen name="A08c-hoi-nguoi-than-tra-loi" bar={<Bar title="Hỏi người thân" onLeft={() => nav('/', { replace: true })} right={<Speak text={`${name} trả lời: ${ask.reply.text}`} />} />}
+      foot={stop && phone
+        ? <><Btn icon="flag" onClick={() => nav('/bao-cao')}>{elder ? 'Báo cuộc vừa nhận' : 'Báo cáo'}</Btn><Btn kind="o" icon="phone" onClick={() => call(name, ask.to.phone)}>Gọi {name}</Btn></>
+        : <><Btn icon="phone" onClick={() => call(name, ask.to.phone)}>Gọi {name}</Btn><Btn kind="o" icon="home" onClick={() => nav('/', { replace: true })}>Về trang chủ</Btn></>}>
+      <div className="card tone-safe r24 col g20 pop" style={{ padding: '24px 20px 24px' }}>
+        <div className="row g12">
+          <div className="avatar big">{name[0]}</div>
+          <div className="t-head c-safe-ink grow">{name} trả lời</div>
+          <div className="t-sm">{new Date(ask.reply.at || Date.now()).toTimeString().slice(0, 5)}</div>
+        </div>
+        <div className="answer">{ask.reply.text}</div>
+        <div className="row jb g8">
+          <button type="button" className="tag w tap" onClick={() => native.speak(say)}><I n="vol" z={16} />Nghe lại</button>
+          {stop && <Art name="dung" z={56} />}
+        </div>
       </div>
-      <div className="bubble in rise" style={{ fontSize: 24, lineHeight: '33px', fontWeight: 700, padding: '20px 22px', maxWidth: '100%', alignSelf: 'stretch' }}>{ask.reply.text}</div>
-      {stop && <div className="row g10 jc"><Art name="dung" z={64} /><div className="t-row c-dang">Đừng chuyển tiền</div></div>}
+      <div className="sp" />
+      {phone && stop && (blocked ? (
+        <div className="card tight row g12">
+          <IconBox icon="ban" tone="dang" z={20} />
+          <div className="col grow g2"><div className="t-head">Đã chặn số {fmtPhone(phone)}</div><div className="t-sm">Số này không gọi được cho {elder ? 'bà' : 'bạn'} nữa</div></div>
+        </div>
+      ) : (
+        <div className="card tight row g12">
+          <IconBox icon="ban" tone="dang" z={20} />
+          <div className="col grow g2"><div className="t-head">Chặn số {fmtPhone(phone)}</div><div className="t-sm">Để số này không gọi được nữa</div></div>
+          <button type="button" className="btn o sm" onClick={() => setBlocked(native.blockNumber(phone) || true)}>Chặn</button>
+        </div>
+      ))}
     </Screen>
   )
 }

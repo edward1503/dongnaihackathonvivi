@@ -119,6 +119,10 @@ export const api = {
   verifyAppeal: (id, code) => req(`/api/appeals/${encodeURIComponent(id)}/verify`, { method: 'POST', body: { code }, device: true }),
   appeals: () => req('/api/appeals', { team: true }),
   resolveAppeal: (id, body) => req(`/api/appeals/${encodeURIComponent(id)}/resolve`, { method: 'POST', body, team: true }),
+  // Thi đua bài kiểm tra theo lớp, trường, phường (A12c)
+  quizSchools: () => req('/api/quiz/schools', { timeout: 8000 }),
+  quizResult: (body) => req('/api/quiz/results', { method: 'POST', body, device: true }),
+  quizBoard: (scope, school, group) => req(`/api/quiz/leaderboard?scope=${scope}&school=${encodeURIComponent(school)}&group=${encodeURIComponent(group || '')}`, { timeout: 8000 }),
 }
 
 export const qrUrl = (path) => `${API_BASE}/api/demo/qr.svg?path=${encodeURIComponent(path)}`

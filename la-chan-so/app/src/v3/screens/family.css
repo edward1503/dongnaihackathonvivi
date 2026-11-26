@@ -1,9 +1,7 @@
-.family-alert { text-align: left; padding-block: 16px; }
+.family-alert { text-align: left; padding-block: 14px; align-items: flex-start; }
 .family-alert time, .family-timeline time { font-variant-numeric: tabular-nums; }
 .family-confirm { padding-block: 32px; }
-.family-message { background: var(--safe-t); border: 2px solid var(--safe); }
-.family-summary { background: #f1edfc; }
-.family-summary h2 { color: #583398; }
+.family-summary p { color: var(--ai-d); }
 .family-summary p, .family-message p, .family-timeline p { overflow-wrap: anywhere; }
 .btn.family-call { background: var(--safe); color: white; }
 .family-timeline { list-style: none; padding: 0; margin: 0 0 0 6px; }

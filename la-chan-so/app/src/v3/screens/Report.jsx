@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { native } from '../../lib/native.js'
 import { useApp } from '../../lib/state.jsx'
-import { Bar, Btn, Circle, Group, Screen, StateView, Tag } from '../ui.jsx'
+import { Art, Bar, Btn, I, IconBox, Progress, Screen, StateView, Tag } from '../ui.jsx'
 import { levels, reportStatuses, voteProgress } from '../review.js'
 
 function eventTime(at) {
@@ -39,10 +39,16 @@ function useRecentEvents() {
   return { events, error, reload: () => refresh((n) => n + 1) }
 }
 
+// Tên màn theo đối tượng: bà báo cuộc gọi vừa nhận, học sinh báo cáo lừa đảo
+const reportTitle = (persona) => (persona === 'elder' ? 'Báo cuộc vừa nhận' : 'Báo cáo lừa đảo')
+const LEVEL_LOOK = { danger: ['dang', 'Nguy hiểm'], suspicious: ['warn', 'Nghi ngờ'], safe: ['safe', 'An toàn'], unknown: ['gray', 'Chưa rõ'] }
+const fmtDuration = (sec) => (Number.isFinite(sec) && sec > 0 ? `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}` : '')
+
 export function Report() {
+  const { persona } = useApp()
   if (native.available()) return <ReceivedEvents />
   return (
-    <Screen name="B4-bao-cao" bar={<Bar title="Báo cáo" />}>
+    <Screen name="B4-bao-cao" bar={<Bar title={reportTitle(persona)} />}>
       <StateView art="nghi" title="Mở Lá chắn số trên điện thoại"
         text="Báo cáo cần app Lá chắn số trên chính điện thoại đã nhận cuộc gọi hoặc tin nhắn." />
     </Screen>
@@ -56,7 +62,9 @@ function ReceivedEvents() {
   const [selected, select] = useState('')
   const [story, setStory] = useState('')
   const [sending, setSending] = useState(false)
+  const [confirm, setConfirm] = useState(false)
   const [issue, setIssue] = useState('')
+  const elder = persona === 'elder'
   const event = events?.find((item) => item.eventId === selected)
   const withdraw = Boolean(event?.reportId)
   async function submit() {
@@ -68,36 +76,82 @@ function ReceivedEvents() {
       setPoints(response.totalPoints)
       setReport({ response, display: event.display || event.target, withdrawn: withdraw })
       nav('/bao-cao/xong', { replace: true })
-    } catch (e) { setIssue(e.message) }
+    } catch (e) { setIssue(e.message); setConfirm(false) }
     finally { setSending(false) }
   }
+  const canSend = event && event.reportStatus !== 'withdrawn'
+  // Gửi báo cáo mới thì hỏi lại một lần (A09b); rút báo cáo thì làm ngay
+  const sheet = confirm && event && (
+    <>
+      <div className="scrim" onClick={() => !sending && setConfirm(false)} />
+      <div className="sheet" role="dialog" aria-modal="true" aria-labelledby="report-confirm">
+        <div className="grab" />
+        <IconBox icon="megaphone" tone="pri" size="lgx" z={28} />
+        <div className="col g8">
+          <div id="report-confirm" className="h-l">Báo {event.type === 'call_log' ? 'số này' : 'tin này'} cho cộng đồng?</div>
+          <div className="t-body c-ink2">Lá chắn dùng báo cáo để cảnh báo người khác về {event.type === 'call_log' ? 'số này' : 'người gửi này'}. {elder ? 'Bà' : 'Bạn'} rút lại được bất cứ lúc nào.</div>
+        </div>
+        <div className="card tone-gray tight row g12">
+          <I n={event.type === 'call_log' ? 'phone' : 'msg'} z={20} c="ink2" />
+          <div className="t-row grow">{event.display || event.target}</div>
+          {event.hasRecording && <Tag kind="on">Có ghi âm</Tag>}
+        </div>
+        <div className="col g4">
+          <Btn busy={sending} onClick={submit}>Gửi báo cáo</Btn>
+          <button type="button" className="btn ghost" disabled={sending} onClick={() => setConfirm(false)}>Để sau</button>
+        </div>
+      </div>
+    </>
+  )
   return (
-    <Screen name="B4-bao-cao" bar={<Bar title="Báo cáo" />}
-      foot={event && event.reportStatus !== 'withdrawn' && <Btn kind={withdraw ? 'o' : 'p'} busy={sending} onClick={submit}>{withdraw ? 'Rút báo cáo' : 'Gửi báo cáo'}</Btn>}>
-      <h1 className="h-l">Cuộc gọi và tin nhắn vừa nhận</h1>
-      <p className="t-sub">{persona === 'elder' ? 'Bà chọn cuộc gọi hoặc tin nhắn mình đã nhận trong 7 ngày qua nha.' : 'Chọn cuộc gọi hoặc tin nhắn máy mình đã nhận trong 7 ngày qua.'}</p>
-      {error && <><p role="alert" className="t-sub c-dang">{error}</p><Btn kind="o" onClick={reload}>Tải lại</Btn></>}
-      {!events && !error && <p role="status">Đang xem nhật ký trên máy…</p>}
+    <Screen name="A09a-bao-cao-form" bar={<Bar title={reportTitle(persona)} />} overlay={sheet}
+      foot={canSend && <Btn kind={withdraw ? 'o' : 'p'} busy={sending && !confirm} onClick={() => (withdraw ? submit() : setConfirm(true))}>{withdraw ? 'Rút báo cáo' : 'Gửi báo cáo'}</Btn>}>
+      <div className="row g12">
+        <div className="grow"><Progress total={2} at={event ? 2 : 1} /></div>
+        <div className="t-sm none">Bước {event ? 2 : 1}/2</div>
+      </div>
+      <div className="col g4">
+        <div className="t-head">Cuộc gọi hoặc tin nhắn đã nhận</div>
+        <div className="t-sm">{elder ? 'Bà chọn cuộc gọi hoặc tin nhắn mình đã nhận trong 7 ngày qua nha.' : 'Chọn cuộc gọi hoặc tin nhắn máy mình đã nhận trong 7 ngày qua.'}</div>
+      </div>
+      {error && <div className="card tone-dang col g8"><p role="alert" className="t-sub c-dang-ink">{error}</p><Btn kind="o" icon="refresh" onClick={reload}>Tải lại</Btn></div>}
+      {!events && !error && <p role="status" className="t-sub">Đang xem nhật ký trên máy…</p>}
       {events?.length === 0 && <StateView icon="phonein" title="Chưa có cuộc gọi hoặc tin nhắn để báo" />}
-      <Group>{events?.map((item) => {
+      {events?.length > 0 && <div className="col g8">{events.map((item) => {
         const call = item.type === 'call_log'
+        const on = selected === item.eventId
         const time = new Date(eventTime(item.at)).toLocaleString('vi-VN', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+        const status = reportStatuses[item.reportStatus] || (item.reportId ? 'Đã báo' : '')
         return (
-          <button key={item.eventId} type="button" className="li" aria-pressed={selected === item.eventId} disabled={sending}
+          <button key={item.eventId} type="button" className={`opt ev-pick${on ? ' sel' : ''}`} aria-pressed={on} disabled={sending}
             onClick={() => { select(item.eventId); setStory(''); setIssue('') }}>
-            <Circle z={42} icon={call ? 'phonein' : 'msg'} iz={20} />
-            <span className="col grow g4">
-              <span className="t-row">{item.display || item.target}</span>
+            <IconBox icon={call ? 'phone-in' : 'message'} tone={on ? 'white' : 'pri'} size="sm" z={20} />
+            <span className="col grow g2">
+              <span className="t-row c-ink">{item.display || item.target}</span>
               <span className="t-sm">{call ? 'Cuộc gọi đến' : 'Tin nhắn đến'} · {time}</span>
-              {item.hasRecording && <span><Tag kind="on">Có ghi âm</Tag></span>}
-              <span className="t-sm">{reportStatuses[item.reportStatus] || (item.reportId ? 'Đã báo' : 'Chưa báo')}</span>
+              {(status || item.hasRecording) && <span className="row g6" style={{ flexWrap: 'wrap', marginTop: 2 }}>
+                {item.hasRecording && <Tag kind="on">Có ghi âm</Tag>}
+                {status && <Tag kind="line">{status}</Tag>}
+              </span>}
             </span>
-            <span className={`radio${selected === item.eventId ? ' on' : ''}`} />
+            <span className={`radio${on ? ' on' : ''}`} />
           </button>
         )
-      })}</Group>
-      {event && !withdraw && <label className="col g8"><span className="t-lbl">Kể thêm nếu muốn</span>
-        <textarea className="field" value={story} disabled={sending} onChange={(e) => setStory(e.target.value)} /></label>}
+      })}</div>}
+      {event && !withdraw && <>
+        <label className="col g8"><span className="t-head">Chuyện gì đã xảy ra?</span>
+          <textarea className="field" value={story} disabled={sending} onChange={(e) => setStory(e.target.value)}
+            placeholder={elder ? 'Bà kể thêm nếu muốn, ví dụ: người gọi xưng công an, đòi chuyển tiền' : 'Kể thêm nếu muốn, ví dụ: hứa việc nhẹ lương cao, đòi nạp tiền trước'} /></label>
+        {event.hasRecording && (
+          <div className="card tone-gray tight row g12">
+            <IconBox icon="file-audio" tone="pri" size="sm" z={20} />
+            <div className="col grow g2">
+              <div className="t-row">Có bản ghi âm{fmtDuration(event.durationSec) ? ` ${fmtDuration(event.durationSec)}` : ''}</div>
+              <div className="t-sm">Lá chắn phân tích bản ghi để xác nhận, không lưu lại âm thanh.</div>
+            </div>
+          </div>
+        )}
+      </>}
       {issue && <p role="alert" className="t-sub c-dang">{issue}</p>}
     </Screen>
   )
@@ -105,13 +159,15 @@ function ReceivedEvents() {
 
 export function ReportDone() {
   const nav = useNavigate()
-  const { report, setReport, setPoints } = useApp()
+  const { report, setReport, setPoints, persona } = useApp()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   if (!native.available() || !report?.response) return <Navigate to="/bao-cao" replace />
   const { response, display, withdrawn } = report
   const item = response.report
   const progress = response.case
+  const elder = persona === 'elder'
+  const [tone, word] = LEVEL_LOOK[progress?.level] || LEVEL_LOOK.unknown
   async function withdraw() {
     setBusy(true)
     setError('')
@@ -123,22 +179,37 @@ export function ReportDone() {
     finally { setBusy(false) }
   }
   return (
-    <Screen name="B4b-da-gui" bar={<Bar title="Báo cáo" onLeft={() => nav('/bao-cao', { replace: true })} />}
+    <Screen name={withdrawn ? 'A09c-da-rut' : 'A09c-bao-cao-xong'} bar={<Bar title="" onLeft={() => nav('/bao-cao', { replace: true })} />}
       foot={<Btn onClick={() => nav('/', { replace: true })}>Về trang chủ</Btn>}>
-      <StateView art={withdrawn ? 'an-toan' : 'mung'} title={withdrawn ? 'Đã rút báo cáo' : 'Đã gửi báo cáo'} text={response.message}>
-        {response.alertMessage && <p role="status" className="t-sub">{response.alertMessage}</p>}
-        <div className="t-row">{display}</div>
-        {reportStatuses[item?.status] && <Tag kind="ok">{reportStatuses[item.status]}</Tag>}
-        {progress && <div className="col g4">
-          <span className="t-row">{levels[progress.level]}</span>
-          <span className="t-sub">{progress.count} máy đã báo</span>
-          <span className="t-sm">{voteProgress(progress.votes)}</span>
+      <div className="col ac g4 center">
+        <Art name={withdrawn ? 'an-toan' : 'mung'} z={112} className="pop" />
+        <div className="h-l" style={{ marginTop: 8 }}>{withdrawn ? 'Đã rút báo cáo' : elder ? 'Cảm ơn bà ạ!' : 'Cảm ơn bạn!'}</div>
+        <div className="t-body c-ink2">{response.message}</div>
+      </div>
+      {response.alertMessage && <p role="status" className="card tone-pri t-sub c-pri-ink">{response.alertMessage}</p>}
+      <div className={`card tone-${tone} col g10`}>
+        <div className="row jb g8">
+          <span className="t-over c-ink2">Báo cáo của {elder ? 'bà' : 'bạn'}</span>
+          {reportStatuses[item?.status] && <Tag kind="line">{reportStatuses[item.status]}</Tag>}
+        </div>
+        <div className="row g12">
+          <IconBox icon="flag" tone="white" size="sm" z={20} />
+          <div className="t-row grow">{display}</div>
+        </div>
+        {progress && <div className="col g2">
+          <div className="t-head">Mức cộng đồng · {levels[progress.level] || word}</div>
+          <div className="t-sm c-ink">{progress.count} máy đã báo · {voteProgress(progress.votes)}</div>
         </div>}
-        {Number.isFinite(response.totalPoints) && <span className="t-sub">Tổng điểm học tập · {response.totalPoints}</span>}
-        {response.points > 0 && <Tag icon="award">+{response.points} điểm</Tag>}
-        {!withdrawn && item?.id && item.status !== 'withdrawn' && <Btn kind="o" busy={busy} onClick={withdraw}>Rút báo cáo</Btn>}
-        {error && <p role="alert" className="t-sub c-dang">{error}</p>}
-      </StateView>
+      </div>
+      {Number.isFinite(response.totalPoints) && (
+        <div className="card tone-warn tight row g10">
+          <IconBox icon="award" tone="white warn" round z={20} />
+          <div className="t-head c-warn-ink grow">{response.points > 0 ? `+${response.points} điểm đóng góp` : 'Điểm học tập'}</div>
+          <div className="t-sm c-warn-ink">Tổng: {response.totalPoints} điểm</div>
+        </div>
+      )}
+      {!withdrawn && item?.id && item.status !== 'withdrawn' && <Btn kind="o" busy={busy} onClick={withdraw}>Rút báo cáo</Btn>}
+      {error && <p role="alert" className="t-sub c-dang">{error}</p>}
     </Screen>
   )
 }

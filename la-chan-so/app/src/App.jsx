@@ -9,6 +9,7 @@ import { AddRelative, AskReply, AskSend, AskWait, NoRelatives, Relatives, SimCal
 import { AfterCallQuestions, Emergency, Voice } from './v3/screens/Help.jsx'
 import { AfterCall, CallAnalysis, IncomingCall, Notification, QuickAsk, StopScreen } from './v3/screens/Call.jsx'
 import { LessonCards, Lessons, Quiz, QuizResult } from './v3/screens/Student.jsx'
+import { LeaderboardPage } from './v3/screens/Leaderboard.jsx'
 import { Report, ReportDone } from './v3/screens/Report.jsx'
 import { Appeal } from './v3/screens/Appeal.jsx'
 import { useApp } from './lib/state.jsx'
@@ -53,6 +54,7 @@ export default function App() {
     <Route path="/bai-hoc/:id" element={<LessonCards />} />
     <Route path="/kiem-tra-bai" element={<Quiz />} />
     <Route path="/kiem-tra-bai/ket-qua" element={<QuizResult />} />
+    <Route path="/thi-dua" element={<LeaderboardPage />} />
   </>
   if (relative && familyCode) return <FamilyInbox code={familyCode}>
     <Routes>

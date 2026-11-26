@@ -4,13 +4,13 @@ import { api, saveTeam } from '../../lib/api.js'
 import { familyAlerts, familyCall, familyReply } from '../../lib/family.js'
 import { native } from '../../lib/native.js'
 import { FAMILY_ROOM, useApp } from '../../lib/state.jsx'
-import { Art, Bar, Btn, Circle, Group, I, Screen, StateView, Tag, maskPhone } from '../ui.jsx'
+import { Art, Bar, Btn, Group, I, IconBox, Screen, StateView, Tag, maskPhone } from '../ui.jsx'
 import './family.css'
 
 const Inbox = createContext(null)
 const levels = {
-  danger: ['Nguy hiểm', 'dang', 'off', 'xoct'], warn: ['Nghi ngờ', 'warn', 'new', 'tri'],
-  unknown: ['Chưa rõ', 'pri', 'ok', 'info'], safe: ['Khớp danh bạ', 'safe', 'on', 'shieldok'],
+  danger: ['Nguy hiểm', 'dang', 'off', 'alert-oct'], warn: ['Nghi ngờ', 'warn', 'new', 'alert'],
+  unknown: ['Chưa rõ', 'pri', 'ok', 'help'], safe: ['Khớp danh bạ', 'safe', 'on', 'shield-check'],
 }
 levels.suspicious = levels.warn
 const levelOf = level => levels[level] || levels.unknown
@@ -115,13 +115,13 @@ function LoadStatus({ error, retry }) {
 export function FamilyHome() {
   const nav = useNavigate()
   const { alerts, error, retry } = useContext(Inbox)
-  return <Screen name="family-alerts" nav="/">
-    <h1 className="h-xl">Cảnh báo gia đình</h1>
+  return <Screen name="family-alerts" nav="/" bar={<Bar title="Cảnh báo gia đình" left={null} />}>
     {(!alerts || error) && <LoadStatus error={error} retry={retry} />}
     {alerts?.length === 0 && !error && <StateView art="gia-dinh" title="Chưa có cảnh báo" text="Khi máy mẹ gặp cuộc gọi hay tin nhắn đáng ngờ, Bé Nai sẽ báo anh ở đây." />}
     {alerts?.length > 0 && <Group>{alerts.map(a => {
-      const [label, , kind] = levelOf(a.level)
+      const [label, tone, kind, icon] = levelOf(a.level)
       return <button className="li family-alert" key={a.id} onClick={() => nav('/canh-bao/' + encodeURIComponent(a.id))}>
+        <IconBox icon={icon} tone={tone} z={22} />
         <div className="col grow g6"><div className="row jb"><Tag kind={kind}>{label}</Tag><time className="t-sm">{stamp(a.at)}</time></div>
           <strong className="t-row">{a.who} · {familyNumber(a.number)}</strong>
           <span className="t-sub">{a.reply ? 'Đã trả lời' : 'Chờ anh trả lời'}</span></div><I n="next" className="chev" />
@@ -178,26 +178,26 @@ export function FamilyDetail() {
   }
   if (a.reply && params.get('sent') === '1') return <Screen name="family-sent" bar={bar}>
     <div className="col ac jc center g12 grow family-confirm">
-      <Circle z={88} bg="safe" c="w" icon="check" iz={48} /><h1 className="h-l">Đã gửi cho mẹ</h1>
+      <IconBox icon="check" tone="solid-safe" size="xl" z={44} /><h1 className="h-l">Đã gửi cho mẹ</h1>
       <p className="t-body c-ink2" role="status">{a.reply.seenAt ? 'Mẹ đã xem lúc ' + stamp(a.reply.seenAt) : 'Đang chờ mẹ xem lời nhắn của anh.'}</p>
     </div>
-    <div className="card col g8 family-message"><span className="t-lbl">Lời anh gửi cho mẹ</span><p className="h-m">{a.reply.text}</p></div>
+    <div className="card tone-safe col g8 family-message"><span className="t-lbl c-safe-ink">Lời anh gửi cho mẹ</span><p className="h-m">{a.reply.text}</p></div>
     {error && <LoadStatus error={error} retry={retry} />}
     {a.reportId && a.case && <p className="card t-sub">Mức cộng đồng · {levelOf(a.case.level)[0]} · {a.case.count} máy</p>}
     <CallMother id={id} /><Btn kind="o" onClick={back}>Về danh sách cảnh báo</Btn>
   </Screen>
   const answer = { yes: 'Có, người gọi bảo mẹ chuyển tiền.', no: 'Không, người gọi không bảo mẹ chuyển tiền.', known: 'Mẹ biết số này.' }[a.selfAnswer]
   return <Screen name="family-detail" bar={bar}>
-    <div className="card row g12" style={{ background: `var(--${tone}-t)` }}>
-      <Circle bg={tone} c="w" icon={icon} /><div><h1 className={'h-m c-' + tone}>{label}</h1>
+    <div className={`card row g12 tone-${tone}`}>
+      <IconBox icon={icon} tone={`solid-${tone}`} size="lgx" z={28} /><div><h1 className={`h-m c-${tone}-ink`}>{label}</h1>
         <time className="t-sub">{stamp(a.at)}{a.kind === 'message' ? ' · Tin nhắn' : a.reportId || a.callSeconds != null ? ' · Cuộc gọi' : ''}</time></div>
     </div>
     <div className="row g12"><div className="avatar">{(a.who || 'Hoa').trim().split(/\s+/).at(-1)[0]}</div>
       <div><div className="t-row">{a.who}</div><div className="t-sub">Số hiển thị · {familyNumber(a.number)}</div></div></div>
-    {a.timeline?.length > 0 && <section className="card col g10"><h2 className="t-lbl">Diễn biến</h2>
+    {a.timeline?.length > 0 && <section className="card col g10"><h2 className="t-head">Diễn biến</h2>
       <ol className="family-timeline">{a.timeline.map((item, i) => <li key={i} data-tone={item.tone}>
         <time className="t-sm">{item.t}</time><p>{masked(item.text)}</p></li>)}</ol></section>}
-    <section className="card col g8 family-summary"><h2 className="row g8 t-lbl"><I n="sparkle" z={20} />{a.source === 'ask' ? 'Lời mẹ nhắn (đã che số)' : a.aiLevel || a.source === 'demo' ? 'Tóm tắt của AI (đã che thông tin riêng)' : 'Tóm tắt đã che thông tin riêng'}</h2>
+    <section className="card tone-ai col g8 family-summary"><h2 className="ai-tag"><I n="sparkles" z={16} />{a.source === 'ask' ? 'Lời mẹ nhắn (đã che số)' : a.aiLevel || a.source === 'demo' ? 'Tóm tắt của AI (đã che thông tin riêng)' : 'Tóm tắt đã che thông tin riêng'}</h2>
       {a.scenario && <p>{masked(a.scenario)}</p>}
       {a.aiLevel && <strong>Nhãn AI của bản ghi · {levelOf(a.aiLevel)[0]}</strong>}
       <p>{masked(a.summaryMasked) || 'Chưa có tóm tắt cho cảnh báo này.'}</p>

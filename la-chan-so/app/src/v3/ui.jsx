@@ -17,11 +17,12 @@ const ART = { chao, mung, dung, nghi, 'an-toan': anToan, 'gia-dinh': giaDinh }
 export const APP = 'Lá chắn số'
 
 // ---------- Khung màn ----------
-export function Screen({ name, tone, nav, bar, foot, children, gap, pad, scrollRef, className = '' }) {
+export function Screen({ name, tone, nav, bar, foot, overlay, children, gap, pad, scrollRef, className = '' }) {
   const dark = tone === 'night' || tone === 'red'
+  const { persona } = useApp()
   return (
     <div className="shell">
-      <div className={['phone', tone ? `t-${tone}` : '', nav ? 'has-nav' : '', className].filter(Boolean).join(' ')} data-name={name}>
+      <div className={['phone', persona === 'elder' ? 'lg' : '', tone ? `t-${tone}` : '', nav ? 'has-nav' : '', className].filter(Boolean).join(' ')} data-name={name}>
         <div className="sbar" style={{ color: dark ? '#fff' : 'var(--ink)' }}>
           <span>{hhmm()}</span>
           <span className="notch" />
@@ -33,6 +34,7 @@ export function Screen({ name, tone, nav, bar, foot, children, gap, pad, scrollR
         </div>
         {foot && <div className="foot">{foot}</div>}
         {nav && <Nav active={nav} />}
+        {overlay}
       </div>
     </div>
   )
@@ -43,7 +45,8 @@ export function Bar({ title, left = 'back', right, onLeft, dark = false }) {
   const go = onLeft || (() => (window.history.length > 1 ? nav(-1) : nav('/', { replace: true })))
   return (
     <div className="bar">
-      {left ? <button type="button" className={`ib${dark ? ' on-dark' : ''}`} aria-label={left === 'x' ? 'Đóng' : 'Quay lại'} onClick={go}><I n={left} /></button> : <span className="ib ghost" />}
+      {left ? <button type="button" className={`ib${dark ? ' on-dark' : ''}`} aria-label={left === 'x' ? 'Đóng' : 'Quay lại'} onClick={go}><I n={left} /></button>
+        : left === null ? null : <span className="ib ghost" />}
       <div className="title">{title}</div>
       {right || <span className="ib ghost" />}
     </div>
@@ -82,20 +85,29 @@ export function Art({ name, z = 160, className = '', style }) {
 // ---------- Dòng, nhóm, nhãn ----------
 export function Group({ children, style }) { return <div className="group" style={style}>{children}</div> }
 
+// Màu biểu tượng của dòng -> tông ô biểu tượng (ink: ô xám)
+const ROW_TONE = { ink: '', pri: 'pri', safe: 'safe', dang: 'dang', warn: 'warn', ai: 'ai' }
+
 export function Row({ icon, iconColor = 'ink', lead, title, sub, value, right, onClick, chev = true, tall = false }) {
   const Tag = onClick ? 'button' : 'div'
   return (
     <Tag type={onClick ? 'button' : undefined} className={`li${tall ? ' tall' : ''}`} onClick={onClick}>
-      {lead || (icon && <I n={icon} z={26} c={iconColor} />)}
+      {lead || (icon && <IconBox icon={icon} tone={ROW_TONE[iconColor]} size="sm" z={20} />)}
       <div className="col grow g2">
         <div className="t-row">{title}</div>
         {sub && <div className="t-sub">{sub}</div>}
       </div>
-      {value && <div className="t-sub none" style={{ fontSize: 17 }}>{value}</div>}
+      {value && <div className="t-sub none">{value}</div>}
       {right}
       {onClick && chev && <I n="next" z={22} className="chev" />}
     </Tag>
   )
+}
+
+// Icon box from the submitted design: tinted square (or round) with an icon
+export function IconBox({ icon, tone, size, round, z }) {
+  const cls = ['ibox', tone, size, round ? 'round' : ''].filter(Boolean).join(' ')
+  return <div className={cls}><I n={icon} z={z || (size === 'lgx' ? 28 : 22)} /></div>
 }
 
 export function Circle({ z = 52, bg = 'pri-t', icon, iz = 26, c = 'pri', children, style }) {
@@ -118,10 +130,11 @@ export function Btn({ kind = 'p', icon, children, onClick, disabled, busy, style
   )
 }
 
-export function StateView({ art, icon, iconBg = 'pri-t', iconColor = 'pri', title, text, small, children }) {
+export function StateView({ art, square, icon, iconBg = 'pri-t', iconColor = 'pri', title, text, small, children }) {
   return (
     <div className="col ac jc g12 center grow" style={{ padding: '0 10px' }}>
-      {art ? <Art name={art} z={180} className="pop" /> : icon && <Circle z={112} bg={iconBg} c={iconColor} icon={icon} iz={52} style={{ animation: 'pop .45s var(--ease) both' }} />}
+      {art ? <Art name={art} z={square ? 200 : 168} className={`pop${square ? ' sq' : ''}`} style={square ? { borderRadius: 24 } : undefined} />
+        : icon && <Circle z={88} bg={iconBg} c={iconColor} icon={icon} iz={40} style={{ animation: 'pop .45s var(--ease) both' }} />}
       <div className="h-l rise">{title}</div>
       {text && <div className="t-body c-ink2 rise" style={{ animationDelay: '.05s' }}>{text}</div>}
       {small && <div className="t-sub">{small}</div>}
@@ -160,8 +173,8 @@ export function Banner({ bg = 'pri', title, btn, icon, art, onClick }) {
 // ---------- Thanh điều hướng theo đối tượng ----------
 const NAVS = {
   relative: [['bell', 'Cảnh báo', '/'], ['book', 'Bài học', '/bai-hoc'], ['user', 'Cá nhân', '/ca-nhan']],
-  elder: [['shieldok', 'Kiểm tra', '/'], ['users', 'Người thân', '/nguoi-than'], ['book', 'Bài học', '/bai-hoc'], ['user', 'Cá nhân', '/ca-nhan']],
-  student: [['shieldok', 'Kiểm tra', '/'], ['users', 'Người thân', '/nguoi-than'], ['book', 'Bài học', '/bai-hoc'], ['user', 'Cá nhân', '/ca-nhan']],
+  elder: [['shield', 'Lá chắn', '/'], ['search', 'Kiểm tra', '/kiem-tra'], ['book', 'Bài học', '/bai-hoc'], ['user', 'Cá nhân', '/ca-nhan']],
+  student: [['shield', 'Lá chắn', '/'], ['search', 'Kiểm tra', '/kiem-tra'], ['book', 'Bài học', '/bai-hoc'], ['user', 'Cá nhân', '/ca-nhan']],
   volunteer: [['chart', 'Thống kê', '/'], ['check', 'Duyệt', '/duyet'], ['user', 'Cá nhân', '/ca-nhan']],
 }
 
