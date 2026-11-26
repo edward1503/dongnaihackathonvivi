@@ -34,7 +34,31 @@
   #md-list button,.tr.head{display:grid;grid-template-columns:1.35fr .65fr 1fr;gap:8px;text-align:left;width:100%;overflow-wrap:anywhere}
   #md-list button{border:0;border-bottom:1px solid var(--outline-2);background:var(--surface);color:var(--ink)}
   #md-list button.sel{background:var(--brand-c)}
-  #md-detail li{padding:8px 0}#md-detail p{margin:2px 0}
+  #md-detail p{margin:0}
+  .rv{gap:16px}
+  .rv-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .rv-target{font-size:28px;line-height:1.2;letter-spacing:.3px;overflow-wrap:anywhere;margin-top:2px}
+  .rv-level{flex:none;padding:6px 14px;border-radius:999px;font-weight:700;font-size:14px;background:var(--surface-2);color:var(--ink-2)}
+  .rv-level.lv-danger{background:var(--danger-c);color:var(--danger-ink)} .rv-level.lv-suspicious{background:var(--warn-c);color:var(--warn-ink)} .rv-level.lv-safe{background:var(--safe-c);color:var(--safe-ink)}
+  .rv-tags{display:flex;flex-wrap:wrap;gap:6px} .rv-tags span{padding:4px 10px;border-radius:999px;background:var(--brand-c);color:var(--brand-ink);font-size:13px;font-weight:600}
+  .rv-tags span.warn{background:var(--warn-c);color:var(--warn-ink)}
+  .rv-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .rv-stats div{background:var(--surface-2);border-radius:12px;padding:10px 12px;min-width:0}
+  .rv-stats b{display:block;font-size:22px;line-height:1.2;color:var(--ink)} .rv-stats span{font-size:12px;color:var(--ink-2)}
+  .rv-ev summary{cursor:pointer;font-weight:700;list-style:none;display:flex;align-items:center;gap:10px;color:var(--ink)}
+  .rv-ev summary::-webkit-details-marker{display:none}
+  .rv-ev summary::before{content:'';width:7px;height:7px;border-right:2px solid var(--ink-2);border-bottom:2px solid var(--ink-2);transform:rotate(-45deg);transition:transform .15s;margin-left:2px}
+  .rv-ev[open] summary::before{transform:rotate(45deg)}
+  .rv-ev summary .n{padding:1px 9px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);font-size:13px}
+  .rv-list{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:8px;max-height:320px;overflow:auto}
+  .rv-item{display:flex;gap:10px;padding:10px 12px;border:1px solid var(--outline-2);border-radius:12px;background:var(--surface)}
+  .rv-ic{flex:none;width:34px;height:34px;border-radius:10px;background:var(--brand-c);color:var(--brand);display:grid;place-items:center}
+  .rv-body{min-width:0;flex:1}
+  .rv-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .rv-row strong{font-size:14px} .rv-row time{color:var(--ink-3);font-size:13px;white-space:nowrap}
+  .rv-body p{margin-top:3px;font-size:14px;line-height:1.4;color:var(--ink-2);overflow-wrap:anywhere}
+  .rv-body .ans{display:inline-block;margin:6px 6px 0 0;padding:2px 8px;border-radius:8px;background:var(--surface-2);font-size:12px;color:var(--ink-2)}
+  .rv-note{padding:10px 12px;border-radius:12px;background:var(--surface-2);font-size:14px;color:var(--ink-2)}
   @media(max-width:760px){body{flex-direction:column}.sidebar{position:static;width:100%;height:auto;gap:6px}.main{padding:16px}.grid-3,.grid-4{grid-template-columns:1fr!important}}
 </style>
 </head>
@@ -255,26 +279,31 @@ function renderReview(c) {
   const el = $('#md-detail');
   if (!c) { el.replaceChildren(); return; }
   const required = c.flags.includes('conflict');
+  const when = (t) => new Date(t).toLocaleString('vi-VN', {hour:'2-digit', minute:'2-digit', day:'2-digit', month:'2-digit'});
   const reports = c.reports.map(r => {
-    const evidence = r.evidence.type === 'call_log' ? (r.analysisId ? 'Cuộc gọi có bản ghi' : 'Nhật ký cuộc gọi đến') : 'Thông báo tin nhắn';
-    return `<li><strong>${evidence}</strong> · ${new Date(r.evidence.at).toLocaleString('vi-VN')}
-      ${r.aiLevel ? '<p>Nhãn bản ghi · ' + esc(levels[r.aiLevel]) + '</p>' : ''}
-      <p>${esc(r.summary || r.story)}</p>
-      ${r.selfAnswer ? '<p>Người nhận · ' + esc(choices[r.selfAnswer]) + '</p>' : ''}
-      ${r.relativeChoice ? '<p>Minh · ' + esc(choices[r.relativeChoice]) + '</p>' : ''}
-      ${r.lateAnswers.map(a => '<p>Trả lời muộn · ' + esc(choices[a.choice]) + '</p>').join('')}</li>`;
+    const call = r.evidence.type === 'call_log';
+    const evidence = call ? (r.analysisId ? 'Cuộc gọi có bản ghi' : 'Nhật ký cuộc gọi đến') : 'Thông báo tin nhắn';
+    const icon = call ? (r.analysisId ? 'file-audio' : 'phone-in') : 'message';
+    const ans = [r.aiLevel ? 'Nhãn bản ghi · ' + esc(levels[r.aiLevel]) : '', r.selfAnswer ? 'Người nhận · ' + esc(choices[r.selfAnswer]) : '',
+      r.relativeChoice ? 'Người thân · ' + esc(choices[r.relativeChoice]) : '', ...r.lateAnswers.map(a => 'Trả lời muộn · ' + esc(choices[a.choice]))].filter(Boolean);
+    return `<li class="rv-item"><span class="rv-ic"><i class="ic s18" data-i="${icon}"></i></span><div class="rv-body">
+      <div class="rv-row"><strong>${evidence}</strong><time>${when(r.evidence.at)}</time></div>
+      <p>${esc(r.summary || r.story)}</p>${ans.map(a => '<span class="ans">' + a + '</span>').join('')}</div></li>`;
   }).join('');
-  el.innerHTML = `<div class="card col gap-12"><h2 class="t-h2">${esc(c.reports[0]?.target || c.key)}</h2>
-    <p>${c.flags.map(f => esc(flagNames[f])).join(' · ')}</p>
-    <p>Mức công khai · <strong>${levels[c.level]}</strong> · ${c.count} máy được tính</p>
-    <details open><summary>Bằng chứng trong đợt này (${c.reports.length})</summary><ul>${reports}</ul></details>
-    <p>${c.votes.confirm}/2 phiếu xác nhận · ${c.votes.reject} phiếu bác · ${c.votes.spam} phiếu báo rác</p>
-    ${c.notes.filter(v => v.note).map(v => '<p>' + esc(v.member) + ' · ' + esc(v.note) + '</p>').join('')}
+  el.innerHTML = `<div class="card col rv"><div class="rv-head"><div class="col gap-2"><div class="t-cap muted">Đối tượng bị báo</div>
+      <h2 class="t-h2 rv-target">${esc(c.reports[0]?.target || c.key)}</h2></div>
+      <span class="rv-level lv-${esc(c.level)}">${levels[c.level] || esc(c.level)}</span></div>
+    ${c.flags.length ? '<div class="rv-tags">' + c.flags.map(f => '<span class="' + (f === 'burst' || f === 'conflict' ? 'warn' : '') + '">' + esc(flagNames[f] || f) + '</span>').join('') + '</div>' : ''}
+    <div class="rv-stats"><div><b>${c.count}</b><span>máy được tính</span></div><div><b>${c.reports.length}</b><span>bằng chứng đợt này</span></div>
+      <div><b>${c.votes.confirm}/2</b><span>phiếu xác nhận${c.votes.reject ? ' · ' + c.votes.reject + ' bác' : ''}${c.votes.spam ? ' · ' + c.votes.spam + ' rác' : ''}</span></div></div>
+    <details open class="rv-ev"><summary>Bằng chứng trong đợt này <span class="n">${c.reports.length}</span></summary><ul class="rv-list">${reports}</ul></details>
+    ${c.notes.filter(v => v.note).map(v => '<p class="rv-note"><strong>' + esc(v.member) + '</strong> · ' + esc(v.note) + '</p>').join('')}
     ${c.canVote ? `<label for="vote-note">${required ? 'Lý do xử lý ý kiến trái nhau (bắt buộc)' : 'Nhận xét (nếu có)'}</label>
     <textarea class="field" id="vote-note" rows="2"></textarea><div class="row wrap gap-8">
     <button class="btn primary sm" data-vote="confirm">Xác nhận dấu hiệu</button>
     <button class="btn outline sm" data-vote="reject">Bác báo cáo</button>
-    <button class="btn outline sm" data-vote="spam">Báo rác</button></div>` : '<p>' + esc(c.reasonCannotVote) + '</p>'}</div>`;
+    <button class="btn outline sm" data-vote="spam">Báo rác</button></div>` : '<p class="rv-note">' + esc(c.reasonCannotVote) + '</p>'}</div>`;
+  paintIcons(el);
   el.querySelectorAll('[data-vote]').forEach(b => b.onclick = async () => {
     const note = $('#vote-note').value.trim();
     if (required && !note) { toast('Bạn ghi lý do trước khi bỏ phiếu nhé.'); $('#vote-note').focus(); return; }
