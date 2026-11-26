@@ -228,8 +228,8 @@ const VE = veHopLe(q.get('ve'));
 // ===== CÂU CỦA CHỊ LAN: đổi file / chữ ở đây. lip: file .json khẩu hình tính sẵn (để null = tự tính trong trình duyệt) =====
 const LINES = [
   { audio: 'audio/lan/mo-dau.m4a', lip: 'audio/lan/mo-dau.lip.json', caption: 'Em ơi, chị thấy trên mạng có chỗ tuyển cộng tác viên đặt đơn, lương năm trăm nghìn một ngày. Họ bảo nạp trước hai trăm nghìn là làm được liền. Chị có nên làm không em?' },
-  { audio: 'audio/lan/hoi-vi-sao.m4a', lip: 'audio/lan/hoi-vi-sao.lip.json', caption: 'Ừ, chị chưa nạp. Mà sao em biết là lừa vậy?' },
-  { audio: 'audio/lan/ket-tot.m4a', lip: 'audio/lan/ket-tot.lip.json', caption: 'Nhờ em mà chị không bị lừa. Chị báo cáo luôn, để người khác cũng biết nha.' },
+  { audio: 'audio/lan/goi-dau-hai.m4a', lip: 'audio/lan/goi-dau-hai.lip.json', caption: 'Họ nhắc chị còn có hai suất, nghe khúc đó em nghĩ sao?' },
+  { audio: 'audio/lan/du-may.m4a', lip: 'audio/lan/du-may.lip.json', caption: 'Hú hồn, may có em. Giờ chị biết phải làm gì rồi.' },
 ];
 // ===== LỜI ĐÁP MẪU CỦA VY (người học) cho chế độ "Chạy demo tự động"; tick: ý được chấm đạt sau câu đó =====
 const VY = [
@@ -722,6 +722,8 @@ $('#end').addEventListener('click', () => {
 $('#again').addEventListener('click', () => location.reload());
 $('#go').addEventListener('click', () => start(AUTO_URL));
 $('#auto').addEventListener('click', () => { if (C.ban_dien) start(true); });
+// Trong app không còn nút "Chạy demo tự động": mọi nhân vật chỉ có một nút gọi. Công cụ quay video vẫn mở được bằng ?auto=1.
+if (q.get('auto') !== '1') $('#auto').style.display = 'none';
 $('#finish a').href = SCORE_URL;
 if(parent!==window) addEventListener('keydown', e => {
   if(e.key==='ArrowLeft'||e.key==='ArrowRight'){

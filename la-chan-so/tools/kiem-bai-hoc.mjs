@@ -237,6 +237,7 @@ async function choiBai(B, w, h, o) {
   await mo(`hoc.html?bai=${B.so}&toc=${TOC}`, w, h); await ev(`localStorage.clear()`); await mo(`hoc.html?bai=${B.so}&toc=${TOC}`, w, h);
   await choMan('bia'); ghi((await ev(`document.querySelector('#app').classList.contains('lg')`)) === lg, 'chế độ chữ lớn đúng theo bài'); await kiem('bia', true);
   ghi((await ev(`document.querySelector('.thanh .tt b').textContent`)) === 'Bài ' + B.stt, 'bìa hiện số bài theo vị trí phát hành (Bài ' + B.stt + ')');
+  ghi(await ev(`document.querySelectorAll('#app .luoi-tranh .o-tranh.khoa').length`) === 1, 'bìa: khung kết cục còn khóa khi chưa xem truyện (không lộ lối đúng trước điểm rẽ)');
   await bam('Bắt đầu');
   // A. truyện
   for (let k = 0; k < B.truyen.length; k++) {
@@ -245,6 +246,7 @@ async function choiBai(B, w, h, o) {
     if (B.truyen[k].re) {
       await cho(`window.__hoc.pha==='re'`, 60000, 'tới điểm rẽ sau khi kể xong');
       ghi(await ev(`document.querySelectorAll('#app .lua-chon').length`) === 2, 'điểm rẽ có đúng hai lựa chọn');
+      ghi(await ev(`new Set([...document.querySelectorAll('#app .lua-chon')].map(e=>e.className.replace(/\\bdoc\\b/,'').trim()+'|'+e.innerHTML.replace(/>[^<]*</g,'><'))).size`) === 1, 'hai thẻ lựa chọn cùng kiểu, cùng biểu tượng (không lộ đáp án)');
       if (B.truyen[k].re.some(r => r.giong)) ghi(await cho(`!!document.querySelector('#app .lua-chon.doc')`, 8000, 'Bé Nai đọc lựa chọn'), 'điểm rẽ: Bé Nai đọc to từng lựa chọn');
       await kiem('diem-re', true);
       const sai = B.truyen[k].re.find(r => r.toi === 'ngo-cut'), dung = B.truyen[k].re.find(r => r.toi === 'an-toan');
@@ -261,6 +263,8 @@ async function choiBai(B, w, h, o) {
     }
   }
   await choMan('on-lai'); ghi(await ev(`document.querySelectorAll('.chip.dh').length`) === B.dau_hieu.length, 'màn ôn lại hiện đủ dấu hiệu'); await kiem('on-lai', true);
+  const soTranh = B.truyen.filter(x => x.tranh).length + (B.an_toan && B.an_toan.tranh ? 1 : 0);
+  ghi(await ev(`document.querySelectorAll('#app .luoi-tranh .o-tranh.khoa').length`) === 0 && await ev(`document.querySelectorAll('#app .luoi-tranh .o-tranh img').length`) === soTranh, 'màn ôn lại hiện đủ các khung tranh, kể cả kết cục');
   ghi((await ev(`JSON.parse(localStorage.getItem('lcs-hoc-v1')).bai[${B.so}].a`)) === true, 'xem xong truyện được ghi lại');
   await bam('Vào phần luyện');
   // B. luyện
@@ -295,12 +299,16 @@ async function choiBai(B, w, h, o) {
   ghi(await veTuGoi(`JSON.stringify({diem:0.5,tong:${J(String(n))},luc:Date.now()})`) === 'bo', 'bản ghi sai kiểu (điểm lẻ, tổng là chữ) không được nhận');
   ghi(await veTuGoi(`JSON.stringify({diem:${n},tong:${n}})`) === 'bo', 'bản ghi thiếu mốc luc không được nhận');
   ghi(await veTuGoi(`JSON.stringify({diem:${n},tong:${n},luc:Date.now()})`) === 'du', 'cuộc gọi đủ ý');
-  ghi((await ev(`document.querySelector('.diem-to').textContent`)).startsWith(`${n}/${n} ý · +${n * 10} điểm`), 'điểm không vượt quá số ý của bài, mỗi ý mười điểm', await ev(`document.querySelector('.diem-to').textContent`)); await kiem('ket-qua-du', true);
+  const diemDu = await ev(`[document.querySelector('.diem-to').textContent, (document.querySelector('#app .thanh .cong-diem')||{}).textContent]`);
+  ghi(diemDu[0].startsWith(`${n}/${n} ý`) && diemDu[1] === `+${n * 10} điểm`, 'điểm không vượt quá số ý của bài, mỗi ý mười điểm', J(diemDu)); await kiem('ket-qua-du', true);
   ghi(await veTuGoi(`JSON.stringify({diem:0,tong:${n},luc:Date.now()})`) === 'thieu', 'gọi lại được điểm thấp hơn');
   const kho = JSON.parse(await ev(`localStorage.getItem('lcs-hoc-v1')`)).bai[B.so];
   ghi(kho.a && kho.b.length === B.luyen.length && kho.b.every(x => x.dat) && kho.c_tot.diem === T.y.length && kho.c.diem === 0, 'tiến độ lưu đủ ba phần, giữ điểm cuộc gọi tốt nhất', J(kho));
-  ghi(await ev(`document.querySelectorAll('#app .card.solid-navy .sao .ic.co').length`) === 3, 'đủ ba phần thì ba sao');
+  ghi(await ev(`document.querySelectorAll('#app .ba-phan-the .sao .ic.co').length`) === 3 && await ev(`document.querySelectorAll('#app .ba-phan span.co').length`) === 3, 'đủ ba phần thì ba sao');
   sttMong = 0; await bam('Về thư viện'); await choMan('thu-vien'); await kiem('thu-vien', true);
+  const capDo = await ev(`document.querySelector('#app .cap-do').textContent`);
+  ghi(capDo.includes('3/') && capDo.includes(`sao · ${T.y.length * 10} điểm`), 'thẻ cấp ở thư viện tính đúng sao và điểm đã lưu', capDo);
+  ghi(!(await ev(`!!document.querySelector('#app .chip.lien')`)), 'mới học một ngày thì không hiện chuỗi "ngày liền"');
 }
 
 let ma = 0;
@@ -353,7 +361,7 @@ try {
     if (chon.includes(1)) {         // tiến độ cũ có điểm vượt trần: thư viện không cộng điểm đó
       await mo('hoc.html?im=1', w, h); await ev(`localStorage.setItem('lcs-hoc-v1', JSON.stringify({bai:{1:{c_tot:{diem:40,tong:50},c:{diem:40,tong:50},b:[{xong:false,dat:true},{xong:false,dat:true}]}}}))`);
       await mo('hoc.html?im=1', w, h); await choMan('thu-vien');
-      ghi((await ev(`document.querySelector('#app .card.solid-navy').textContent`)).includes('0/' + ML.bai.length * 3 + ' sao · 0 điểm'), 'tiến độ hỏng (điểm vượt trần, đạt mà chưa xong) không được tính', await ev(`document.querySelector('#app .card.solid-navy').textContent`));
+      ghi((await ev(`document.querySelector('#app .cap-do').textContent`)).includes('0/' + ML.bai.length * 3 + ' sao · 0 điểm'), 'tiến độ hỏng (điểm vượt trần, đạt mà chưa xong) không được tính', await ev(`document.querySelector('#app .cap-do').textContent`));
       await ev(`localStorage.clear()`);
     }
     if (chon.includes(2)) {         // B1 bản chữ lớn
